@@ -1,0 +1,55 @@
+/// ---------------------------------------------------------------------
+/// @file 
+/// @ingroup Sql
+/// <summary>
+/// Test for the CSQL_DROP_FOREIGN_KEY macro.
+/// </summary>
+/// ---------------------------------------------------------------------
+#include "DbMacros.h"
+
+CSQL_SET_CATALOG( tempdb )
+go
+
+CSQL_DROP_TABLE( dbo.TestDetail )
+go
+
+CSQL_DROP_TABLE( dbo.TestMaster )
+go
+
+
+create table dbo.TestMaster ( MasterId int primary key )
+go
+create table dbo.TestDetail( DetailId int, MasterId int )
+go
+
+alter table TestDetail add constraint TestDetailMasterFK foreign key ( MasterId ) references TestMaster ( MasterId )
+go
+
+declare @CaughtError bit
+begin try 
+	insert into TestDetail ( DetailId, MasterId ) values ( 1, 1 )
+end try
+begin catch
+	set @CaughtError = 1
+end catch
+if @CaughtError != 1
+	raiserror 50000 'Foreign key did not prevent the insert. Has it been created?'
+go
+
+CSQL_DROP_FOREIGN_KEY( dbo.TestDetail, dbo.TestMaster )
+go
+
+insert into dbo.TestDetail ( DetailId, MasterId ) values ( 1, 1 )
+go
+if not exists ( select 1 from dbo.TestDetail )
+	raiserror 50000 'Data has not been inserted'
+go
+
+
+CSQL_DROP_TABLE( dbo.TestDetail )
+go
+
+CSQL_DROP_TABLE( dbo.TestMaster )
+go
+
+
