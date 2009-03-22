@@ -1,3 +1,0 @@
-// This is a file containg code page 1252 specific characters.
-#define GERMAN_UMLAUTE הצüִײÜ
-GERMAN_UMLAUTE

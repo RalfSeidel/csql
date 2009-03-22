@@ -1,8 +1,0 @@
-
-
-
-
-
-
-A message from heaven
-

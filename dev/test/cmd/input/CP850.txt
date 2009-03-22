@@ -1,3 +1,0 @@
-// This is a file containg code page 850 specific characters.
-#define GERMAN_UMLAUTE „”™š
-GERMAN_UMLAUTE
