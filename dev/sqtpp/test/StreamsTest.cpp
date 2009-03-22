@@ -28,7 +28,7 @@ void AnsiFileBufferTest::run()
 
 	wclog << L"AnsiFileBufferTest" << endl;
 
-	if ( !File::isDirectory( L"test/input" ) ) {
+	if ( !File::isDirectory( L"test/cmd/input" ) ) {
 		wclog << L"Checks skiped because the test input directory does not exist." << endl;
 	} else {
 		test.openTest();
@@ -38,7 +38,7 @@ void AnsiFileBufferTest::run()
 		test.seekoffTest();
 		test.sputbackTest();
 	}
-	if ( !File::isDirectory( L"test/output" ) ) {
+	if ( !File::isDirectory( L"test/cmd/sqtppout" ) ) {
 		wclog << L"Tests skiped because the test output directory does not exist." << endl;
 	} else {
 		test.writeStringTest();
@@ -49,7 +49,7 @@ void AnsiFileBufferTest::run()
 void AnsiFileBufferTest::openTest()
 {
 	AnsiFileBuffer buffer;
-	AnsiFileBuffer* pBuffer = buffer.open( "test/input/ansiabc.txt", ios_base::in );
+	AnsiFileBuffer* pBuffer = buffer.open( "test/cmd/input/ansiabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 
 	buffer.close();
@@ -58,7 +58,7 @@ void AnsiFileBufferTest::openTest()
 void AnsiFileBufferTest::sbumpcTest()
 {
 	AnsiFileBuffer buffer;
-	AnsiFileBuffer* pBuffer = buffer.open( "test/input/ansiabc.txt", ios_base::in );
+	AnsiFileBuffer* pBuffer = buffer.open( "test/cmd/input/ansiabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 
 	AnsiFileBuffer::int_type ch;
@@ -86,7 +86,7 @@ void AnsiFileBufferTest::sbumpcTest()
 void AnsiFileBufferTest::uflowTest()
 {
 	AnsiFileBuffer buffer;
-	AnsiFileBuffer* pBuffer = buffer.open( "test/input/ansiabc.txt", ios_base::in );
+	AnsiFileBuffer* pBuffer = buffer.open( "test/cmd/input/ansiabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 
 	AnsiFileBuffer::int_type ch;
@@ -114,7 +114,7 @@ void AnsiFileBufferTest::uflowTest()
 void AnsiFileBufferTest::seekposTest()
 {
 	AnsiFileBuffer buffer;
-	AnsiFileBuffer* pBuffer = buffer.open( "test/input/ansiabc.txt", ios_base::in );
+	AnsiFileBuffer* pBuffer = buffer.open( "test/cmd/input/ansiabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	AnsiFileBuffer::int_type ch;
 
@@ -138,7 +138,7 @@ void AnsiFileBufferTest::seekposTest()
 void AnsiFileBufferTest::seekoffTest()
 {
 	AnsiFileBuffer buffer;
-	AnsiFileBuffer* pBuffer = buffer.open( "test/input/Ansiabc.txt", ios_base::in );
+	AnsiFileBuffer* pBuffer = buffer.open( "test/cmd/input/Ansiabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	AnsiFileBuffer::int_type ch;
 
@@ -174,7 +174,7 @@ void AnsiFileBufferTest::seekoffTest()
 void AnsiFileBufferTest::sputbackTest()
 {
 	AnsiFileBuffer buffer;
-	AnsiFileBuffer* pBuffer = buffer.open( "test/input/ansiabc.txt", ios_base::in );
+	AnsiFileBuffer* pBuffer = buffer.open( "test/cmd/input/ansiabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	AnsiFileBuffer::int_type ch;
 
@@ -201,7 +201,7 @@ void AnsiFileBufferTest::sputbackTest()
 void AnsiFileBufferTest::writeStringTest()
 {
 	AnsiFileBuffer buffer;
-	const char* pszFileName = "test/output/ansiabc.txt";
+	const char* pszFileName = "test/cmd/sqtppout/ansiabc.txt";
 	const char* pszString   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	AnsiFileBuffer* pBuffer = buffer.open( pszFileName, ios_base::out | ios_base::trunc );
 	assert( pBuffer != NULL );
@@ -225,7 +225,7 @@ void AnsiFileStreamTest::run()
 
 	wclog << L"AnsiFileStreamTest" << endl;
 
-	if ( !File::isDirectory( L"test/input" ) ) {
+	if ( !File::isDirectory( L"test/cmd/input" ) ) {
 		wclog << L"Checks skiped because the test input directory does not exist." << endl;
 	} else {
 		test.peekTest();
@@ -235,7 +235,7 @@ void AnsiFileStreamTest::run()
 void AnsiFileStreamTest::peekTest()
 {
 	AnsiFileStream stream;
-	stream.open( "test/input/ansiabc.txt", ios_base::in );
+	stream.open( "test/cmd/input/ansiabc.txt", ios_base::in );
 	assert( stream.good() );
 	AnsiFileStream::int_type chExpected = 'A';
 	AnsiFileStream::int_type chFound;
@@ -270,7 +270,7 @@ void UtfFileBufferTest::run()
 
 	wclog << L"UtfFileBufferTest" << endl;
 
-	if ( !File::isDirectory( L"test/input" ) ) {
+	if ( !File::isDirectory( L"test/cmd/input" ) ) {
 		wclog << L"Checks skiped because the test input directory does not exist." << endl;
 	} else {
 		test.openTest();
@@ -294,13 +294,13 @@ void UtfFileBufferTest::run()
 void UtfFileBufferTest::openTest()
 {
 	UtfFileBuffer buffer;
-	UtfFileBuffer* pBuffer = buffer.open( L"test/input/UTF16.txt", ios_base::in );
+	UtfFileBuffer* pBuffer = buffer.open( L"test/cmd/input/UTF16.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	assert( !buffer.isBigEndian() );
 
 	buffer.close();
 
-	pBuffer = buffer.open( L"test/input/UTF16BE.txt", ios_base::in );
+	pBuffer = buffer.open( L"test/cmd/input/UTF16BE.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	assert( buffer.isBigEndian() );
 
@@ -339,8 +339,8 @@ void UtfFileBufferTest::sbumpcTest()
 		buffer.close();
 	}} impl;
 
-	impl( L"test/input/utfabc.txt" );
-	impl( L"test/input/utfbeabc.txt" );
+	impl( L"test/cmd/input/utfabc.txt" );
+	impl( L"test/cmd/input/utfbeabc.txt" );
 }
 
 
@@ -376,14 +376,14 @@ void UtfFileBufferTest::uflowTest()
 		buffer.close();
 	}} impl;
 
-	impl( L"test/input/utfabc.txt" );
-	impl( L"test/input/utfbeabc.txt" );
+	impl( L"test/cmd/input/utfabc.txt" );
+	impl( L"test/cmd/input/utfbeabc.txt" );
 }
 
 void UtfFileBufferTest::seekposTest()
 {
 	UtfFileBuffer buffer;
-	UtfFileBuffer* pBuffer = buffer.open( L"test/input/utfabc.txt", ios_base::in );
+	UtfFileBuffer* pBuffer = buffer.open( L"test/cmd/input/utfabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	wchar_t wc;
 
@@ -407,7 +407,7 @@ void UtfFileBufferTest::seekposTest()
 void UtfFileBufferTest::seekoffTest()
 {
 	UtfFileBuffer buffer;
-	UtfFileBuffer* pBuffer = buffer.open( L"test/input/utfabc.txt", ios_base::in );
+	UtfFileBuffer* pBuffer = buffer.open( L"test/cmd/input/utfabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	wchar_t wc;
 
@@ -443,7 +443,7 @@ void UtfFileBufferTest::seekoffTest()
 void UtfFileBufferTest::sputbackTest()
 {
 	UtfFileBuffer buffer;
-	UtfFileBuffer* pBuffer = buffer.open( L"test/input/utfabc.txt", ios_base::in );
+	UtfFileBuffer* pBuffer = buffer.open( L"test/cmd/input/utfabc.txt", ios_base::in );
 	assert( pBuffer != NULL );
 	wchar_t wc;
 
@@ -469,7 +469,7 @@ void UtfFileBufferTest::sputbackTest()
 void UtfFileBufferTest::readRussiaTest()
 {
 	UtfFileBuffer buffer;
-	const wchar_t* pszFileName = L"test/input/\x0420\x043E\x0441\x0441\x0438\x044F.txt";
+	const wchar_t* pszFileName = L"test/cmd/input/\x0420\x043E\x0441\x0441\x0438\x044F.txt";
 	UtfFileBuffer* pBuffer = buffer.open( pszFileName, ios_base::in );
 	assert( pBuffer != NULL );
 	wchar_t wc;
@@ -534,7 +534,7 @@ void UtfFileStreamTest::run()
 
 	wclog << L"UtfFileStreamTest" << endl;
 
-	if ( !File::isDirectory( L"test/input" ) ) {
+	if ( !File::isDirectory( L"test/cmd/input" ) ) {
 		wclog << L"Checks skiped because the test input directory does not exist." << endl;
 	} else {
 		test.peekTest();
@@ -544,7 +544,7 @@ void UtfFileStreamTest::run()
 void UtfFileStreamTest::peekTest()
 {
 	UtfFileStream stream;
-	stream.open( L"test/input/utfabc.txt", ios_base::in );
+	stream.open( L"test/cmd/input/utfabc.txt", ios_base::in );
 	assert( stream.good() );
 	UtfFileStream::int_type chExpected = L'A';
 	UtfFileStream::int_type chFound;

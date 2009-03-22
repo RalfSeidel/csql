@@ -27,7 +27,7 @@ void FileTest::run()
 	*/
 	test.getLineTest();
 
-	if ( !File::isDirectory( L"test/input" ) ) {
+	if ( !File::isDirectory( L"test/cmd/input" ) ) {
 		wclog << L"File checks skiped because the test input directory does not exist." << endl;
 	} else {
 		test.isFileTest();
@@ -77,8 +77,8 @@ void FileTest::getLineTest()
 
 void FileTest::isFileTest()
 {
-	assert( File::isFile( L"test/input/buildin.h" ) );
-	assert( File::isFile( L"test\\input\\buildin.h" ) );
+	assert( File::isFile( L"test/cmd/input/buildin.h" ) );
+	assert( File::isFile( L"test\\cmd\\input\\buildin.h" ) );
 }
 
 void FileTest::findFileTest()
@@ -87,7 +87,7 @@ void FileTest::findFileTest()
 	File            file;
 	wstring         path;
 
-	file.open( L"test/input/include1.h" );
+	file.open( L"test/cmd/input/include1.h" );
 
 	path = file.findFile( L"include2.h", includeDirectories, false );
 	assert( path.empty() );
@@ -95,7 +95,7 @@ void FileTest::findFileTest()
 	path = file.findFile( L"include2.h", includeDirectories, true );
 	assert( !path.empty() );
 
-	includeDirectories.push_back( L"test/input" );
+	includeDirectories.push_back( L"test/cmd/input" );
 	path = file.findFile( L"include2.h", includeDirectories, false );
 	assert( !path.empty() );
 
