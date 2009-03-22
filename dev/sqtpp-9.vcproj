@@ -1360,7 +1360,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\doc\sqtppdoc.cfg"
+			RelativePath=".\sqtppdoc.cfg"
 			>
 		</File>
 	</Files>
