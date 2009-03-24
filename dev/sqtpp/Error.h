@@ -915,7 +915,21 @@ public:
 
 
 /**
-** @brief Unkonwn file type {1}.
+** @brief {1} requires {2}; option ignored.
+*/
+class D9007 : public Warning 
+{
+public:
+	D9007( const wstring& argument, const wstring& option )
+		: Warning( L"D9007", L"{1} requires {2}; option ignored." )
+	{
+		formatMessage( argument, option );
+	}
+};
+
+
+/**
+** @brief Unknown file type {1}.
 */
 class D9024 : public Warning 
 {

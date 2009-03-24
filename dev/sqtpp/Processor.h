@@ -110,6 +110,10 @@ private:
 	/// The output stream (wcout).
 	std::wostream*     m_pOutStream;
 
+	/// Flag indicating if the output stream is allocated by the 
+	/// this program and needs to be released.
+	bool               m_deleteOutStream;
+
 	/// The error out stream (wcerr).
 	std::wostream*     m_pErrStream;
 

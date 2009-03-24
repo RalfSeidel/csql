@@ -48,6 +48,7 @@ void CmdArgs::usage()
 	wcout << L"sqtpp [Flags] Filepath" << endl;
 	wcout << L"-?              " << L"Show this help" << endl;
 	wcout << L"-V              " << L"Verbose message output" << endl;
+	wcout << L"-o              " << L"Output path. If ommited the ouput will be send to stdout." << endl;
 	wcout << L"-C[io]Codepage  " << L"Set codepage of input and and ouput." << endl;
 	wcout << L"                List of supported code pages:" << endl;
 
@@ -134,6 +135,9 @@ void CmdArgs::parse( Options& options )
 					break;
 				case L'e':
 					setEliminateEmptyLines( options, &pszArgument[2] );
+					break;
+				case L'o':
+					setOutputFile( options, &pszArgument[2] );
 					break;
 				default:
 					// Invalid argument {1}.
@@ -467,6 +471,24 @@ void CmdArgs::setEliminateEmptyLines( Options& options, const wchar_t* pwszArgum
 	bool bEliminate = *pwszArgument == L'\0' || *pwszArgument == L'+';
 	options.eliminateEmptyLines( bEliminate );
 }
+
+/**
+** @brief /o Set the path of the output file.
+*/
+void CmdArgs::setOutputFile( Options& options, const wchar_t* pwszArgument )
+{
+	if ( *pwszArgument == L'\0' ) {
+		// {1} requires {2}; option ignored
+		error::D9007 warning( L"-o", L"[filename]");
+		return;
+	}
+
+	if ( *pwszArgument == L'"' ) {
+	} else {
+		options.setOutputFile( pwszArgument );
+	}
+}
+
 
 /**
 ** @brief /c[b|l|s][+|-] Option to emit the comments to the ouput (on or off).

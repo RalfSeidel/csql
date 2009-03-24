@@ -83,6 +83,7 @@ Processor::Processor( Options& options )
 , m_nOutputLineNumber( 1 )
 , m_pTokenStream( NULL )
 , m_pOutStream( NULL )
+, m_deleteOutStream( false )
 , m_pErrStream( &std::wcerr )
 , m_pLogStream( &std::wclog )
 //, m_pIStream( NULL )
@@ -95,6 +96,9 @@ Processor::Processor( Options& options )
 */
 Processor::~Processor()
 {
+	if ( m_deleteOutStream ) {
+		delete m_pOutStream;
+	}
 	delete m_pScanner;
 	delete &m_conditionalStack;
 	delete &m_tokenStreamStack;
@@ -111,11 +115,14 @@ Processor::~Processor()
 **
 ** @attention The processor stores a pointer to the submitted reference.
 ** Do not pass a local variable.
-**
 */
 void Processor::setOutStream( std::wostream& output )
 {
-	this->m_pOutStream = &output;
+	if ( m_deleteOutStream ) {
+		delete m_pOutStream;
+	}
+	m_pOutStream = &output;
+	m_deleteOutStream = false;
 }
 
 /**
@@ -127,7 +134,7 @@ void Processor::setOutStream( std::wostream& output )
 */
 void Processor::setErrStream( std::wostream& output )
 {
-	this->m_pErrStream = &output;
+	m_pErrStream = &output;
 }
 
 /**
@@ -138,7 +145,7 @@ void Processor::setErrStream( std::wostream& output )
 */
 void Processor::setLogStream( std::wostream& output )
 {
-	this->m_pLogStream = &output;
+	m_pLogStream = &output;
 }
 
 /**
@@ -510,6 +517,9 @@ void Processor::applyOptions()
 
 		if ( sOutputFile.empty() ) {
 			m_pOutStream = &std::wcout;
+		} else {
+			m_pOutStream = new std::wofstream( sOutputFile.c_str(), std::ios::out );
+			m_deleteOutStream = true;
 		}
 
 		if ( nOutputCodePage != 0 ) {
