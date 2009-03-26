@@ -34,10 +34,18 @@ int wmain(int argc, const wchar_t* const argv[])
 	Options  options;
 	Processor cpp( options );
 
+
 	try {
 		CmdArgs  cmdargs( argc, argv );
-		cmdargs.parse( options );
-
+		try {
+			cmdargs.parse( options );
+		} catch ( const error::Error& error ) {
+			wcerr << error;
+			return 1;
+		} catch ( const std::exception& ex ) {
+			wcerr << ex.what();
+			return 3;
+		}
 		const StringArray& files = cmdargs.getFiles();
 
 		if ( files.size() == 0 ) {
@@ -68,11 +76,11 @@ int wmain(int argc, const wchar_t* const argv[])
 #	endif
 
 	if ( cpp.getMaxMessageSeverity() >= error::Error::SEV_FATAL ) {
-		return 2;
+		return 3;
 	}
 
 	if ( cpp.getMaxMessageSeverity() >= error::Error::SEV_ERROR ) {
-		return 1;
+		return 2;
 	}
 
 	return 0;
