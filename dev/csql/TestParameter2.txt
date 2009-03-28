@@ -1,0 +1,24 @@
+﻿System=mssql
+
+;Server=tacheles
+Server=ralfpc
+
+Database=tacheles
+;Database=tachelestest
+User=sa
+Password=(tws-2433.sql)
+;Security=T
+BreakOnError=Yes
+UsePreprocessor=Yes
+Trace=0
+Charset=ansi
+
+;BreakOnError=false
+
+PreprocessorArgs=/E /TS /DTARGET_DB=_CSQL_DATABASE  /DCSQL_CREATE_PROCEDURES /DCSQL_CREATE_TRIGGERS /DCSQL_EXECUTE_TESTS
+;  /DCSQL_INSERT_DEF_DATA /DCSQL_CREATE_PROCEDURES /DCSQL_EXECUTE_TESTS
+;  /DCSQL_DROP_FOREIGN_KEYS
+
+
+Tempfile=e:\temp\bsql.out
+;Distfile=e:\temp\bsqlout.sql

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+    <Words>
+        <Deprecated>
+            <!-- Words that should be flagged as obsolete. -->
+        </Deprecated>
+        <Recognized>
+            <!-- Words that should not cause a violation. -->
+			<Word>csql</Word>
+		</Recognized>
+        <Unrecognized>
+            <!-- Words that should cause a violation. -->
+        </Unrecognized>
+    </Words>
+    <Acronyms>
+        <CasingExceptions>
+            <Acronym>sqtpp</Acronym>
+			<Acronym>csql</Acronym>
+			<Acronym>Db</Acronym>
+			<Acronym>Ms</Acronym>
+		</CasingExceptions>
+    </Acronyms>
+</Dictionary>

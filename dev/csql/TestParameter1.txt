@@ -1,0 +1,4 @@
+﻿-System=MSSQL
+-Server=.
+-Database=tempdb
+-ScriptFile=D:\src\Tools\sqtpp\sqtpp\test\sql\DropForeignKey.csql
