@@ -1,11 +1,12 @@
 //---------------------------------------------------------------------
 /**
 ** @file
-** <copyright file="Default.aspx.cs" company="SQL Service GmbH">
+** <copyright file="DbMacros.h" company="SQL Service GmbH">
 ** Copyright (c) SQL Service GmbH.  All rights reserved.
 ** </copyright>
 ** <summary>
-** Common helper macros for MS Transact SQL Scripts.
+** Common helper macros for MS Transact SQL Scripts / Sample macro
+** package for sqtpp and csql.
 ** </summary>
 **
 ** <remarks>
@@ -18,7 +19,6 @@
 ** @defgroup Action Macro definitions that are expanded into SQL script .
 */
 //---------------------------------------------------------------------
-#include "DbConst.h"
 
 /// @def CSQL_CREATE_ALL
 /// <summary>
@@ -559,9 +559,14 @@
 ** Redefine all helper macros.
 */
 #undef CSQL_SET_CATALOG
+#undef CSQL_DROP_DEFAULT
+#undef CSQL_DROP_TYPE
+#undef CSQL_DROP_RULE
+#undef CSQL_DROP_SCHEMA
 #undef CSQL_DROP_TABLE
 #undef CSQL_DROP_TEMP_TABLE
 #undef CSQL_DROP_VIEW
+#undef CSQL_DROP_SYNONYM
 #undef CSQL_DROP_PROCEDURE
 #undef CSQL_DROP_TRIGGER
 #undef CSQL_DROP_TYPE
@@ -575,6 +580,10 @@
 #undef CSQL_DROP_UQ_CONSTRAINT
 #undef CSQL_DROP_INDEX
 #undef CSQL_DROP_FUNCTION
+#undef CSQL_CREATE_DEFAULT
+#undef CSQL_CREATE_TYPE
+#undef CSQL_CREATE_RULE
+#undef CSQL_CREATE_SCHEMA
 #undef CSQL_CREATE_VIEW
 #undef CSQL_CREATE_PROCEDURE
 #undef CSQL_CREATE_FUNCTION
