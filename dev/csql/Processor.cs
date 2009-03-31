@@ -394,7 +394,7 @@ namespace csql
 				return LineType.Exec;
 
 			// check for # line no
-			if ( line[0] == '#' ) {
+			if ( line.StartsWith( "#line" ) ) {
 				string[] parts = line.Split( ' ' );
 				if ( parts.Length >= 3 )
 					return LineType.Line;
