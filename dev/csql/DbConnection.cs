@@ -221,7 +221,6 @@ namespace csql
 			if ( !String.IsNullOrEmpty( cmdArgs.User ) ) {
 				sb.Append( "User ID=" ).Append( cmdArgs.User ).Append( ";" );
 				sb.Append( "Password=" ).Append( cmdArgs.Password ).Append(  ";" );
-				sb.Append( ";" );
 			} else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}

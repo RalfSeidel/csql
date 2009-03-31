@@ -1155,8 +1155,7 @@ namespace CommandLine
             private bool ParseValue(Type type, string stringData, out object value)
             {
                 // null is only valid for bool variables
-                // empty string is never valid
-                if ((stringData != null || type == typeof(bool)) && (stringData == null || stringData.Length > 0))
+                if ((stringData != null || type == typeof(bool)) )
                 {
                     try
                     {
