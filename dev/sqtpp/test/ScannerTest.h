@@ -58,6 +58,9 @@ public:
 	/// Test scanning a directive not starting a the beginning of the line.
 	void scanNonDirectiveTest();
 
+	/// Test scanning a script with a temporary table name.
+	void scanNonDirectiveTest2();
+
 	/// Test a simple macro define a directive.
 	void scanDefineTest();
 

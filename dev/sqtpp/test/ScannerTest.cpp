@@ -35,6 +35,7 @@ void ScannerTest::run()
 	test.scanComment1Test();
 	test.scanComment2Test();
 	test.scanNonDirectiveTest();
+	test.scanNonDirectiveTest2();
 	test.scanDirectiveTest();
 	test.scanDefineTest();
 	test.scanDefine2Test();
@@ -279,6 +280,34 @@ void ScannerTest::scanNonDirectiveTest()
 
 	testTokenSequence( inputText, tokensExpected );
 }
+
+
+/**
+** @brief Test scanning a script with a temporary table name.
+**
+** Repro for a problem found by Melanie. The following 
+** line i.e. which is not a preprocess directive::
+** @code
+**	insert into 
+**		#temp
+** values ...
+** @endcode
+*/
+void ScannerTest::scanNonDirectiveTest2()
+{
+	wstring          inputText( L"insert into\r\n\t#temp" );
+	TokenExpressions tokensExpected;
+
+	tokensExpected.push_back( TokenExpression( TOK_IDENTIFIER, CTX_DEFAULT, L"insert" ) );
+	tokensExpected.push_back( TokenExpression( TOK_SPACE, CTX_DEFAULT, L" " ) );
+	tokensExpected.push_back( TokenExpression( TOK_IDENTIFIER, CTX_DEFAULT, L"into" ) );
+	tokensExpected.push_back( TokenExpression( TOK_NEW_LINE, CTX_DEFAULT, L"\r\n" ) );
+	tokensExpected.push_back( TokenExpression( TOK_SPACE, CTX_DEFAULT, L"\t" ) );
+	tokensExpected.push_back( TokenExpression( TOK_DIRECTIVE, CTX_DEFAULT, L"temp" ) );
+
+	testTokenSequence( inputText, tokensExpected );
+}
+
 
 
 /**

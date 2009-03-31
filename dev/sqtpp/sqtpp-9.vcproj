@@ -803,6 +803,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\test\cmd\sqtpp.bat"
+					>
+				</File>
+				<File
 					RelativePath=".\test\cmd\sqtppall.bat"
 					>
 				</File>
@@ -1052,6 +1056,10 @@
 					</File>
 					<File
 						RelativePath=".\test\cmd\input\stringize.h"
+						>
+					</File>
+					<File
+						RelativePath=".\test\cmd\input\temptable.sql"
 						>
 					</File>
 					<File
@@ -1356,6 +1364,10 @@
 					</File>
 					<File
 						RelativePath=".\test\cmd\reference\stringize.h"
+						>
+					</File>
+					<File
+						RelativePath=".\test\cmd\reference\temptable.sql"
 						>
 					</File>
 					<File

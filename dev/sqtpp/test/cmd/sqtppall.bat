@@ -4,7 +4,7 @@ REM TODO: Add some description.
 REM -------------------------------------------------------------------
 setlocal
 set failct=0
-set sqtpp=..\..\Debug\sqtpp.exe
+set sqtpp=..\..\..\Debug\sqtpp.exe
 
 if not exist failed\nul mkdir failed
 if not exist sqtppout\nul mkdir sqtppout
