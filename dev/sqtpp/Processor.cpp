@@ -519,6 +519,10 @@ void Processor::applyOptions()
 			m_pOutStream = &std::wcout;
 		} else {
 			m_pOutStream = new std::wofstream( sOutputFile.c_str(), std::ios::out );
+			if ( m_pOutStream->fail() ) {
+				throw error::C1083( sOutputFile );
+			}
+			m_pOutStream->exceptions( ifstream::failbit | ifstream::badbit );
 			m_deleteOutStream = true;
 		}
 

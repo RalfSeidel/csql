@@ -480,6 +480,7 @@ void CmdArgs::setOutputFile( Options& options, const wchar_t* pwszArgument )
 	if ( *pwszArgument == L'\0' ) {
 		// {1} requires {2}; option ignored
 		error::D9007 warning( L"-o", L"[filename]");
+		wcerr << warning;
 		return;
 	}
 

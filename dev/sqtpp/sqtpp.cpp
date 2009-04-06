@@ -6,6 +6,7 @@
 #include "test/Test.h"
 #include "Processor.h"
 #if defined( _DEBUG ) && defined( WIN32 )
+#include <conio.h>
 #include <windows.h>
 #endif
 
@@ -66,8 +67,8 @@ int wmain(int argc, const wchar_t* const argv[])
 #	ifdef _DEBUG
 #	ifdef WIN32
 	if ( ::IsDebuggerPresent() ) {
-		wchar_t c;
-		wcin >> c;
+		wcout << "Press any key to exit..." << flush;
+		_getwch();
 	}
 #	else
 	wchar_t c;
