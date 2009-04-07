@@ -674,7 +674,7 @@ begin \
 	exec( @SqlStmt ) \
 end
 #else  // !CSQL_CREATE_DEFAULTS
-#define CSQL_CREATE_DEFAULTS(X, V)
+#define CSQL_CREATE_DEFAULT(X, V)
 #endif // CSQL_CREATE_DEFAULTS
 
 
@@ -699,7 +699,7 @@ begin \
 	exec( @SqlStmt ) \
 end
 #else  // !CSQL_DROP_DEFAULTS
-#define CSQL_DROP_DEFAULTS(X)
+#define CSQL_DROP_DEFAULT(X)
 #endif // CSQL_DROP_DEFAULTS
 
 
@@ -729,7 +729,7 @@ begin \
 	exec( @SqlStmt ) \
 end
 #else  // !CSQL_CREATE_RULES
-#define CSQL_CREATE_RULES(X, E)
+#define CSQL_CREATE_RULE(X, E)
 #endif // CSQL_CREATE_RULES
 
 
@@ -754,7 +754,7 @@ begin \
 	exec( @SqlStmt ) \
 end
 #else  // !CSQL_DROP_RULES
-#define CSQL_DROP_RULES(X)
+#define CSQL_DROP_RULE(X)
 #endif // CSQL_DROP_RULES
 
 
@@ -782,7 +782,7 @@ begin \
 	exec( @SqlStmt ) \
 end
 #else  // !CSQL_CREATE_TYPES
-#define CSQL_CREATE_TYPES(X, E)
+#define CSQL_CREATE_TYPE(X, E)
 #endif // CSQL_CREATE_TYPES
 
 
@@ -807,7 +807,7 @@ begin \
 	exec( @SqlStmt ) \
 end
 #else  // !CSQL_DROP_TYPES
-#define CSQL_DROP_TYPES(X)
+#define CSQL_DROP_TYPE(X)
 #endif // CSQL_DROP_TYPES
 
 
