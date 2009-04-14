@@ -648,7 +648,7 @@ namespace CommandLine
                 {
                     if (argument.ShortName != null && argument.ShortName.Length > 0)
                     {
-                        Debug.Assert(!argumentMap.ContainsKey(argument.ShortName));
+                        Debug.Assert(!argumentMap.ContainsKey(argument.ShortName), "Duplicate short argument name: " + argument.ShortName );
                         this.argumentMap[argument.ShortName] = argument;
                     }
                     else

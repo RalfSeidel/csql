@@ -54,6 +54,10 @@ namespace csql
 		public string Server;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
+		[Argument( ArgumentType.AtMostOnce, HelpText = "The server IP port.", ShortName = "R" )]
+		public int ServerPort;
+
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
 		[Argument( ArgumentType.AtMostOnce, HelpText = "The initial server database/catalog.", ShortName = "D" )]
 		public string Database;
 
@@ -86,6 +90,10 @@ namespace csql
 		[Argument( ArgumentType.AtMostOnce, HelpText = "The verbosity/trace level.", LongName = "Trace", ShortName = "t", DefaultValue = ((int)TraceLevel.Info) )]
 		public int Verbose;
 
+		/// <summary>
+		/// Gets definitions for the preprocessor that reflect some of the program properties.
+		/// </summary>
+		/// <value>Defintions for the preprocessor.</value>
 		public string PreprocessorDefines
 		{
 			get
@@ -96,15 +104,13 @@ namespace csql
 				Assembly assembly = Assembly.GetExecutingAssembly();
 				AssemblyName assemblyName = assembly.GetName();
 				Version assemblyVersion = assemblyName.Version;
-				string version = String.Format( CultureInfo.InvariantCulture, "{0:d2}.{1:d2}"
-					, assemblyVersion.Major, assemblyVersion.Minor );
+				string version = String.Format( CultureInfo.InvariantCulture, "{0:d2}.{1:d2}", assemblyVersion.Major, assemblyVersion.Minor );
 
-				if ( !String.IsNullOrEmpty( version ) ) {
-					sb.Append( separator );
-					sb.Append( "/D_CSQL_VERSION=" );
-					sb.Append( version );
-					separator = " ";
-				}
+				sb.Append( separator );
+				sb.Append( "/D_CSQL_SYSTEM_" );
+				sb.Append( System.ToString().ToUpper() );
+				separator = " ";
+
 				if ( !String.IsNullOrEmpty( Server ) ) {
 					sb.Append( separator );
 					sb.Append( "/D_CSQL_SERVER=" );
@@ -123,6 +129,13 @@ namespace csql
 					sb.Append( User );
 					separator = " ";
 				}
+				if ( !String.IsNullOrEmpty( version ) ) {
+					sb.Append( separator );
+					sb.Append( "/D_CSQL_VERSION=" );
+					sb.Append( version );
+					separator = " ";
+				}
+
 				string result = sb.ToString();
 				return result;
 			}

@@ -10,9 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql", "csql\csql.csproj", "{804CB225-6ACE-4171-9FE1-85038F5A452F}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{D693F846-F652-408C-A70E-1E95418890B3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs08.codeplex.com/
 		SccLocalPath0 = .
@@ -22,6 +24,9 @@ Global
 		SccProjectUniqueName2 = csql\\csql.csproj
 		SccProjectName2 = csql
 		SccLocalPath2 = csql
+		SccProjectUniqueName3 = setup\\setup.vdproj
+		SccProjectName3 = setup
+		SccLocalPath3 = setup
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +70,14 @@ Global
 		{804CB225-6ACE-4171-9FE1-85038F5A452F}.Release|x64.ActiveCfg = Release|Any CPU
 		{804CB225-6ACE-4171-9FE1-85038F5A452F}.Release|x86.ActiveCfg = Release|Any CPU
 		{804CB225-6ACE-4171-9FE1-85038F5A452F}.Release|x86.Build.0 = Release|Any CPU
+		{D693F846-F652-408C-A70E-1E95418890B3}.Debug|Any CPU.ActiveCfg = Debug
+		{D693F846-F652-408C-A70E-1E95418890B3}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{D693F846-F652-408C-A70E-1E95418890B3}.Debug|x64.ActiveCfg = Debug
+		{D693F846-F652-408C-A70E-1E95418890B3}.Debug|x86.ActiveCfg = Debug
+		{D693F846-F652-408C-A70E-1E95418890B3}.Release|Any CPU.ActiveCfg = Release
+		{D693F846-F652-408C-A70E-1E95418890B3}.Release|Mixed Platforms.ActiveCfg = Release
+		{D693F846-F652-408C-A70E-1E95418890B3}.Release|x64.ActiveCfg = Release
+		{D693F846-F652-408C-A70E-1E95418890B3}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

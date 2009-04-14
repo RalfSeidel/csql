@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.IO;
-using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace csql
 {
@@ -109,16 +108,41 @@ namespace csql
 			{
 				return !String.IsNullOrEmpty( m_cmdArgs.TempFile ) && !String.IsNullOrEmpty( m_tempFileName );
 			}
-			
 		}
 
 
 		/// <summary>
-		/// Emits the an intro code.
+		/// Emits an entry message.
 		/// </summary>
 		public virtual void SignIn()
 		{
+			if ( Program.TraceLevel.TraceInfo ) {
+				StringBuilder sb = new StringBuilder();
+				Assembly assembly = Assembly.GetEntryAssembly();
+				string name = assembly.GetName().Name;
+				Version version = assembly.GetName().Version;
+				sb.Append( name );
+				sb.Append( " " );
+				if ( Program.TraceLevel.TraceVerbose ) {
+					sb.Append( version.ToString() );
+				} else {
+					sb.Append( version.ToString(2) );
+				}
+				sb.Append( " (c) SQL Service GmbH" );
+
+				string message = sb.ToString();
+				Trace.WriteLine( message );
+			}
 		}
+
+		/// <summary>
+		/// Emits the an exit/finished message.
+		/// </summary>
+		public virtual void SignOut()
+		{
+			Trace.WriteLineIf( Program.TraceLevel.TraceInfo, "** Finished" );
+		}
+
 
 		/// <summary>
 		/// Preprocess the input file and 
@@ -198,38 +222,41 @@ namespace csql
 		/// <param name="batch">The batch.</param>
 		private void ProcessExec( string batch )
 		{
-			ProcessProgress(" Executing batch " + m_currentBatchNo );
+			ProcessProgress( "Executing batch " + m_currentBatchNo );
 			Debug.WriteLineIf( Program.TraceLevel.TraceVerbose, batch );
 			try {
 				ProcessBatch( batch );
 			}
+			catch ( csql.DbException ex ) {
+				string message = FormatError( ex.Message, ex.LineNumber );
+				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
+				if ( m_cmdArgs.BreakOnError ) {
+					throw new TerminateException( ExitCode.SqlCommandError );
+				}
+			}
 			catch ( System.Data.SqlClient.SqlException ex ) {
-				int    lineNo = CurrentBatchLineNo + (ex.LineNumber > 0 ? ex.LineNumber : 0);
-				string message = FormatError( ex.Message, lineNo );
+				string message = FormatError( ex.Message, ex.LineNumber );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Odbc.OdbcException ex ) {
-				int    lineNo = CurrentBatchLineNo;
-				string message = FormatError( ex.Message, lineNo );
+				string message = FormatError( ex.Message, 0 );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.OleDb.OleDbException ex ) {
-				int    lineNo = CurrentBatchLineNo;
-				string message = FormatError( ex.Message, lineNo );
+				string message = FormatError( ex.Message, 0 );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Common.DbException ex ) {
-				int    lineNo = CurrentBatchLineNo;
-				string message = FormatError( ex.Message, lineNo );
+				string message = FormatError( ex.Message, 0 );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
@@ -372,6 +399,10 @@ namespace csql
 		/// <returns>The formated message.</returns>
 		private string FormatError( string message, int lineNumber )
 		{
+			if ( lineNumber < 0 )
+				lineNumber = 0;
+
+			lineNumber += CurrentBatchLineNo;
 			string error = String.Format( "{0}({1}): Error: {2}", m_currentFile, lineNumber, message );
 			return error;
 		}
@@ -400,13 +431,6 @@ namespace csql
 					return LineType.Line;
 			}
 			return LineType.Text;
-		}
-
-		/// <summary>
-		/// Emits script exit code.
-		/// </summary>
-		public virtual void SignOut()
-		{
 		}
 
 		/// <summary>

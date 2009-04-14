@@ -18,11 +18,15 @@ namespace csql
 		public ExecutionProcessor( CmdArgs cmdArgs )
 		: base ( cmdArgs )
 		{
-			m_connection = ConnectionFactory.CreateConnection( cmdArgs.System, cmdArgs.Driver );
-			m_connection.Open( cmdArgs );
+			m_connection = ConnectionFactory.CreateConnection( cmdArgs );
 			m_connection.InfoMessage += new EventHandler<DbMessageEventArgs>( InfoMessageEventHandler );
 		}
 
+		/// <summary>
+		/// Handler for the informational messages send by the database server when processing the scripts.
+		/// </summary>
+		/// <param name="sender">The connection.</param>
+		/// <param name="e">The <see cref="csql.DbMessageEventArgs"/> instance containing the message.</param>
 		void InfoMessageEventHandler( object sender, DbMessageEventArgs e )
 		{
 			if ( Program.TraceLevel.TraceVerbose ) {
@@ -46,7 +50,7 @@ namespace csql
 
 		protected override void ProcessProgress( string progressInfo )
 		{
-			m_connection.TraceProgress( progressInfo );
+			Trace.WriteLineIf( Program.TraceLevel.TraceInfo, progressInfo );
 		}
 
 		/// <summary>
@@ -65,10 +69,8 @@ namespace csql
 					if ( !dataReader.NextResult() )
 						break;
 				}
-
+				dataReader.Close();
 			}
 		}
-
-
 	}
 }
