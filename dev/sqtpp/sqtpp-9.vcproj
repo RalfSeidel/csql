@@ -533,6 +533,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Location.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Logger.h"
 				>
 			</File>
