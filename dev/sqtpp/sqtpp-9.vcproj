@@ -194,10 +194,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="3"
+				Optimization="0"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="2"
-				OmitFramePointers="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -221,10 +220,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
+				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
+				Profile="true"
 			/>
 			<Tool
 				Name="VCALinkTool"

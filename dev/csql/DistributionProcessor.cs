@@ -28,7 +28,7 @@ namespace csql
 
 		protected override void ProcessProgress( string progressInfo )
 		{
-			string statement = "print '" + progressInfo.Replace( "'", "''" ) + "'";
+			string statement = "print '" + progressInfo.Replace( "'", "''" ) + "'\r\n";
 			ProcessBatch( statement );
 		}
 
