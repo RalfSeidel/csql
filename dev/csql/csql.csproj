@@ -90,7 +90,6 @@
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
     <Content Include="sqtpp.ico" />
     <Content Include="TestParameter1.txt" />
-    <Content Include="TestParameter2.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
