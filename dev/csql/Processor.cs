@@ -157,7 +157,7 @@ namespace csql
 			m_batchBuilder       = new StringBuilder( 4096 );
 			try {
 				using ( Stream stream = OpenInputFile() )
-				using ( StreamReader reader = new StreamReader( stream, true ) ) {
+				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
 					while ( !reader.EndOfStream ) {
 						string line = reader.ReadLine();
 						LineType type = GetLineType( line );
