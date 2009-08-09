@@ -14,7 +14,9 @@
 namespace sqtpp {
 
 class Error;
+class CodePageInfo;
 enum Token;
+enum CodePageId;
 
 class File
 {
@@ -66,8 +68,7 @@ public:
 	std::wstring findFile( const wstring& filePath, const vector<wstring>& includeDirectories, bool bSearchCwd ) const;
 
 	// Open the file.
-	//std::wistream& open( const std::wstring& fileName, const std::locale& loc );
-	std::wistream& open( const std::wstring& fileName, int codepage );
+	std::wistream& open( const std::wstring& fileName, const CodePageId defaultCodePageId );
 
 	// Open the file.
 	std::wistream& open( const std::wstring& fileName );
@@ -126,8 +127,10 @@ public:
 
 private:
 	// Auto detect the character set of the file.
-	static int detectCodePage( const std::wstring& fileName );
+	static const CodePageInfo* detectCodePage( const std::wstring& fileName, const CodePageInfo* pDefaultCodePage );
 
+	// Auto detect the character set of the file.
+	static const CodePageInfo* detectCodePageByBom( std::ifstream& fileStream );
 };
 
 /**

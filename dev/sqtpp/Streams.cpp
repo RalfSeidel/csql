@@ -299,20 +299,6 @@ UtfFileBuffer::pos_type UtfFileBuffer::seekoff( off_type offset, ios_base::seekd
 	return position;
 }
 
-// --------------------------------------------------------------------
-// UtfFileStream
-// --------------------------------------------------------------------
-
-
-/**
-** @brief The constructor setting the stream buffer in the base class.
-*/
-UtfFileStream::UtfFileStream()
-: base( &m_buffer )
-{
-}
-
-
 #ifdef _WIN32
 
 // --------------------------------------------------------------------

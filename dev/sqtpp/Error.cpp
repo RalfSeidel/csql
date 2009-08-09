@@ -132,7 +132,7 @@ void Error::formatMessage( const wstring& sParameter1, const wstring& sParameter
 
 
 /**
-** @brief Message severity stream out.
+** @brief 
 */
 C1070::C1070( const Location* pLocation ) : FatalError( L"C1070", L"mismatched #if/#endif pair in file {1}({2})" )
 {
@@ -142,6 +142,18 @@ C1070::C1070( const Location* pLocation ) : FatalError( L"C1070", L"mismatched #
 		 wstring lineNo = linoNoBuilder.str();
 		 formatMessage( pLocation->getFile(), lineNo );
 	}
+}
+
+/**
+** @brief constructor.
+** @param codePageId The id of the code page that caused the error.
+*/
+C1205::C1205( const int codePageId ): FatalError( L"C1205", L"Unsupported code page {1}" )
+{
+	wstringstream cpStringBuilder;
+	cpStringBuilder << codePageId;
+	wstring codePageString = cpStringBuilder.str();
+	formatMessage( codePageString );
 }
 
 

@@ -17,7 +17,8 @@
 #include "Context.h"
 #include "Util.h"
 #include "Scanner.h"
-
+#include "CodePage.h"
+#include "CodePageConverter.h"
 #include "Processor.h"
 
 
@@ -83,7 +84,7 @@ Processor::Processor( Options& options )
 , m_nOutputLineNumber( 1 )
 , m_pTokenStream( NULL )
 , m_pOutStream( NULL )
-, m_deleteOutStream( false )
+, m_createdOutFile( false )
 , m_pErrStream( &std::wcerr )
 , m_pLogStream( &std::wclog )
 //, m_pIStream( NULL )
@@ -96,7 +97,7 @@ Processor::Processor( Options& options )
 */
 Processor::~Processor()
 {
-	if ( m_deleteOutStream ) {
+	if ( m_createdOutFile ) {
 		delete m_pOutStream;
 	}
 	delete m_pScanner;
@@ -109,6 +110,16 @@ Processor::~Processor()
 	delete &m_logger;
 }
 
+/**
+** @brief Close the output file if it has been created by this instance.
+*/
+void Processor::close()
+{
+	if ( m_createdOutFile ) {
+		std::wofstream* fs = (wofstream*)(m_pOutStream);
+		fs->close();
+	}
+}
 
 /**
 ** @brief Set the stream to which the processor will write the result.
@@ -118,11 +129,11 @@ Processor::~Processor()
 */
 void Processor::setOutStream( std::wostream& output )
 {
-	if ( m_deleteOutStream ) {
+	if ( m_createdOutFile ) {
 		delete m_pOutStream;
 	}
 	m_pOutStream = &output;
-	m_deleteOutStream = false;
+	m_createdOutFile = false;
 }
 
 /**
@@ -303,9 +314,11 @@ size_t Processor::emitBuffer()
 	}
 
 	if ( bEmit ) {
-		(*this->m_pOutStream) << line;
+		if ( line.length() > 0 ) {
+			(*this->m_pOutStream) << line;
+			nCount = line.length();
+		}
 		m_prevLine = line;
-		nCount     = line.length();
 	}
 
 	m_outputBuffer.str( wstring() );
@@ -411,8 +424,9 @@ void Processor::processFile( const std::wstring& fileName )
 		wstring message = Convert::str2wcs( ex.what() );
 		error::C1001 error( message );
 		error.setFileInfo( file );
-		(*m_pErrStream) << error;
-		if ( !m_fileStack.empty() ) {
+		if ( m_fileStack.empty() ) {
+			(*m_pErrStream) << error;
+		} else {
 			throw error;
 		}
 	}
@@ -512,26 +526,39 @@ void Processor::applyOptions()
 	m_pTokenStream = m_pScanner;
 
 	if ( m_pOutStream == NULL ) {
-		const wstring& sOutputFile     = m_options.getOutputFile();
-		const int      nOutputCodePage = m_options.getOutputCodePage();
+		const wstring& sOutputFile = m_options.getOutputFile();
+		const int nOutputCodePage = m_options.getOutputCodePage();
 
 		if ( sOutputFile.empty() ) {
 			m_pOutStream = &std::wcout;
+			m_createdOutFile = false;
 		} else {
-			m_pOutStream = new std::wofstream( sOutputFile.c_str(), std::ios::out );
-			if ( m_pOutStream->fail() ) {
+			std::wofstream* pOutStream = new std::wofstream();
+			if ( nOutputCodePage == CodePageId::CPID_UTF16 ) {
+				Utf16Converter* pConverter = new Utf16Converter();
+				locale loc = locale::classic() ;
+				loc = locale( loc, pConverter );
+				pOutStream->imbue( loc ) ;
+			} else if ( nOutputCodePage != 0 ) {
+				char  buffer[32];
+				_itoa( nOutputCodePage, buffer, 10 );
+				// see documentation of setlocale crt function for the
+				// explanation of the local name format.
+				const string locId = string( "English_US." ) + buffer;
+				const locale loc( locId.c_str() );
+				pOutStream->imbue( loc );
+			}
+			
+			pOutStream->open( sOutputFile.c_str(), std::ios::out | std::ios::binary );
+			if ( pOutStream->fail() ) {
 				throw error::C1083( sOutputFile );
 			}
-			m_pOutStream->exceptions( ifstream::failbit | ifstream::badbit );
-			m_deleteOutStream = true;
-		}
-
-		if ( nOutputCodePage != 0 ) {
-			char  buffer[32];
-			_itoa( nOutputCodePage, buffer, 10 );
-			const string     locId = string( "English_US." ) + buffer;
-			const locale     loc( locId.c_str() );
-			m_pOutStream->rdbuf()->pubimbue( loc );
+			pOutStream->exceptions( wofstream::failbit | wofstream::badbit );
+			if ( nOutputCodePage == CodePageId::CPID_UTF16 ) {
+				(*pOutStream) << wchar_t(0xFEFF);
+			}
+			m_pOutStream = pOutStream;
+			m_createdOutFile = true;
 		}
 	}
 
@@ -692,7 +719,6 @@ void Processor::processInput()
 		}
 		throw error::C1070( pLocation );
 	}
-
 }
 
 /**

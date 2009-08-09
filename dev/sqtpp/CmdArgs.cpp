@@ -55,8 +55,8 @@ void CmdArgs::usage()
 	const CodePageInfo** ppCpi = CodePageInfo::getCodePages();
 	while ( *ppCpi != NULL ) {
 		const CodePageInfo* pCpi = *ppCpi;
-		const CodePage  cp = pCpi->getCodePage();
-		if ( cp != CP_UNDEFINED ) {
+		const CodePageId  cp = pCpi->getCodePageId();
+		if ( cp != CPID_UNDEFINED ) {
 			const wstring&  name = pCpi->getIdentifier();
 			wcout << "                \t" << cp << ": " << name << endl;
 		}
@@ -270,7 +270,7 @@ void CmdArgs::setCodepage( Options& options, const wchar_t* pwszArgument )
 		}
 	}
 	long     lCodePage = wcstol( pwszArgument, NULL, 10 );
-	CodePage cp        = CodePage(lCodePage);
+	CodePageId cp      = CodePageId(lCodePage);
 
 	if ( CodePageInfo::findCodePageInfo( cp ) == NULL ) {
 		// Invalid argument {1}.

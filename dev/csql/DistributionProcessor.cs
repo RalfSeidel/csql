@@ -22,7 +22,7 @@ namespace csql
 		{
 			string outputFilePath = cmdArgs.DistFile;
 			Stream stream = new FileStream( outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
-			m_outputFileWriter = new StreamWriter( stream );
+			m_outputFileWriter = new StreamWriter( stream, Encoding.Unicode );
 		}
 
 

@@ -5,6 +5,7 @@
 #include <mbctype.h>
 #include <strstream>
 #include "CodePage.h"
+#include "CodePageConverter.h"
 #include "Streams.h"
 #include "Exceptions.h"
 #include "Error.h"
@@ -341,34 +342,6 @@ std::wistream& File::attach( std::wistream& is )
 }
 
 /**
-** @brief Attach to the given istream
-**
-** @param loc The locale of the stream data.
-** @param is The non unicode stream to attach to.
-*/
-/*
-std::wistream& File::attach( const std::locale& loc, std::istream& is )
-{
-	C2WIStream* pExternalStream = new C2WIStream( loc, is );
-	m_pData->m_pInternalStream = &is;
-	m_pData->m_pExternalStream = pExternalStream;
-	m_pData->m_nLineNumber = 1;
-	m_pData->m_nLineColumn = 1;
-	m_pData->m_isAttached = true;
-
-	int exceptions = ios::badbit;
-#	if	_MSC_VER > 10
-	exceptions|= ios::_Hardfail;
-#	endif
-
-	m_pData->m_pInternalStream->exceptions( exceptions  );
-	m_pData->m_pExternalStream->exceptions( exceptions );
-
-	return *m_pData->m_pExternalStream;
-}
-*/
-
-/**
 ** @brief Get the full absolute path for the given relative file path.
 ** 
 ** @param filePath The relative file path.
@@ -576,9 +549,9 @@ std::wstring File::findFile( const wstring& filePath, const vector<wstring>& inc
 ** @todo Code page detection.
 ** 
 ** @param fileName The file path.
-** @param codepage The locale of the file (for code page information).
+** @param defaultCodePageId The default code page for files having no bom at their beginning.
 */
-std::wistream& File::open( const std::wstring& fileName, int codepage )
+std::wistream& File::open( const std::wstring& fileName, const CodePageId defaultCodePageId )
 {
 	if ( m_pData->m_pExternalStream ) {
 		throw LogicError( "File already open" );
@@ -587,50 +560,36 @@ std::wistream& File::open( const std::wstring& fileName, int codepage )
 	// Check if the exists and is accessable.
 	wstring sFullPath = checkFile( fileName );
 
-	if ( codepage == CP_UNDEFINED ) {
-		codepage = File::detectCodePage( fileName );
+	const CodePageInfo* const pDefaultCodePage = CodePageInfo::findCodePageInfo( defaultCodePageId );
+	if ( pDefaultCodePage == NULL ) {
+		throw error::C1205( defaultCodePageId );
 	}
+	const CodePageInfo* const pCodePage = detectCodePage( fileName, pDefaultCodePage );
+	const CodePageId codePageId = pCodePage->getCodePageId();
 
-	if ( codepage == CP_UTF32 || codepage == CP_UTF32BE ) {
+	if ( codePageId == CPID_UTF32 || codePageId == CPID_UTF32BE ) {
 		//throw NotSupportedError( "The code page is not supported" );
 		throw NotSupportedError();
 	}
 
-	if ( codepage == CP_UTF16 || codepage == CP_UTF16BE ) {
-		UtfFileStream* pUtfStream  = new UtfFileStream();
+	std::wifstream* pInnerStream = new std::wifstream();
+	const locale& fileLocale = pCodePage->getLocale();
+	pInnerStream->imbue( fileLocale ) ;
+	pInnerStream->open( fileName.c_str(), std::ios_base::in | std::ios_base::binary  );
 
-		pUtfStream->open( fileName.c_str(), std::ios_base::in | std::ios_base::binary );
-
-		// Skip intro.
-		attach( *pUtfStream );
-	} else {
-		stringstream cpBuffer;
-		cpBuffer << "English_US." << codepage;
-		string locName = cpBuffer.str();
-		locale fileLocale( locName.c_str() );
-		locale saveLocale = locale::global( fileLocale );
-
-		locName = fileLocale.name();
-
-		std::wifstream* pInnerStream = new std::wifstream();
-		//std::ifstream* pInnerStream = new std::ifstream();
-#		if _MSC_VER >= 1400
-			pInnerStream->open( fileName.c_str(), std::ios_base::in | std::ios_base::binary  );
-#		else
-			string sFileName2 = Convert::wcs2str( fileName.c_str() );
-			pInnerStream->open( sFileName2.c_str(), std::ios_base::in | std::ios_base::binary );
-#		endif
-		attach( *pInnerStream );
-
-#		ifdef _DEBUG
-		const locale locCheck = pInnerStream->rdbuf()->getloc();
-		locName = locCheck.name();
-		assert( locName == fileLocale.name() );
-#		endif
-
-		locale::global( saveLocale );
+	const char* fileBom = pCodePage->getFileBom();
+	if ( pCodePage->getFileBom() != NULL ) {
+		size_t bomLength = strlen( pCodePage->getFileBom() );
+		pInnerStream->rdbuf()->pubseekpos( bomLength );
 	}
+	attach( *pInnerStream );
 
+
+#	ifdef _DEBUG
+	const locale locCheck = pInnerStream->rdbuf()->getloc();
+	const string locName = locCheck.name();
+	assert( locName == fileLocale.name() );
+#	endif
 
 
 	m_pData->m_relativePath = fileName;
@@ -645,7 +604,7 @@ std::wistream& File::open( const std::wstring& fileName, int codepage )
 */
 std::wistream& File::open( const std::wstring& fileName )
 {
-	return open( fileName, CP_UNDEFINED );
+	return open( fileName, CPID_UNDEFINED );
 }
 
 
@@ -668,32 +627,54 @@ std::wistream& File::getStream()
 **
 ** @todo Determine code page of non unicode files.
 */
-int File::detectCodePage( const std::wstring& fileName  )
+const CodePageInfo* File::detectCodePage( const std::wstring& fileName, const CodePageInfo* pDefaultCodePage  )
 {
-	ifstream ifs;
-	char     leadIn[2] = { '\0' };
+	std::ifstream ifs;
 
-	ifs.exceptions( ios::badbit );
-#	if _MSC_VER >= 1400
-		ifs.open( fileName.c_str(), ios::in | ios::binary );
-#	else
-		string sFileName2 = Convert::wcs2str( fileName.c_str() );
-		ifs.open( sFileName2.c_str(), ios::in | ios::binary );
-#	endif
-	ifs.read( leadIn, sizeof( leadIn ) );
+	ifs.open( fileName.c_str(), ios::in | ios::binary  );
+	const CodePageInfo* pCodePageInfo = detectCodePageByBom( ifs );
 	ifs.close();
 
-	if ( leadIn[0] == '\xFF' && leadIn[1] == '\xFE' ) {
-		// UTF-16
-		return 1200;
-	} else if ( leadIn[0] == '\xFE' && leadIn[1] == '\xFF' ) {
-		// UTF-16 Big Endian
-		return 1200;
+	if ( pCodePageInfo == NULL && pDefaultCodePage == NULL ) {
+		// TODO: detect code page of non unicode files.
 	}
 
-	// TODO: Determine code page of non unicode files.
-	return 1252;
+	return pCodePageInfo == NULL ? pDefaultCodePage : pCodePageInfo ;
 }
+
+/**
+** @brief Read the first bytes of a file and try to determine it's encoding
+** by examinig the first bytes of the file.
+*/
+const CodePageInfo* File::detectCodePageByBom( std::ifstream& fileStream )
+{
+	const CodePageInfo** codePageInfos = CodePageInfo::getCodePages();
+	char  fileStart[512];
+
+	fileStream.seekg( ios_base::beg );
+	fileStream.read( fileStart, sizeof( fileStart ) );
+	size_t bytesRead = fileStream.gcount();
+	if ( bytesRead < sizeof(fileStart) ) {
+		fileStart[bytesRead] = '\0';
+	} else {
+		fileStart[bytesRead-1] = '\0';
+	}
+
+	// Determine max length to read necessary to determine the encoding.
+	size_t maxBomLength = 0;
+	for ( const CodePageInfo* const* ppCodePageInfo = codePageInfos; *ppCodePageInfo != NULL; ppCodePageInfo++ ) {
+		const CodePageInfo& cpInfo = **ppCodePageInfo;
+		const char* cpBom = cpInfo.getFileBom();
+		if ( cpBom == NULL )
+			continue;
+		size_t length = strlen( cpBom );
+		if ( strncmp( cpBom, fileStart, min( length, bytesRead ) ) == 0 )
+			return *ppCodePageInfo;
+	}
+	return NULL;
+}
+
+
 
 
 } // namespace

@@ -58,6 +58,7 @@ int wmain(int argc, const wchar_t* const argv[])
 			cpp.processFile( fileName );
 			++it;
 		}
+		cpp.close();
 	} catch ( const error::Error& error ) {
 		wcerr << error;
 	} catch ( const std::exception& ex ) {

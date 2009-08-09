@@ -111,8 +111,8 @@ private:
 	std::wostream*     m_pOutStream;
 
 	/// Flag indicating if the output stream is allocated by the 
-	/// this program and needs to be released.
-	bool               m_deleteOutStream;
+	/// this program and needs to be closed and released.
+	bool               m_createdOutFile;
 
 	/// The error out stream (wcerr).
 	std::wostream*     m_pErrStream;
@@ -190,6 +190,8 @@ public:
 	// Process the input stream to collect the macro argumentsw
 	bool collectMacroArgumentValues( const Macro& macro, ITokenStream& tokenStream, MacroArgumentValues& argumentValues ) const;
 
+	// Close the out file if openend by this instance.
+	void close();
 private:
 	// Get the current file we are processing.
 	File& getFile();

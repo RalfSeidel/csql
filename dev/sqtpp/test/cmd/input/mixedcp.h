@@ -10,3 +10,5 @@ mixedcp_utf8
 mixedcp_utf16
 #include "include/mixedcp_utf16.h"
 
+mixedcp_utf16be
+#include "include/mixedcp_utf16be.h"

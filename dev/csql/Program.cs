@@ -24,10 +24,17 @@ namespace csql
 		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Main has to catch everything." )]
 		public static int Main( string[] args )
 		{
-			Trace.Listeners.Add( new ConsoleTraceListener() );
+			// Set output encoding to ansi because otherwise the output pane 
+			// of visual studio will display wrong characters.
+			// TODO: Make this behaviour configurable.
+			Console.OutputEncoding = Encoding.Default;
+			ConsoleTraceListener traceListener = new ConsoleTraceListener();
+			Trace.Listeners.Add( traceListener );
+
 			CmdArgs cmdArgs = new CmdArgs();
 			bool argumentsValid = CommandLine.Parser.ParseArguments( args, cmdArgs );
 			bool didTraceCommandLine = false;
+
 
 			ExitCode exitCode; ;
 			if ( !argumentsValid ) {
@@ -49,7 +56,12 @@ namespace csql
 
 						processor.Process();
 
+						if ( !string.IsNullOrEmpty( cmdArgs.DistFile ) ) {
+							Trace.WriteLineIf( Program.TraceLevel.TraceInfo, cmdArgs.DistFile + "(1): file created." );
+						}
+
 						processor.SignOut();
+
 						exitCode = ExitCode.Success;
 					}
 				}

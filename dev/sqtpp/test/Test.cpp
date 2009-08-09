@@ -12,6 +12,7 @@
 #include "StreamsTest.h"
 #include "TokenTest.h"
 #include "NStringStreamTest.h"
+#include "Utf8ConverterTest.h"
 #include "Test.h"
 
 
@@ -20,6 +21,7 @@ namespace test {
 
 void Test::run()
 {
+	Utf8ConverterTest::run();
 	CmdArgsTest::run();
 	ProcessorTest::run();
 	ScannerTest::run();
@@ -28,7 +30,6 @@ void Test::run()
 	AnsiFileBufferTest::run();
 	UtfFileBufferTest::run();
 	AnsiFileStreamTest::run();
-	UtfFileStreamTest::run();
 	ConvertTest::run();
 	DirectiveTest::run();
 	ErrorTest::run();

@@ -352,6 +352,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CodePageConverter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Context.cpp"
 				>
 			</File>
@@ -507,6 +511,10 @@
 			</File>
 			<File
 				RelativePath=".\CodePage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodePageConverter.h"
 				>
 			</File>
 			<File
@@ -748,6 +756,22 @@
 				RelativePath=".\test\TokenTest.h"
 				>
 			</File>
+			<File
+				RelativePath=".\test\Utf7ConverterTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\test\Utf7ConverterTest.h"
+				>
+			</File>
+			<File
+				RelativePath=".\test\Utf8ConverterTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\test\Utf8ConverterTest.h"
+				>
+			</File>
 			<Filter
 				Name="sql"
 				>
@@ -797,6 +821,22 @@
 				</File>
 				<File
 					RelativePath=".\test\sql\ObjectInfo.csql"
+					>
+				</File>
+				<File
+					RelativePath=".\test\sql\print1252.sql"
+					>
+				</File>
+				<File
+					RelativePath=".\test\sql\printutf16.sql"
+					>
+				</File>
+				<File
+					RelativePath=".\test\sql\printutf16be.sql"
+					>
+				</File>
+				<File
+					RelativePath=".\test\sql\printutf8.sql"
 					>
 				</File>
 			</Filter>
@@ -1044,6 +1084,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\test\cmd\input\mixedcp.h"
+						>
+					</File>
+					<File
 						RelativePath=".\test\cmd\input\multiline.sql"
 						>
 					</File>
@@ -1084,6 +1128,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\test\cmd\input\utf8.txt"
+						>
+					</File>
+					<File
+						RelativePath=".\test\cmd\input\utf8abc.txt"
+						>
+					</File>
+					<File
 						RelativePath=".\test\cmd\input\utfabc.txt"
 						>
 					</File>
@@ -1098,6 +1150,22 @@
 					<Filter
 						Name="include"
 						>
+						<File
+							RelativePath=".\test\cmd\input\include\mixedcp_1252.h"
+							>
+						</File>
+						<File
+							RelativePath=".\test\cmd\input\include\mixedcp_utf16.h"
+							>
+						</File>
+						<File
+							RelativePath=".\test\cmd\input\include\mixedcp_utf16be.h"
+							>
+						</File>
+						<File
+							RelativePath=".\test\cmd\input\include\mixedcp_utf8.h"
+							>
+						</File>
 						<File
 							RelativePath=".\test\cmd\input\include\once_explicite.h"
 							>
@@ -1348,6 +1416,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\test\cmd\reference\mixedcp.h"
+						>
+					</File>
+					<File
 						RelativePath=".\test\cmd\reference\multiline.sql"
 						>
 					</File>
@@ -1389,6 +1461,10 @@
 					</File>
 					<File
 						RelativePath=".\test\cmd\reference\UTF16BE.txt"
+						>
+					</File>
+					<File
+						RelativePath=".\test\cmd\reference\utf8abc.txt"
 						>
 					</File>
 					<File

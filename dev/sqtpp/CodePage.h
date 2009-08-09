@@ -18,27 +18,27 @@ namespace sqtpp {
 **
 ** @todo Define (and support) more code pages.
 */
-enum CodePage {
-	/// Undefined CodePage / initial value.
-	CP_UNDEFINED           = 0,
+enum CodePageId {
+	/// Undefined code page / initial value.
+	CPID_UNDEFINED           = 0,
 	// OEM (US)
-	CP_OEM_437             = 437,
+	CPID_OEM_437             = 437,
 	// OEM (Latin I)
-	CP_OEM_850             = 850,
+	CPID_OEM_850             = 850,
 	/// Unicode/UTF16
-	CP_UTF16               = 1200,
+	CPID_UTF16               = 1200,
 	/// Unicode/UTF16 Big Endian
-	CP_UTF16BE             = 1201,
+	CPID_UTF16BE             = 1201,
 	/// Windows 1252
-	CP_WINDOWS1252         = 1252,
+	CPID_WINDOWS_1252        = 1252,
 	// Unicode UTF-7
-	CP_UTF7                = 65000,
+	CPID_UTF7                = 65000,
 	// Unicode UTF-8 
-	CP_UTF8                = 65001,
+	CPID_UTF8                = 65001,
 	/// UTF32 (not supported yet).
-	CP_UTF32               = 65005,
-	/// UTF32 Bug Endian (not supported yet).
-	CP_UTF32BE             = 65006
+	CPID_UTF32               = 65005,
+	/// UTF32 Big Endian (not supported yet).
+	CPID_UTF32BE             = 65006
 };
 
 /**
@@ -50,21 +50,20 @@ private:
 	/// All CodePages.
 	static const CodePageInfo* m_codePages[];
 
-	static const CodePageInfo Undefined;
-	static const CodePageInfo OEM437;
-	static const CodePageInfo OEM850;
-	static const CodePageInfo UTF7;
-	static const CodePageInfo UTF8;
-	static const CodePageInfo UTF16;
-	static const CodePageInfo UTF16BE;
-	static const CodePageInfo Windows1252;
+	static const CodePageInfo& Undefined;
+	static const CodePageInfo& OEM437;
+	static const CodePageInfo& OEM850;
+	static const CodePageInfo& Windows1252;
+	static const CodePageInfo& UTF7;
+	static const CodePageInfo& UTF8;
+	static const CodePageInfo& UTF16;
+	static const CodePageInfo& UTF16BE;
 
-	/// The id of the CodePage.
-	CodePage      m_codePage;
+	/// @brief The id of the code page.
+	CodePageId m_codePageId;
 
-	/// The CodePage identifier.
+	/// @brief The CodePageId identifier.
 	const wstring m_identifier;
-
 
 private:
 	// Copy c'tor (not implemented)
@@ -72,25 +71,36 @@ private:
 	// Assignment operator (not implemented)
 	CodePageInfo& operator=( const CodePageInfo& that );
 public:
-	// Initializing constructor.
-	CodePageInfo( CodePage CodePage, const wchar_t* text );
-	// Destructor.
-	~CodePageInfo() throw();
+	/// @brief Initializing constructor.
+	CodePageInfo( CodePageId codePageId, const wchar_t* text );
 
-	// Get all supported code pages.
+	/// @brief Destructor.
+	virtual ~CodePageInfo() throw();
+
+	/// @brief Get all supported code pages.
 	static const CodePageInfo** getCodePages() throw();
 
-	// Get CodePage of given identifier.
-	static const CodePageInfo* findCodePageInfo( CodePage cp ) throw();
+	/// Get the code page informations of the given identifier.
+	static const CodePageInfo* findCodePageInfo( CodePageId cp ) throw();
 
-	// Get CodePage of given identifier.
-	static const CodePageInfo& getCodePageInfo( CodePage cp ) throw();
+	/// Get the code page informations of the given identifier.
+	static const CodePageInfo& getCodePageInfo( CodePageId cp ) throw();
 
-	// Get the CodePage id.
-	CodePage getCodePage() const throw() { return m_codePage; }
+	/// Get the code page id.
+	CodePageId getCodePageId() const throw() { return m_codePageId; }
 
-	// Get the CodePage identifier.
+	/// Get the code page identifier.
 	const wstring& getIdentifier() const throw() { return m_identifier; }
+
+	/// Get the byte order mask character sequence that is used to identifie the code page
+	/// at the beginning of a file.
+	/// @return <code>NULL</code> if no BOM is defined for the code page. The character
+	/// sequence otherwise.
+	virtual const char* getFileBom() const throw() = NULL;
+
+	/// @brief Get the locale used to convert the characters set of the codepage from and to 
+	/// the c++ unicode strings.
+	virtual const locale& getLocale() const throw() = NULL;
 };
 
 

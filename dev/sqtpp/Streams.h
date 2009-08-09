@@ -103,47 +103,6 @@ private:
 	Chars w2c( wchar_t wchar ) const throw();
 };
 
-/**
-** @brief A stream for sequential reading and writting unicode files.
-*/
-class UtfFileStream : public std::basic_iostream<wchar_t>
-{
-private:
-	// Base class type definition.
-	typedef std::basic_iostream<wchar_t> base;
-
-	// The stream buffer.
-	UtfFileBuffer m_buffer;
-public:
-	// The constructor setting the stream buffer in the base class.
-	UtfFileStream();
-private:
-	// Copy constructor (Not implemented).
-	UtfFileStream( const UtfFileStream& that );
-	// Assignment operator (Not implemented).
-	UtfFileStream& operator= ( const UtfFileStream& that );
-public:
-
-	// Check if the file processed is a big endian (UTF-16BE / CP 1201) file.
-	bool isBigEndian() const throw()
-	{
-		return m_buffer.isBigEndian();
-	}
-
-	// Open the stream.
-	inline void open( const wchar_t* pwszFilename, ios_base::openmode mode = ios_base::in, int prot = (int)ios_base::_Openprot )
-	{
-		m_buffer.open( pwszFilename, mode, prot );
-	}
-
-	// Close the stream.
-	inline void close()
-	{
-		m_buffer.close();
-	}
-};
-
-
 #ifdef _WIN32
 
 /**

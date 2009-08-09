@@ -559,6 +559,16 @@ public:
 
 
 /**
+** @brief Unsupported code page {1}.
+*/
+class C1205 : public FatalError
+{
+public:
+	C1205( const int codePageId );
+};
+
+
+/**
 ** @brief Unkown fatal error - please contact author.
 */
 class C1999 : public FatalError
@@ -569,7 +579,7 @@ public:
 	{
 	}
 	C1999( const std::exception& ex )
-		: FatalError( L"C1999", L"Unkown fatal error ({1})- please contact author." )
+	: FatalError( L"C1999", L"Unkown fatal error ({1})- please contact author." )
 	{
 		const char* pszMessage = ex.what();
 		if ( pszMessage != NULL ) {

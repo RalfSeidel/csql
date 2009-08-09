@@ -98,25 +98,6 @@ private:
 
 };
 
-/**
-** @brief Tests for the class sqtpp::UtfFileStream
-*/
-class UtfFileStreamTest : public Test
-{
-public:
-	/// Constructor
-	UtfFileStreamTest();
-	/// Destructor
-	~UtfFileStreamTest() throw() {}
-
-	/// Execute all tests.
-	static void run();
-
-	/// Test peek test
-	void peekTest();
-};
-
-
 
 } // namespace test
 } // namespace sqtpp

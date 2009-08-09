@@ -520,48 +520,6 @@ void UtfFileBufferTest::writeStringTest()
 }
 
 
-// --------------------------------------------------------------------
-// UtfFileStreamTest
-// --------------------------------------------------------------------
-
-UtfFileStreamTest::UtfFileStreamTest()
-{
-}
-
-void UtfFileStreamTest::run()
-{
-	UtfFileStreamTest test;
-
-	wclog << L"UtfFileStreamTest" << endl;
-
-	if ( !File::isDirectory( L"test/cmd/input" ) ) {
-		wclog << L"Checks skiped because the test input directory does not exist." << endl;
-	} else {
-		test.peekTest();
-	}
-}
-
-void UtfFileStreamTest::peekTest()
-{
-	UtfFileStream stream;
-	stream.open( L"test/cmd/input/utfabc.txt", ios_base::in );
-	assert( stream.good() );
-	UtfFileStream::int_type chExpected = L'A';
-	UtfFileStream::int_type chFound;
-
-	for ( int i = 0; i < 26; ++i ) {
-		chFound = stream.peek();
-		assert( chFound == chExpected );
-		chFound = stream.get();
-		assert( chFound == chExpected );
-		++chExpected;
-	}
-	chFound = stream.peek();
-	assert( chFound == UtfFileStream::traits_type::eof() );
-	assert( stream.eof() );
-}
-
-
 
 
 } // namespace test
