@@ -445,7 +445,7 @@ Token Processor::getNextToken( TokenExpression& tokenExpression )
 
 	assert( m_pTokenStream != NULL );
 
-	tokenExpression.tokenId = ++m_nProcessedTokenId;
+	tokenExpression.setTokenId( ++m_nProcessedTokenId );
 	token = m_pTokenStream->getNextToken( fileStream, tokenExpression );
 
 	if ( bSetFileToken && !m_fileStack.empty() ) {
@@ -534,7 +534,7 @@ void Processor::applyOptions()
 			m_createdOutFile = false;
 		} else {
 			std::wofstream* pOutStream = new std::wofstream();
-			if ( nOutputCodePage == CodePageId::CPID_UTF16 ) {
+			if ( nOutputCodePage == CPID_UTF16 ) {
 				Utf16Converter* pConverter = new Utf16Converter();
 				locale loc = locale::classic() ;
 				loc = locale( loc, pConverter );
@@ -554,7 +554,7 @@ void Processor::applyOptions()
 				throw error::C1083( sOutputFile );
 			}
 			pOutStream->exceptions( wofstream::failbit | wofstream::badbit );
-			if ( nOutputCodePage == CodePageId::CPID_UTF16 ) {
+			if ( nOutputCodePage == CPID_UTF16 ) {
 				(*pOutStream) << wchar_t(0xFEFF);
 			}
 			m_pOutStream = pOutStream;

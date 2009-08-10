@@ -339,7 +339,7 @@ int Utf8Converter::do_length( const mbstate_t& state , const char* pFrom, const 
 
 	const char* pFromNext = pFrom;
 	int fromCount = 0;
-	int toCount   = 0;
+	size_t toCount   = 0;
 	while( pFromNext < pFromMax && toCount < toLength  ) {
 		int sequenceLength = sequence_length( *pFromNext );
 		pFromNext+= sequenceLength;

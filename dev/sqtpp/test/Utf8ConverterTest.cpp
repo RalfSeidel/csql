@@ -106,7 +106,6 @@ void Utf8ConverterTest::lengthTest()
 	char inEuro[] = "\xE2\x82\xAC";
 	const char* pIn;
 	const char* pInMax;
-	const char* pInNext;
 	size_t inCount;
 	int result;
 

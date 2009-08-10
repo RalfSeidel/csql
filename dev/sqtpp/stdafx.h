@@ -16,6 +16,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <list>
 #include <set>
 #include <map>
 #include <stack>

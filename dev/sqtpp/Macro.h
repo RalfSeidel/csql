@@ -52,6 +52,11 @@ public:
 class MacroArguments : public std::vector<MacroArgument>
 {
 public:
+	MacroArguments()
+	{
+		reserve( 8 );
+	}
+
 	// Get the index of the arguement.
 	int getArgumentIndex( const wstring& identifier ) const throw();
 

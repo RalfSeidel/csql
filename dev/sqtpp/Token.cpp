@@ -109,18 +109,43 @@ const TokenInfo& TokenInfo::getTokenInfo( Token token )
 */
 TokenExpression::TokenExpression()
 : token( TOK_UNDEFINED )
-, context( CTX_UNDEFINED )
 , tokenId( 0 )
+, context( CTX_UNDEFINED )
 {
+}
+
+/**
+** @brief Copy constructor.
+*/
+TokenExpression::TokenExpression( const TokenExpression& that )
+: tokenId( that.tokenId )
+, token( that.token )
+, context( that.context )
+, text( that.text )
+, identifier( that.identifier )
+{
+}
+
+/**
+** @brief Assignment operation
+*/
+TokenExpression& TokenExpression::operator=( const TokenExpression& that )
+{
+	this->tokenId = that.tokenId;
+	this->token = that.token;
+	this->context = that.context;
+	this->text = that.text;
+	this->identifier = that.identifier;
+	return *this;
 }
 
 /**
 ** @brief Initializing constructor.
 */
 TokenExpression::TokenExpression( Token token, Context context, const wstring& text )
-: token( token )
+: tokenId( 0 )
+, token( token )
 , context( context )
-, tokenId( 0 )
 , text( text )
 , identifier( text )
 {
@@ -130,9 +155,9 @@ TokenExpression::TokenExpression( Token token, Context context, const wstring& t
 ** @brief Initializing constructor.
 */
 TokenExpression::TokenExpression( Token token, Context context, const wstring& text, const wstring& identifier )
-: token( token )
+: tokenId( 0 )
+, token( token )
 , context( context )
-, tokenId( 0 )
 , text( text )
 , identifier( identifier )
 {
@@ -155,6 +180,15 @@ void TokenExpression::clear()
 // --------------------------------------------------------------------
 // TokenExpressions
 // --------------------------------------------------------------------
+
+/**
+** @brief Constructor.
+*/
+TokenExpressions::TokenExpressions()
+{
+	reserve(16);
+}
+
 
 /**
 ** @brief Remove leading and trailing space and (optionally) comments.

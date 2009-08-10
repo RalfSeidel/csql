@@ -104,12 +104,13 @@ enum Token
 */
 class TokenExpression
 {
+private:
+	/// The index of the token in the token input stream.
+	size_t  tokenId;
+
 public:
 	/// The token.
 	Token   token;
-
-	/// The index of the token in the token input stream.
-	size_t  tokenId;
 
 	/// The context of the scanner in which this token was retrieved.
 	Context context;
@@ -125,9 +126,15 @@ public:
 	/// the directive identifier only (e.g 'ifdef').
 	wstring identifier;
 
-
+public:
 	// Default constructor.
 	TokenExpression();
+
+	// Copy constructor.
+	TokenExpression( const TokenExpression& that );
+
+	// Assignment operator
+	TokenExpression& operator=( const TokenExpression& that );
 
 	// Initializing constructor.
 	TokenExpression( Token token, Context context, const wstring& text );
@@ -141,6 +148,7 @@ public:
 	// Reset everything to be empty / undefined.
 	void clear();
 
+	void setTokenId( size_t tokenId ) { this->tokenId = tokenId; }
 	Token getToken() const throw() { return this->token; }
 	Context getContext() const throw() { return this->context; }
 	const wstring& getText() const throw() { return this->text; }
@@ -155,6 +163,8 @@ public:
 class TokenExpressions : public std::vector<TokenExpression> 
 {
 public:
+	TokenExpressions();
+
 	// Remove leading and trailing space and (optionally) comments.
 	void trim( const bool bRemoveLineFeeds, const bool bRemoveBlockComments, const bool bRemoveLineComments, const bool bRemoveSqlComments );
 

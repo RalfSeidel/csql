@@ -6,6 +6,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80CDD787-218C-41B3-8448-14E76649F8C6}"
 	ProjectSection(SolutionItems) = preProject
 		configfile.bsql = configfile.bsql
+		profile_sqtpp.bat = profile_sqtpp.bat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql", "csql\csql.csproj", "{804CB225-6ACE-4171-9FE1-85038F5A452F}"
