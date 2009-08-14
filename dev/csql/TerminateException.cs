@@ -58,10 +58,10 @@ namespace csql
 		/// </param>
 		[Obsolete( "Always use the constructor TerminateException( ExitCode )" )]
 		public TerminateException( string message, Exception innerException )
-			: base( message, innerException )
+		: base( message, innerException )
 		{
-			// Add any type-specific logic for inner exceptions.
-		}
+            m_exitCode = ExitCode.GeneralError;
+        }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TerminateException"/> class.
@@ -70,7 +70,7 @@ namespace csql
 		/// <param name="context">The context.</param>
 		[Obsolete( "Always use the constructor TerminateException( ExitCode )" )]
 		private TerminateException( SerializationInfo info, StreamingContext context )
-			: base( info, context )
+		: base( info, context )
 		{
 		}
 					

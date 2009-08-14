@@ -72,7 +72,7 @@ namespace csql.Sybase
 					root = Path.Combine( systemDrive, "sybase" );
 				}
 				if ( root == null || !Directory.Exists( root ) ) {
-					return file;
+					return null;
 				}
 
 				path = Path.Combine( root, @"DataAccess\ADONET\dll" );
@@ -105,14 +105,20 @@ namespace csql.Sybase
 			get
 			{
 				string assemblyPath = AseAssemblyPath;
-				if ( assemblyPath != null ) {
-					Assembly assembly = Assembly.LoadFile( assemblyPath );
-					return assembly;
-				} else {
-					// Try to load from GAC
-					Assembly assembly = Assembly.Load( "Sybase.Data.AseClient" );
-					return assembly;
-				}
+
+                try {
+                    if ( assemblyPath != null ) {
+                        Assembly assembly = Assembly.LoadFile( assemblyPath );
+                        return assembly;
+                    } else {
+                        // Try to load from GAC
+                        Assembly assembly = Assembly.Load( "Sybase.Data.AseClient" );
+                        return assembly;
+                    }
+                }
+                catch ( Exception ex ) {
+                    throw new ApplicationException( "Can't load sybase provider assembly", ex );
+                }
 			}
 		}
 

@@ -49,6 +49,17 @@ namespace csql
 			m_cmdArgs = cmdArgs;
 		}
 
+        /// <summary>
+        /// Get the command line arguments.
+        /// </summary>
+        /// <value>
+        /// The command line arguments.
+        /// </value>
+        protected CmdArgs CmdArgs
+        {
+            get { return m_cmdArgs; }
+        }
+
 
 		public string CurrentFile
 		{
@@ -82,7 +93,7 @@ namespace csql
 		/// Gets the path of the preprocessor sqtpp.
 		/// </summary>
 		/// <value>The preprocessor path.</value>
-		private static string PreprocessorPath
+		protected static string PreprocessorPath
 		{
 			get
 			{
@@ -94,8 +105,26 @@ namespace csql
 
 				return sqtppPath;
 			}
-		
 		}
+
+		/// <summary>
+		/// Gets the arguemtns for the preprocessor sqtpp.
+		/// </summary>
+		/// <value>The preprocessor arguemtns.</value>
+        protected string PreprocessorArguments
+        {
+            get
+            {
+                string ppArguments = m_cmdArgs.PreprocessorArgs;
+                string ppInputFile = m_cmdArgs.ScriptFile;
+                string ppOutFile = TempFileName;
+                ppArguments += m_cmdArgs.PreprocessorDefines;
+                ppArguments += " -o\"" + ppOutFile + "\"";
+                ppArguments += " " + ppInputFile;
+                return ppArguments;
+            }
+        }
+
 
 		/// <summary>
 		/// Gets a value indicating whether the temporary output file of the preprocessor
@@ -329,13 +358,9 @@ namespace csql
 		/// <returns>The path of the file created by the preprocessor.</returns>
 		private Stream Preprocess()
 		{
-			string ppInputFile = m_cmdArgs.ScriptFile;
 			string ppCommand   = PreprocessorPath;
-			string ppArguments = m_cmdArgs.PreprocessorArgs;
+			string ppArguments = PreprocessorArguments;
 			string ppOutFile   = TempFileName;
-			ppArguments += m_cmdArgs.PreprocessorDefines;
-			ppArguments += " -o\"" + ppOutFile + "\"";
-			ppArguments += " " + ppInputFile;
 			string traceMessage = String.Format( "Executing preprocessor with following command line:\r\n{0} {1}", ppCommand, ppArguments );
 			Trace.WriteLineIf( Program.TraceLevel.TraceVerbose, traceMessage );
 			ProcessStartInfo ppStartInfo = new ProcessStartInfo( ppCommand, ppArguments );

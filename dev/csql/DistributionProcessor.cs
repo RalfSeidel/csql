@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
+using System.Reflection;
+using System.Globalization;
 
 namespace csql
 {
@@ -26,6 +29,54 @@ namespace csql
 		}
 
 
+        /// <summary>
+        /// Emits an entry message.
+        /// </summary>
+        public override void SignIn()
+        {
+            // Emit console informations as defined in the base class.
+            base.SignIn();
+
+            String scriptFile = CmdArgs.ScriptFile;
+            scriptFile = Path.GetFullPath( scriptFile );
+
+            String distFile = CmdArgs.DistFile;
+            distFile = Path.GetFullPath( distFile );
+
+            // Create the dstribution file header
+            StringBuilder headerBuilder = new StringBuilder();
+
+            headerBuilder.AppendLine( "/* ****************************************************************************" );
+            headerBuilder.Append( "** Source script    : " ).AppendLine( scriptFile );
+            headerBuilder.Append( "** Distribution file: " ).AppendLine( distFile );
+            headerBuilder.Append( "** Created          : " ).AppendLine( DateTime.Now.ToString( CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern, CultureInfo.InvariantCulture ) );
+            headerBuilder.Append( "** Preprocessed with: " ).Append( PreprocessorPath ).Append( ' ' ).AppendLine( PreprocessorArguments );
+	        headerBuilder.AppendLine( "**");
+	        headerBuilder.AppendLine( "**************************************************************************** */" );
+
+            m_outputFileWriter.Write( headerBuilder.ToString() );
+        }
+
+        /// <summary>
+        /// Emits the an exit/finished message.
+        /// </summary>
+        public override void SignOut()
+        {
+            StringBuilder footerBuilder = new StringBuilder();
+            footerBuilder.AppendLine( "/* ****************************************************************************" );
+            footerBuilder.AppendLine( "**" );
+            footerBuilder.AppendLine( "** end of script" );
+            footerBuilder.AppendLine( "**" );
+            footerBuilder.AppendLine( "**************************************************************************** */" );
+            m_outputFileWriter.Write( footerBuilder.ToString() );
+
+            String distFile = CmdArgs.DistFile;
+            distFile = Path.GetFullPath( distFile );
+            Trace.WriteLineIf( Program.TraceLevel.TraceInfo, distFile + "(1): file created." );
+        }
+
+
+
 		protected override void ProcessProgress( string progressInfo )
 		{
 			string statement = "print '" + progressInfo.Replace( "'", "''" ) + "'\r\n";
@@ -42,8 +93,31 @@ namespace csql
 		/// <param name="batch">The batch.</param>
 		protected override void ProcessBatch( string batch )
 		{
-			m_outputFileWriter.Write( batch );
-			m_outputFileWriter.WriteLine( "go" );
+            StringBuilder outputBuilder = new StringBuilder();
+            StringBuilder lineBuilder = new StringBuilder();
+            string line;
+
+            foreach ( char c in batch ) {
+                if ( c == '\r' || c == '\n' ) {
+                    line = lineBuilder.ToString().TrimEnd();
+                    if ( line.Length != 0 ) {
+                        outputBuilder.AppendLine( line );
+                    }
+                    lineBuilder = new StringBuilder();
+                } else {
+                    lineBuilder.Append( c );
+                }
+            }
+            line = lineBuilder.ToString().TrimEnd();
+            if ( line.Length != 0 ) {
+                outputBuilder.AppendLine( line );
+            }
+
+            string output = outputBuilder.ToString();
+            if ( output.Length != 0 ) {
+                m_outputFileWriter.Write( output );
+                m_outputFileWriter.WriteLine( "go" );
+            }
 		}
 
 

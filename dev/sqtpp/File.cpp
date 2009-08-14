@@ -578,8 +578,8 @@ std::wistream& File::open( const std::wstring& fileName, const CodePageId defaul
 	pInnerStream->open( fileName.c_str(), std::ios_base::in | std::ios_base::binary  );
 
 	const char* fileBom = pCodePage->getFileBom();
-	if ( pCodePage->getFileBom() != NULL ) {
-		size_t bomLength = strlen( pCodePage->getFileBom() );
+	if ( fileBom != NULL ) {
+		size_t bomLength = strlen( fileBom );
 		pInnerStream->rdbuf()->pubseekpos( bomLength );
 	}
 	attach( *pInnerStream );
@@ -660,8 +660,6 @@ const CodePageInfo* File::detectCodePageByBom( std::ifstream& fileStream )
 		fileStart[bytesRead-1] = '\0';
 	}
 
-	// Determine max length to read necessary to determine the encoding.
-	size_t maxBomLength = 0;
 	for ( const CodePageInfo* const* ppCodePageInfo = codePageInfos; *ppCodePageInfo != NULL; ppCodePageInfo++ ) {
 		const CodePageInfo& cpInfo = **ppCodePageInfo;
 		const char* cpBom = cpInfo.getFileBom();

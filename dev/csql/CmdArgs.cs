@@ -169,7 +169,7 @@ namespace csql
 				sb.Append( field.Name );
 				sb.Append( ':' );
 				sb.Append( field.GetValue( this ) );
-				separator = "\r\n";
+				separator = " ";
 			}
 			string result = sb.ToString();
 			return result;

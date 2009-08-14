@@ -56,10 +56,6 @@ namespace csql
 
 						processor.Process();
 
-						if ( !string.IsNullOrEmpty( cmdArgs.DistFile ) ) {
-							Trace.WriteLineIf( Program.TraceLevel.TraceInfo, cmdArgs.DistFile + "(1): file created." );
-						}
-
 						processor.SignOut();
 
 						exitCode = ExitCode.Success;

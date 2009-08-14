@@ -52,43 +52,7 @@ namespace csql
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-			string separator = "";
-
-			if ( !String.IsNullOrEmpty( Server ) ) {
-				sb.Append( separator );
-				sb.Append( "Server: " );
-				sb.Append( Server );
-				separator = ", ";
-			}
-			if ( !String.IsNullOrEmpty( Catalog ) ) {
-				sb.Append( separator );
-				sb.Append( "Catalog: " );
-				sb.Append( Catalog );
-				separator = ", ";
-			}
-
-			if ( !String.IsNullOrEmpty( Procedure ) ) {
-				sb.Append( separator );
-				sb.Append( "Procedure: " );
-				sb.Append( Procedure );
-				separator = ", ";
-			}
-
-			if ( LineNumber > 0 ) {
-				sb.Append( separator );
-				sb.Append( "Line: " );
-				sb.Append( LineNumber );
-				separator = ", ";
-			}
-
-			if ( !String.IsNullOrEmpty( separator ) ) {
-				separator = "\r\n";
-			}
-			sb.Append( separator );
-			sb.Append( m_message );
-			string result = sb.ToString();
-			return result;
+			return m_message.ToString();
 		}
 
 	}
