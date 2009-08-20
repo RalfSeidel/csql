@@ -34,7 +34,7 @@ namespace csql
 		public string ScriptFile;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[Argument( ArgumentType.AtMostOnce, HelpText = "A temporary file for the preprocessor output. If you specify the temporary file it will not be deleted automaticly.", ShortName = "tf" )]
+		[Argument( ArgumentType.AtMostOnce, HelpText = "A temporary file for the preprocessor output. If you specify the temporary file it will not be deleted automaticly. If no temporary file name is specified the program will use named pipes to retrieve the output of the pre processor.", ShortName = "tf" )]
 		public string TempFile;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]

@@ -61,6 +61,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdArgs.cs" />
@@ -76,6 +77,8 @@
     <Compile Include="ExitCode.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MsSql\MsSqlConnection.cs" />
+    <Compile Include="NamedPipe.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="ProcessorFactory.cs" />
     <Compile Include="Program.cs" />

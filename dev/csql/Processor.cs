@@ -13,7 +13,7 @@ namespace csql
 	public abstract class Processor : IDisposable	
 	{
 		private readonly CmdArgs m_cmdArgs;
-		private string m_tempFileName;
+		private string m_pipeName;
 		private string m_currentFile;
 		private int    m_currentLineNo;
 		private int    m_currentBatchNo;
@@ -61,38 +61,74 @@ namespace csql
         }
 
 
+        /// <summary>
+        /// Gets the path of the current file processed.
+        /// </summary>
+        /// <value>The current file path.</value>
 		public string CurrentFile
 		{
 			get { return this.m_currentFile; }
 		}
 
+
+        /// <summary>
+        /// Gets the line number in the current batch.
+        /// </summary>
+        /// <value>The current batch line no.</value>
 		public int CurrentBatchLineNo
 		{
 			get { return this.m_currentBatchLineNo; }
 		}
 
 		/// <summary>
-		/// Gets the name of the temp file.
+		/// Flag indicating if a named pipe is used to communicate with the pre processor.
 		/// </summary>
-		/// <value>The name of the temp file.</value>
-		private string TempFileName
-		{
-			get
-			{
-				if ( !String.IsNullOrEmpty( m_cmdArgs.TempFile ) )
-					return m_cmdArgs.TempFile;
+		/// <value>Flag for the named pipe usage option.</value>
+        private bool UseNamedPipes
+        {
+            get { return String.IsNullOrEmpty( m_cmdArgs.TempFile ); }
+        }
 
-				if ( m_tempFileName == null ) {
-					m_tempFileName = Path.GetTempFileName();
-				}
-				return m_tempFileName;
-			}
-		}
+        /// <summary>
+        /// Gets the name of the named pipe.
+        /// </summary>
+        /// <value>The name of the named pipe.</value>
+        private string NamedPipeName
+        {
+            get
+            {
+                Debug.Assert( UseNamedPipes );
+                if ( m_pipeName == null ) {
+                    m_pipeName = "de.sqlservice.sqtpp";
+                }
+                return m_pipeName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the temp file of the preprocessor output.
+        /// </summary>
+        /// <value>The name of the temp file.</value>
+        private string TempFileName
+        {
+            get
+            {
+                Debug.Assert( !UseNamedPipes, "Usage of the temp file name is not valid if name pipes are used for the pre processor output." );
+                return m_cmdArgs.TempFile;
+            }
+        }
 
 		/// <summary>
 		/// Gets the path of the preprocessor sqtpp.
 		/// </summary>
-		/// <value>The preprocessor path.</value>
+        /// <remarks>
+        /// Currently the preprocessor is expected to be found in the same directory as 
+        /// csql itself. 
+        /// </remarks>
+		/// <value>
+        /// The preprocessor path which is the directory of the csql executable combined 
+        /// with the file name of the preprocessor executable.
+        /// </value>
 		protected static string PreprocessorPath
 		{
 			get
@@ -117,7 +153,8 @@ namespace csql
             {
                 string ppArguments = m_cmdArgs.PreprocessorArgs;
                 string ppInputFile = m_cmdArgs.ScriptFile;
-                string ppOutFile = TempFileName;
+                string ppOutFile   = UseNamedPipes ? NamedPipe.GetPipePath( NamedPipeName ) : TempFileName;
+
                 ppArguments += m_cmdArgs.PreprocessorDefines;
                 ppArguments += " -o\"" + ppOutFile + "\"";
                 ppArguments += " " + ppInputFile;
@@ -135,7 +172,7 @@ namespace csql
 		{
 			get
 			{
-				return !String.IsNullOrEmpty( m_cmdArgs.TempFile ) && !String.IsNullOrEmpty( m_tempFileName );
+                return !UseNamedPipes && !String.IsNullOrEmpty( TempFileName );
 			}
 		}
 
@@ -199,7 +236,7 @@ namespace csql
 								break;
 							case LineType.Exec:
 								string batch = m_batchBuilder.ToString();
-								if ( !isWhiteSpaceOnly( batch ) ) {
+								if ( !IsWhiteSpaceOnly( batch ) ) {
 									ProcessExec( m_batchBuilder.ToString() );
 									m_currentBatchNo++;
 								}
@@ -213,7 +250,7 @@ namespace csql
 					}
 				}
 				string lastBatch = m_batchBuilder.ToString();
-				if ( !isWhiteSpaceOnly( lastBatch ) ) {
+				if ( !IsWhiteSpaceOnly( lastBatch ) ) {
 					m_currentBatchNo++;
 					ProcessExec( lastBatch );
 				}
@@ -234,10 +271,11 @@ namespace csql
 			finally {
 				if ( DeleteTempFile ) {
 					try {
-						Debug.WriteLineIf( Program.TraceLevel.TraceVerbose, "deleting file " + m_tempFileName );
-						File.Delete( m_tempFileName );
+						Debug.WriteLineIf( Program.TraceLevel.TraceVerbose, "deleting file " + TempFileName );
+                        File.Delete( TempFileName );
 					}
-					catch {
+					catch ( IOException ex ) {
+                        Debug.WriteLineIf( Program.TraceLevel.TraceError, "Error deleting file " + TempFileName + ":\r\n" + ex.Message );
 					}
 				}
 			}
@@ -360,8 +398,8 @@ namespace csql
 		{
 			string ppCommand   = PreprocessorPath;
 			string ppArguments = PreprocessorArguments;
-			string ppOutFile   = TempFileName;
 			string traceMessage = String.Format( "Executing preprocessor with following command line:\r\n{0} {1}", ppCommand, ppArguments );
+            NamedPipe pipe = null;
 			Trace.WriteLineIf( Program.TraceLevel.TraceVerbose, traceMessage );
 			ProcessStartInfo ppStartInfo = new ProcessStartInfo( ppCommand, ppArguments );
 			ppStartInfo.UseShellExecute = false;
@@ -369,6 +407,10 @@ namespace csql
 			ppStartInfo.RedirectStandardError = true;
 
 			try {
+                if ( UseNamedPipes ) {
+                    pipe = new NamedPipe( NamedPipeName );
+                }
+
 				m_ppProcess = new Process();
 				m_ppProcess.StartInfo = ppStartInfo;
 				m_ppProcess.OutputDataReceived += delegate( object sender, DataReceivedEventArgs e )
@@ -386,14 +428,19 @@ namespace csql
 				m_ppProcess.Start();
 				m_ppProcess.BeginErrorReadLine();
 				m_ppProcess.BeginOutputReadLine();
-				// TODO: when switching to named pipes eliminate this line.
-				m_ppProcess.WaitForExit();
 
-				if ( m_ppProcess.ExitCode != 0 ) {
-					throw new TerminateException( ExitCode.PreprocessorError );
-				}
+				Stream stream;
+                if ( pipe == null ) {
+                    m_ppProcess.WaitForExit();
 
-				Stream stream = new FileStream( ppOutFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
+                    if ( m_ppProcess.ExitCode != 0 ) {
+                        throw new TerminateException( ExitCode.PreprocessorError );
+                    }
+
+                    stream = new FileStream( TempFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
+                } else {
+                    stream = pipe.Open();
+                }
 
 				return stream;
 			}
@@ -467,7 +514,7 @@ namespace csql
 		/// contains white space characters only.
 		/// <c>false</c> otherwise.
 		/// </returns>
-		private static bool isWhiteSpaceOnly( string line )
+		private static bool IsWhiteSpaceOnly( string line )
 		{
 			foreach ( char c in line ) {
 				if ( !Char.IsWhiteSpace( c ) )
