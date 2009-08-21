@@ -47,6 +47,7 @@ namespace csql
             StringBuilder headerBuilder = new StringBuilder();
 
             headerBuilder.AppendLine( "/* ****************************************************************************" );
+            headerBuilder.AppendLine( "**" );
             headerBuilder.Append( "** Source script    : " ).AppendLine( scriptFile );
             headerBuilder.Append( "** Distribution file: " ).AppendLine( distFile );
             headerBuilder.Append( "** Created          : " ).AppendLine( DateTime.Now.ToString( CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern, CultureInfo.InvariantCulture ) );

@@ -22,7 +22,7 @@ namespace csql
         /// Flags for the CreateNamedPipe Api call.
         /// </summary>
         [Flags]
-        private enum NamedPipeOpenMode : uint
+        private enum OpenMode : uint
         {
             /// <summary>
             /// 
@@ -60,6 +60,46 @@ namespace csql
             /// 
             /// </summary>
             FileFlagWriteThough = 0x80000000
+        }
+
+        /// <summary>
+        /// Flags for the CreateNamedPipe Api call.
+        /// </summary>
+        [Flags]
+        private enum PipeMode : uint
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeWait = 0x00,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeNowait = 0x01,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeReadmodeByte = 0x00,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeReadmodeMessage = 0x02,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeTypeByte = 0x00,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeTypeMessage = 0x04,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeAcceptRemoteClients = 0x00,
+            /// <summary>
+            /// 
+            /// </summary>
+            PipeRejectRemoteClients = 0x08
         }
 
         /// <summary>
@@ -115,12 +155,13 @@ namespace csql
                 throw new InvalidOperationException( "The pipe has allready been created." );
             }
             string pipePath = m_pipePathPrefix + name;
-            uint   openMode = (uint)(NamedPipeOpenMode.PipeAccessDuplex | NamedPipeOpenMode.FileFlagOverlapped);
+            uint openMode = (uint)(OpenMode.PipeAccessDuplex | OpenMode.FileFlagFirstPipeInstance | OpenMode.FileFlagOverlapped);
+            uint pipeMode = (uint)(PipeMode.PipeWait | PipeMode.PipeTypeByte | PipeMode.PipeRejectRemoteClients);
             SafeFileHandle handle = NativeMethods.CreateNamedPipe(
                 pipePath,
                 openMode,
-                0,
-                255,
+                pipeMode,
+                1,
                 m_pipeBufferSize,
                 m_pipeBufferSize,
                 0,
@@ -145,9 +186,8 @@ namespace csql
                 throw new System.ComponentModel.Win32Exception( "ConnectNamedPipe Api call failed" );
             }
 
-            FileStream stream = new FileStream( m_pipeHandle, FileAccess.Read, m_pipeBufferSize, true );
+            FileStream stream = new FileStream( m_pipeHandle, FileAccess.Read, m_pipeBufferSize, false );
             return stream;
-
         }
 
     }

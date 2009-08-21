@@ -99,7 +99,8 @@ namespace csql
             {
                 Debug.Assert( UseNamedPipes );
                 if ( m_pipeName == null ) {
-                    m_pipeName = "de.sqlservice.sqtpp";
+                    int currentProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
+                    m_pipeName = "de.sqlservice.sqtpp\\" + currentProcessId.ToString();
                 }
                 return m_pipeName;
             }
