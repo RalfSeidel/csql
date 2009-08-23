@@ -29,7 +29,7 @@ int wmain(int argc, const wchar_t* const argv[])
 	WinDebugOutBuffer logBuffer;
 	wclog.rdbuf( &logBuffer );
 #	endif
-	sqtpp::test::Test::run();
+//	sqtpp::test::Test::run();
 #	endif
 
 	Options  options;

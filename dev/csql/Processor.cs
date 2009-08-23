@@ -173,7 +173,8 @@ namespace csql
 		{
 			get
 			{
-                return !UseNamedPipes && !String.IsNullOrEmpty( TempFileName );
+                //return !UseNamedPipes && !String.IsNullOrEmpty( TempFileName );
+                return false;
 			}
 		}
 
@@ -341,22 +342,26 @@ namespace csql
 		{
 			string[] parts = line.Split( ' ' );
 			this.m_currentLineNo = int.Parse( parts[1] );
-			this.m_currentFile = parts[2];
 
-			for ( int i = 3; i < parts.Length; ++i ) {
-				this.m_currentFile+= ' ';
-				this.m_currentFile+= parts[i];
-			}
-			if ( m_currentFile.Length > 0 ) {
-				char firstChar = m_currentFile[0];
-				if ( firstChar == '\'' || firstChar == '"' )
-					m_currentFile = m_currentFile.Substring( 1 );
-			}
-			if ( m_currentFile.Length > 0 ) {
-				char lastChar  = m_currentFile[m_currentFile.Length-1];
-				if ( lastChar == '\'' || lastChar == '"' )
-					m_currentFile = m_currentFile.Substring( 0, m_currentFile.Length - 1 );
-			}
+            // The pre processor may omit the file name if it hasn't changed 
+            // since the last #line directive.
+            if ( parts.Length > 2 ) {
+                this.m_currentFile = parts[2];
+                for ( int i = 3; i < parts.Length; ++i ) {
+                    this.m_currentFile += ' ';
+                    this.m_currentFile += parts[i];
+                }
+                if ( m_currentFile.Length > 0 ) {
+                    char firstChar = m_currentFile[0];
+                    if ( firstChar == '\'' || firstChar == '"' )
+                        m_currentFile = m_currentFile.Substring( 1 );
+                }
+                if ( m_currentFile.Length > 0 ) {
+                    char lastChar = m_currentFile[m_currentFile.Length - 1];
+                    if ( lastChar == '\'' || lastChar == '"' )
+                        m_currentFile = m_currentFile.Substring( 0, m_currentFile.Length - 1 );
+                }
+            }
 		}
 
 		/// <summary>

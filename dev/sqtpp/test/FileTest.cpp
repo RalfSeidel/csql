@@ -27,7 +27,7 @@ void FileTest::run()
 	*/
 	test.getLineTest();
 
-	if ( !File::isDirectory( L"test/cmd/input" ) ) {
+	if ( !File::isDirectory( L"../sqtpp/test/cmd/input" ) ) {
 		wclog << L"File checks skiped because the test input directory does not exist." << endl;
 	} else {
 		test.isFileTest();

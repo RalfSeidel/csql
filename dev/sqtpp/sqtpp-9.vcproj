@@ -195,11 +195,14 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="3"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
+				StructMemberAlignment="3"
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="2"
@@ -220,7 +223,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -1186,6 +1188,30 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="special"
+						>
+						<File
+							RelativePath=".\test\cmd\input\special\emitline1.h"
+							>
+						</File>
+						<File
+							RelativePath=".\test\cmd\input\special\emitline2.h"
+							>
+						</File>
+						<Filter
+							Name="include"
+							>
+							<File
+								RelativePath=".\test\cmd\input\special\include\emitline2_1.h"
+								>
+							</File>
+							<File
+								RelativePath=".\test\cmd\input\special\include\emitline2_2.h"
+								>
+							</File>
+						</Filter>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="reference"
@@ -1436,6 +1462,10 @@
 					</File>
 					<File
 						RelativePath=".\test\cmd\reference\russia.txt"
+						>
+					</File>
+					<File
+						RelativePath=".\test\cmd\reference\special_emitline1.h"
 						>
 					</File>
 					<File

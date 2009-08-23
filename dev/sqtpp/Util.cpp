@@ -125,11 +125,33 @@ void Util::getLocalTime( tm& localTime )
 
 /**
 ** @brief Remove leading and trailing blanks from a string.
+** 
+** @param str The string to trim.
 */
 const wstring Util::trim( const wstring& str )
 {
 	wstring::size_type pos1 = str.find_first_not_of( L' ' );
 	wstring::size_type pos2 = str.find_last_not_of( L' ' );
+
+	if ( pos1 == wstring::npos )
+		pos1 = 0;
+	if ( pos2 == wstring::npos ) 
+		pos2 = str.length() - 1;
+
+	wstring trimed = str.substr( pos1, pos2 - pos1 + 1 );
+	return trimed;
+}
+
+/**
+** @brief Remove leading and trailing blanks from a string.
+**
+** @param str The string to trim.
+** @param c The character to remove.
+*/
+const wstring Util::trim( const wstring& str, wchar_t c )
+{
+	wstring::size_type pos1 = str.find_first_not_of( c );
+	wstring::size_type pos2 = str.find_last_not_of( c );
 
 	if ( pos1 == wstring::npos )
 		pos1 = 0;

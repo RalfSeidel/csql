@@ -82,6 +82,7 @@ Processor::Processor( Options& options )
 , m_nErrorCount( 0 )
 , m_nWarningCount( 0 )
 , m_nOutputLineNumber( 1 )
+, m_nSkippedLineCount( 0 )
 , m_pTokenStream( NULL )
 , m_pOutStream( NULL )
 , m_createdOutFile( false )
@@ -213,60 +214,68 @@ bool Processor::isBuildinMacro( const wstring& identifier ) const
 ** #line n "filename"
 ** @endcode
 */
-void Processor::emitLine()
+void Processor::emitLine( std::wostream& output )
 {
 	// #line n "filename"
 	const File&    file     = getFile();
-	wstring        fileName = file.getPath();
-	wstring        sNewLine = file.getDefaultNewLine(); 
+	const wstring  fileName = file.getPath();
+	const wstring  sNewLine = file.getDefaultNewLine(); 
 	const size_t   line     = file.getLine();
 	const wchar_t  quote    = m_options.getStringDelimiter() == Options::STRD_DOUBLE ? L'"' : '\'';
 
+	output << L"#line " << (unsigned int)line << L' ' << quote;
+
 	if ( m_options.getStringQuoting() == Options::QUOT_ESCAPE ) {
 		// Replace backslash in file name with double backshlash.
-		wstringstream wss;
 		wstring::const_iterator it = fileName.begin();
 		while ( it != fileName.end() ) {
 			const wchar_t ch = *it;
 			if ( ch == L'\\' ) {
-				wss << ch;
+				output << ch;
 			}
-			wss << ch;
+			output << ch;
 			++it;
 		}
-		fileName = wss.str();
+	} else {
+		output << fileName;
 	}
+	output << quote;
 
-	wostream& os = *m_pOutStream;
-	os.clear();
-	os << L"#line " << (unsigned int)line << L' ' << quote << fileName << quote;
+	emitLineFeed( output, sNewLine );
+}
 
+/**
+** @brief Emit a line feed.
+**
+** @param sNewLine The line feed found in the input.
+*/
+void Processor::emitLineFeed( std::wostream& output, const wstring& sNewLine )
+{
 	switch ( m_options.getNewLineOutput() ) {
 		case Options::NLO_AS_IS:
 			if ( sNewLine.empty() ) {
-				os << endl;
+				output << endl;
 			} else {
-				os << sNewLine;
+				output << sNewLine;
 			}
 			break;
 		case Options::NLO_OS_DEFAULT:
-			os << endl;
+			output << endl;
 			break;
 		case Options::NLO_LF:
-			os << L'\n';
+			output << L'\n';
 			break;
 		case Options::NLO_CR:
-			os << L'\r';
+			output << L'\r';
 			break;
 		case Options::NLO_CRLF:
-			os << L"\r\n";
+			output << L"\r\n";
 			break;
 		default:
 			throw UnexpectedSwitchError();
 			//throw UnexpectedSwitchError( "NewLineOutput" );
 	}
 }
-
 
 /**
 ** @brief Emit a message, warning or error.
@@ -291,9 +300,10 @@ void Processor::emitMessage( error::Error& error ) const
 /**
 ** @brief Emit the current output buffer.
 **
+** @param output The output stream to emit to.
 ** @returns Number of characters written.
 */
-size_t Processor::emitBuffer()
+size_t Processor::emitBuffer( wostream& output )
 {
 	wstring line   = m_outputBuffer.str();
 	bool    bEmit  = true;
@@ -315,7 +325,7 @@ size_t Processor::emitBuffer()
 
 	if ( bEmit ) {
 		if ( line.length() > 0 ) {
-			(*this->m_pOutStream) << line;
+			output << line;
 			nCount = line.length();
 		}
 		m_prevLine = line;
@@ -339,12 +349,8 @@ void Processor::processStream( std::wistream& input )
 		m_fileStack.push( file );
 		m_nOutputLineNumber = 1;
 
-		if ( m_options.emitLine() ) {
-			//emitLine();
-		}
-
 		processInput();
-		emitBuffer();
+		emitBuffer( *m_pOutStream );
 		m_fileStack.pop();
 	} catch ( error::Error& error ) {
 		m_fileStack.pop();
@@ -384,24 +390,15 @@ void Processor::processFile( const std::wstring& fileName )
 			throw error::C1068( fileName );
 		}
 
-		m_nOutputLineNumber   = 1;
-
-		if ( m_options.emitLine() ) {
-			//emitLine();
-		}
+		m_nOutputLineNumber = -1;
 
 		processInput();
 
-		// If the input file doesn't end with and empty line 
-		// emit the remaing part.
-		wstring line = m_outputBuffer.str();
-		if ( line.length() > 0 ) {
-			wchar_t chLast = line[line.length()-1];
-			if ( !m_pScanner->isNewLine( chLast ) ) {
-				m_outputBuffer << file.getDefaultNewLine();
-			}
+		// If the input file doesn't end with an empty line 
+		// emit the remaning part.
+		if ( m_outputBuffer.tellp() > 0 ) {
+			processNewLine( file.getDefaultNewLine() );
 		}
-		emitBuffer();
 
 		if ( file.isAutoIncludedOnce() ) {
 			file.setIncludeOnce( true );
@@ -410,6 +407,7 @@ void Processor::processFile( const std::wstring& fileName )
 			m_includeOnceFiles.insert( file.getPath() );
 		}
 		m_fileStack.pop();
+		m_nOutputLineNumber = -1;
 	} catch ( error::Error& error ) {
 		m_fileStack.pop();
 
@@ -527,13 +525,16 @@ void Processor::applyOptions()
 
 	if ( m_pOutStream == NULL ) {
 		const wstring& sOutputFile = m_options.getOutputFile();
-		const int nOutputCodePage = m_options.getOutputCodePage();
+		const int nOutputCodePage   = m_options.getOutputCodePage();
+		//const CodePageId codePageId = CodePageId( nOutputCodePage  );
+		//const CodePageInfo& codePageInfo = CodePageInfo::getCodePageInfo( codePageId );
 
 		if ( sOutputFile.empty() ) {
 			m_pOutStream = &std::wcout;
 			m_createdOutFile = false;
 		} else {
 			std::wofstream* pOutStream = new std::wofstream();
+
 			if ( nOutputCodePage == CPID_UTF16 ) {
 				Utf16Converter* pConverter = new Utf16Converter();
 				locale loc = locale::classic() ;
@@ -1169,46 +1170,36 @@ void Processor::processIdentifier()
 */
 void Processor::processNewLine( const wstring& sNewLine )
 {
-	File&  file       = getFile();
+	File&  file = getFile();
 
 	if ( file.getDefaultNewLine().empty() ) {
 		file.setDefaultNewLine( sNewLine );
 	}
 
-	if ( this->m_pTokenStream == m_pScanner ) {
+	wostringstream lineOutput;
+	const size_t nCharCount = emitBuffer( lineOutput );
+
+	if ( nCharCount != 0 && this->m_pTokenStream == m_pScanner ) {
 		if ( m_options.emitLine() && (m_nOutputLineNumber != file.getLine() || file.getLine() == 1 ) ) {
-			emitLine();
+			emitLine( *m_pOutStream );
 			m_nOutputLineNumber = file.getLine();
 		}
 	}
 
-	size_t nCharCount = emitBuffer();
 
+	if ( nCharCount != 0 || !m_options.eliminateEmptyLines() ) {
+		emitLineFeed( lineOutput, sNewLine );
 
-	if ( !m_options.eliminateEmptyLines() || nCharCount != 0 ) {
-		wostream& outputStream = *this->m_pOutStream;
-		outputStream.clear();
-		// Transform CR and/or LF as defined in options.
-		switch ( m_options.getNewLineOutput() ) {
-			case Options::NLO_AS_IS:
-				outputStream << sNewLine;
-				break;
-			case Options::NLO_OS_DEFAULT:
-				outputStream << endl;
-				break;
-			case Options::NLO_LF: 
-				outputStream << L"\n";
-				break;
-			case Options::NLO_CR:
-				outputStream << L"\r";
-				break;
-			case Options::NLO_CRLF:
-				outputStream << L"\r\n";
-				break;
-			default:
-				throw UnexpectedSwitchError();
-		}
 		++m_nOutputLineNumber;
+		m_nSkippedLineCount = 0;
+	} else {
+		++m_nSkippedLineCount;
+	}
+
+	if ( lineOutput.tellp() > 0 ) {
+		const wstring line = lineOutput.str();
+		(*m_pOutStream) << line ;
+		m_pOutStream->clear();
 	}
 
 	if ( this->m_pTokenStream == m_pScanner ) {

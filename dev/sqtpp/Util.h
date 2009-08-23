@@ -78,6 +78,9 @@ public:
 	// Get current local date/time.
 	static void getLocalTime( tm& localTime );
 
+	// Remove leading and trailing characters from a string.
+	static const wstring trim( const wstring& str, wchar_t c );
+
 	// Remove leading and trailing blanks from a string
 	static const wstring trim( const wstring& str );
 

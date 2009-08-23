@@ -141,6 +141,11 @@ private:
 	/// The ouput line number.
 	size_t             m_nOutputLineNumber;
 
+	/// The number of empty lines eliminated / skipped in the ouput.
+	/// This variable is used to suppress the output of the #line 
+	/// information if more than one empty line is skipped.
+	size_t             m_nSkippedLineCount;
+
 private:
 	// Copy c'tor (not implemented);
 	Processor( const Processor& that );
@@ -207,10 +212,13 @@ private:
 	const wstring getNextIdentifier();
 
 	// Emit the current line string to the ouput stream.
-	void emitLine( );
+	void emitLine( std::wostream& output );
+
+	// Emit the new line chacter(s).
+	void emitLineFeed( std::wostream& output, const wstring& sNewLine );
 
 	// Emit the current output buffer.
-	size_t emitBuffer();
+	size_t emitBuffer( std::wostream& ouput );
 
 	// Process the input stream to collect the macro argumentsw
 	bool collectMacroArgumentValues( const Macro& macro, MacroArgumentValues& argumentValues, TokenExpressions& tokenExpressions );

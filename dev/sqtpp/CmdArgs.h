@@ -95,6 +95,9 @@ private:
 	// Handle /e
 	void setEliminateEmptyLines( Options& options, const wchar_t* pwszArgument );
 
+	// Handle /i
+	void setInputFile( Options& options, const wchar_t* pwszArgument );
+
 	// Handle /o
 	void setOutputFile( Options& options, const wchar_t* pwszArgument );
 
@@ -102,6 +105,9 @@ private:
 	void setKeepComments( Options& options, const wchar_t* pwszArgument );
 
 	void ignoreMissingArgs( const bool bIgnore ) { m_bIgnoreMissingArgs = bIgnore; }
+
+	// Check the argument and elminiate leading and trailing quotes.
+	static wstring getFilePath( const wchar_t* pwszArgument );
 
 	friend class sqtpp::test::CmdArgsTest;
 };

@@ -3,6 +3,7 @@
 #include "CodePage.h"
 #include "File.h"
 #include "Options.h"
+#include "Util.h"
 #include "CodePage.h"
 #include "CmdArgs.h"
 
@@ -136,6 +137,9 @@ void CmdArgs::parse( Options& options )
 				case L'e':
 					setEliminateEmptyLines( options, &pszArgument[2] );
 					break;
+				case L'i':
+					setInputFile( options, &pszArgument[2] );
+					break;
 				case L'o':
 					setOutputFile( options, &pszArgument[2] );
 					break;
@@ -152,18 +156,15 @@ void CmdArgs::parse( Options& options )
 	}
 
 
-	if ( !m_bIgnoreMissingArgs && nextArg >= m_argc ) {
+	if ( m_files.size() == 0 && nextArg >= m_argc && !m_bIgnoreMissingArgs ) {
 		// No input file specified in the command line arguments.
 		throw error::D8003();
 	}
 
 
 	while ( nextArg < m_argc ) {
-		wstring sFile( m_argv[nextArg] );
+		setInputFile( options, m_argv[nextArg] );
 
-		File::checkFile( sFile );
-
-		m_files.push_back( sFile );
 		++nextArg;
 	}
 }
@@ -473,6 +474,25 @@ void CmdArgs::setEliminateEmptyLines( Options& options, const wchar_t* pwszArgum
 }
 
 /**
+** @brief /i Set the path of the input file.
+*/
+void CmdArgs::setInputFile( Options& options, const wchar_t* pwszArgument )
+{
+	if ( *pwszArgument == L'\0' ) {
+		// {1} requires {2}; option ignored
+		error::D9007 warning( L"-i", L"[filename]");
+		wcerr << warning;
+		return;
+	}
+
+	wstring filePath = getFilePath( pwszArgument );
+	File::checkFile( filePath );
+
+	m_files.push_back( filePath );
+}
+
+
+/**
 ** @brief /o Set the path of the output file.
 */
 void CmdArgs::setOutputFile( Options& options, const wchar_t* pwszArgument )
@@ -484,10 +504,8 @@ void CmdArgs::setOutputFile( Options& options, const wchar_t* pwszArgument )
 		return;
 	}
 
-	if ( *pwszArgument == L'"' ) {
-	} else {
-		options.setOutputFile( pwszArgument );
-	}
+	wstring filePath = getFilePath( pwszArgument );
+	options.setOutputFile( filePath );
 }
 
 
@@ -590,6 +608,17 @@ void CmdArgs::setExtraOptions( Options& options, const wchar_t* pwszArgument )
 	if ( wcscmp( pwszArgument, L"NG" ) == 0 ) {
 		options.supportAdSalesNG( true );
 	}
+}
+
+/**
+** @brief Elimiated leading and trailing quote characters from the
+** argument.
+*/
+wstring CmdArgs::getFilePath( const wchar_t* pwszArgument )
+{
+	wstring filePath( pwszArgument );
+	filePath = Util::trim( filePath, L'"' );
+	return filePath;
 }
 
 } // namespace
