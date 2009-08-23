@@ -65,7 +65,7 @@ namespace {
 /**
 ** @brief Helper for macro expansion.
 **
-** @todo Better documentation. Unifiy with Processor::MacroExpansion
+** @todo Better documentation. Unify with Processor::MacroExpansion
 */
 class ArgumentTokenStream : public ITokenStream
 {
@@ -109,7 +109,7 @@ public:
 void MacroExpander::expandIndentifier( const Processor& processor, const TokenExpressions& tokenExpressions, TokenExpressions::const_iterator& itToken, TokenExpressions& result )
 {
 	const TokenExpression& tokenExpression = *itToken;
-	const wstring          identifier      = tokenExpression.getIdentifier();
+	const wstring&         identifier      = tokenExpression.getIdentifier();
 	const MacroSet&        allMacros       = processor.getMacros();
 	MacroSet::const_iterator itMacro = allMacros.find( identifier );
 	bool isMacro = itMacro != allMacros.end();
@@ -117,6 +117,12 @@ void MacroExpander::expandIndentifier( const Processor& processor, const TokenEx
 		const Macro& macro = itMacro->second;
 		MacroArgumentValues argumentValues;
 		TokenExpressions    macroExpansion;
+		// Do not expand macros in the argument list which are currently processed
+		// to avoid recursion like in the following example:
+		//	#define A B
+		//	#define B A
+		//	A
+		// The result will be A: A --> B  --> A (is expanding)
 		if ( macro.isExpanding() ) {
 			isMacro = false;
 		} else if ( macro.hasArguments() ) {
@@ -154,7 +160,7 @@ void MacroExpander::expandArguments( const Processor& processor, const MacroArgu
 		TokenExpressions expandedTokens;
 		for ( TokenExpressions::const_iterator itToken = argumentExpressions.begin(); itToken != argumentExpressions.end(); ) {
 			const TokenExpression& tokenExpression = *itToken;
-			const Token    token      = tokenExpression.token;
+			const Token token = tokenExpression.token;
 			if ( token == TOK_IDENTIFIER ) {
 				expandIndentifier( processor, argumentExpressions, itToken, expandedTokens );
 			} else {
