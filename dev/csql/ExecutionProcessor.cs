@@ -75,7 +75,12 @@ namespace csql
 			}
 		}
 
-        private void TraceResult( IDataReader dataReader )
+
+		/// <summary>
+		/// Traces the result of a database query.
+		/// </summary>
+		/// <param name="dataReader">The data reader returned by the execute call.</param>
+        private static void TraceResult( IDataReader dataReader )
         {
             if ( !Program.TraceLevel.TraceInfo )
                 return;

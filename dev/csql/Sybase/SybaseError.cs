@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Diagnostics;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace csql.Sybase
 {
@@ -38,6 +39,8 @@ namespace csql.Sybase
 			return server;
 		}
 
+
+		[SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "aseError", Justification="Parameter reserved for later use." )]
 		private static string GetCatalog( object aseError )
 		{
 			return "";

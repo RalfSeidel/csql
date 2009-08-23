@@ -7,7 +7,7 @@ namespace csql
     /// <summary>
     /// Native methode declarations.
     /// </summary>
-    class NativeMethods
+    internal static class NativeMethods
     {
         /// <summary>
         /// See <see cref="http://msdn.microsoft.com/en-us/library/aa365150(VS.85).aspx"/>

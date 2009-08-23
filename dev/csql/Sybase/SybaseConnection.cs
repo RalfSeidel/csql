@@ -117,7 +117,7 @@ namespace csql.Sybase
                     }
                 }
                 catch ( Exception ex ) {
-                    throw new ApplicationException( "Can't load sybase provider assembly", ex );
+                    throw new TerminateException( "Can't load sybase provider assembly", ex );
                 }
 			}
 		}
