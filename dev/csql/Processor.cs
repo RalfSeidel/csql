@@ -17,7 +17,7 @@ namespace csql
 		private string m_currentFile;
 		private int    m_currentLineNo;
 		private int    m_currentBatchNo;
-		private int    m_currentBatchLineNo;
+		private int    m_currentBatchLineOffset;
 		private StringBuilder m_batchBuilder;
 		private Process m_ppProcess;
 
@@ -72,12 +72,12 @@ namespace csql
 
 
         /// <summary>
-        /// Gets the line number in the current batch.
+        /// Gets the line offset of the current batch to the start of the input file.
         /// </summary>
         /// <value>The current batch line no.</value>
-		public int CurrentBatchLineNo
+		public int CurrentBatchLineOffset
 		{
-			get { return this.m_currentBatchLineNo; }
+			get { return this.m_currentBatchLineOffset; }
 		}
 
 		/// <summary>
@@ -165,21 +165,6 @@ namespace csql
 
 
 		/// <summary>
-		/// Gets a value indicating whether the temporary output file of the preprocessor
-		/// has to be deleted.
-		/// </summary>
-		/// <value><c>true</c> if the temp file needs to be deleted. <c>false</c> otherwise.</value>
-		private bool DeleteTempFile
-		{
-			get
-			{
-                //return !UseNamedPipes && !String.IsNullOrEmpty( TempFileName );
-                return false;
-			}
-		}
-
-
-		/// <summary>
 		/// Emits an entry message.
 		/// </summary>
 		public virtual void SignIn()
@@ -218,11 +203,11 @@ namespace csql
 		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Want to catch everything to be able to add file and line number infos." )]
 		public virtual void Process()
 		{
-			m_currentFile        = m_cmdArgs.ScriptFile;
-			m_currentLineNo      = 1;
-			m_currentBatchNo     = 1;
-			m_currentBatchLineNo = 0;
-			m_batchBuilder       = new StringBuilder( 4096 );
+			m_currentFile            = m_cmdArgs.ScriptFile;
+			m_currentLineNo          = 1;
+			m_currentBatchNo         = 1;
+			m_currentBatchLineOffset = 0;
+			m_batchBuilder           = new StringBuilder( 4096 );
 			try {
 				using ( Stream stream = OpenInputFile() )
 				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
@@ -232,6 +217,7 @@ namespace csql
 						switch ( type ) {
 							case LineType.Text:
 								m_batchBuilder.AppendLine( line );
+								m_currentLineNo++;
 								break;
 							case LineType.Line:
 								ProcessLine( line );
@@ -243,12 +229,12 @@ namespace csql
 									m_currentBatchNo++;
 								}
 								m_batchBuilder.Length = 0;
-								m_currentBatchLineNo = m_currentLineNo + 1;
+								m_currentBatchLineOffset = m_currentLineNo;
+								m_currentLineNo++;
 								break;
 							default:
 								throw new NotSupportedException( "Unexepected line type: " + type );
 						}
-						m_currentLineNo++;
 					}
 				}
 				string lastBatch = m_batchBuilder.ToString();
@@ -261,7 +247,7 @@ namespace csql
 				throw;
 			}
 			catch ( Exception ex ) {
-				string message = String.Format( "{0}({1}): Error: {2}", m_currentFile, m_currentBatchLineNo, ex.Message );
+				string message = String.Format( "{0}({1}): Error: {2}", m_currentFile, m_currentBatchLineOffset, ex.Message );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_batchBuilder.Length != 0 && Program.TraceLevel.TraceInfo ) {
 					Trace.Indent();
@@ -269,17 +255,6 @@ namespace csql
 					Trace.Unindent();
 				}
 				throw new TerminateException( ExitCode.SqlCommandError );
-			}
-			finally {
-				if ( DeleteTempFile ) {
-					try {
-						Debug.WriteLineIf( Program.TraceLevel.TraceVerbose, "deleting file " + TempFileName );
-                        File.Delete( TempFileName );
-					}
-					catch ( IOException ex ) {
-                        Debug.WriteLineIf( Program.TraceLevel.TraceError, "Error deleting file " + TempFileName + ":\r\n" + ex.Message );
-					}
-				}
 			}
 		}
 
@@ -480,7 +455,7 @@ namespace csql
 			if ( lineNumber < 0 )
 				lineNumber = 0;
 
-			lineNumber += CurrentBatchLineNo;
+			lineNumber += CurrentBatchLineOffset;
 			string error = String.Format( "{0}({1}): Error: {2}", m_currentFile, lineNumber, message );
 			return error;
 		}

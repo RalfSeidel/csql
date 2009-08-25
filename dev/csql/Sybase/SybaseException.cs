@@ -10,11 +10,8 @@ namespace csql.Sybase
 		public SybaseException( string message, Exception inner ) : base( message, inner ) { }
 		protected SybaseException( System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context ) : base( info, context ) { }
 		public SybaseException( SybaseError sybaseError, Exception innerException )
-			: base( sybaseError.Message, innerException ) 
+		: base( sybaseError, innerException ) 
 		{ 
 		}
-
-
-
 	}
 }

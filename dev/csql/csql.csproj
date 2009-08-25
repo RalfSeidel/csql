@@ -127,7 +127,10 @@
   <ItemGroup>
     <None Include="csql.FxCop" />
     <None Include="csql.snk" />
+    <None Include="Test\Input\ErrorLineTest_2.sql" />
     <None Include="Test\Input\DistributionTest.sql" />
+    <None Include="Test\Input\ErrorLineTest_1.sql" />
+    <None Include="Test\Input\ErrorLineTest_3.sql" />
     <None Include="Test\Input\PrintFromProcedure.sql" />
     <None Include="Test\Input\SelectTest.sql" />
     <None Include="Test\run.bat" />
