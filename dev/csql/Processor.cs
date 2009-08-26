@@ -1,23 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace csql
 {
 	/// <summary>
 	/// Base class for the processors.
 	/// </summary>
+    /// <remarks>
+    /// TODO: this class needs some refactoring to separate raw command execution
+    /// and runtime environment management.
+    /// </remarks>
 	public abstract class Processor : IDisposable	
 	{
 		private readonly CmdArgs m_cmdArgs;
 		private string m_pipeName;
 		private string m_currentFile;
-		private int    m_currentLineNo;
+		private int    m_currentFileLineNo;
 		private int    m_currentBatchNo;
-		private int    m_currentBatchLineOffset;
+		private int    m_currentBatchLineNo;
+        private IList<BatchContext> m_currentBatchContexts;
 		private StringBuilder m_batchBuilder;
 		private Process m_ppProcess;
 
@@ -77,7 +83,7 @@ namespace csql
         /// <value>The current batch line no.</value>
 		public int CurrentBatchLineOffset
 		{
-			get { return this.m_currentBatchLineOffset; }
+			get { return this.m_currentBatchLineNo; }
 		}
 
 		/// <summary>
@@ -203,11 +209,13 @@ namespace csql
 		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Want to catch everything to be able to add file and line number infos." )]
 		public virtual void Process()
 		{
-			m_currentFile            = m_cmdArgs.ScriptFile;
-			m_currentLineNo          = 1;
-			m_currentBatchNo         = 1;
-			m_currentBatchLineOffset = 0;
-			m_batchBuilder           = new StringBuilder( 4096 );
+			m_currentFile = m_cmdArgs.ScriptFile;
+			m_currentFileLineNo = 1;
+			m_currentBatchNo = 1;
+			m_currentBatchLineNo = 1;
+			m_batchBuilder = new StringBuilder( 4096 );
+            m_currentBatchContexts   = new List<BatchContext>();
+            ResetBatchContext();
 			try {
 				using ( Stream stream = OpenInputFile() )
 				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
@@ -217,7 +225,8 @@ namespace csql
 						switch ( type ) {
 							case LineType.Text:
 								m_batchBuilder.AppendLine( line );
-								m_currentLineNo++;
+                                m_currentBatchLineNo++;
+                                m_currentFileLineNo++;
 								break;
 							case LineType.Line:
 								ProcessLine( line );
@@ -225,12 +234,13 @@ namespace csql
 							case LineType.Exec:
 								string batch = m_batchBuilder.ToString();
 								if ( !IsWhiteSpaceOnly( batch ) ) {
-									ProcessExec( m_batchBuilder.ToString() );
+                                    CheckedProcessBatch( m_batchBuilder.ToString() );
 									m_currentBatchNo++;
 								}
 								m_batchBuilder.Length = 0;
-								m_currentBatchLineOffset = m_currentLineNo;
-								m_currentLineNo++;
+								m_currentBatchLineNo = 1;
+								m_currentFileLineNo++;
+                                ResetBatchContext();
 								break;
 							default:
 								throw new NotSupportedException( "Unexepected line type: " + type );
@@ -240,14 +250,14 @@ namespace csql
 				string lastBatch = m_batchBuilder.ToString();
 				if ( !IsWhiteSpaceOnly( lastBatch ) ) {
 					m_currentBatchNo++;
-					ProcessExec( lastBatch );
+                    CheckedProcessBatch( lastBatch );
 				}
 			}
 			catch ( TerminateException ) {
 				throw;
 			}
 			catch ( Exception ex ) {
-				string message = String.Format( "{0}({1}): Error: {2}", m_currentFile, m_currentBatchLineOffset, ex.Message );
+				string message = String.Format( "{0}({1}): Error: {2}", m_currentFile, m_currentBatchLineNo, ex.Message );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_batchBuilder.Length != 0 && Program.TraceLevel.TraceInfo ) {
 					Trace.Indent();
@@ -264,7 +274,7 @@ namespace csql
 		/// Emits the current batch.
 		/// </summary>
 		/// <param name="batch">The batch.</param>
-		private void ProcessExec( string batch )
+        private void CheckedProcessBatch( string batch )
 		{
 			ProcessProgress( "Executing batch " + m_currentBatchNo );
 			Debug.WriteLineIf( Program.TraceLevel.TraceVerbose, batch );
@@ -316,7 +326,7 @@ namespace csql
 		private void ProcessLine( string line )
 		{
 			string[] parts = line.Split( ' ' );
-			this.m_currentLineNo = int.Parse( parts[1] );
+			this.m_currentFileLineNo = int.Parse( parts[1] );
 
             // The pre processor may omit the file name if it hasn't changed 
             // since the last #line directive.
@@ -337,6 +347,8 @@ namespace csql
                         m_currentFile = m_currentFile.Substring( 0, m_currentFile.Length - 1 );
                 }
             }
+            BatchContext newContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
+            m_currentBatchContexts.Add( newContext );
 		}
 
 		/// <summary>
@@ -443,21 +455,49 @@ namespace csql
 			}
 		}
 
+        /// <summary>
+        /// Clear the batch context.
+        /// </summary>
+        private void ResetBatchContext()
+        {
+            m_currentBatchContexts.Clear();
+            if ( !String.IsNullOrEmpty( m_currentFile ) ) {
+                BatchContext initialContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
+                m_currentBatchContexts.Add( initialContext );
+            }
+        }
+
 
 		/// <summary>
 		/// Formats the error message for the output.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <param name="lineNumber">The current line number.</param>
+		/// <param name="message">
+        /// The error message.
+        /// </param>
+        /// <param name="errorLineNumber">
+        /// The line number where error was reported.
+        /// </param>
 		/// <returns>The formated message.</returns>
-		private string FormatError( string message, int lineNumber )
+		private string FormatError( string message, int errorLineNumber )
 		{
-			if ( lineNumber < 0 )
-				lineNumber = 0;
+            int contextCount = m_currentBatchContexts.Count;
+            BatchContext context = null;
+            for ( int i = contextCount - 1; i >= 0; --i ) {
+                context = m_currentBatchContexts[i];
+                if ( context.BatchOffset <= errorLineNumber )
+                    break;
+            }
+            Debug.Assert( context != null );
 
-			lineNumber += CurrentBatchLineOffset;
-			string error = String.Format( "{0}({1}): Error: {2}", m_currentFile, lineNumber, message );
-			return error;
+            if ( context == null ) {
+                string error = String.Format( "{0}({1}): Error: {2}", m_currentFile, errorLineNumber, message );
+                return error;
+            } else {
+                string contextFile = context.File;
+                int contextLineNumber = context.LineNumber + errorLineNumber - context.BatchOffset;
+                string error = String.Format( "{0}({1}): Error: {2}", contextFile, contextLineNumber, message );
+                return error;
+            }
 		}
 
 

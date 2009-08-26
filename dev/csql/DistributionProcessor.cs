@@ -12,7 +12,7 @@ namespace csql
 	/// Processor for the creation of a distribution file i.e. a script
 	/// that contains the ouput of the preprosessor.
 	/// </summary>
-	public class DistributionProcessor : Processor
+	public class DistributionProcessor : Processor //, IBatchProcessor
 	{
 		private readonly TextWriter m_outputFileWriter;
 

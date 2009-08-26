@@ -51,7 +51,7 @@ namespace csql
 					didTraceCommandLine = true;
 				}
 				try {
-					using ( Processor processor = ProcessorFactory.CreateProcessor( cmdArgs ) ) {
+					using ( Processor processor = BatchProcessorFactory.CreateProcessor( cmdArgs ) ) {
 						processor.SignIn();
 
 						processor.Process();

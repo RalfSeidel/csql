@@ -7,7 +7,7 @@ namespace csql
 	/// <summary>
 	/// Processor for SQL script execution of the database server.
 	/// </summary>
-	public class ExecutionProcessor : Processor
+    public class ExecutionProcessor : Processor// , IBatchProcessor
 	{
 		private readonly DbConnection m_connection;
 

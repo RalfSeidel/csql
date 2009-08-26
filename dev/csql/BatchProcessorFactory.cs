@@ -4,7 +4,12 @@ using System.Text;
 
 namespace csql
 {
-	public static class ProcessorFactory
+    /// <summary>
+    /// This class encapsulates the conditions under which csql will create
+    /// a distribution file or executes the sql commands by creating
+    /// the appropriate batch processsor.
+    /// </summary>
+	public static class BatchProcessorFactory
 	{
 		/// <summary>
 		/// Creates the processor for the script.
