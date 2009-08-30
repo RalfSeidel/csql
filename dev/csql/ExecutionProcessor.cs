@@ -85,44 +85,8 @@ namespace csql
             if ( !Program.TraceLevel.TraceInfo )
                 return;
 
-            int fieldCount = dataReader.FieldCount;
-            int lineWidth = 0;
-            string separator = "";
-
-            for ( int i = 0; i < fieldCount; ++i ) {
-                String fieldName = dataReader.GetName( i );
-                if ( String.IsNullOrEmpty( fieldName ) ) {
-                    fieldName = "Column_" + i.ToString();
-                }
-                Trace.Write( separator );
-                Trace.Write( fieldName );
-                lineWidth+= separator.Length + fieldName.Length;
-                separator = " ";
-            }
-
-            Trace.WriteLine( "" );
-            Trace.WriteLine( new String( '-', lineWidth ) );
-
-            int lineCount = 0;
-            while ( dataReader.Read() ) {
-                separator = "";
-                for ( int i = 0; i < fieldCount; ++i ) {
-                    string fieldValue;
-                    if ( dataReader.IsDBNull( i ) ) {
-                        fieldValue = "null";
-                    } else {
-                        fieldValue = dataReader[i].ToString();
-                    }
-                    Trace.Write( separator );
-                    Trace.Write( fieldValue );
-                    separator = " ";
-                }
-                Trace.WriteLine( "" );
-                ++lineCount;
-            }
-            if ( lineCount == 0 ) {
-                Trace.WriteLine( "[empty]" );
-            }
+			DataReaderTracer tracer = new DataReaderTracer( dataReader );
+			tracer.TraceAll();
         }
     }
 }

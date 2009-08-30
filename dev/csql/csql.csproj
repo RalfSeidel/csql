@@ -69,6 +69,7 @@
     <Compile Include="CmdArgs.cs" />
     <Compile Include="CommandLineArguments.cs" />
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="DataReaderTracer.cs" />
     <Compile Include="DbConnection.cs" />
     <Compile Include="DbException.cs" />
     <Compile Include="DbMessage.cs" />

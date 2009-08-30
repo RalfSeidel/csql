@@ -8,7 +8,7 @@ using System;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle( "csql" )]
-[assembly: AssemblyDescription( "Sql command processor" )]
+[assembly: AssemblyDescription( "Compiled sql command processor" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "SQL Service GmbH" )]
 [assembly: AssemblyProduct( "csql" )]
@@ -36,6 +36,6 @@ using System;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "0.4.0.*" )]
-[assembly: AssemblyFileVersion( "0.4" )]
+[assembly: AssemblyVersion( "0.5.0.*" )]
+[assembly: AssemblyFileVersion( "0.5" )]
 [assembly: NeutralResourcesLanguageAttribute( "en-US" )]
