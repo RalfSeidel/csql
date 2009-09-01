@@ -223,7 +223,13 @@ void Processor::emitLine( std::wostream& output )
 	const size_t   line     = file.getLine();
 	const wchar_t  quote    = m_options.getStringDelimiter() == Options::STRD_DOUBLE ? L'"' : '\'';
 
-	output << L"#line " << (unsigned int)line << L' ' << quote;
+	// The stream operator << inserts thousand grouping separators. I haven't found a way
+	// to avoid this (expected classic locale wouldn't do so). The workaround is to do
+	// the formatting manually.
+	wchar_t lineBuffer[20];
+	_itow( line, lineBuffer, 10 );
+
+	output << L"#line " << lineBuffer << L' ' << quote;
 
 	if ( m_options.getStringQuoting() == Options::QUOT_ESCAPE ) {
 		// Replace backslash in file name with double backshlash.
@@ -390,8 +396,9 @@ void Processor::processFile( const std::wstring& fileName )
 			throw error::C1068( fileName );
 		}
 
-		m_nOutputLineNumber = -1;
-
+		// Reset the output line number counter to force emitting
+		// the #line directive for the next non empty line.
+		m_nOutputLineNumber = 0;
 		processInput();
 
 		// If the input file doesn't end with an empty line 
@@ -407,7 +414,7 @@ void Processor::processFile( const std::wstring& fileName )
 			m_includeOnceFiles.insert( file.getPath() );
 		}
 		m_fileStack.pop();
-		m_nOutputLineNumber = -1;
+		m_nOutputLineNumber = 0;
 	} catch ( error::Error& error ) {
 		m_fileStack.pop();
 
