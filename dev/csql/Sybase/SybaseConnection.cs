@@ -65,7 +65,7 @@ namespace csql.Sybase
 		{
 			get
 			{
-				string file = @"Sybase.Data.AseClient.dll";
+                string file = @"Sybase.AdoNet2.AseClient.dll";
 				string root;
 				string path;
 
@@ -82,12 +82,12 @@ namespace csql.Sybase
 					return null;
 				}
 
-				path = Path.Combine( root, @"DataAccess" );
+				path = Path.Combine( root, "DataAccess" );
 				// Append "64" if the current process is running in a x64 environment.
 				if ( IntPtr.Size == 8 ) {
 					path += "64";
 				}
-				path = Path.Combine( root, @"\ADONET\dll" );
+				path = Path.Combine( path, @"ADONET\dll" );
 				path = Path.Combine( path, file );
 
 				if ( File.Exists( path ) )
