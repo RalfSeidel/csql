@@ -54,6 +54,13 @@ namespace csql.Sybase
 			return adoConnection;
 		}
 
+		/// <summary>
+		/// Gets the path of Sybase database provider.
+		/// </summary>
+		/// <remarks>
+		/// The code checks the 
+		/// </remarks>
+		/// <value>The sybase ADO.NET data provider assembly path.</value>
 		private static string AseAssemblyPath
 		{
 			get
@@ -75,7 +82,12 @@ namespace csql.Sybase
 					return null;
 				}
 
-				path = Path.Combine( root, @"DataAccess\ADONET\dll" );
+				path = Path.Combine( root, @"DataAccess" );
+				// Append "64" if the current process is running in a x64 environment.
+				if ( IntPtr.Size == 8 ) {
+					path += "64";
+				}
+				path = Path.Combine( root, @"\ADONET\dll" );
 				path = Path.Combine( path, file );
 
 				if ( File.Exists( path ) )
