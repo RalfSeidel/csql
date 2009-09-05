@@ -37,6 +37,9 @@ typedef std::map<std::wstring, std::wstring> StringDictionary;
 
 // This function or variable may be unsafe - don't bother
 #pragma warning( disable: 4996 )
+// warning C4481: nonstandard extension used: override specifier 'override' - ignore for now
+#pragma warning( disable: 4481 )
+
 
 using namespace std;
 

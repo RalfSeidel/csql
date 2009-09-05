@@ -8,6 +8,7 @@
 #include "Options.h"
 #include "Directive.h"
 #include "File.h"
+#include "Output.h"
 #include "Exceptions.h"
 #include "Expression.h"
 #include "Error.h"
@@ -84,8 +85,7 @@ Processor::Processor( Options& options )
 , m_nOutputLineNumber( 1 )
 , m_nSkippedLineCount( 0 )
 , m_pTokenStream( NULL )
-, m_pOutStream( NULL )
-, m_createdOutFile( false )
+, m_pOutput( NULL )
 , m_pErrStream( &std::wcerr )
 , m_pLogStream( &std::wclog )
 //, m_pIStream( NULL )
@@ -98,9 +98,7 @@ Processor::Processor( Options& options )
 */
 Processor::~Processor()
 {
-	if ( m_createdOutFile ) {
-		delete m_pOutStream;
-	}
+	delete m_pOutput;
 	delete m_pScanner;
 	delete &m_conditionalStack;
 	delete &m_tokenStreamStack;
@@ -116,9 +114,8 @@ Processor::~Processor()
 */
 void Processor::close()
 {
-	if ( m_createdOutFile ) {
-		std::wofstream* fs = (wofstream*)(m_pOutStream);
-		fs->close();
+	if ( m_pOutput != NULL ) {
+		m_pOutput->close();
 	}
 }
 
@@ -128,13 +125,9 @@ void Processor::close()
 ** @attention The processor stores a pointer to the submitted reference.
 ** Do not pass a local variable.
 */
-void Processor::setOutStream( std::wostream& output )
+void Processor::setOutStream( std::wostream& /*output*/ )
 {
-	if ( m_createdOutFile ) {
-		delete m_pOutStream;
-	}
-	m_pOutStream = &output;
-	m_createdOutFile = false;
+	throw error::C1001( L"Not implemented" );
 }
 
 /**
@@ -356,7 +349,7 @@ void Processor::processStream( std::wistream& input )
 		m_nOutputLineNumber = 1;
 
 		processInput();
-		emitBuffer( *m_pOutStream );
+		emitBuffer( m_pOutput->getStream() );
 		m_fileStack.pop();
 	} catch ( error::Error& error ) {
 		m_fileStack.pop();
@@ -401,10 +394,11 @@ void Processor::processFile( const std::wstring& fileName )
 		m_nOutputLineNumber = 0;
 		processInput();
 
-		// If the input file doesn't end with an empty line 
-		// emit the remaning part.
+		// If an include file doesn't end with an empty line 
+		// emit the remaining part.
 		if ( m_outputBuffer.tellp() > 0 ) {
-			processNewLine( file.getDefaultNewLine() );
+			const wstring* psNewLine = m_fileStack.size() > 1 ? &file.getDefaultNewLine() : NULL;
+			processNewLine( psNewLine );
 		}
 
 		if ( file.isAutoIncludedOnce() ) {
@@ -530,44 +524,8 @@ void Processor::applyOptions()
 	m_pScanner     = Scanner::createScanner( m_options );
 	m_pTokenStream = m_pScanner;
 
-	if ( m_pOutStream == NULL ) {
-		const wstring& sOutputFile = m_options.getOutputFile();
-		const int nOutputCodePage   = m_options.getOutputCodePage();
-		//const CodePageId codePageId = CodePageId( nOutputCodePage  );
-		//const CodePageInfo& codePageInfo = CodePageInfo::getCodePageInfo( codePageId );
-
-		if ( sOutputFile.empty() ) {
-			m_pOutStream = &std::wcout;
-			m_createdOutFile = false;
-		} else {
-			std::wofstream* pOutStream = new std::wofstream();
-
-			if ( nOutputCodePage == CPID_UTF16 ) {
-				Utf16Converter* pConverter = new Utf16Converter();
-				locale loc = locale::classic() ;
-				loc = locale( loc, pConverter );
-				pOutStream->imbue( loc ) ;
-			} else if ( nOutputCodePage != 0 ) {
-				char  buffer[32];
-				_itoa( nOutputCodePage, buffer, 10 );
-				// see documentation of setlocale crt function for the
-				// explanation of the local name format.
-				const string locId = string( "English_US." ) + buffer;
-				const locale loc( locId.c_str() );
-				pOutStream->imbue( loc );
-			}
-			
-			pOutStream->open( sOutputFile.c_str(), std::ios::out | std::ios::binary );
-			if ( pOutStream->fail() ) {
-				throw error::C1083( sOutputFile );
-			}
-			pOutStream->exceptions( wofstream::failbit | wofstream::badbit );
-			if ( nOutputCodePage == CPID_UTF16 ) {
-				(*pOutStream) << wchar_t(0xFEFF);
-			}
-			m_pOutStream = pOutStream;
-			m_createdOutFile = true;
-		}
+	if ( m_pOutput == NULL ) {
+		m_pOutput = Output::createOutput( m_options );
 	}
 
 	// Add buildin macros.
@@ -757,7 +715,7 @@ bool Processor::processToken( int scannerToken )
 			m_outputBuffer << tokenText;
 			break;
 		case TOK_NEW_LINE:
-			processNewLine( tokenText );
+			processNewLine( &tokenText );
 			break;
 		case TOK_SPACE:
 			m_outputBuffer << tokenText;
@@ -1173,14 +1131,15 @@ void Processor::processIdentifier()
 /**
 ** @brief Process the new line token.
 **
-** @param sNewLine The actual new line string found in the input file.
+** @param psNewLine The actual new line string found in the input file
+** or NULL if the file is the last input fille
 */
-void Processor::processNewLine( const wstring& sNewLine )
+void Processor::processNewLine( const wstring* psNewLine )
 {
 	File&  file = getFile();
 
-	if ( file.getDefaultNewLine().empty() ) {
-		file.setDefaultNewLine( sNewLine );
+	if ( psNewLine != NULL && !psNewLine->empty() && file.getDefaultNewLine().empty() ) {
+		file.setDefaultNewLine( *psNewLine );
 	}
 
 	wostringstream lineOutput;
@@ -1188,25 +1147,27 @@ void Processor::processNewLine( const wstring& sNewLine )
 
 	if ( nCharCount != 0 && this->m_pTokenStream == m_pScanner ) {
 		if ( m_options.emitLine() && (m_nOutputLineNumber != file.getLine() || file.getLine() == 1 ) ) {
-			emitLine( *m_pOutStream );
+			emitLine( m_pOutput->getStream() );
 			m_nOutputLineNumber = file.getLine();
 		}
 	}
 
 
-	if ( nCharCount != 0 || !m_options.eliminateEmptyLines() ) {
-		emitLineFeed( lineOutput, sNewLine );
+	if ( psNewLine != NULL ) {
+		if ( nCharCount != 0 || !m_options.eliminateEmptyLines() ) {
+			emitLineFeed( lineOutput, *psNewLine );
 
-		++m_nOutputLineNumber;
-		m_nSkippedLineCount = 0;
-	} else {
-		++m_nSkippedLineCount;
+			++m_nOutputLineNumber;
+			m_nSkippedLineCount = 0;
+		} else {
+			++m_nSkippedLineCount;
+		}
 	}
 
 	if ( lineOutput.tellp() > 0 ) {
 		const wstring line = lineOutput.str();
-		(*m_pOutStream) << line ;
-		m_pOutStream->clear();
+		m_pOutput->getStream() << line ;
+		m_pOutput->getStream().clear();
 	}
 
 	if ( this->m_pTokenStream == m_pScanner ) {
@@ -1221,7 +1182,7 @@ void Processor::processNewLine( const wstring& sNewLine )
 */
 void Processor::processNewLine()
 {
-	processNewLine( m_tokenExpression.text );
+	processNewLine( &m_tokenExpression.text );
 }
 
 
@@ -1647,7 +1608,7 @@ void Processor::processDefineDirective()
 				} else {
 					bContinue = false;
 				}
-				processNewLine( m_tokenExpression.getText() );
+				processNewLine( &m_tokenExpression.getText() );
 				break;
 
 			case TOK_END_OF_FILE:

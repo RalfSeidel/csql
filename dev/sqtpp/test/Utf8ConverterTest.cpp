@@ -31,7 +31,7 @@ void Utf8ConverterTest::isStartByteTest()
 {
 	bool is_start_byte;
 	char c;
-	for ( c = '\0'; c != char('\128'); ++c ) {
+	for ( c = '\0'; c != char('\127'); ++c ) {
 		is_start_byte = Utf8Converter::is_start_byte( c );
 		assert( !is_start_byte );
 	}
@@ -57,7 +57,7 @@ void Utf8ConverterTest::sequenceLengthTest()
 {
 	int length;
 	char c;
-	for ( c = '\0'; c != char('\128'); ++c ) {
+	for ( c = '\0'; c != char('\127'); ++c ) {
 		length = Utf8Converter::sequence_length( c );
 		assert( length == 1 );
 	}
@@ -141,9 +141,9 @@ void Utf8ConverterTest::inTest()
 	mbstate_t state = 0;
 	char inAbc[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	// "ä"
-	char inUmlaut[] = "\xC3\xA4";
+	//char inUmlaut[] = "\xC3\xA4";
 	// "€"
-	char inEuro[] = "\xE2\x82\xAC";
+	//char inEuro[] = "\xE2\x82\xAC";
 	const char* pIn;
 	const char* pInMax;
 	const char* pInNext;
@@ -188,8 +188,8 @@ void Utf8ConverterTest::outTest()
 	int result;
 	mbstate_t state = 0;
 	wchar_t inAbc[] = L"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	wchar_t inUmlaut[] = L"ä";
-	wchar_t inEuro[] = L"€";
+	//wchar_t inUmlaut[] = L"ä";
+	//wchar_t inEuro[] = L"€";
 	const wchar_t* pIn;
 	const wchar_t* pInMax;
 	const wchar_t* pInNext;

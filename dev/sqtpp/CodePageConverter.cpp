@@ -15,6 +15,162 @@
 namespace sqtpp {
 
 // --------------------------------------------------------------------
+// SbcsConverter
+// --------------------------------------------------------------------
+
+/**
+** @brief Constructor.
+*/
+SbcsConverter::SbcsConverter( unsigned int codePageId, size_t refCount )
+: base( refCount ) 
+, m_codePageId( codePageId )
+{
+}
+
+/**
+** @brief Destructor.
+*/
+SbcsConverter::~SbcsConverter()
+{
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/in/">c++ documentation</a> for details.
+*/
+std::codecvt_base::result SbcsConverter::do_in( mbstate_t& state
+, const char* pFrom , const char* pFromMax , const char*& pFromNext
+, wchar_t* pTo , wchar_t* pToMax, wchar_t*& pToNext ) const
+{
+	assert( pFrom != NULL );
+	assert( pFromMax != NULL );
+	assert( pFromMax > pFrom );
+	assert( pTo != NULL );
+	assert( pToMax != NULL );
+	assert( pToMax > pTo );
+
+	pFromNext = pFrom;
+	pToNext = pTo;
+
+	const size_t toLength = pToMax - pTo;
+	if ( toLength == 0 )
+		return noconv;
+
+	const size_t fromLength = do_length( state, pFrom, pFromMax, toLength );
+
+	if ( fromLength == 0 ) {
+		return pFrom == pFromMax ? noconv : partial;
+	}
+
+	// Set dwFlags (Windows Vista and later): 
+	// The function does not drop illegal code points if the application does not set this flag.
+	const DWORD dwFlags = MB_ERR_INVALID_CHARS;
+	const unsigned int codePageId = getCodePageId();
+	const int charCount = MultiByteToWideChar( codePageId, dwFlags, pFrom, fromLength, pTo, toLength ) ; 
+	if ( charCount > 0 ) {
+		pFromNext = pFrom + fromLength;
+		pToNext   = pTo   + charCount;
+		return pFromNext == pFromMax ? ok : partial;
+	} else {
+		return error;
+	}
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/out/">c++ documentation</a> for details.
+*/
+std::codecvt_base::result SbcsConverter::do_out( mbstate_t& state
+ , const wchar_t* pFrom , const wchar_t* pFromMax , const wchar_t*& pFromNext 
+ , char* pTo, char* pToMax, char*& pToNext ) const
+{
+	assert( pFrom != NULL );
+	assert( pFromMax != NULL );
+	assert( pFromMax > pFrom );
+	assert( pTo != NULL );
+	assert( pToMax != NULL );
+	assert( pToMax > pTo );
+
+	pFromNext = pFrom;
+	pToNext = pTo;
+
+	const size_t fromLength = pFromMax - pFrom;
+	if ( fromLength == 0 ) {
+		return noconv;
+	}
+
+	const size_t toLength = pToMax - pTo;
+	if ( toLength == 0 ) {
+		return partial;
+	}
+
+	// Set dwFlags (Windows Vista and later): 
+	// dwFlags must be set to either 0 or WC_ERR_INVALID_CHARS. 
+	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
+	const unsigned int codePageId = getCodePageId();
+	const int charCount = WideCharToMultiByte( codePageId, dwFlags, pFrom, fromLength, pTo, toLength, NULL, NULL ) ; 
+	if ( charCount > 0 ) {
+		pFromNext = pFrom + fromLength;
+		pToNext = pTo + charCount;
+		return ok;
+	} else {
+		DWORD dwErrorCode = ::GetLastError();
+		return dwErrorCode == ERROR_INSUFFICIENT_BUFFER ? partial : error;
+	}
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/unshift/">c++ documentation</a> for details.
+*/
+std::codecvt_base::result SbcsConverter::do_unshift( mbstate_t& state, char* pTo, char* pToMax, char*& pToNext ) const
+{
+    return noconv;
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
+*/
+int SbcsConverter::do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax, size_t toLength ) const throw() 
+{
+	assert( pFrom != NULL );
+	assert( pFromMax != NULL );
+	assert( pFromMax > pFrom );
+
+	const size_t fromCount = pFromMax - pFrom;
+	return fromCount < toLength ? fromCount : toLength;
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/always_noconv/">c++ documentation</a> for details.
+**
+** @return <code>false</code>. 
+*/
+bool SbcsConverter::do_always_noconv() const throw()
+{
+    return false;
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/max_length/">c++ documentation</a> for details.
+**
+** @return <code>4</code>. 
+*/
+int SbcsConverter::do_max_length() const throw()
+{
+    return 1;
+}
+
+/**
+** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/encoding/">c++ documentation</a> for details.
+**
+** @return <code>1</code> because single byte characters sets have a fixed width.
+*/
+int SbcsConverter::do_encoding() const throw()
+{
+    return 1;
+}
+
+
+
+// --------------------------------------------------------------------
 // Utf7Converter
 // --------------------------------------------------------------------
 
@@ -116,8 +272,8 @@ std::codecvt_base::result Utf7Converter::do_out( mbstate_t& state
 	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
 	const int charCount = WideCharToMultiByte( CP_UTF7, dwFlags, pFrom, fromLength, pTo, toLength, NULL, NULL ) ; 
 	if ( charCount > 0 ) {
-		pFromNext = pFrom + charCount;
-		pToNext = pTo + toLength;
+		pFromNext = pFrom + fromLength;
+		pToNext = pTo + charCount;
 		return ok;
 	} else {
 		DWORD dwErrorCode = ::GetLastError();
@@ -142,9 +298,10 @@ int Utf7Converter::do_length( const mbstate_t& state , const char* pFrom, const 
 	assert( pFromMax != NULL );
 	assert( pFromMax > pFrom );
 
-	const char* pFromNext = pFrom;
-	int toCount = 0;
-	throw new NotSupportedError();
+	const size_t fromLength = pFromMax - pFrom;
+	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
+	const int charCount = MultiByteToWideChar( CP_UTF7, dwFlags, pFrom, fromLength, NULL, 0 ) ; 
+	return charCount;
 }
 
 /**
@@ -311,8 +468,8 @@ std::codecvt_base::result Utf8Converter::do_out( mbstate_t& state
 	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
 	const int charCount = WideCharToMultiByte( CP_UTF8, dwFlags, pFrom, fromLength, pTo, toLength, NULL, NULL ) ; 
 	if ( charCount > 0 ) {
-		pFromNext = pFrom + charCount;
-		pToNext = pTo + toLength;
+		pFromNext = pFrom + fromLength;
+		pToNext = pTo + charCount;
 		return ok;
 	} else {
 		DWORD dwErrorCode = ::GetLastError();

@@ -17,7 +17,7 @@ private:
 public:
 	SbcsInfoBase( CodePageId codePageId, const wchar_t* text )
 	: CodePageInfo( codePageId, text )
-	, m_locale( getLocaleName( codePageId ).c_str() )
+	, m_locale( locale::classic(), new SbcsConverter( codePageId ) )
 	{
 	}
 
@@ -32,18 +32,6 @@ public:
 	virtual const locale& getLocale() const
 	{
 		return m_locale;
-	}
-private:
-	static string getLocaleName( CodePageId codePageId )
-	{
-		if ( codePageId == CPID_UNDEFINED ) {
-			return locale::classic().name();
-		} else {
-			stringstream cpBuffer;
-			cpBuffer << "English_US." << int(codePageId);
-			string locName = cpBuffer.str();
-			return locName;
-		}
 	}
 };
 

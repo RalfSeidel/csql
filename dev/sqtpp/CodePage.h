@@ -72,7 +72,7 @@ private:
 	CodePageInfo& operator=( const CodePageInfo& that );
 public:
 	/// @brief Initializing constructor.
-	CodePageInfo( CodePageId codePageId, const wchar_t* text );
+	CodePageInfo( CodePageId codePageId, const wchar_t* name );
 
 	/// @brief Destructor.
 	virtual ~CodePageInfo() throw();
@@ -92,7 +92,7 @@ public:
 	/// Get the code page identifier.
 	const wstring& getIdentifier() const throw() { return m_identifier; }
 
-	/// Get the byte order mask character sequence that is used to identifie the code page
+	/// Get the byte order mask character sequence that is used to identify the code page
 	/// at the beginning of a file.
 	/// @return <code>NULL</code> if no BOM is defined for the code page. The character
 	/// sequence otherwise.

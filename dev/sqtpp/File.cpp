@@ -604,7 +604,7 @@ std::wistream& File::open( const std::wstring& fileName, const CodePageId defaul
 */
 std::wistream& File::open( const std::wstring& fileName )
 {
-	return open( fileName, CPID_UNDEFINED );
+	return open( fileName, CPID_WINDOWS_1252 );
 }
 
 

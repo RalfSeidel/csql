@@ -19,6 +19,7 @@ class File;
 class FileStack;
 class Logger;
 class Options;
+class Output;
 class LocationStack;
 class Scanner;
 class Macro;
@@ -107,12 +108,8 @@ private:
 	/// A buffer for the current line.
 	std::wstringstream m_outputBuffer;
 
-	/// The output stream (wcout).
-	std::wostream*     m_pOutStream;
-
-	/// Flag indicating if the output stream is allocated by the 
-	/// this program and needs to be closed and released.
-	bool               m_createdOutFile;
+	/// The output stream.
+	Output*            m_pOutput;
 
 	/// The error out stream (wcerr).
 	std::wostream*     m_pErrStream;
@@ -246,7 +243,7 @@ private:
 
 	// Process the new line token.
 	void processNewLine();
-	void processNewLine( const wstring& sNewLine );
+	void processNewLine( const wstring* psNewLine );
 
 	// Process a block comment.
 	void processBlockComment();

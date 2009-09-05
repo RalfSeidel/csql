@@ -19,7 +19,7 @@
 
 
 
-unicode.txt
+utf8.txt
 הצüִײÜ 
 
 €

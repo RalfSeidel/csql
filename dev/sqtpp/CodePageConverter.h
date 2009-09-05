@@ -12,6 +12,46 @@ namespace sqtpp {
 typedef std::codecvt<wchar_t , char, mbstate_t> CodePageConverter;
 
 /**
+** @brief Converter for single byte coded string streams.
+*/
+class SbcsConverter : public CodePageConverter
+{
+private:
+	typedef CodePageConverter base;
+
+	unsigned int m_codePageId;
+
+public:
+	explicit SbcsConverter( unsigned int codePageId, size_t refCount = 0 );
+	virtual ~SbcsConverter();
+
+
+	unsigned int getCodePageId() const throw()
+	{
+		return m_codePageId;
+	}
+
+protected:
+    virtual result do_in( mbstate_t& state
+	                    , const char* pFrom , const char* pFromMax , const char*& pFromNext
+						, wchar_t* pTo , wchar_t* pToMax, wchar_t*& pToNext ) const override;
+
+    virtual result do_out( mbstate_t& state
+	                     , const wchar_t* pFrom , const wchar_t* pFromMax, const wchar_t*& pFromNext 
+						 , char* pTo, char* pToMax , char*& pToNext ) const override;
+
+    virtual result do_unshift( mbstate_t& state, char* pTo , char* pToMax, char*& pToNext ) const override;
+
+    virtual int do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
+
+    virtual bool do_always_noconv() const throw() override;
+
+    virtual int do_max_length() const throw() override;
+
+    virtual int do_encoding() const throw() override;
+};
+
+/**
 ** @brief Converter for UTF7 streams.
 */
 class Utf7Converter : public CodePageConverter
