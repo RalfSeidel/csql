@@ -223,29 +223,25 @@ namespace csql.Sybase
 			return statement;
 		}
 
-		public override IDataReader Execute( string statement )
+		public override Exception GetMappedException( Exception ex )
 		{
-			try {
-				return base.Execute( statement );
-			}
-			catch ( Exception e ) {
-				Type type = e.GetType();
-				if ( type.FullName == "Sybase.Data.AseClient.AseException" ) {
-					PropertyInfo property = type.GetProperty( "Errors" );
-					object value = property.GetValue( e, null );
-					if ( value != null ) {
-						IEnumerable errors = (IEnumerable)value;
-						IEnumerator enumerator = errors.GetEnumerator();
-						if ( enumerator.MoveNext() ) {
-							object error = enumerator.Current;
-							SybaseError sybaseError = new SybaseError( error );
-							SybaseException sybaseException = new SybaseException( sybaseError, e );
-							throw sybaseException;
-						}
+			Type type = ex.GetType();
+			if ( type.FullName == "Sybase.Data.AseClient.AseException" ) {
+				PropertyInfo property = type.GetProperty( "Errors" );
+				object value = property.GetValue( ex, null );
+				if ( value != null ) {
+					IEnumerable errors = (IEnumerable)value;
+					IEnumerator enumerator = errors.GetEnumerator();
+					if ( enumerator.MoveNext() ) {
+						object error = enumerator.Current;
+						SybaseError sybaseError = new SybaseError( error );
+						SybaseException sybaseException = new SybaseException( sybaseError, ex );
+						return sybaseException;
 					}
-				} 
-				throw;
+				}
 			}
+			return ex;
 		}
+
 	}
 }

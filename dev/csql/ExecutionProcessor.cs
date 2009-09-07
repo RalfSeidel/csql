@@ -69,15 +69,25 @@ namespace csql
 		/// <param name="batch">The batch.</param>
 		protected override void ProcessBatch( string batch )
 		{
-			using ( IDataReader dataReader = m_connection.Execute( batch ) ) {
-				while ( dataReader != null && !dataReader.IsClosed ) {
-                    if ( dataReader.FieldCount != 0 ) {
-                        TraceResult( dataReader );
-                    }
-					if ( !dataReader.NextResult() )
-						break;
+			try {
+				using ( IDbCommand command = m_connection.CreateCommand( batch ) ) 
+				using ( IDataReader dataReader = m_connection.Execute( command ) ) {
+					while ( dataReader != null && !dataReader.IsClosed ) {
+						if ( dataReader.FieldCount != 0 ) {
+							TraceResult( dataReader );
+						}
+						if ( !dataReader.NextResult() )
+							break;
+					}
+					dataReader.Close();
 				}
-				dataReader.Close();
+			}
+			catch ( Exception ex ) {
+				Exception mappedException = m_connection.GetMappedException(ex);
+				if ( mappedException != null ) 
+					throw mappedException;
+				else 
+					throw;
 			}
 		}
 

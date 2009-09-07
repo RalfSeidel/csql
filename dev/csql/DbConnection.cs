@@ -55,20 +55,34 @@ namespace csql
 		}
 
 		/// <summary>
-		/// Executes the specified statement.
+		/// Create a command object for the given statement (batch).
 		/// </summary>
-		/// <param name="statement">The statement.</param>
-		/// <returns>Data reader.</returns>
-		public virtual IDataReader Execute( string statement )
+		/// <param name="statement">The SQL statement.</param>
+		/// <returns>Initialized command object.</returns>
+		public IDbCommand CreateCommand( string statement )
 		{
 			IDbConnection adoConnection = AdoConnection;
-			using ( IDbCommand command = adoConnection.CreateCommand() ) {
-				command.CommandTimeout = 0;
-				command.CommandText = statement;
-				command.CommandType = CommandType.Text;
-				IDataReader dataReader = command.ExecuteReader( CommandBehavior.SequentialAccess );
-				return dataReader;
-			}
+			IDbCommand command = adoConnection.CreateCommand();
+			command.CommandTimeout = 0;
+			command.CommandType = CommandType.Text;
+			command.CommandText = statement;
+			return command;
+		}
+
+		/// <summary>
+		/// Executes the specified statement.
+		/// </summary>
+		/// <param name="command">The command created by CreateCommand.</param>
+		/// <returns>A data reader for the query results.</returns>
+		public virtual IDataReader Execute( IDbCommand command )
+		{
+			IDataReader dataReader = command.ExecuteReader( CommandBehavior.SequentialAccess );
+			return dataReader;
+		}
+
+		public virtual Exception GetMappedException( Exception ex )
+		{
+			return null;
 		}
 
 		/// <summary>
