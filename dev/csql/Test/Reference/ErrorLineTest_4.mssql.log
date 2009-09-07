@@ -1,0 +1,19 @@
+Executing batch 1
+input\ErrorLineTest_4.sql(8): Error: ErrorLineTest_4.sql - 8
+Executing batch 2
+D:/src/Tools/sqtpp/csql/Test/input/Include/ErrorLineTest_4.1.sql(1): Error: ErrorLineTest_4.1.sql - 1
+Executing batch 3
+Macro Line 1
+Macro Line 2
+Macro Line 3
+D:/src/Tools/sqtpp/csql/Test/input/Include/ErrorLineTest_4.1.sql(5): Error: ErrorLineTest_4.1.sql - 5
+Executing batch 4
+D:/src/Tools/sqtpp/csql/Test/input/Include/ErrorLineTest_4.1.sql(8): Error: ErrorLineTest_4.1.sql - 8
+Executing batch 5
+Macro Line 1
+Macro Line 2
+Macro Line 3
+input\ErrorLineTest_4.sql(20): Error: ErrorLineTest_4.sql - 20
+Executing batch 6
+input\ErrorLineTest_4.sql(23): Error: ErrorLineTest_4.sql - 23
+** Finished

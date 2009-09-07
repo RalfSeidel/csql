@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 
 namespace csql
 {
@@ -16,9 +15,9 @@ namespace csql
 			m_message = new DbMessage( message );
 		}
 
-		public DbMessageEventArgs( string server, string catalog, string procedure, int lineNo, string message )
+		public DbMessageEventArgs( TraceLevel severity, string server, string catalog, string procedure, int lineNo, string message )
 		{
-			m_message = new DbMessage( server, catalog, procedure, lineNo, message );
+			m_message = new DbMessage( severity, server, catalog, procedure, lineNo, message );
 		}
 
 		public string Server
@@ -39,6 +38,11 @@ namespace csql
 		public int LineNumber
 		{
 			get { return m_message.LineNumber; }
+		}
+
+		public TraceLevel TraceLevel
+		{
+			get { return m_message.TraceLevel; }
 		}
 
 		/// <summary>

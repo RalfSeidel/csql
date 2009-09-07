@@ -99,6 +99,7 @@
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
     <Content Include="sqtpp.ico" />
     <Content Include="TestParameter1.txt" />
+    <Content Include="Test\mssql.cfg.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -130,6 +131,7 @@
   <ItemGroup>
     <None Include="csql.FxCop" />
     <None Include="csql.snk" />
+    <None Include="Test\Input\DependencyWarning.sql" />
     <None Include="Test\Input\ErrorLineTest_2.sql" />
     <None Include="Test\Input\DistributionTest.sql" />
     <None Include="Test\Input\ErrorLineTest_1.sql" />
@@ -138,10 +140,14 @@
     <None Include="Test\Input\Include\ErrorLineTest_4.1.sql" />
     <None Include="Test\Input\PrintFromProcedure.sql" />
     <None Include="Test\Input\SelectTest.sql" />
+    <None Include="Test\Reference\DependencyWarning.mssql.log" />
+    <None Include="Test\Reference\ErrorLineTest_1.mssql.log" />
+    <None Include="Test\Reference\ErrorLineTest_2.mssql.log" />
+    <None Include="Test\Reference\ErrorLineTest_3.mssql.log" />
+    <None Include="Test\Reference\ErrorLineTest_4.mssql.log" />
+    <None Include="Test\Reference\PrintFromProcedure.mssql.log" />
+    <None Include="Test\Reference\SelectTest.mssql.log" />
     <None Include="Test\run.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Test\Reference\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

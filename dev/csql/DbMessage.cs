@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace csql
 {
@@ -10,6 +10,7 @@ namespace csql
 	[Serializable]
 	public class DbMessage
 	{
+		private readonly TraceLevel m_severity;
 		private readonly string m_server;
 		private readonly string m_catalog;
 		private readonly string m_procedure;
@@ -18,6 +19,7 @@ namespace csql
 
 		public DbMessage( string message )
 		{
+			this.m_severity = TraceLevel.Info;
 			this.m_server = "";
 			this.m_catalog = "";
 			this.m_procedure = "";
@@ -25,8 +27,9 @@ namespace csql
 			this.m_message = message;
 		}
 
-		public DbMessage( string server, string catalog, string procedure, int lineNo, string message )
+		public DbMessage( TraceLevel severity, string server, string catalog, string procedure, int lineNo, string message )
 		{
+			this.m_severity = severity;
 			this.m_server = server;
 			this.m_catalog = catalog;
 			this.m_procedure = procedure;
@@ -69,6 +72,12 @@ namespace csql
 		/// </summary>
 		/// <value>The message.</value>
 		public string Message { get { return m_message; } }
+
+		/// <summary>
+		/// Gets the trace / verbosity level of the message.
+		/// </summary>
+		/// <value>The trace level.</value>
+		public TraceLevel TraceLevel { get { return m_severity; } }
 
 
 		public override string ToString()

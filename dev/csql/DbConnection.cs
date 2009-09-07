@@ -155,7 +155,7 @@ namespace csql
 					string procedure = null;
 					int lineNumber = 0;
 					string message = error.Message;
-					DbMessageEventArgs eventArgs = new DbMessageEventArgs( server, catalog, procedure, lineNumber, message );
+					DbMessageEventArgs eventArgs = new DbMessageEventArgs( TraceLevel.Info, server, catalog, procedure, lineNumber, message );
 					OnDbMessage( eventArgs );
 				}
 			}
@@ -196,12 +196,13 @@ namespace csql
 				OnDbMessage( eventArgs );
 			} else {
 				foreach ( System.Data.Odbc.OdbcError error in errors ) {
+					TraceLevel severity = TraceLevel.Info;
 					string server = null;
 					string catalog = null;
 					string procedure = null;
 					int lineNumber = 0;
 					string message = error.Message;
-					DbMessageEventArgs eventArgs = new DbMessageEventArgs( server, catalog, procedure, lineNumber, message );
+					DbMessageEventArgs eventArgs = new DbMessageEventArgs( severity, server, catalog, procedure, lineNumber, message );
 					OnDbMessage( eventArgs );
 				}
 			}

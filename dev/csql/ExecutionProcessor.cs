@@ -29,10 +29,16 @@ namespace csql
 		/// <param name="e">The <see cref="csql.DbMessageEventArgs"/> instance containing the message.</param>
 		void InfoMessageEventHandler( object sender, DbMessageEventArgs e )
 		{
-			if ( Program.TraceLevel.TraceVerbose ) {
-				Trace.WriteLine( e.ToString() );
-			} else {
-				Trace.WriteLineIf( Program.TraceLevel.TraceInfo, e.Message );
+			if ( Program.TraceLevel.Level >= e.TraceLevel ) {
+				if ( Program.TraceLevel.TraceVerbose ) {
+					Trace.WriteLine( e.ToString() );
+				} else {
+					if ( e.TraceLevel <= TraceLevel.Warning ) {
+						Trace.WriteLine( FormatError( e.TraceLevel, e.Message, e.LineNumber ) );
+					} else {
+						Trace.WriteLine( e.Message );
+					}
+				}
 			}
 		}
 

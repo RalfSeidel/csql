@@ -1,0 +1,5 @@
+Executing batch 1
+Executing batch 2
+input\DependencyWarning.sql(11): Warning: Cannot add rows to sys.sql_dependencies for the stored procedure because it depends on the missing table '_NoExistingProcedure_'. The stored procedure will still be created; however, it cannot be successfully executed until the table exists.
+Executing batch 3
+** Finished

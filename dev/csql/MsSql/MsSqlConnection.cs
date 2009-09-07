@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace csql.MsSql
 {
@@ -58,12 +59,13 @@ namespace csql.MsSql
 				OnDbMessage( eventArgs );
 			} else {
 				foreach ( SqlError error in errors ) {
+					TraceLevel severity = GetSeverity( error );
 					string server = error.Server;
 					string catalog = null;
 					string procedure = error.Procedure;
 					int lineNumber = error.LineNumber;
 					string message = error.Message;
-					DbMessageEventArgs eventArgs = new DbMessageEventArgs( server, catalog, procedure, lineNumber, message );
+					DbMessageEventArgs eventArgs = new DbMessageEventArgs( severity, server, catalog, procedure, lineNumber, message );
 					OnDbMessage( eventArgs );
 				}
 			}
@@ -85,5 +87,27 @@ namespace csql.MsSql
 			string statement = sb.ToString();
 			return statement;
 		}
+
+		/// <summary>
+		/// Determine the tracelevel of the sql server message.
+		/// </summary>
+		/// <param name="error">The message data send by the SQL Server.</param>
+		/// <returns>The internal trace level for the message.</returns>
+		private static TraceLevel GetSeverity( SqlError error )
+		{
+			switch ( error.Number ) {
+				case 2007:
+					// Cannot add rows to sys.sql_dependencies for the stored procedure because it depends on...
+					return TraceLevel.Warning;
+				case 5701:
+					// Changed database context to '...'.
+					//return TraceLevel.Verbose;
+					return TraceLevel.Info;
+				default:
+					return TraceLevel.Info;
+
+			}
+		}
 	}
+
 }

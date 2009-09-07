@@ -1,0 +1,10 @@
+Executing batch 1
+input\ErrorLineTest_3.sql(8): Error: ErrorLineTest_3.sql - 8
+Executing batch 2
+Macro Line 1
+Macro Line 2
+Macro Line 3
+input\ErrorLineTest_3.sql(12): Error: ErrorLineTest_3.sql - 12
+Executing batch 3
+input\ErrorLineTest_3.sql(15): Error: ErrorLineTest_3.sql - 15
+** Finished

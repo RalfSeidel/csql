@@ -90,6 +90,10 @@ namespace csql
 		[Argument( ArgumentType.AtMostOnce, HelpText = "The verbosity/trace level.", LongName = "Trace", ShortName = "t", DefaultValue = ((int)TraceLevel.Info) )]
 		public int Verbose;
 
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
+		[Argument( ArgumentType.AtMostOnce, HelpText = "Suppresses the output of the logo/version information.", ShortName = "N", DefaultValue = false )]
+		public bool NoLogo;
+
 		/// <summary>
 		/// Gets definitions for the preprocessor that reflect some of the program properties.
 		/// </summary>

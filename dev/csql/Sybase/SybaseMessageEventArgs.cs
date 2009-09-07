@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace csql.Sybase
 {
@@ -13,8 +14,14 @@ namespace csql.Sybase
 		{
 		}
 
-		public SybaseMessageEventArgs( SybaseError message ) : base( message.Server, "", message.Procedure, message.LineNumber, message.Message )
+		public SybaseMessageEventArgs( SybaseError message )
+			: base( GetSeverity( message ), message.Server, "", message.Procedure, message.LineNumber, message.Message )
 		{
+		}
+
+		private static TraceLevel GetSeverity( SybaseError message )
+		{
+			return TraceLevel.Info;
 		}
 	}
 }

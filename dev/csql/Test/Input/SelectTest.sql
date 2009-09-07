@@ -22,7 +22,7 @@ create table dbo.SelectTest (
 	c_image             image               null,
 	c_guid              uniqueidentifier    null,
 	c_variant           sql_variant         null,
-	c_timestamp         timestamp,
+	--c_timestamp         rowverion,
 )
 go
 
@@ -68,7 +68,7 @@ insert into dbo.SelectTest ( c_money ) values ( 922337203685477.5807 )
 insert into dbo.SelectTest ( c_datetime ) values ( '18991231' )
 insert into dbo.SelectTest ( c_datetime ) values ( '19000101' )
 insert into dbo.SelectTest ( c_datetime ) values ( '20000615' )
-insert into dbo.SelectTest ( c_datetime ) values ( getdate() )
+insert into dbo.SelectTest ( c_datetime ) values ( '23450101 11:55:00.333' )
 
 insert into dbo.SelectTest ( c_varchar ) values ( '' )
 insert into dbo.SelectTest ( c_varchar ) values ( 'a' )
@@ -84,7 +84,6 @@ insert into dbo.SelectTest ( c_text ) values ( 'ZZZZZ' )
 
 insert into dbo.SelectTest ( c_guid ) values ( '{00000000-0000-0000-0000-000000000000}' )
 insert into dbo.SelectTest ( c_guid ) values ( '{9B7F1C49-7B08-4f78-BBB2-AEEB3D640FD1}' )
-insert into dbo.SelectTest ( c_guid ) values ( newid() )
 
 
 insert into dbo.SelectTest ( c_variant ) values( 0 )
@@ -93,7 +92,7 @@ insert into dbo.SelectTest ( c_variant ) values( 'a' )
 insert into dbo.SelectTest ( c_variant ) values( 'b' )
 insert into dbo.SelectTest ( c_variant ) values( 0x00 )
 insert into dbo.SelectTest ( c_variant ) values( 0x01 )
-insert into dbo.SelectTest ( c_variant ) values( newid() )
+insert into dbo.SelectTest ( c_variant ) values( cast( '{9B7F1C49-7B08-4f78-BBB2-AEEB3D640FD1}' as uniqueidentifier ) )
 go
 
 select * from dbo.SelectTest where 0 = 1

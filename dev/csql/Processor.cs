@@ -175,7 +175,7 @@ namespace csql
 		/// </summary>
 		public virtual void SignIn()
 		{
-			if ( Program.TraceLevel.TraceInfo ) {
+			if ( Program.TraceLevel.TraceInfo && !CmdArgs.NoLogo ) {
 				StringBuilder sb = new StringBuilder();
 				Assembly assembly = Assembly.GetEntryAssembly();
 				string name = assembly.GetName().Name;
@@ -249,8 +249,8 @@ namespace csql
 				}
 				string lastBatch = m_batchBuilder.ToString();
 				if ( !IsWhiteSpaceOnly( lastBatch ) ) {
-					m_currentBatchNo++;
                     CheckedProcessBatch( lastBatch );
+					m_currentBatchNo++;
 				}
 			}
 			catch ( TerminateException ) {
@@ -282,35 +282,35 @@ namespace csql
 				ProcessBatch( batch );
 			}
 			catch ( csql.DbException ex ) {
-				string message = FormatError( ex.Message, ex.LineNumber );
+				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.SqlClient.SqlException ex ) {
-				string message = FormatError( ex.Message, ex.LineNumber );
+				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Odbc.OdbcException ex ) {
-				string message = FormatError( ex.Message, 0 );
+				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.OleDb.OleDbException ex ) {
-				string message = FormatError( ex.Message, 0 );
+				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Common.DbException ex ) {
-				string message = FormatError( ex.Message, 0 );
+				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
 				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
 				if ( m_cmdArgs.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
@@ -471,6 +471,9 @@ namespace csql
 		/// <summary>
 		/// Formats the error message for the output.
 		/// </summary>
+		/// <param name="severity">
+		/// The severity of the (error) message.
+		/// </param>
 		/// <param name="message">
         /// The error message.
         /// </param>
@@ -478,7 +481,7 @@ namespace csql
         /// The line number where error was reported.
         /// </param>
 		/// <returns>The formated message.</returns>
-		private string FormatError( string message, int errorLineNumber )
+		protected string FormatError( TraceLevel severity, string message, int errorLineNumber )
 		{
             int contextCount = m_currentBatchContexts.Count;
             BatchContext context = null;
@@ -490,12 +493,12 @@ namespace csql
             Debug.Assert( context != null );
 
             if ( context == null ) {
-                string error = String.Format( "{0}({1}): Error: {2}", m_currentFile, errorLineNumber, message );
+                string error = String.Format( "{0}({1}): {2}: {3}", m_currentFile, errorLineNumber, severity, message );
                 return error;
             } else {
                 string contextFile = context.File;
                 int contextLineNumber = context.LineNumber + errorLineNumber - context.BatchOffset;
-                string error = String.Format( "{0}({1}): Error: {2}", contextFile, contextLineNumber, message );
+				string error = String.Format( "{0}({1}): {2}: {3}", contextFile, contextLineNumber, severity, message );
                 return error;
             }
 		}

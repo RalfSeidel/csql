@@ -857,11 +857,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\test\cmd\sqtpp.bat"
-					>
-				</File>
-				<File
-					RelativePath=".\test\cmd\sqtppall.bat"
+					RelativePath=".\test\cmd\run.bat"
 					>
 				</File>
 				<Filter

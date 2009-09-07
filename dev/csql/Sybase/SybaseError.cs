@@ -19,7 +19,7 @@ namespace csql.Sybase
 		/// The unknown error/info message.
 		/// </param>
 		public SybaseError( object aseError )
-			: base( GetServer( aseError ), GetCatalog( aseError ), GetProcedure( aseError ), GetLineNumber( aseError ), GetMessage( aseError ) )
+			: base( TraceLevel.Error, GetServer( aseError ), GetCatalog( aseError ), GetProcedure( aseError ), GetLineNumber( aseError ), GetMessage( aseError ) )
 		{
 			if ( aseError == null )
 				throw new ArgumentNullException( "aseError" );
