@@ -1203,6 +1203,10 @@
 							RelativePath=".\test\cmd\input\special\emitline2.h"
 							>
 						</File>
+						<File
+							RelativePath=".\test\cmd\input\special\findfile.h"
+							>
+						</File>
 						<Filter
 							Name="include"
 							>
@@ -1212,6 +1216,10 @@
 							</File>
 							<File
 								RelativePath=".\test\cmd\input\special\include\emitline2_2.h"
+								>
+							</File>
+							<File
+								RelativePath=".\test\cmd\input\special\include\findfile_include.h"
 								>
 							</File>
 						</Filter>

@@ -5,9 +5,11 @@
 ; -------------------------------------
 ; Database Settings
 ; -------------------------------------
-System=MSSQL
-Server=capella
+System=sybase
+Server=146.220.74.208:4200
 Database=tempdb
+user=s4mdbo
+password=s4mdbo
 
 NoLogo=true
 BreakOnError=false

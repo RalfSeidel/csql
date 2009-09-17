@@ -21,9 +21,12 @@ if not exist sqtppout\nul mkdir sqtppout
 
 for %%a in (input\*.*) do call :exec %%~nxa
 
-REM remove empty line and emit line numbers
+REM Remove empty line and emit line numbers
 call :exec special\emitline1.h /E /e+
 call :exec special\emitline2.h /E /e+
+
+REM Check include directories are used as expected
+call :exec special\findfile.h /E /e+ /Iinclude
 
 :end
 exit /b

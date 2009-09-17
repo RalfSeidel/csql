@@ -2,7 +2,7 @@
 use tempdb
 go
 
-if exists ( select 1 from sys.objects where object_id = object_id( 'dbo.pPrintTest' ) )
+if exists ( select 1 from sysobjects where id = object_id( 'dbo.pPrintTest' ) )
 	drop procedure dbo.pPrintTest
 go
 
@@ -21,6 +21,6 @@ exec dbo.pPrintTest
 go
 
 
-if exists ( select 1 from sys.objects where object_id = object_id( 'dbo.pPrintTest' ) )
+if exists ( select 1 from sysobjects where id = object_id( 'dbo.pPrintTest' ) )
 	drop procedure dbo.pPrintTest
 go
