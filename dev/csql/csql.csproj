@@ -60,6 +60,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.Extensions, Version=99.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -69,6 +70,7 @@
     <Compile Include="CmdArgs.cs" />
     <Compile Include="CommandLineArguments.cs" />
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="CsqlOptions.cs" />
     <Compile Include="DataReaderTracer.cs" />
     <Compile Include="DbConnection.cs" />
     <Compile Include="DbException.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DbSystem.cs" />
+    <Compile Include="SqtppOptions.cs" />
     <Compile Include="Sybase\SybaseConnection.cs" />
     <Compile Include="Sybase\SybaseError.cs" />
     <Compile Include="Sybase\SybaseException.cs" />
@@ -100,6 +103,9 @@
     <Content Include="sqtpp.ico" />
     <Content Include="TestParameter1.txt" />
     <Content Include="Test\mssql.cfg.txt" />
+    <Content Include="Test\sybase.cfg.txt">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
