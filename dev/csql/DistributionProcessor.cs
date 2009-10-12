@@ -20,10 +20,10 @@ namespace csql
 		/// Initializes a new instance of the <see cref="DistributionProcessor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The CMD args.</param>
-		public DistributionProcessor( CmdArgs cmdArgs )
-		: base ( cmdArgs )
+        public DistributionProcessor(CsqlOptions csqlOptions)
+            : base(csqlOptions)
 		{
-			string outputFilePath = cmdArgs.DistFile;
+            string outputFilePath = csqlOptions.DistibutionFile;
 			Stream stream = new FileStream( outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
 			m_outputFileWriter = new StreamWriter( stream, Encoding.Unicode );
 		}
@@ -37,10 +37,12 @@ namespace csql
             // Emit console informations as defined in the base class.
             base.SignIn();
 
-            String scriptFile = CmdArgs.ScriptFile;
+            String scriptFile = Options.ScriptFile;
+            
+            
             scriptFile = Path.GetFullPath( scriptFile );
 
-            String distFile = CmdArgs.DistFile;
+            String distFile = Options.DistibutionFile;
             distFile = Path.GetFullPath( distFile );
 
             // Create the dstribution file header
@@ -71,9 +73,9 @@ namespace csql
             footerBuilder.AppendLine( "**************************************************************************** */" );
             m_outputFileWriter.Write( footerBuilder.ToString() );
 
-            String distFile = CmdArgs.DistFile;
+            String distFile = Options.DistibutionFile;
             distFile = Path.GetFullPath( distFile );
-            Trace.WriteLineIf( Program.TraceLevel.TraceInfo, distFile + "(1): file created." );
+            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created.");
         }
 
 

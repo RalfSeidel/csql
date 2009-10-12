@@ -8,29 +8,29 @@ namespace csql
 {
 	static class ConnectionFactory
 	{
-		public static DbConnection CreateConnection( CmdArgs cmdArgs )
+        public static DbConnection CreateConnection(CsqlOptions csqlOptions)
 		{
-			DbSystem dbSystem = cmdArgs.System;
+            DbSystem dbSystem = csqlOptions.DbSystem;
 
 			switch ( dbSystem ) {
 				case DbSystem.MsSql:
-					return CreateMssqlConnection( cmdArgs );
+                    return CreateMssqlConnection(csqlOptions);
 				case DbSystem.MsJet:
-					return CreateMsjetConnection( cmdArgs );
+                    return CreateMsjetConnection(csqlOptions);
 				case DbSystem.Sybase:
-					return CreateSybaseConnection( cmdArgs );
+                    return CreateSybaseConnection(csqlOptions);
 				case DbSystem.Oracle:
-					return CreateOracleConnection( cmdArgs );
+                    return CreateOracleConnection(csqlOptions);
 				case DbSystem.IbmDb2:
-					return CreateIbmdb2Connection( cmdArgs );
+                    return CreateIbmdb2Connection(csqlOptions);
 				default:
 					throw new ArgumentException( "Unexpected database system: " + dbSystem, "cmdArgs" );
 			}
 		}
 
-		private static DbConnection CreateMssqlConnection( CmdArgs cmdArgs )
+        private static DbConnection CreateMssqlConnection(CsqlOptions csqlOptions)
 		{
-			DbDriver dbDriver = cmdArgs.Driver;
+            DbDriver dbDriver = csqlOptions.DbDriver;
 
 			if ( dbDriver == DbDriver.Default )
 				dbDriver = DbDriver.Native;
@@ -38,13 +38,13 @@ namespace csql
 			if ( dbDriver != DbDriver.Native )
 				throw new ArgumentException( "The driver " + dbDriver + " is not supported for the MS SQL server", "cmdArgs" );
 
-			DbConnection cnt = new MsSql.MsSqlConnection( cmdArgs );
+            DbConnection cnt = new MsSql.MsSqlConnection(csqlOptions);
 			return cnt;
 		}
 
-		private static DbConnection CreateMsjetConnection( CmdArgs cmdArgs )
+        private static DbConnection CreateMsjetConnection(CsqlOptions csqlOptions)
 		{
-			DbDriver dbDriver = cmdArgs.Driver;
+            DbDriver dbDriver = csqlOptions.DbDriver;
 
 			switch ( dbDriver ) {
 				case DbDriver.Native:
@@ -56,16 +56,16 @@ namespace csql
 			}
 		}
 
-		private static DbConnection CreateSybaseConnection( CmdArgs cmdArgs )
+        private static DbConnection CreateSybaseConnection(CsqlOptions csqlOptions)
 		{
-			DbDriver dbDriver = cmdArgs.Driver;
+            DbDriver dbDriver = csqlOptions.DbDriver;
 			DbConnection connection;
 
 			switch ( dbDriver ) {
 				case DbDriver.Default:
 					goto case DbDriver.Native;
 				case DbDriver.Native:
-					connection = new Sybase.SybaseConnection( cmdArgs );
+					connection = new Sybase.SybaseConnection( csqlOptions );
 					break;
 				case DbDriver.OleDb:
 					throw new NotSupportedException( "TODO" );
@@ -75,9 +75,9 @@ namespace csql
 			return connection;
 		}
 
-		private static DbConnection CreateOracleConnection( CmdArgs cmdArgs )
+        private static DbConnection CreateOracleConnection(CsqlOptions csqlOptions)
 		{
-			DbDriver dbDriver = cmdArgs.Driver;
+            DbDriver dbDriver = csqlOptions.DbDriver;
 
 			switch ( dbDriver ) {
 				case DbDriver.Native:
@@ -89,9 +89,9 @@ namespace csql
 			}
 		}
 
-		private static DbConnection CreateIbmdb2Connection( CmdArgs cmdArgs )
+        private static DbConnection CreateIbmdb2Connection(CsqlOptions csqlOptions)
 		{
-			DbDriver dbDriver = cmdArgs.Driver;
+            DbDriver dbDriver = csqlOptions.DbDriver;
 
 			switch ( dbDriver ) {
 				case DbDriver.Native:

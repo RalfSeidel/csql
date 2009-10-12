@@ -12,26 +12,31 @@ namespace csql.MsSql
 	/// </summary>
 	public class MsSqlConnection : DbConnection
 	{
-		public MsSqlConnection( CmdArgs cmdArgs ) : base( cmdArgs )
+        public MsSqlConnection(CsqlOptions csqlOptions)
+            : base(csqlOptions)
 		{
 		}
 
-		protected override IDbConnection CreateAdoConnection( CmdArgs cmdArgs )
+        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if ( cmdArgs.Server.Length != 0 ) {
-				sb.Append( "Server=" ).Append( cmdArgs.Server ).Append( ";" );
+            if (csqlOptions.DbServer.Length != 0)
+            {
+                sb.Append("Server=").Append(csqlOptions.DbServer).Append(";");
 			}
-			if ( cmdArgs.ServerPort != 0 ) {
-				sb.Append( "Server Port=" ).Append( cmdArgs.ServerPort ).Append( ";" );
+            if (csqlOptions.DbServerPort != 0)
+            {
+                sb.Append("Server Port=").Append(csqlOptions.DbServerPort).Append(";");
 			}
-			if ( !String.IsNullOrEmpty( cmdArgs.Database ) ) {
-				sb.Append( "Database=" ).Append( cmdArgs.Database ).Append( ";" );
+            if (!String.IsNullOrEmpty(csqlOptions.DbDatabase))
+            {
+                sb.Append("Database=").Append(csqlOptions.DbDatabase).Append(";");
 			}
-			if ( !String.IsNullOrEmpty( cmdArgs.User ) ) {
-				sb.Append( "User ID=" ).Append( cmdArgs.User ).Append( ";" );
-				sb.Append( "Password=" ).Append( cmdArgs.Password ).Append( ";" );
+            if (!String.IsNullOrEmpty(csqlOptions.DbUser))
+            {
+                sb.Append("User ID=").Append(csqlOptions.DbUser).Append(";");
+                sb.Append("Password=").Append(csqlOptions.DbPassword).Append(";");
 			} else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}

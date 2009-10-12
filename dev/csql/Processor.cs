@@ -17,7 +17,7 @@ namespace csql
     /// </remarks>
 	public abstract class Processor : IDisposable	
 	{
-		private readonly CmdArgs m_cmdArgs;
+        protected readonly CsqlOptions m_options;
 		private string m_pipeName;
 		private string m_currentFile;
 		private int    m_currentFileLineNo;
@@ -50,9 +50,9 @@ namespace csql
 		/// Initializes a new instance of the <see cref="Processor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The parsed command line arguments.</param>
-		protected Processor( CmdArgs cmdArgs )
+        protected Processor(CsqlOptions csqlOptions)
 		{
-			m_cmdArgs = cmdArgs;
+            this.m_options = csqlOptions;
 		}
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace csql
         /// <value>
         /// The command line arguments.
         /// </value>
-        protected CmdArgs CmdArgs
+        protected CsqlOptions Options
         {
-            get { return m_cmdArgs; }
+            get { return m_options; }
         }
 
 
@@ -92,7 +92,7 @@ namespace csql
 		/// <value>Flag for the named pipe usage option.</value>
         private bool UseNamedPipes
         {
-            get { return String.IsNullOrEmpty( m_cmdArgs.TempFile ); }
+            get { return String.IsNullOrEmpty( m_options.TempFile ); }
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace csql
             get
             {
                 Debug.Assert( !UseNamedPipes, "Usage of the temp file name is not valid if name pipes are used for the pre processor output." );
-                return m_cmdArgs.TempFile;
+                return m_options.TempFile;
             }
         }
 
@@ -141,7 +141,11 @@ namespace csql
 			get
 			{
 				Process thisProcess = System.Diagnostics.Process.GetCurrentProcess();
-				string thisPath = thisProcess.MainModule.FileName;
+                Assembly assembly = Assembly.GetExecutingAssembly();
+
+				//string thisPath = thisProcess.MainModule.FileName;
+                string thisPath = assembly.Location;
+
 				string root = Path.GetPathRoot( thisPath );
 				string folder = Path.GetDirectoryName( thisPath );
 				string sqtppPath = Path.Combine( Path.Combine( root, folder ), "sqtpp.exe" );
@@ -158,11 +162,10 @@ namespace csql
         {
             get
             {
-                string ppArguments = m_cmdArgs.PreprocessorArgs;
-                string ppInputFile = m_cmdArgs.ScriptFile;
+                string ppArguments = m_options.GeneratePreprocessorArguments();
+                string ppInputFile = m_options.ScriptFile;
                 string ppOutFile   = UseNamedPipes ? NamedPipe.GetPipePath( NamedPipeName ) : TempFileName;
 
-                ppArguments += m_cmdArgs.PreprocessorDefines;
                 ppArguments += " -o\"" + ppOutFile + "\"";
                 ppArguments += " " + ppInputFile;
                 return ppArguments;
@@ -175,14 +178,14 @@ namespace csql
 		/// </summary>
 		public virtual void SignIn()
 		{
-			if ( Program.TraceLevel.TraceInfo && !CmdArgs.NoLogo ) {
+			if ( GlobalSettings.Verbosity.TraceInfo && !m_options.NoLogo ) {
 				StringBuilder sb = new StringBuilder();
-				Assembly assembly = Assembly.GetEntryAssembly();
+				Assembly assembly = Assembly.GetExecutingAssembly();
 				string name = assembly.GetName().Name;
 				Version version = assembly.GetName().Version;
 				sb.Append( name );
 				sb.Append( " " );
-				if ( Program.TraceLevel.TraceVerbose ) {
+                if (GlobalSettings.Verbosity.TraceVerbose) {
 					sb.Append( version.ToString() );
 				} else {
 					sb.Append( version.ToString(2) );
@@ -199,7 +202,7 @@ namespace csql
 		/// </summary>
 		public virtual void SignOut()
 		{
-			Trace.WriteLineIf( Program.TraceLevel.TraceInfo, "** Finished" );
+            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, "** Finished");
 		}
 
 
@@ -209,7 +212,7 @@ namespace csql
 		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Want to catch everything to be able to add file and line number infos." )]
 		public virtual void Process()
 		{
-			m_currentFile = m_cmdArgs.ScriptFile;
+			m_currentFile = m_options.ScriptFile;
 			m_currentFileLineNo = 1;
 			m_currentBatchNo = 1;
 			m_currentBatchLineNo = 1;
@@ -258,8 +261,9 @@ namespace csql
 			}
 			catch ( Exception ex ) {
 				string message = String.Format( "{0}({1}): Error: {2}", m_currentFile, m_currentBatchLineNo, ex.Message );
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
-				if ( m_batchBuilder.Length != 0 && Program.TraceLevel.TraceInfo ) {
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+                if (m_batchBuilder.Length != 0 && GlobalSettings.Verbosity.TraceInfo)
+                {
 					Trace.Indent();
 					Trace.WriteLine( m_batchBuilder.ToString() );
 					Trace.Unindent();
@@ -277,42 +281,45 @@ namespace csql
         private void CheckedProcessBatch( string batch )
 		{
 			ProcessProgress( "Executing batch " + m_currentBatchNo );
-			Debug.WriteLineIf( Program.TraceLevel.TraceVerbose, batch );
+            Debug.WriteLineIf(GlobalSettings.Verbosity.TraceVerbose, batch);
 			try {
 				ProcessBatch( batch );
 			}
-			catch ( csql.DbException ex ) {
+			catch ( DbException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
-				if ( m_cmdArgs.BreakOnError ) {
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.SqlClient.SqlException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
-				if ( m_cmdArgs.BreakOnError ) {
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Odbc.OdbcException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
-				if ( m_cmdArgs.BreakOnError ) {
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+                if (m_options.BreakOnError)
+                {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.OleDb.OleDbException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
-				if ( m_cmdArgs.BreakOnError ) {
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+                if (m_options.BreakOnError)
+                {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Common.DbException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
-				if ( m_cmdArgs.BreakOnError ) {
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+                if (m_options.BreakOnError)
+                {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
@@ -375,10 +382,10 @@ namespace csql
 		/// <returns>The open stream for reading</returns>
 		private Stream OpenInputFile()
 		{
-			if ( this.m_cmdArgs.UsePreprocessor ) {
+			if ( m_options.UsePreprocessor ) {
 				return Preprocess();
 			} else {
-				return new FileStream( m_cmdArgs.ScriptFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
+                return new FileStream(m_options.ScriptFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan);
 			}
 		}
 
@@ -393,7 +400,7 @@ namespace csql
 			string ppArguments = PreprocessorArguments;
 			string traceMessage = String.Format( "Executing preprocessor with following command line:\r\n{0} {1}", ppCommand, ppArguments );
             NamedPipe pipe = null;
-			Trace.WriteLineIf( Program.TraceLevel.TraceVerbose, traceMessage );
+            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceVerbose, traceMessage);
 			ProcessStartInfo ppStartInfo = new ProcessStartInfo( ppCommand, ppArguments );
 			ppStartInfo.UseShellExecute = false;
 			ppStartInfo.RedirectStandardOutput = true;
@@ -409,13 +416,13 @@ namespace csql
 				m_ppProcess.OutputDataReceived += delegate( object sender, DataReceivedEventArgs e )
 				{
 					if ( e.Data != null ) {
-						Trace.WriteLineIf( Program.TraceLevel.TraceInfo, e.Data );
+                        Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, e.Data);
 					}
 				};
 				m_ppProcess.ErrorDataReceived += delegate( object sender, DataReceivedEventArgs e )
 				{
 					if ( e.Data != null ) {
-						Trace.WriteLineIf( Program.TraceLevel.TraceWarning, e.Data );
+                        Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, e.Data);
 					}
 				};
 				m_ppProcess.Start();
@@ -450,7 +457,7 @@ namespace csql
 					m_ppProcess = null;
 				}
 				string message = ppCommand + " " + ppArguments + ":\r\n" + ex.Message;
-				Trace.WriteLineIf( Program.TraceLevel.TraceError, message );
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
 				throw new TerminateException( ExitCode.ArgumentsError );
 			}
 		}

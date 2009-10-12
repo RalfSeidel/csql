@@ -16,7 +16,7 @@ namespace csql
 		/// <summary>
 		/// The command line arguments.
 		/// </summary>
-		private readonly CmdArgs m_cmdArgs;
+        private readonly CsqlOptions csqlOptions;
 
 		/// <summary>
 		/// The inner exception that is used for the database communication.
@@ -34,9 +34,9 @@ namespace csql
 		/// Initializes a new instance of the <see cref="DbConnection"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The object holding the command line arguments of the program instance.</param>
-		protected DbConnection( CmdArgs cmdArgs )
+        protected DbConnection(CsqlOptions csqlOptions)
 		{
-			m_cmdArgs = cmdArgs;
+            this.csqlOptions = csqlOptions;
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace csql
 			get 
 			{
 				if ( m_adoConnection == null ) {
-					m_adoConnection = CreateAdoConnection( m_cmdArgs );
+                    m_adoConnection = CreateAdoConnection(csqlOptions);
 				}
 				return m_adoConnection; 
 			}
@@ -94,7 +94,7 @@ namespace csql
 		/// </remarks>
 		/// <param name="cmdArgs">The command line arguments.</param>
 		/// <returns>The method has to return an open database connection object.</returns>
-		protected abstract IDbConnection CreateAdoConnection( CmdArgs cmdArgs );
+        protected abstract IDbConnection CreateAdoConnection(CsqlOptions csqlOptions);
 
 		/// <summary>
 		/// Create a statement batch that will just echo the given messages texts.
@@ -138,21 +138,21 @@ namespace csql
 	/// </summary>
 	public class OleDbConnection : DbConnection
 	{
-		public OleDbConnection( CmdArgs cmdArgs )
-			: base( cmdArgs )
+		public OleDbConnection( CsqlOptions csqlOptions )
+            : base(csqlOptions)
 		{
 			System.Data.OleDb.OleDbConnection connection = (System.Data.OleDb.OleDbConnection)AdoConnection;
 			connection.InfoMessage += new System.Data.OleDb.OleDbInfoMessageEventHandler( InfoMessageEventHandler );
 		}
 
-		protected override IDbConnection CreateAdoConnection( CmdArgs cmdArgs )
+        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
 		{
 			throw new NotImplementedException( "TODO" );
 		}
 
 		public override string GetPrintStatements( IEnumerable<string> messages )
 		{
-			Trace.WriteLineIf( Program.TraceLevel.TraceWarning, "Not implemented: OleDbConnection.GetPrintStatements" );
+            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, "Not implemented: OleDbConnection.GetPrintStatements");
 			return null;
 		}
 
@@ -182,14 +182,14 @@ namespace csql
 	/// </summary>
 	public class OdbcConnection : DbConnection
 	{
-		public OdbcConnection( CmdArgs cmdArgs )
-			: base( cmdArgs )
+        public OdbcConnection(CsqlOptions csqlOptions)
+			: base( csqlOptions )
 		{
 			System.Data.Odbc.OdbcConnection connection = (System.Data.Odbc.OdbcConnection)AdoConnection;
 			connection.InfoMessage += new System.Data.Odbc.OdbcInfoMessageEventHandler( InfoMessageEventHandler );
 		}
 
-		protected override IDbConnection CreateAdoConnection( CmdArgs cmdArgs )
+        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
 		{
 			throw new NotImplementedException( "TODO" );
 			//connection.InfoMessage += new System.Data.Odbc.OdbcInfoMessageEventHandler( InfoMessageEventHandler );
@@ -197,7 +197,7 @@ namespace csql
 
 		public override string GetPrintStatements( IEnumerable<string> messages )
 		{
-			Trace.WriteLineIf( Program.TraceLevel.TraceWarning, "Not implemented: OleDbConnection.GetPrintStatements" );
+            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, "Not implemented: OleDbConnection.GetPrintStatements");
 			return null;
 		}
 

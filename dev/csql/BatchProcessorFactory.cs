@@ -16,13 +16,16 @@ namespace csql
 		/// </summary>
 		/// <param name="cmdArgs">The command line arguments.</param>
 		/// <returns>The script processor</returns>
-		public static Processor CreateProcessor( CmdArgs cmdArgs )
+		public static Processor CreateProcessor(CsqlOptions csqlOptions )
 		{
-			if ( !String.IsNullOrEmpty( cmdArgs.DistFile ) ) {
-				Processor processor = new DistributionProcessor( cmdArgs );
+            //Setting the Global Trace Level
+            GlobalSettings.Verbosity.Level = GlobalSettings.Verbosity.Level;
+
+			if ( !String.IsNullOrEmpty( csqlOptions.DistibutionFile ) ) {
+                Processor processor = new DistributionProcessor(csqlOptions);
 				return processor;
 			} else {
-				Processor processor = new ExecutionProcessor( cmdArgs );
+                Processor processor = new ExecutionProcessor(csqlOptions);
 				return processor;
 			}
 		}

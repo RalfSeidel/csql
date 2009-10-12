@@ -9,25 +9,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		profile_sqtpp.bat = profile_sqtpp.bat
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql", "csql\csql.csproj", "{804CB225-6ACE-4171-9FE1-85038F5A452F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.lib", "csql\csql.lib.csproj", "{804CB225-6ACE-4171-9FE1-85038F5A452F}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{D693F846-F652-408C-A70E-1E95418890B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.exe", "csql.exe\csql.exe.csproj", "{15B41BEB-03B7-4B88-A6FA-A97F65202B43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.addin", "csql.addin\csql.addin.csproj", "{37A22F40-1137-46F7-9260-B68CCFB1EA6E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs08.codeplex.com/
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = sqtpp\\sqtpp-9.vcproj
 		SccProjectName1 = sqtpp
 		SccLocalPath1 = sqtpp
-		SccProjectUniqueName2 = csql\\csql.csproj
-		SccProjectName2 = csql
-		SccLocalPath2 = csql
-		SccProjectUniqueName3 = setup\\setup.vdproj
-		SccProjectName3 = setup
-		SccLocalPath3 = setup
+		SccProjectUniqueName2 = setup\\setup.vdproj
+		SccProjectName2 = setup
+		SccLocalPath2 = setup
+		SccProjectUniqueName3 = csql.exe\\csql.exe.csproj
+		SccProjectName3 = csql.exe
+		SccLocalPath3 = csql.exe
+		SccProjectUniqueName4 = csql.addin\\csql.addin.csproj
+		SccProjectName4 = csql.addin
+		SccLocalPath4 = csql.addin
+		SccProjectUniqueName5 = csql\\csql.lib.csproj
+		SccProjectName5 = csql
+		SccLocalPath5 = csql
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +89,30 @@ Global
 		{D693F846-F652-408C-A70E-1E95418890B3}.Release|Mixed Platforms.ActiveCfg = Release
 		{D693F846-F652-408C-A70E-1E95418890B3}.Release|x64.ActiveCfg = Release
 		{D693F846-F652-408C-A70E-1E95418890B3}.Release|x86.ActiveCfg = Release
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Release|x64.ActiveCfg = Release|Any CPU
+		{15B41BEB-03B7-4B88-A6FA-A97F65202B43}.Release|x86.ActiveCfg = Release|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Release|x64.ActiveCfg = Release|Any CPU
+		{37A22F40-1137-46F7-9260-B68CCFB1EA6E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,12 +15,14 @@ namespace csql
 		/// Initializes a new instance of the <see cref="ExecutionProcessor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The CMD args.</param>
-		public ExecutionProcessor( CmdArgs cmdArgs )
-		: base ( cmdArgs )
+        public ExecutionProcessor(CsqlOptions csqlOptions)
+            : base(csqlOptions)
 		{
-			m_connection = ConnectionFactory.CreateConnection( cmdArgs );
+            m_connection = ConnectionFactory.CreateConnection(csqlOptions);
 			m_connection.InfoMessage += new EventHandler<DbMessageEventArgs>( InfoMessageEventHandler );
+            
 		}
+
 
 		/// <summary>
 		/// Handler for the informational messages send by the database server when processing the scripts.
@@ -29,8 +31,10 @@ namespace csql
 		/// <param name="e">The <see cref="csql.DbMessageEventArgs"/> instance containing the message.</param>
 		void InfoMessageEventHandler( object sender, DbMessageEventArgs e )
 		{
-			if ( Program.TraceLevel.Level >= e.TraceLevel ) {
-				if ( Program.TraceLevel.TraceVerbose ) {
+            if (GlobalSettings.Verbosity.Level >= e.TraceLevel)
+            {
+                if (GlobalSettings.Verbosity.TraceVerbose)
+                {
 					Trace.WriteLine( e.ToString() );
 				} else {
 					if ( e.TraceLevel <= TraceLevel.Warning ) {
@@ -56,7 +60,7 @@ namespace csql
 
 		protected override void ProcessProgress( string progressInfo )
 		{
-			Trace.WriteLineIf( Program.TraceLevel.TraceInfo, progressInfo );
+            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, progressInfo);
 		}
 
 		/// <summary>
@@ -98,7 +102,7 @@ namespace csql
 		/// <param name="dataReader">The data reader returned by the execute call.</param>
         private static void TraceResult( IDataReader dataReader )
         {
-            if ( !Program.TraceLevel.TraceInfo )
+            if (!GlobalSettings.Verbosity.TraceInfo)
                 return;
 
 			DataReaderTracer tracer = new DataReaderTracer( dataReader );

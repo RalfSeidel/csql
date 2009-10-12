@@ -16,27 +16,31 @@ namespace csql.Sybase
 	/// </summary>
 	public class SybaseConnection : DbConnection
 	{
-		public SybaseConnection( CmdArgs cmdArgs )
-			: base( cmdArgs )
+        public SybaseConnection(CsqlOptions csqlOptions)
+            : base(csqlOptions)
 		{
 		}
 
-		protected override IDbConnection CreateAdoConnection( CmdArgs cmdArgs )
+        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if ( cmdArgs.Server.Length != 0 ) {
-				sb.Append( "DataSource=" ).Append( cmdArgs.Server ).Append( ";" );
+            if (csqlOptions.DbServer.Length != 0)
+            {
+                sb.Append("DataSource=").Append(csqlOptions.DbServer).Append(";");
 			}
-			if ( cmdArgs.ServerPort != 0 ) {
-				sb.Append( "Port=" ).Append( cmdArgs.ServerPort ).Append( ";" );
+            if (csqlOptions.DbServerPort != 0)
+            {
+                sb.Append("Port=").Append(csqlOptions.DbServerPort).Append(";");
 			}
-			if ( !String.IsNullOrEmpty( cmdArgs.Database ) ) {
-				sb.Append( "Database=" ).Append( cmdArgs.Database ).Append( ";" );
+            if (!String.IsNullOrEmpty(csqlOptions.DbDatabase))
+            {
+                sb.Append("Database=").Append(csqlOptions.DbDatabase).Append(";");
 			}
-			if ( !String.IsNullOrEmpty( cmdArgs.User ) ) {
-				sb.Append( "User ID=" ).Append( cmdArgs.User ).Append( ";" );
-				sb.Append( "Password=" ).Append( cmdArgs.Password ).Append( ";" );
+            if (!String.IsNullOrEmpty(csqlOptions.DbUser))
+            {
+                sb.Append("User ID=").Append(csqlOptions.DbUser).Append(";");
+                sb.Append("Password=").Append(csqlOptions.DbPassword).Append(";");
 			} else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}
@@ -103,7 +107,7 @@ namespace csql.Sybase
 					return path;
 
 
-				Trace.WriteLineIf( Program.TraceLevel.TraceWarning, "Can't find sybase data provider assembly (" + file + ")." );
+                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, "Can't find sybase data provider assembly (" + file + ").");
 				return null;
 			}
 		}
@@ -129,7 +133,8 @@ namespace csql.Sybase
                     }
                 }
                 catch ( Exception ex ) {
-                    throw new TerminateException( "Can't load sybase provider assembly", ex );
+					Trace.TraceError( "Can't load sybase provider assembly: " + ex.Message );
+                    throw new TerminateException( ExitCode.SqlIntializeError );
                 }
 			}
 		}
