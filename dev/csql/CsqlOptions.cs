@@ -18,13 +18,17 @@ namespace csql
 		/// <value>The main input script file to process.</value>
 		public string ScriptFile { get; set; }
 
+		/// <summary>
+		/// The path of the distribution (output) file if one is to be created.
+		/// </summary>
+		/// <value>The distibution file path.</value>
 		public string DistibutionFile { get; set; }
 
 		/// <summary>
 		/// The temporary file used to store the pre processor output.
 		/// If it is not specified the program will use a named pipe.
 		/// </summary>
-		/// <value>The temporary file to hold the pre processor ouput.</value>
+		/// <value>The temporary file path to hold the pre processor ouput.</value>
 		public string TempFile { get; set; }
 
 		/// <summary>
@@ -88,10 +92,15 @@ namespace csql
 		public string AdditionalPreprocessorArguments { get; set; }
 
 		/// <summary>
+		/// Data member for the <see cref="P:Verbosity"/> property.
+		/// </summary>
+		private readonly VerbositySwitch m_verbosity;
+
+		/// <summary>
 		/// Gets or sets the trace/verbosity setting.
 		/// </summary>
 		/// <value>The trace level.</value>
-		public VerbositySwitch Verbosity { get; set; }
+		public VerbositySwitch Verbosity { get { return m_verbosity; } }
 
 		/// <summary>
 		/// Options for the pre processor.
@@ -117,8 +126,8 @@ namespace csql
 
 			AdditionalPreprocessorArguments = "";
 
-			Verbosity = new VerbositySwitch();
-			Verbosity.Level = System.Diagnostics.TraceLevel.Info;
+			m_verbosity = new VerbositySwitch();
+			m_verbosity.Level = System.Diagnostics.TraceLevel.Info;
 		}
 
 
@@ -167,7 +176,8 @@ namespace csql
 			#endregion
 
 
-			//Appending the "normal" Arguments 
+			//Appending the pre processor arguments spefied by the user.
+			sb.Append( separator );
 			sb.Append( this.AdditionalPreprocessorArguments );
 
 			string result = sb.ToString();

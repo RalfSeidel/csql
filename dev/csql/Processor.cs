@@ -413,18 +413,8 @@ namespace csql
 
 				m_ppProcess = new Process();
 				m_ppProcess.StartInfo = ppStartInfo;
-				m_ppProcess.OutputDataReceived += delegate( object sender, DataReceivedEventArgs e )
-				{
-					if ( e.Data != null ) {
-                        Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, e.Data);
-					}
-				};
-				m_ppProcess.ErrorDataReceived += delegate( object sender, DataReceivedEventArgs e )
-				{
-					if ( e.Data != null ) {
-                        Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, e.Data);
-					}
-				};
+				m_ppProcess.OutputDataReceived += PreProcessor_OutputDataReceived;
+				m_ppProcess.ErrorDataReceived += PreProcessor_ErrorDataReceived;
 				m_ppProcess.Start();
 				m_ppProcess.BeginErrorReadLine();
 				m_ppProcess.BeginOutputReadLine();
@@ -453,12 +443,42 @@ namespace csql
 			}
 			catch ( Exception ex ) {
 				if ( m_ppProcess != null ) {
+					// Detach the event handler before disposing. If they are not connected
+					// and the program execution stoped because of an exception the pre 
+					// processor may send an error message when the named piped is 
+					// destroyed. 
+					m_ppProcess.OutputDataReceived -= PreProcessor_OutputDataReceived;
+					m_ppProcess.ErrorDataReceived -= PreProcessor_ErrorDataReceived;
 					m_ppProcess.Dispose();
 					m_ppProcess = null;
 				}
 				string message = ppCommand + " " + ppArguments + ":\r\n" + ex.Message;
                 Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
 				throw new TerminateException( ExitCode.ArgumentsError );
+			}
+		}
+
+		/// <summary>
+		/// Handles the OutputDataReceived event of the pre processor std output stream.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The event data.</param>
+		private void PreProcessor_OutputDataReceived( object sender, DataReceivedEventArgs e )
+		{
+			if ( e.Data != null ) {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, e.Data );
+			}
+		}
+
+		/// <summary>
+		/// Handles the ErrorDataReceived event of of the pre processor std error output stream.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The event data.</param>
+		private void PreProcessor_ErrorDataReceived( object sender, DataReceivedEventArgs e )
+		{
+			if ( e.Data != null ) {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceWarning, e.Data );
 			}
 		}
 

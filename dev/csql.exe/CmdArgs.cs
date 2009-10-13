@@ -95,58 +95,6 @@ namespace csql.exe
 		public bool NoLogo;
 
 		/// <summary>
-		/// Gets definitions for the preprocessor that reflect some of the program properties.
-		/// </summary>
-		/// <value>Defintions for the preprocessor.</value>
-		public string PreprocessorDefines
-		{
-			get
-			{
-				StringBuilder sb = new StringBuilder();
-				string separator = " ";
-
-				Assembly assembly = Assembly.GetExecutingAssembly();
-				AssemblyName assemblyName = assembly.GetName();
-				Version assemblyVersion = assemblyName.Version;
-				string version = String.Format( CultureInfo.InvariantCulture, "{0:d2}.{1:d2}", assemblyVersion.Major, assemblyVersion.Minor );
-
-				sb.Append( separator );
-				sb.Append( "/D_CSQL_SYSTEM_" );
-				sb.Append( System.ToString().ToUpper() );
-				separator = " ";
-
-				if ( !String.IsNullOrEmpty( Server ) ) {
-					sb.Append( separator );
-					sb.Append( "/D_CSQL_SERVER=" );
-					sb.Append( Server );
-					separator = " ";
-				}
-				if ( !String.IsNullOrEmpty( Database ) ) {
-					sb.Append( separator );
-					sb.Append( "/D_CSQL_DATABASE=" );
-					sb.Append( Database );
-					separator = " ";
-				}
-				if ( !String.IsNullOrEmpty( User ) ) {
-					sb.Append( separator );
-					sb.Append( "/D_CSQL_USER=" );
-					sb.Append( User );
-					separator = " ";
-				}
-				if ( !String.IsNullOrEmpty( version ) ) {
-					sb.Append( separator );
-					sb.Append( "/D_CSQL_VERSION=" );
-					sb.Append( version );
-					separator = " ";
-				}
-
-				string result = sb.ToString();
-				return result;
-			}
-		}
-
-
-		/// <summary>
 		/// Gets a value indicating whether to use windows authentication (integrated security).
 		/// </summary>
 		/// <value>
@@ -173,6 +121,7 @@ namespace csql.exe
 			csqlOptions.DbDriver = this.Driver;
 			csqlOptions.DbServer = this.Server;
 			csqlOptions.DbServerPort = this.ServerPort;
+			csqlOptions.DbDatabase = this.Database;
 			csqlOptions.DbUser = this.User;
 			csqlOptions.DbPassword = this.Password;
 			csqlOptions.UsePreprocessor = this.UsePreprocessor;
