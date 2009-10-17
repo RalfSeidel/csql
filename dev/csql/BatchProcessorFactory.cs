@@ -19,7 +19,7 @@ namespace csql
 		public static Processor CreateProcessor(CsqlOptions csqlOptions )
 		{
             //Setting the Global Trace Level
-            GlobalSettings.Verbosity.Level = GlobalSettings.Verbosity.Level;
+            GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;
 
 			if ( !String.IsNullOrEmpty( csqlOptions.DistibutionFile ) ) {
                 Processor processor = new DistributionProcessor(csqlOptions);

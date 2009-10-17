@@ -17,11 +17,6 @@ namespace csql.exe
 	class Program
 	{
 		/// <summary>
-		/// The trace level of the program.
-		/// </summary>
-		public static readonly VerbositySwitch Verbosity = new VerbositySwitch();
-
-		/// <summary>
 		/// The program entry point.
 		/// </summary>
 		/// <param name="args">The command line arguments.</param>
@@ -42,18 +37,20 @@ namespace csql.exe
 			bool argumentsValid = CommandLine.Parser.ParseArguments( args, cmdArgs );
 			bool didTraceCommandLine = false;
 
+			VerbositySwitch verbosity = GlobalSettings.Verbosity;
+			verbosity.Level = (TraceLevel)(cmdArgs.Verbose);
 
 			ExitCode exitCode; ;
 			if ( !argumentsValid ) {
-				if ( Verbosity.TraceWarning ) {
+				if ( verbosity.TraceWarning ) {
 					TraceCommandLine( args );
 					didTraceCommandLine = true;
 					CommandLine.Parser.ArgumentsUsage( cmdArgs.GetType() );
 				}
 				exitCode = ExitCode.ArgumentsError;
 			} else {
-				Verbosity.Level = (TraceLevel)cmdArgs.Verbose;
-				if ( Verbosity.TraceVerbose ) {
+				verbosity.Level = (TraceLevel)cmdArgs.Verbose;
+				if ( verbosity.TraceVerbose ) {
 					TraceCommandLine( args );
 					didTraceCommandLine = true;
 				}
@@ -71,30 +68,30 @@ namespace csql.exe
 					}
 				}
 				catch ( FileNotFoundException ex ) {
-					if ( !didTraceCommandLine && Verbosity.TraceError ) {
+					if ( !didTraceCommandLine && verbosity.TraceError ) {
 						TraceCommandLine( args );
 					}
-					Trace.WriteLineIf( Program.Verbosity.TraceError, ex.FileName + ": " + ex.Message );
+					Trace.WriteLineIf( verbosity.TraceError, ex.FileName + ": " + ex.Message );
 					exitCode = ExitCode.FileIOError;
 				}
 				catch ( IOException ex ) {
-					if ( !didTraceCommandLine && Verbosity.TraceError ) {
+					if ( !didTraceCommandLine && verbosity.TraceError ) {
 						TraceCommandLine( args );
 					}
-					Trace.WriteLineIf( Program.Verbosity.TraceError, ex.Message );
+					Trace.WriteLineIf( verbosity.TraceError, ex.Message );
 					exitCode = ExitCode.FileIOError;
 				}
 				catch ( TerminateException ex ) {
-					if ( !didTraceCommandLine && Verbosity.TraceError ) {
+					if ( !didTraceCommandLine && verbosity.TraceError ) {
 						TraceCommandLine( args );
 					}
 					exitCode = ex.ExitCode;
 				}
 				catch ( Exception ex ) {
-					if ( !didTraceCommandLine && Verbosity.TraceError ) {
+					if ( !didTraceCommandLine && verbosity.TraceError ) {
 						TraceCommandLine( args );
 					}
-					Trace.WriteLineIf( Program.Verbosity.TraceError, "Unexpected error: " + ex );
+					Trace.WriteLineIf( verbosity.TraceError, "Unexpected error: " + ex );
 					exitCode = ExitCode.UnexpectedError;
 				}
 				finally {
