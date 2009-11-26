@@ -310,6 +310,8 @@
 
 #ifdef CSQL_UNDEF_ALL
 
+#undef CSQL_DBMACROS_INCLUDED
+
 #undef CSQL_DROP_ALL
 #undef CSQL_DROP_DEFAULTS
 #undef CSQL_DROP_RULES
@@ -349,12 +351,15 @@
 #undef CSQL_GRANT_PROCEDURES
 #undef CSQL_GRANT_FUNCTIONS
 
-#undef CSQL_INSERT_DEF_DATA
+#undef CSQL_INSERT_DEFAULT_DATA
 #undef CSQL_EXECUTE_TESTS
 
 #undef CSQL_UNDEF_ALL
 
+
 #else
+
+#define CSQL_DBMACROS_INCLUDED
 
 /*
 ** If no flow control macro is defined the default behaviour is
@@ -372,7 +377,7 @@
     || defined(CSQL_GRANT_ALL) \
     || defined(CSQL_GRANT_TABLES)        || defined(CSQL_GRANT_VIEWS) \
     || defined(CSQL_GRANT_PROCEDURES)    || defined(CSQL_GRANT_FUNCTIONS) \
-    || defined(CSQL_INSERT_DEF_DATA) \
+    || defined(CSQL_INSERT_DEFAULT_DATA) \
     || defined(CSQL_EXECUTE_TESTS)   \
     || defined(CSQL_DROP_ALL) \
     || defined(CSQL_DROP_DEFAULTS)       || defined(CSQL_DROP_RULES) \
@@ -385,7 +390,7 @@
 #define CSQL_CREATE_ALL
 #define CSQL_DROP_CREATE
 #define CSQL_GRANT_ALL
-#define CSQL_INSERT_DEF_DATA
+#define CSQL_INSERT_DEFAULT_DATA
 #define CSQL_EXECUTE_TESTS
 #endif
 
@@ -602,7 +607,7 @@
 #define CSQL_SET_CATALOG( C ) if db_name() != __QUOTE( C ) use C;
 
 /// <summary>
-/// Infoausgabe am Anfang eines SQL Scripts.
+/// Prints a message at the start of an SQL script.
 ///</summary>
 /// @ingroup Action
 #define CSQL_PRINT_ENTER_SCRIPT \
@@ -612,7 +617,7 @@ print '*** Enter script: ' ##__FILE__ ##' ***' \
 print '*** Context: ' + @@servername + '.' + db_name() + ' ***'
 
 /// <summary>
-/// Infoausgabe am Ende eines SQL Scripts.
+/// Prints a message at the end of an SQL script.
 /// </summary>
 /// @ingroup Action
 #define CSQL_PRINT_EXIT_SCRIPT print '*** Exit script: ' ##__FILE__ ##' ***'
@@ -1186,7 +1191,7 @@ end
 /// Macro to drop a primary key constraint specified by its (qualified) name.
 /// </summary>
 /// <param name="X">
-/// The (schema qualified) of the contraint.
+/// The (schema qualified) name of the constraint.
 /// </param>
 /// @ingroup Action
 #ifdef CSQL_DROP_PRIMARY_KEYS
@@ -1198,7 +1203,7 @@ begin\
 	     , @KeyName = name \
 	  from sys.objects \
 	 where object_id = object_id( #@X ) and type = 'PK' \
-	set @MsgText = 'drop primary key ' + @TblName + '.' + #@X \
+	set @MsgText = 'drop primary key ' + @TblName + '.' + @KeyName \
 	print @MsgText; \
 	set @SqlStmt = 'alter table ' + @TblName + ' drop constraint ' + @KeyName; \
 	exec( @SqlStmt ) \
@@ -1213,7 +1218,7 @@ end
 /// (qualified) table name it is defined for.
 /// </summary>
 /// <param name="X">
-/// The (schema qualified) of the table.
+/// The (schema qualified) name of the table.
 /// </param>
 /// @ingroup Action
 #ifdef CSQL_DROP_PRIMARY_KEYS
@@ -1321,6 +1326,40 @@ close c \
 deallocate c 
 #else // !CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_ALL_FOREIGN_KEYS( Detail )
+#endif // CSQL_DROP_FOREIGN_KEYS
+
+
+
+/// <summary>
+/// Drop all foreign key constraints that are referencing the specified table.
+/// </summary>
+/// <param name="Master">
+/// The qualified name of the table for which is referenced by the keys to drop.
+/// </param>
+/// @ingroup Action
+#ifdef CSQL_DROP_FOREIGN_KEYS
+#define CSQL_DROP_REFERENCING_KEYS( Master ) \
+declare c cursor local forward_only for \
+	select ' drop constraint ' + schema_name(so.schema_id) + '.' +object_name( so.object_id ) + '.' + k.name \
+	     , 'alter table ' + schema_name(so.schema_id) + '.' + object_name( so.object_id ) \
+	     + ' drop constraint ' + k.name \
+	  from sys.foreign_keys k \
+	      join sys.objects so \
+	        on so.object_id = k.parent_object_id \
+	 where k.referenced_object_id = object_id( #@Master ) \
+declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
+open c \
+fetch c into @Message, @SqlStmt \
+while @@fetch_status = 0 \
+begin \
+	print @Message \
+	exec( @SqlStmt ) \
+	fetch c into @Message, @SqlStmt \
+end \
+close c \
+deallocate c 
+#else // !CSQL_DROP_FOREIGN_KEYS
+#define CSQL_DROP_REFERENCING_KEYS( Master )
 #endif // CSQL_DROP_FOREIGN_KEYS
 
 
