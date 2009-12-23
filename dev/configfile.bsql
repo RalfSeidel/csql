@@ -6,12 +6,20 @@
 ; -------------------------------------
 ; Database Settings
 ; -------------------------------------
-System=MSSQL
-Server=.
+;System=MSSQL
+;Server=.
+
+
+System=SYBASE
+Server=146.220.74.208:4200
+Database=tva_adsalesng_cf
+;User=
+;Password=
+
 Database=tempdb
 
 
-BreakOnError=false
+BreakOnError=true
 PreprocessorArgs=/E /Co1200 /DA=1
 ;Tempfile=c:\temp\bsqltmp.sql
 ;Distfile=c:\temp\bsqlout.sql

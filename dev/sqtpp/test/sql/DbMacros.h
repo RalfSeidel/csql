@@ -351,11 +351,12 @@
 #undef CSQL_GRANT_PROCEDURES
 #undef CSQL_GRANT_FUNCTIONS
 
+#undef CSQL_DELETE_DICTIONARY_DATA
 #undef CSQL_INSERT_DEFAULT_DATA
+#undef CSQL_INSERT_DICTIONARY_DATA
 #undef CSQL_EXECUTE_TESTS
 
 #undef CSQL_UNDEF_ALL
-
 
 #else
 
@@ -366,31 +367,34 @@
 ** to drop and create everything.
 */
 
-#if !( defined(CSQL_CREATE_ALL)          || defined(CSQL_CREATE_ALL_BUT_TABLES) \
-    || defined(CSQL_CREATE_DEFAULTS )    || defined(CSQL_CREATE_RULES ) \
-    || defined(CSQL_CREATE_TYPES)        || defined(CSQL_CREATE_TABLES) \
-    || defined(CSQL_CREATE_PRIMARY_KEYS) || defined(CSQL_CREATE_FOREIGN_KEYS)  \
-    || defined(CSQL_CREATE_PKEYS)        || defined(CSQL_CREATE_FKEYS)  \
-    || defined(CSQL_CREATE_INDEXES)      || defined(CSQL_CREATE_TRIGGERS) \
-    || defined(CSQL_CREATE_VIEWS)        || defined(CSQL_CREATE_PROCEDURES) \
-    || defined(CSQL_CREATE_FUNCTIONS)    || defined(CSQL_CREATE_SYNONYMS) \
+#if !( defined(CSQL_CREATE_ALL)             || defined(CSQL_CREATE_ALL_BUT_TABLES) \
+    || defined(CSQL_CREATE_DEFAULTS )       || defined(CSQL_CREATE_RULES ) \
+    || defined(CSQL_CREATE_TYPES)           || defined(CSQL_CREATE_TABLES) \
+    || defined(CSQL_CREATE_PRIMARY_KEYS)    || defined(CSQL_CREATE_FOREIGN_KEYS)  \
+    || defined(CSQL_CREATE_PKEYS)           || defined(CSQL_CREATE_FKEYS)  \
+    || defined(CSQL_CREATE_INDEXES)         || defined(CSQL_CREATE_TRIGGERS) \
+    || defined(CSQL_CREATE_VIEWS)           || defined(CSQL_CREATE_PROCEDURES) \
+    || defined(CSQL_CREATE_FUNCTIONS)       || defined(CSQL_CREATE_SYNONYMS) \
     || defined(CSQL_GRANT_ALL) \
-    || defined(CSQL_GRANT_TABLES)        || defined(CSQL_GRANT_VIEWS) \
-    || defined(CSQL_GRANT_PROCEDURES)    || defined(CSQL_GRANT_FUNCTIONS) \
+    || defined(CSQL_GRANT_TABLES)           || defined(CSQL_GRANT_VIEWS) \
+    || defined(CSQL_GRANT_PROCEDURES)       || defined(CSQL_GRANT_FUNCTIONS) \
     || defined(CSQL_INSERT_DEFAULT_DATA) \
+	|| defined(CSQL_DELETE_DICTIONARY_DATA) || defined(CSQL_INSERT_DICTIONARY_DATA) \
     || defined(CSQL_EXECUTE_TESTS)   \
     || defined(CSQL_DROP_ALL) \
-    || defined(CSQL_DROP_DEFAULTS)       || defined(CSQL_DROP_RULES) \
-    || defined(CSQL_DROP_TYPES)          || defined(CSQL_DROP_TABLES) \
-    || defined(CSQL_DROP_PRIMARY_KEYS)   || defined(CSQL_DROP_FOREIGN_KEYS)  \
-    || defined(CSQL_DROP_PKEYS)          || defined(CSQL_DROP_FKEYS)  \
-    || defined(CSQL_DROP_INDEXES)        || defined(CSQL_DROP_TRIGGERS) \
-    || defined(CSQL_DROP_VIEWS)          || defined(CSQL_DROP_PROCEDURES) \
-    || defined(CSQL_DROP_FUNCTIONS)      || defined(CSQL_DROP_SYNONYMS))
+    || defined(CSQL_DROP_DEFAULTS)          || defined(CSQL_DROP_RULES) \
+    || defined(CSQL_DROP_TYPES)             || defined(CSQL_DROP_TABLES) \
+    || defined(CSQL_DROP_PRIMARY_KEYS)      || defined(CSQL_DROP_FOREIGN_KEYS)  \
+    || defined(CSQL_DROP_PKEYS)             || defined(CSQL_DROP_FKEYS)  \
+    || defined(CSQL_DROP_INDEXES)           || defined(CSQL_DROP_TRIGGERS) \
+    || defined(CSQL_DROP_VIEWS)             || defined(CSQL_DROP_PROCEDURES) \
+    || defined(CSQL_DROP_FUNCTIONS)         || defined(CSQL_DROP_SYNONYMS))
 #define CSQL_CREATE_ALL
 #define CSQL_DROP_CREATE
 #define CSQL_GRANT_ALL
 #define CSQL_INSERT_DEFAULT_DATA
+#define CSQL_DELETE_DICTIONARY_DATA
+#define CSQL_INSERT_DICTIONARY_DATA
 #define CSQL_EXECUTE_TESTS
 #endif
 

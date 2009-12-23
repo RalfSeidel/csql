@@ -1,0 +1,33 @@
+﻿<Window x:Class="csql.addin.Gui.Views.AboutDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+    Title="About CSQL Script Processor" WindowStyle="ThreeDBorderWindow" KeyDown="Window_KeyDown"
+        Background="White"
+        Height="180" Width="420" WindowStartupLocation="CenterScreen">
+    
+
+    <DockPanel>  
+        <FlowDocumentScrollViewer Zoom="2" VerticalScrollBarVisibility="Hidden">
+            <FlowDocument>
+
+                <Paragraph>
+                    <Floater HorizontalAlignment="Right"  Width="120">
+                        <BlockUIContainer>
+                            <Image Source="/csql.Addin;component/Resources/Images/SqlServiceLogo.png" />
+                        </BlockUIContainer>
+                    </Floater>
+                    <LineBreak/>
+                    <Bold>CSQL Script Processor</Bold><LineBreak/>
+                    Copyright © SQL Service GmbH 2009<LineBreak/>
+                    Version 1.0.0<LineBreak/>
+                    
+                </Paragraph>
+
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        
+    </DockPanel>
+
+
+</Window>

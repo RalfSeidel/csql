@@ -1,0 +1,202 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{37A22F40-1137-46F7-9260-B68CCFB1EA6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>csql.addin</AssemblyName>
+    <RootNamespace>csql.addin</RootNamespace>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <OutputPath>..\debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <IncrementalBuild>false</IncrementalBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>..\release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <IncrementalBuild>false</IncrementalBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddInTraceListener.cs" />
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bases\ViewModel.cs" />
+    <Compile Include="Bases\ViewModelWrapper.cs" />
+    <Compile Include="Commands\FileGrouper.cs" />
+    <Compile Include="Commands\SolutionExplorerFileLocator.cs" />
+    <Compile Include="Globals\ImageHelper.cs" />
+    <Compile Include="Gui\Commands\CommandBehavior.cs" />
+    <Compile Include="Gui\Commands\CommandBehaviorBinding.cs" />
+    <Compile Include="Gui\Commands\EventHandlerGenerator.cs" />
+    <Compile Include="Gui\Commands\SimpleCommand.cs" />
+    <Compile Include="Connect.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ScriptExecutor.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Globals\ExtensionMethods.cs" />
+    <Compile Include="Globals\ImageTranslator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Globals\Messages.cs" />
+    <Compile Include="Globals\XamlConverters\NegationConverter.cs" />
+    <Compile Include="Gui\Controls\GridViewEditBox.cs" />
+    <Compile Include="Gui\Controls\GridViewEditBoxAdorner.cs" />
+    <Compile Include="Gui\Views\AboutDialog.xaml.cs">
+      <DependentUpon>AboutDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\Views\SettingsPanel.xaml.cs">
+      <DependentUpon>SettingsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ISettingsPersistensProvider.cs" />
+    <Compile Include="Settings\PreprocessorDefinition.cs" />
+    <Compile Include="Gui\Views\PreprocessorDefinitionViewModel.cs" />
+    <Compile Include="Settings\SettingsCollection.cs" />
+    <Compile Include="Settings\SettingsItem.cs" />
+    <Compile Include="Settings\SettingsFilePersistensProvider.cs" />
+    <Compile Include="Gui\Views\SettingsItemViewModel.cs" />
+    <Compile Include="Gui\Views\SettingsPanelViewModel.cs" />
+    <Compile Include="WpfHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WpfHost.designer.cs">
+      <DependentUpon>WpfHost.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CommandBar.resx" />
+    <EmbeddedResource Include="WpfHost.resx">
+      <DependentUpon>WpfHost.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="EnvDTE">
+      <Guid>{80CC9F66-E7D8-4DDD-85B6-D9E6CD0E93E2}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="EnvDTE80">
+      <Guid>{1A31287A-4D7D-413E-8E32-3B374931BD89}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="EnvDTE90">
+      <Guid>{2CE2370E-D744-4936-A090-3FFFE667B0E1}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="Microsoft.VisualStudio.CommandBars">
+      <Guid>{1CBA492E-7263-47BB-87FE-639000619B15}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="C:\Users\Ralf\Documents\Visual Studio 2008\Addins\csqladdin - For Testing.AddIn">
+      <Link>csqladdin - For Testing.AddIn</Link>
+    </Content>
+    <Content Include="csqladdin.addin" />
+    <EmbeddedResource Include="Resources\Images\Commands\ExecuteAll.bmp" />
+    <EmbeddedResource Include="Resources\Images\Commands\ViewAboutDialog.bmp" />
+    <EmbeddedResource Include="Resources\Images\Commands\ViewSettingsPanel.bmp" />
+    <Resource Include="Resources\Icon.ico" />
+    <Resource Include="Resources\Images\Cancel.png" />
+    <Resource Include="Resources\Images\CreateCopy.png" />
+    <Resource Include="Resources\Images\ExecutePage.png" />
+    <Resource Include="Resources\Images\ExecuteSelection.png" />
+    <Resource Include="Resources\Images\Delete.png" />
+    <Resource Include="Resources\Images\CreateNew.png" />
+    <Resource Include="Resources\Images\Save.png" />
+    <Resource Include="Resources\Images\SqlServiceLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\csql\csql.lib.csproj">
+      <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
+      <Name>csql.lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Gui\Views\AboutDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Gui\Views\SettingsPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
