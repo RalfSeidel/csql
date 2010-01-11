@@ -5,10 +5,13 @@ using csql.addin.Gui.Views;
 
 namespace csql.addin.Commands
 {
+	/// <summary>
+	/// Wrapper to call the preprocessor and csql script processing engine.
+	/// </summary>
     public class ScriptExecutor
     {
-        string scriptfile;
-        SettingsItemViewModel settingsObjectViewModel;
+        private readonly string scriptfile;
+		private readonly SettingsItemViewModel settingsObjectViewModel;
 
         public ScriptExecutor(string scriptfile, SettingsItemViewModel settingsObjectViewModel)
         {

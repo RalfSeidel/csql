@@ -10,7 +10,7 @@ namespace csql.addin.Commands
 	/// <summary>
 	/// Modify the hierarchy for .csql files.
 	/// </summary>
-	internal class FileGrouper
+	public class FileGrouper
 	{
 		/// <summary>
 		/// Reference to the visual studio automation object.
@@ -21,7 +21,7 @@ namespace csql.addin.Commands
 		/// The constructor.
 		/// </summary>
 		/// <param name="application">The visual studio automation application.</param>
-		internal FileGrouper( DTE2 application )
+		public FileGrouper( DTE2 application )
 		{
 			this.application = application;
 		}
@@ -29,7 +29,7 @@ namespace csql.addin.Commands
 		/// <summary>
 		/// Modify the hierarchy for .csql files.
 		/// </summary>
-		internal void GroupProjectItems()
+		public void GroupProjectItems()
 		{
 			ToolWindows toolWindows = application.ToolWindows;
 

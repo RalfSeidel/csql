@@ -79,7 +79,6 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Globals\ExtensionMethods.cs" />
     <Compile Include="Globals\ImageTranslator.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Globals\Messages.cs" />
     <Compile Include="Globals\XamlConverters\NegationConverter.cs" />

@@ -9,7 +9,7 @@ namespace csql.addin.Commands
 	/// This class implements the logic to find the current editor file 
 	/// in the vistual studio solution explorer hierarchy.
 	/// </summary>
-	class SolutionExplorerFileLocator
+	public class SolutionExplorerFileLocator
 	{
 		/// <summary>
 		/// The visutal studio application object.
