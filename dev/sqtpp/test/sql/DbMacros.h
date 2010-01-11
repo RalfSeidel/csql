@@ -16,11 +16,12 @@
 ** </remarks>
 **
 ** @defgroup Control Definitions controlling what else will be defined in this file.
-** @defgroup Action Macro definitions that are expanded into SQL script .
+** @defgroup Action Macro definitions that are expanded to SQL statements or batches.
 */
 //---------------------------------------------------------------------
 
 /// @def CSQL_CREATE_ALL
+/// @ingroup Control
 /// <summary>
 /// If this definition is set when this file is include any other
 /// CSQL_CREATE_xxx macro will be implictly defined.
@@ -29,9 +30,9 @@
 /// If no other flow control is defined this definition will be 
 /// set by default.
 /// </remarks>
-/// @ingroup Control
 
 /// @def CSQL_DROP_CREATE
+/// @ingroup Control
 /// <summary>
 /// If this definition is set any CSQL_DROP_xxx macro will be 
 /// defined automaticly for any corresponding CSQL_CREATE_xxx
@@ -41,175 +42,175 @@
 /// If no other flow control is defined this definition will be 
 /// set by default.
 /// </remarks>
-/// @ingroup Control
 /// @example DropCreate.csql
 
 /// @def CSQL_DROP_DEFAULTS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping default constraints.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_DEFAULTS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating default constraints.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_RULES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping check constraints.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_RULES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating check constraints.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_TYPES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping user defined datatypes.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_TYPES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating user defined datatypes.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_TABLES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping tables.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_TABLES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating tables.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_PRIMARY_KEYS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping primary keys.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_PRIMARY_KEYS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating primary keys.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_FOREIGN_KEYS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping foreign keys.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_FOREIGN_KEYS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating foreign keys.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_INDEXES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping indexes.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_INDEXES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating indexes.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_VIEWS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping views.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_VIEWS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating views.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_PROCEDURES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping procedures.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_PROCEDURES
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating procedures.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_FUNCTIONS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping functions.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_FUNCTIONS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating functions.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_SYNONYMS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping SYNONYMS.
 /// </summary>
-/// @ingroup Control
 
 /// @def CSQL_CREATE_SYNONYMS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating SYNONYMS.
 /// </summary>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_TRIGGERS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are dropping triggers.
@@ -217,15 +218,16 @@
 /// @ingroup Control
 
 /// @def CSQL_CREATE_TRIGGERS
+/// @ingroup Control
 /// <summary>
 /// Use this defintion to include/excluded sections in your script
 /// that are creating triggers.
 /// </summary>
-/// @ingroup Control
 
 
 
 /// @def CSQL_EXECUTE_TESTS
+/// @ingroup Control
 /// <summary>
 /// Include all sections within the <c>@#ifdef CSQL_EXECUTE_TESTS / @#endif</c> sections.
 /// </summary>
@@ -233,26 +235,25 @@
 /// You may place some code within the <c>CSQL_EXECUTE_TESTS</c> to perform some tests
 /// of your SQL Server logic. 
 /// </remarks>
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_PKEYS
+/// @ingroup Control
 /// <summary>
 /// Obsolete synonym for <see cref="CSQL_DROP_PRIMARY_KEYS"/>.
 /// </summary>
-/// @ingroup Control
 /// @deprecated Use <see cref="CSQL_DROP_PRIMARY_KEYS"/> instead.
 
 /// @def CSQL_CREATE_PKEYS
+/// @ingroup Control
 /// <summary>
 /// Obsolete synonym for <see cref="CSQL_CREATE_PRIMARY_KEYS"/>.
 /// </summary>
-/// @ingroup Control
 /// @deprecated Use <see cref="CSQL_CREATE_PRIMARY_KEYS"/> instead.
 
 /// @def CSQL_UNDEF_ALL
 /// <summary>
-//// Define the Macro CSQL_UNDEF_ALL to clear all previous macro definitions.
+/// Define the Macro CSQL_UNDEF_ALL to clear all previous macro definitions.
 /// </summary>
 /// 
 /// <remarks>
@@ -290,21 +291,20 @@
 /// </remarks>
 /// @deprecated Use <c>@#undef_all CSQL_</c> instead of including this file
 /// with <c>CSQL_UNDEF_ALL</c> defined.
-/// @ingroup Control
 
 
 /// @def CSQL_DROP_FKEYS
+/// @ingroup Control
 /// <summary>
 /// Obsolete synonym for <see cref="CSQL_DROP_FOREIGN_KEYS"/>.
 /// </summary>
-/// @ingroup Control
 /// @deprecated Use <see cref="CSQL_DROP_FOREIGN_KEYS"/> instead.
 
 /// @def CSQL_CREATE_FKEYS
+/// @ingroup Control
 /// <summary>
 /// Obsolete synonym for <see cref="CSQL_CREATE_FOREIGN_KEYS"/>.
 /// </summary>
-/// @ingroup Control
 /// @deprecated Use <see cref="CSQL_CREATE_FOREIGN_KEYS"/> instead.
 
 
@@ -604,33 +604,33 @@
 #undef CSQL_CREATE_UPDATE_TRIGGER
 #undef CSQL_CREATE_DELETE_TRIGGER
 
+/// @ingroup Action
 /// <summary>
 /// Macro to change the current database/catalog.
 /// </summary>
-/// @ingroup Action
 #define CSQL_SET_CATALOG( C ) if db_name() != __QUOTE( C ) use C;
 
+/// @ingroup Action
 /// <summary>
 /// Prints a message at the start of an SQL script.
 ///</summary>
-/// @ingroup Action
 #define CSQL_PRINT_ENTER_SCRIPT \
 set quoted_identifier, ansi_padding off \
 set concat_null_yields_null, ansi_warnings, ansi_nulls on \
 print '*** Enter script: ' ##__FILE__ ##' ***' \
 print '*** Context: ' + @@servername + '.' + db_name() + ' ***'
 
+/// @ingroup Action
 /// <summary>
 /// Prints a message at the end of an SQL script.
 /// </summary>
-/// @ingroup Action
 #define CSQL_PRINT_EXIT_SCRIPT print '*** Exit script: ' ##__FILE__ ##' ***'
 
+/// @ingroup Action
 /// <summary>
 /// Macro to add source location and version informations at the
 /// beginning of a SQL programm object (stored procedure, view, etc).
 /// </summary>
-/// @ingroup Action
 #define CSQL_OBJECT_INFO File: __FILE__ / SCRIPT_REVISION / __TIMESTAMP__
 
 
@@ -687,6 +687,7 @@ end
 #endif // CSQL_CREATE_DEFAULTS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a default previously created by <code>create default</code>
 /// </summary>
@@ -697,7 +698,6 @@ end
 /// <param name="X">
 /// The (schema qualified) name of the default. 
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_DEFAULTS
 #define CSQL_DROP_DEFAULT( X ) \
 if exists ( select 1 from sys.objects where type = 'D' and object_id = object_id( #@X ) ) \
@@ -742,6 +742,7 @@ end
 #endif // CSQL_CREATE_RULES
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a rule previously created by <code>create rule</code>
 /// </summary>
@@ -752,7 +753,6 @@ end
 /// <param name="X">
 /// The (schema qualified) name of the rule. 
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_RULES
 #define CSQL_DROP_RULE( X ) \
 if exists ( select 1 from sys.objects where type = 'R' and object_id = object_id( #@X ) ) \
@@ -795,6 +795,7 @@ end
 #endif // CSQL_CREATE_TYPES
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a type previously created by <code>create type</code>
 /// </summary>
@@ -805,7 +806,6 @@ end
 /// <param name="X">
 /// The (schema qualified) name of the type. 
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_TYPES
 #define CSQL_DROP_TYPE( X ) \
 if exists ( select 1 from sys.types where name = parsename( #@X, 1 ) and is_user_defined = 1 ) \
@@ -819,7 +819,7 @@ end
 #define CSQL_DROP_TYPE(X)
 #endif // CSQL_DROP_TYPES
 
-
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a table if it exists.
 /// </summary>
@@ -827,7 +827,6 @@ end
 /// The qualified name of the table. This may include the schema
 /// in which the table is created.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_TABLES
 #define CSQL_DROP_TABLE(X) \
 if exists (select 1 from sys.objects where type ='U' and object_id = object_id( #@X ) ) \
@@ -842,6 +841,7 @@ end
 #endif // CSQL_DROP_TABLES
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a table in the temporary database (tempdb) if it exists.
 /// </summary>
@@ -849,7 +849,6 @@ end
 /// The qualified name of the table. This may include the schema
 /// in which the table is created.
 /// </param>
-/// @ingroup Action
 #define CSQL_DROP_TEMP_TABLE(X) \
 if exists (select 1 from tempdb.dbo.sys.objects where type ='U' and name = parsename( #@X, 1) ) \
 begin \
@@ -858,6 +857,7 @@ drop table tempdb..X \
 end
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to copy a whole table in the current database into a
 /// new table in the tempdb database.
@@ -874,7 +874,6 @@ end
 /// to copy the current data into the tempdb. Recreate your persistent table
 /// and reinsert the data from the &quot;backup&quot;.
 /// </remarks>
-/// @ingroup Action
 #define CSQL_BACKUP_TABLE(X) \
 if exists (select 1 from sys.objects where type ='U' and object_id = object_id(#@X) ) \
 begin \
@@ -886,6 +885,7 @@ print 'Can''t backup table data from ' + #@X + '. Table doesn''t exist.' \
 end
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a view if it exists.
 /// </summary>
@@ -893,7 +893,6 @@ end
 /// The qualified name of the view. This may include the schema
 /// in which the view is created.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_VIEWS
 #define CSQL_DROP_VIEW(X) \
 if exists (select 1 from sys.objects where type ='V' and object_id = object_id(#@X) ) \
@@ -906,13 +905,13 @@ end
 #endif // CSQL_DROP_VIEWS
 
 
+/// @ingroup Action
 /// <summary>
 /// Create or alter a view.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the view.
 /// </param>
-/// @ingroup Action
 #define CSQL_CREATE_VIEW(X) \
 if not exists (select 1 from sys.objects where type ='V' and object_id = object_id(#@X)) \
 begin \
@@ -927,13 +926,13 @@ go \
 alter view X
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a procedure if it exists.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the procedure.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_PROCEDURES
 #define CSQL_DROP_PROCEDURE(X) \
 if exists (select 1 from sys.objects where type ='P' and object_id = object_id(#@X) ) \
@@ -946,13 +945,13 @@ end
 #endif // CSQL_DROP_PROCEDURES
 
 
+/// @ingroup Action
 /// <summary>
 /// Create or alter a procedure.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the procedure.
 /// </param>
-/// @ingroup Action
 #define CSQL_CREATE_PROCEDURE(X) \
 if not exists (select 1 from sys.objects where type ='P' and object_id = object_id(#@X)) \
 begin \
@@ -967,13 +966,13 @@ go \
 alter procedure X
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a function if it exists.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the function.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_FUNCTIONS
 #define CSQL_DROP_FUNCTION(X) \
 if exists (select 1 from sys.objects where type in ('FN', 'IF', 'TF') and object_id = object_id(#@X) ) \
@@ -986,13 +985,13 @@ end
 #endif // CSQL_DROP_FUNCTIONS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to create a function returning a scalar value.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the function.
 /// </param>
-/// @ingroup Action
 #define CSQL_CREATE_FUNCTION(X) \
 if not exists (select 1 from sys.objects where type ='FN' and object_id = object_id(#@X)) \
 begin \
@@ -1007,13 +1006,13 @@ go \
 alter function X
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to create a function returning a scalar value.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the function.
 /// </param>
-/// @ingroup Action
 #define CSQL_CREATE_SCALAR_FUNCTION(X) \
 if not exists (select 1 from sys.objects where type ='FN' and object_id = object_id(#@X)) \
 begin \
@@ -1028,13 +1027,13 @@ go \
 alter function X
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to create a function returning a temporary table (inline).
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the function.
 /// </param>
-/// @ingroup Action
 /// @example CreateInlineFunction.csql
 #define CSQL_CREATE_INLINE_FUNCTION(X) \
 if not exists ( select 1 from sys.objects where type ='IF' and object_id = object_id(#@X) ) \
@@ -1050,13 +1049,13 @@ go \
 alter function X
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to create a function returning a temporary table.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the function.
 /// </param>
-/// @ingroup Action
 #define CSQL_CREATE_TABLE_FUNCTION(X) \
 if not exists ( select 1 from sys.objects where type ='TF' and object_id = object_id(#@X) ) \
 begin \
@@ -1071,13 +1070,13 @@ go \
 alter function X
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a synonym if it exists.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the synonym.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_SYNONYMS
 #define CSQL_DROP_SYNONYM(X) \
 if exists (select 1 from sys.objects where type = 'SN' and object_id = object_id(#@X) ) \
@@ -1090,13 +1089,13 @@ end
 #endif // CSQL_DROP_SYNONYMS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a trigger with the specified name.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the trigger.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_TRIGGERS
 #define CSQL_DROP_TRIGGER( X ) \
 if exists (select 1 from sys.triggers where object_id = object_id(#@X) ) \
@@ -1109,6 +1108,7 @@ end
 #endif // CSQL_DROP_TRIGGERS
 
 
+/// @ingroup Action
 /// <summary>
 /// Disable a trigger.
 /// </summary>
@@ -1118,7 +1118,6 @@ end
 /// <remarks>
 /// If the trigger doesn't exist or is not enabled the macro does nothing.
 /// </remarks>
-/// @ingroup Action
 #define CSQL_DISABLE_TRIGGER( X ) \
 if exists ( select 1 from sys.triggers where object_id = object_id( #X ) and is_disabled = 0 ) \
 begin \
@@ -1135,6 +1134,7 @@ begin \
 end
 
 
+/// @ingroup Action
 /// <summary>
 /// Enable a trigger.
 /// </summary>
@@ -1144,7 +1144,6 @@ end
 /// <remarks>
 /// If the trigger doesn't exist or is not disabled the macro does nothing.
 /// </remarks>
-/// @ingroup Action
 #define CSQL_ENABLE_TRIGGER( X ) \
 if exists ( select 1 from sys.triggers where object_id = object_id( #X ) and is_disabled = 1 ) \
 begin \
@@ -1161,13 +1160,13 @@ begin \
 end
 
 
+/// @ingroup Action
 /// <summary>
 /// Revoke database access for the specified user (drop the user).
 /// </summary>
 /// <param name="X">
 /// The name of the user.
 /// </param>
-/// @ingroup Action
 #define CSQL_DROP_USER( X ) \
 if exists ( select name from sysusers where uid != gid and name = #@X and name not like '%[_]role' ) \
 begin \
@@ -1176,13 +1175,13 @@ exec sp_dropuser #@X \
 end
 
 
+/// @ingroup Action
 /// <summary>
 /// Revoke server access for the specified user (drop the login).
 /// </summary>
 /// <param name="X">
 /// The name of the user.
 /// </param>
-/// @ingroup Action
 #define CSQL_DROP_LOGIN( X ) \
 if exists ( select name from master..syslogins where name = #@X ) \
 begin \
@@ -1191,13 +1190,13 @@ exec sp_droplogin #@X \
 end
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a primary key constraint specified by its (qualified) name.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the constraint.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_PRIMARY_KEYS
 #define CSQL_DROP_PK_CONSTRAINT( X ) \
 if exists (select 1 from sys.objects where object_id = object_id( #@X ) and type = 'PK')\
@@ -1217,6 +1216,7 @@ end
 #endif // CSQL_DROP_PRIMARY_KEYS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a synonym primary key constraint specified by the
 /// (qualified) table name it is defined for.
@@ -1224,7 +1224,6 @@ end
 /// <param name="X">
 /// The (schema qualified) name of the table.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_PRIMARY_KEYS
 #define CSQL_DROP_PRIMARY_KEY( X ) \
 if exists ( select 1 from sys.objects where object_id = object_id( #@X ) and type = 'U' )\
@@ -1247,13 +1246,13 @@ end
 #endif // CSQL_DROP_PRIMARY_KEYS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a foreign key constraint specified by its (qualified) name.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the constraint.
 /// </param>
-/// @ingroup Action
 /// @example DropForeignKey.csql
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_FK_CONSTRAINT( X ) \
@@ -1274,6 +1273,7 @@ end
 #endif // CSQL_DROP_FOREIGN_KEYS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a foreign key constraint specified the table
 /// that defines the key and the referenced table.
@@ -1284,7 +1284,6 @@ end
 /// <param name="Master">
 /// The (schema qualified) name of the referenced table.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_FOREIGN_KEY( Detail, Master ) \
 if exists ( select 1 from sysforeignkeys where fkeyid = object_id( #Detail ) and rkeyid  = object_id( #Master ) ) \
@@ -1302,13 +1301,13 @@ end
 #define CSQL_DROP_FOREIGN_KEY( Detail, Master )
 #endif // CSQL_DROP_FOREIGN_KEYS
 
+/// @ingroup Action
 /// <summary>
 /// Drop all foreign key constraints defined for the specified table.
 /// </summary>
 /// <param name="Detail">
 /// The qualified name of the table for which the constraints are defined.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_ALL_FOREIGN_KEYS( Detail ) \
 declare c cursor local forward_only for \
@@ -1334,13 +1333,13 @@ deallocate c
 
 
 
+/// @ingroup Action
 /// <summary>
 /// Drop all foreign key constraints that are referencing the specified table.
 /// </summary>
 /// <param name="Master">
 /// The qualified name of the table for which is referenced by the keys to drop.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_REFERENCING_KEYS( Master ) \
 declare c cursor local forward_only for \
@@ -1367,6 +1366,7 @@ deallocate c
 #endif // CSQL_DROP_FOREIGN_KEYS
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop an index spefied by the table and index name.
 /// </summary>
@@ -1376,7 +1376,6 @@ deallocate c
 /// <param name="IdxName">
 /// The name of the index.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_INDEXES
 #define CSQL_DROP_INDEX( TblName, IdxName ) \
 if exists (select 1 from sys.indexes where name = #IdxName and object_id = object_id( #TblName ) ) \
@@ -1391,6 +1390,7 @@ end
 #endif // CSQL_DROP_INDEXES
 
 
+/// @ingroup Action
 /// <summary>
 /// Drop all indexes defined for the specified table and which 
 /// are not enforcing a unique or primary key contraint.
@@ -1398,7 +1398,6 @@ end
 /// <param name="X">
 /// The (schema qualified) name of the table for which to drop the indexes.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_INDEXES
 #define CSQL_DROP_ALL_INDEXES( X ) \
 declare c cursor local forward_only for \
@@ -1425,13 +1424,13 @@ deallocate c
 
 
 
+/// @ingroup Action
 /// <summary>
 /// Macro to drop a unique constraint specified by its (qualified) name.
 /// </summary>
 /// <param name="X">
 /// The (schema qualified) name of the contraint.
 /// </param>
-/// @ingroup Action
 #ifdef CSQL_DROP_INDEXES
 #define CSQL_DROP_UNIQUE_CONSTRAINT( X ) \
 if exists (select 1 from sys.objects where object_id = object_id( #@X ) and type = 'UQ')\
@@ -1450,11 +1449,11 @@ end
 #define CSQL_DROP_UNIQUE_CONSTRAINT( X )
 #endif
 
+/// @ingroup Action
 /// <summary>
 /// Obsolete synonym for <see cref="CSQL_DROP_UNIQUE_CONSTRAINT" /> 
 /// </summary>
 /// @deprecated Use <see cref="CSQL_DROP_UNIQUE_CONSTRAINT" /> instead.
-/// @ingroup Action
 #define CSQL_DROP_UQ_CONSTRAINT( X ) CSQL_DROP_UNIQUE_CONSTRAINT( X )
 
 

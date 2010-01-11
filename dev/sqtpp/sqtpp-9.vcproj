@@ -381,6 +381,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FileFinder.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Location.cpp"
 				>
 			</File>
@@ -544,6 +548,10 @@
 			</File>
 			<File
 				RelativePath=".\File.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FileFinder.h"
 				>
 			</File>
 			<File
