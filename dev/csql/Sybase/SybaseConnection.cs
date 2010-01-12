@@ -134,7 +134,7 @@ namespace csql.Sybase
                 }
                 catch ( Exception ex ) {
 					Trace.TraceError( "Can't load sybase provider assembly: " + ex.Message );
-                    throw new TerminateException( ExitCode.SqlIntializeError );
+                    throw new TerminateException( ExitCode.SqlInitializeError );
                 }
 			}
 		}

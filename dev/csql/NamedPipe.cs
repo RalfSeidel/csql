@@ -196,7 +196,10 @@ namespace csql
 			return stream;
 		}
 
-		private bool UseVistaFlags
+		/// <summary>
+		/// Check if the host runs windows vista or above.
+		/// </summary>
+		private static bool UseVistaFlags
 		{
 			get
 			{

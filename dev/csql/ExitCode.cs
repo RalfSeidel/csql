@@ -14,7 +14,7 @@ namespace csql
 		/// <summary>
 		/// Error occured while initialising the database provider (driver).
 		/// </summary>
-		SqlIntializeError,
+		SqlInitializeError,
 		SqlConnectionError,
 		SqlCommandError,
 		UnexpectedError

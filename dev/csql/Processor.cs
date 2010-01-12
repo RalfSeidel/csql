@@ -11,19 +11,19 @@ namespace csql
 	/// <summary>
 	/// Base class for the processors.
 	/// </summary>
-    /// <remarks>
-    /// TODO: this class needs some refactoring to separate raw command execution
-    /// and runtime environment management.
-    /// </remarks>
-	public abstract class Processor : IDisposable	
+	/// <remarks>
+	/// TODO: this class needs some refactoring to separate raw command execution
+	/// and runtime environment management.
+	/// </remarks>
+	public abstract class Processor : IDisposable
 	{
-        protected readonly CsqlOptions m_options;
+		private readonly CsqlOptions m_options;
 		private string m_pipeName;
 		private string m_currentFile;
-		private int    m_currentFileLineNo;
-		private int    m_currentBatchNo;
-		private int    m_currentBatchLineNo;
-        private IList<BatchContext> m_currentBatchContexts;
+		private int m_currentFileLineNo;
+		private int m_currentBatchNo;
+		private int m_currentBatchLineNo;
+		private IList<BatchContext> m_currentBatchContexts;
 		private StringBuilder m_batchBuilder;
 		private Process m_ppProcess;
 
@@ -50,37 +50,37 @@ namespace csql
 		/// Initializes a new instance of the <see cref="Processor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The parsed command line arguments.</param>
-        protected Processor(CsqlOptions csqlOptions)
+		protected Processor( CsqlOptions csqlOptions )
 		{
-            this.m_options = csqlOptions;
+			this.m_options = csqlOptions;
 		}
 
-        /// <summary>
-        /// Get the command line arguments.
-        /// </summary>
-        /// <value>
-        /// The command line arguments.
-        /// </value>
-        protected CsqlOptions Options
-        {
-            get { return m_options; }
-        }
+		/// <summary>
+		/// Get the command line arguments.
+		/// </summary>
+		/// <value>
+		/// The command line arguments.
+		/// </value>
+		protected CsqlOptions Options
+		{
+			get { return m_options; }
+		}
 
 
-        /// <summary>
-        /// Gets the path of the current file processed.
-        /// </summary>
-        /// <value>The current file path.</value>
+		/// <summary>
+		/// Gets the path of the current file processed.
+		/// </summary>
+		/// <value>The current file path.</value>
 		public string CurrentFile
 		{
 			get { return this.m_currentFile; }
 		}
 
 
-        /// <summary>
-        /// Gets the line offset of the current batch to the start of the input file.
-        /// </summary>
-        /// <value>The current batch line no.</value>
+		/// <summary>
+		/// Gets the line offset of the current batch to the start of the input file.
+		/// </summary>
+		/// <value>The current batch line no.</value>
 		public int CurrentBatchLineOffset
 		{
 			get { return this.m_currentBatchLineNo; }
@@ -90,61 +90,61 @@ namespace csql
 		/// Flag indicating if a named pipe is used to communicate with the pre processor.
 		/// </summary>
 		/// <value>Flag for the named pipe usage option.</value>
-        private bool UseNamedPipes
-        {
-            get { return String.IsNullOrEmpty( m_options.TempFile ); }
-        }
+		private bool UseNamedPipes
+		{
+			get { return String.IsNullOrEmpty( m_options.TempFile ); }
+		}
 
-        /// <summary>
-        /// Gets the name of the named pipe.
-        /// </summary>
-        /// <value>The name of the named pipe.</value>
-        private string NamedPipeName
-        {
-            get
-            {
-                Debug.Assert( UseNamedPipes );
-                if ( m_pipeName == null ) {
-                    int currentProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
-                    m_pipeName = "de.sqlservice.sqtpp\\" + currentProcessId.ToString();
-                }
-                return m_pipeName;
-            }
-        }
+		/// <summary>
+		/// Gets the name of the named pipe.
+		/// </summary>
+		/// <value>The name of the named pipe.</value>
+		private string NamedPipeName
+		{
+			get
+			{
+				Debug.Assert( UseNamedPipes );
+				if ( m_pipeName == null ) {
+					int currentProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
+					m_pipeName = "de.sqlservice.sqtpp\\" + currentProcessId.ToString();
+				}
+				return m_pipeName;
+			}
+		}
 
-        /// <summary>
-        /// Gets the name of the temp file of the preprocessor output.
-        /// </summary>
-        /// <value>The name of the temp file.</value>
-        private string TempFileName
-        {
-            get
-            {
-                Debug.Assert( !UseNamedPipes, "Usage of the temp file name is not valid if name pipes are used for the pre processor output." );
-                return m_options.TempFile;
-            }
-        }
+		/// <summary>
+		/// Gets the name of the temp file of the preprocessor output.
+		/// </summary>
+		/// <value>The name of the temp file.</value>
+		private string TempFileName
+		{
+			get
+			{
+				Debug.Assert( !UseNamedPipes, "Usage of the temp file name is not valid if name pipes are used for the pre processor output." );
+				return m_options.TempFile;
+			}
+		}
 
 		/// <summary>
 		/// Gets the path of the preprocessor sqtpp.
 		/// </summary>
-        /// <remarks>
-        /// Currently the preprocessor is expected to be found in the same directory as 
-        /// csql itself. 
-        /// </remarks>
+		/// <remarks>
+		/// Currently the preprocessor is expected to be found in the same directory as 
+		/// csql itself. 
+		/// </remarks>
 		/// <value>
-        /// The preprocessor path which is the directory of the csql executable combined 
-        /// with the file name of the preprocessor executable.
-        /// </value>
+		/// The preprocessor path which is the directory of the csql executable combined 
+		/// with the file name of the preprocessor executable.
+		/// </value>
 		protected static string PreprocessorPath
 		{
 			get
 			{
 				Process thisProcess = System.Diagnostics.Process.GetCurrentProcess();
-                Assembly assembly = Assembly.GetExecutingAssembly();
+				Assembly assembly = Assembly.GetExecutingAssembly();
 
 				//string thisPath = thisProcess.MainModule.FileName;
-                string thisPath = assembly.Location;
+				string thisPath = assembly.Location;
 
 				string root = Path.GetPathRoot( thisPath );
 				string folder = Path.GetDirectoryName( thisPath );
@@ -158,19 +158,19 @@ namespace csql
 		/// Gets the arguemtns for the preprocessor sqtpp.
 		/// </summary>
 		/// <value>The preprocessor arguemtns.</value>
-        protected string PreprocessorArguments
-        {
-            get
-            {
-                string ppArguments = m_options.GeneratePreprocessorArguments();
-                string ppInputFile = m_options.ScriptFile;
-                string ppOutFile   = UseNamedPipes ? NamedPipe.GetPipePath( NamedPipeName ) : TempFileName;
+		protected string PreprocessorArguments
+		{
+			get
+			{
+				string ppArguments = m_options.GeneratePreprocessorArguments();
+				string ppInputFile = m_options.ScriptFile;
+				string ppOutFile   = UseNamedPipes ? NamedPipe.GetPipePath( NamedPipeName ) : TempFileName;
 
-                ppArguments += " -o\"" + ppOutFile + "\"";
-                ppArguments += " " + ppInputFile;
-                return ppArguments;
-            }
-        }
+				ppArguments += " -o\"" + ppOutFile + "\"";
+				ppArguments += " " + ppInputFile;
+				return ppArguments;
+			}
+		}
 
 
 		/// <summary>
@@ -185,10 +185,10 @@ namespace csql
 				Version version = assembly.GetName().Version;
 				sb.Append( name );
 				sb.Append( " " );
-                if (GlobalSettings.Verbosity.TraceVerbose) {
+				if ( GlobalSettings.Verbosity.TraceVerbose ) {
 					sb.Append( version.ToString() );
 				} else {
-					sb.Append( version.ToString(2) );
+					sb.Append( version.ToString( 2 ) );
 				}
 				sb.Append( " (c) SQL Service GmbH" );
 
@@ -202,7 +202,7 @@ namespace csql
 		/// </summary>
 		public virtual void SignOut()
 		{
-            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, "** Finished");
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, "** Finished" );
 		}
 
 
@@ -217,8 +217,8 @@ namespace csql
 			m_currentBatchNo = 1;
 			m_currentBatchLineNo = 1;
 			m_batchBuilder = new StringBuilder( 4096 );
-            m_currentBatchContexts   = new List<BatchContext>();
-            ResetBatchContext();
+			m_currentBatchContexts   = new List<BatchContext>();
+			ResetBatchContext();
 			try {
 				using ( Stream stream = OpenInputFile() )
 				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
@@ -228,8 +228,8 @@ namespace csql
 						switch ( type ) {
 							case LineType.Text:
 								m_batchBuilder.AppendLine( line );
-                                m_currentBatchLineNo++;
-                                m_currentFileLineNo++;
+								m_currentBatchLineNo++;
+								m_currentFileLineNo++;
 								break;
 							case LineType.Line:
 								ProcessLine( line );
@@ -237,13 +237,13 @@ namespace csql
 							case LineType.Exec:
 								string batch = m_batchBuilder.ToString();
 								if ( !IsWhiteSpaceOnly( batch ) ) {
-                                    CheckedProcessBatch( m_batchBuilder.ToString() );
+									CheckedProcessBatch( m_batchBuilder.ToString() );
 									m_currentBatchNo++;
 								}
 								m_batchBuilder.Length = 0;
 								m_currentBatchLineNo = 1;
 								m_currentFileLineNo++;
-                                ResetBatchContext();
+								ResetBatchContext();
 								break;
 							default:
 								throw new NotSupportedException( "Unexepected line type: " + type );
@@ -252,7 +252,7 @@ namespace csql
 				}
 				string lastBatch = m_batchBuilder.ToString();
 				if ( !IsWhiteSpaceOnly( lastBatch ) ) {
-                    CheckedProcessBatch( lastBatch );
+					CheckedProcessBatch( lastBatch );
 					m_currentBatchNo++;
 				}
 			}
@@ -261,9 +261,8 @@ namespace csql
 			}
 			catch ( Exception ex ) {
 				string message = String.Format( "{0}({1}): Error: {2}", m_currentFile, m_currentBatchLineNo, ex.Message );
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
-                if (m_batchBuilder.Length != 0 && GlobalSettings.Verbosity.TraceInfo)
-                {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
+				if ( m_batchBuilder.Length != 0 && GlobalSettings.Verbosity.TraceInfo ) {
 					Trace.Indent();
 					Trace.WriteLine( m_batchBuilder.ToString() );
 					Trace.Unindent();
@@ -278,48 +277,45 @@ namespace csql
 		/// Emits the current batch.
 		/// </summary>
 		/// <param name="batch">The batch.</param>
-        private void CheckedProcessBatch( string batch )
+		private void CheckedProcessBatch( string batch )
 		{
 			ProcessProgress( "Executing batch " + m_currentBatchNo );
-            Debug.WriteLineIf(GlobalSettings.Verbosity.TraceVerbose, batch);
+			Debug.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, batch );
 			try {
 				ProcessBatch( batch );
 			}
 			catch ( DbException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.SqlClient.SqlException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Odbc.OdbcException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
-                if (m_options.BreakOnError)
-                {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
+				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.OleDb.OleDbException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
-                if (m_options.BreakOnError)
-                {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
+				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
 			catch ( System.Data.Common.DbException ex ) {
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
-                if (m_options.BreakOnError)
-                {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
+				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
 			}
@@ -335,27 +331,27 @@ namespace csql
 			string[] parts = line.Split( ' ' );
 			this.m_currentFileLineNo = int.Parse( parts[1] );
 
-            // The pre processor may omit the file name if it hasn't changed 
-            // since the last #line directive.
-            if ( parts.Length > 2 ) {
-                this.m_currentFile = parts[2];
-                for ( int i = 3; i < parts.Length; ++i ) {
-                    this.m_currentFile += ' ';
-                    this.m_currentFile += parts[i];
-                }
-                if ( m_currentFile.Length > 0 ) {
-                    char firstChar = m_currentFile[0];
-                    if ( firstChar == '\'' || firstChar == '"' )
-                        m_currentFile = m_currentFile.Substring( 1 );
-                }
-                if ( m_currentFile.Length > 0 ) {
-                    char lastChar = m_currentFile[m_currentFile.Length - 1];
-                    if ( lastChar == '\'' || lastChar == '"' )
-                        m_currentFile = m_currentFile.Substring( 0, m_currentFile.Length - 1 );
-                }
-            }
-            BatchContext newContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
-            m_currentBatchContexts.Add( newContext );
+			// The pre processor may omit the file name if it hasn't changed 
+			// since the last #line directive.
+			if ( parts.Length > 2 ) {
+				this.m_currentFile = parts[2];
+				for ( int i = 3; i < parts.Length; ++i ) {
+					this.m_currentFile += ' ';
+					this.m_currentFile += parts[i];
+				}
+				if ( m_currentFile.Length > 0 ) {
+					char firstChar = m_currentFile[0];
+					if ( firstChar == '\'' || firstChar == '"' )
+						m_currentFile = m_currentFile.Substring( 1 );
+				}
+				if ( m_currentFile.Length > 0 ) {
+					char lastChar = m_currentFile[m_currentFile.Length - 1];
+					if ( lastChar == '\'' || lastChar == '"' )
+						m_currentFile = m_currentFile.Substring( 0, m_currentFile.Length - 1 );
+				}
+			}
+			BatchContext newContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
+			m_currentBatchContexts.Add( newContext );
 		}
 
 		/// <summary>
@@ -385,7 +381,7 @@ namespace csql
 			if ( m_options.UsePreprocessor ) {
 				return Preprocess();
 			} else {
-                return new FileStream(m_options.ScriptFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan);
+				return new FileStream( m_options.ScriptFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
 			}
 		}
 
@@ -399,17 +395,17 @@ namespace csql
 			string ppCommand   = PreprocessorPath;
 			string ppArguments = PreprocessorArguments;
 			string traceMessage = String.Format( "Executing preprocessor with following command line:\r\n{0} {1}", ppCommand, ppArguments );
-            NamedPipe pipe = null;
-            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceVerbose, traceMessage);
+			NamedPipe pipe = null;
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, traceMessage );
 			ProcessStartInfo ppStartInfo = new ProcessStartInfo( ppCommand, ppArguments );
 			ppStartInfo.UseShellExecute = false;
 			ppStartInfo.RedirectStandardOutput = true;
 			ppStartInfo.RedirectStandardError = true;
 
 			try {
-                if ( UseNamedPipes ) {
-                    pipe = new NamedPipe( NamedPipeName );
-                }
+				if ( UseNamedPipes ) {
+					pipe = new NamedPipe( NamedPipeName );
+				}
 
 				m_ppProcess = new Process();
 				m_ppProcess.StartInfo = ppStartInfo;
@@ -420,17 +416,17 @@ namespace csql
 				m_ppProcess.BeginOutputReadLine();
 
 				Stream stream;
-                if ( pipe == null ) {
-                    m_ppProcess.WaitForExit();
+				if ( pipe == null ) {
+					m_ppProcess.WaitForExit();
 
-                    if ( m_ppProcess.ExitCode != 0 ) {
-                        throw new TerminateException( ExitCode.PreprocessorError );
-                    }
+					if ( m_ppProcess.ExitCode != 0 ) {
+						throw new TerminateException( ExitCode.PreprocessorError );
+					}
 
-                    stream = new FileStream( TempFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
-                } else {
-                    stream = pipe.Open();
-                }
+					stream = new FileStream( TempFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
+				} else {
+					stream = pipe.Open();
+				}
 
 				return stream;
 			}
@@ -453,7 +449,7 @@ namespace csql
 					m_ppProcess = null;
 				}
 				string message = ppCommand + " " + ppArguments + ":\r\n" + ex.Message;
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceError, message);
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				throw new TerminateException( ExitCode.ArgumentsError );
 			}
 		}
@@ -482,17 +478,17 @@ namespace csql
 			}
 		}
 
-        /// <summary>
-        /// Clear the batch context.
-        /// </summary>
-        private void ResetBatchContext()
-        {
-            m_currentBatchContexts.Clear();
-            if ( !String.IsNullOrEmpty( m_currentFile ) ) {
-                BatchContext initialContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
-                m_currentBatchContexts.Add( initialContext );
-            }
-        }
+		/// <summary>
+		/// Clear the batch context.
+		/// </summary>
+		private void ResetBatchContext()
+		{
+			m_currentBatchContexts.Clear();
+			if ( !String.IsNullOrEmpty( m_currentFile ) ) {
+				BatchContext initialContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
+				m_currentBatchContexts.Add( initialContext );
+			}
+		}
 
 
 		/// <summary>
@@ -502,32 +498,32 @@ namespace csql
 		/// The severity of the (error) message.
 		/// </param>
 		/// <param name="message">
-        /// The error message.
-        /// </param>
-        /// <param name="errorLineNumber">
-        /// The line number where error was reported.
-        /// </param>
+		/// The error message.
+		/// </param>
+		/// <param name="errorLineNumber">
+		/// The line number where error was reported.
+		/// </param>
 		/// <returns>The formated message.</returns>
 		protected string FormatError( TraceLevel severity, string message, int errorLineNumber )
 		{
-            int contextCount = m_currentBatchContexts.Count;
-            BatchContext context = null;
-            for ( int i = contextCount - 1; i >= 0; --i ) {
-                context = m_currentBatchContexts[i];
-                if ( context.BatchOffset <= errorLineNumber )
-                    break;
-            }
-            Debug.Assert( context != null );
+			int contextCount = m_currentBatchContexts.Count;
+			BatchContext context = null;
+			for ( int i = contextCount - 1; i >= 0; --i ) {
+				context = m_currentBatchContexts[i];
+				if ( context.BatchOffset <= errorLineNumber )
+					break;
+			}
+			Debug.Assert( context != null );
 
-            if ( context == null ) {
-                string error = String.Format( "{0}({1}): {2}: {3}", m_currentFile, errorLineNumber, severity, message );
-                return error;
-            } else {
-                string contextFile = context.File;
-                int contextLineNumber = context.LineNumber + errorLineNumber - context.BatchOffset;
+			if ( context == null ) {
+				string error = String.Format( "{0}({1}): {2}: {3}", m_currentFile, errorLineNumber, severity, message );
+				return error;
+			} else {
+				string contextFile = context.File;
+				int contextLineNumber = context.LineNumber + errorLineNumber - context.BatchOffset;
 				string error = String.Format( "{0}({1}): {2}: {3}", contextFile, contextLineNumber, severity, message );
-                return error;
-            }
+				return error;
+			}
 		}
 
 
@@ -576,7 +572,7 @@ namespace csql
 
 		#region IDisposable Members
 
-		
+
 		/// <summary>
 		/// Finalizer
 		/// </summary>

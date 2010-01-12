@@ -116,7 +116,7 @@ namespace csql.exe
 
 			csqlOptions.ScriptFile = this.ScriptFile;
 			csqlOptions.TempFile = this.TempFile;
-			csqlOptions.DistibutionFile = this.DistFile;
+			csqlOptions.DistributionFile = this.DistFile;
 			csqlOptions.DbSystem = this.System;
 			csqlOptions.DbDriver = this.Driver;
 			csqlOptions.DbServer = this.Server;

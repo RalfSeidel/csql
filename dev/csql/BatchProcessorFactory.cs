@@ -21,7 +21,7 @@ namespace csql
             //Setting the Global Trace Level
             GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;
 
-			if ( !String.IsNullOrEmpty( csqlOptions.DistibutionFile ) ) {
+			if ( !String.IsNullOrEmpty( csqlOptions.DistributionFile ) ) {
                 Processor processor = new DistributionProcessor(csqlOptions);
 				return processor;
 			} else {

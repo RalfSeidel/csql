@@ -23,7 +23,7 @@ namespace csql
         public DistributionProcessor(CsqlOptions csqlOptions)
             : base(csqlOptions)
 		{
-            string outputFilePath = csqlOptions.DistibutionFile;
+            string outputFilePath = csqlOptions.DistributionFile;
 			Stream stream = new FileStream( outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
 			m_outputFileWriter = new StreamWriter( stream, Encoding.Unicode );
 		}
@@ -42,7 +42,7 @@ namespace csql
             
             scriptFile = Path.GetFullPath( scriptFile );
 
-            String distFile = Options.DistibutionFile;
+            String distFile = Options.DistributionFile;
             distFile = Path.GetFullPath( distFile );
 
             // Create the dstribution file header
@@ -73,7 +73,7 @@ namespace csql
             footerBuilder.AppendLine( "**************************************************************************** */" );
             m_outputFileWriter.Write( footerBuilder.ToString() );
 
-            String distFile = Options.DistibutionFile;
+            String distFile = Options.DistributionFile;
             distFile = Path.GetFullPath( distFile );
             Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created.");
         }

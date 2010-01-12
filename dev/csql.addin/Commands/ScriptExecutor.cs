@@ -31,9 +31,9 @@ namespace csql.addin.Commands
             csql.CsqlOptions csqlOptions = new csql.CsqlOptions();
 
             csqlOptions.ScriptFile = scriptfile;
-            csqlOptions.DistibutionFile = settingsObjectViewModel.Distributionfile.Value;
+            csqlOptions.DistributionFile = settingsObjectViewModel.Distributionfile.Value;
             if (!settingsObjectViewModel.IsDistributionfileEnabled.Value)
-                csqlOptions.DistibutionFile = "";
+                csqlOptions.DistributionFile = "";
 
             csqlOptions.TempFile = settingsObjectViewModel.TemporaryOutputFile.Value;
 

@@ -21,8 +21,8 @@ namespace csql
 		/// <summary>
 		/// The path of the distribution (output) file if one is to be created.
 		/// </summary>
-		/// <value>The distibution file path.</value>
-		public string DistibutionFile { get; set; }
+		/// <value>The distribution file path.</value>
+		public string DistributionFile { get; set; }
 
 		/// <summary>
 		/// The temporary file used to store the pre processor output.
@@ -112,7 +112,7 @@ namespace csql
 		/// </summary>
 		public CsqlOptions()
 		{
-			DistibutionFile = "";
+			DistributionFile = "";
 			TempFile = "";
 			ScriptFile = "";
 			BreakOnError = true;

@@ -18,10 +18,11 @@
   <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
   <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
   <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
-  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+  <IgnoreGeneratedCode>True</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
   <Target Name="$(ProjectDir)/../Debug/csql.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../Debug/csql.lib.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
@@ -38,10 +39,53 @@
   <Settings />
  </Rules>
  <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="csql.exe">
+    <Messages>
+     <Message Id="exe" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-01-12 12:49:32Z">
+      <Issue Name="Namespace">
+       <Item>exe</Item>
+       <Item>csql.exe</Item>
+       <Item>Exe</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="csql.MsSql">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-01-12 12:49:32Z">
+      <Issue>
+       <Item>csql.MsSql</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="csql.Sybase">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-01-12 12:49:32Z">
+      <Issue>
+       <Item>csql.Sybase</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
   <Targets>
    <Target Name="$(ProjectDir)/../Debug/csql.exe">
     <Modules>
      <Module Name="csql.exe">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2010-01-12 12:49:32Z">
+        <Issue Name="NoStrongName">
+         <Item>'csql.exe'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2010-01-12 12:49:32Z">
+        <Issue>
+         <Item>'csql.exe'</Item>
+        </Issue>
+       </Message>
+      </Messages>
       <Namespaces>
        <Namespace Name="CommandLine">
         <Types>
@@ -253,38 +297,352 @@
          </Type>
         </Types>
        </Namespace>
+       <Types>
+        <Type Name="CmdArgs">
+         <Members>
+          <Member Name="#CreateCsqlOptions()">
+           <Messages>
+            <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-01-12 14:51:43Z">
+             <Issue>
+              <Item>'CmdArgs.CreateCsqlOptions()'</Item>
+              <Item>'TraceSwitch.Level.set(TraceLevel)'</Item>
+              <Item>&#xD;&#xA;   -&gt;'CmdArgs.CreateCsqlOptions()'&#xD;&#xA;   -&gt;'CmdArgs.CreateCsqlOptions()'</Item>
+             </Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/../Debug/csql.lib.dll">
+    <Modules>
+     <Module Name="csql.lib.dll">
+      <Messages>
+       <Message Id="lib" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-01-12 12:49:32Z">
+        <Issue Name="Assembly">
+         <Item>lib</Item>
+         <Item>'csql.lib.dll'</Item>
+         <Item>Lib</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
        <Namespace Name="csql">
         <Types>
-         <Type Name="DbConnection">
+         <Type Name="ConnectionFactory">
           <Members>
-           <Member Name="#Dispose()">
+           <Member Name="#CreateConnection(csql.CsqlOptions)">
             <Messages>
-             <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Created="2009-03-27 19:26:08Z">
-              <Issue Name="DisposeImplementation">
-               <Item>'DbConnection.Dispose()'</Item>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateConnection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateIbmdb2Connection(csql.CsqlOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateIbmdb2Connection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateMsjetConnection(csql.CsqlOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateMsjetConnection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateMsjetConnection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateMssqlConnection(csql.CsqlOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateMssqlConnection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateOracleConnection(csql.CsqlOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateOracleConnection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateSybaseConnection(csql.CsqlOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'ConnectionFactory.CreateSybaseConnection(CsqlOptions)'</Item>
+               <Item>cmdArgs</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="TerminateException">
+         <Type Name="CsqlOptions">
+          <Members>
+           <Member Name="#DistibutionFile">
+            <Messages>
+             <Message Id="Distibution" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+              <Issue Name="Member">
+               <Item>Distibution</Item>
+               <Item>'CsqlOptions.DistibutionFile'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#SqtppOptions">
+            <Messages>
+             <Message Id="Sqtpp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+              <Issue Name="Member">
+               <Item>Sqtpp</Item>
+               <Item>'CsqlOptions.SqtppOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DataReaderTracer">
+          <Members>
+           <Member Name="#GetRowColumns(csql.DataReaderTracer+ColumnInfo,System.String)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-01-12 12:49:32Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'DataReaderTracer.GetRowColumns(DataReaderTracer.ColumnInfo, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DataReaderTracer+BinaryFormat">
+          <Members>
+           <Member Name="#.ctor(System.Int32)">
+            <Messages>
+             <Message Id="maxWidth" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-01-12 12:49:32Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'maxWidth'</Item>
+               <Item>'DataReaderTracer.BinaryFormat.BinaryFormat(int)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DataReaderTracer+ColumnInfo">
+          <Members>
+           <Member Name="#Index">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'DataReaderTracer.ColumnInfo.Index'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Type">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'DataReaderTracer.ColumnInfo.Type'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ExitCode">
+          <Members>
+           <Member Name="#SqlIntializeError">
+            <Messages>
+             <Message Id="Intialize" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+              <Issue Name="Member">
+               <Item>Intialize</Item>
+               <Item>'ExitCode.SqlIntializeError'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="GlobalSettings">
+          <Members>
+           <Member Name="#Verbosity">
+            <Messages>
+             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'GlobalSettings.Verbosity'</Item>
+               <Item>'VerbositySwitch'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="NamedPipe">
+          <Members>
+           <Member Name="#UseVistaFlags">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-01-12 12:49:32Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'NamedPipe.UseVistaFlags'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Processor">
+          <Members>
+           <Member Name="#PreprocessorPath">
+            <Accessors>
+             <Accessor Name="#get_PreprocessorPath()">
+              <Messages>
+               <Message Id="thisProcess" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-01-12 12:49:32Z">
+                <Issue>
+                 <Item>'Processor.PreprocessorPath.get()'</Item>
+                 <Item>'thisProcess'</Item>
+                 <Item>'Process'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SqtppOptions">
           <Messages>
-           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2009-03-27 19:26:08Z">
-            <Issue Name="MissingConstructor">
-             <Item>'TerminateException'</Item>
-             <Item>private TerminateException(SerializationInfo, StreamingContext)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TerminateException'</Item>
-             <Item>public TerminateException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TerminateException'</Item>
-             <Item>public TerminateException(String, Exception)</Item>
+           <Message Id="Sqtpp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+            <Issue Name="Type">
+             <Item>Sqtpp</Item>
+             <Item>'SqtppOptions'</Item>
             </Issue>
            </Message>
           </Messages>
+          <Members>
+           <Member Name="#CommandLineArguments">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-01-12 12:49:32Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'SqtppOptions.CommandLineArguments'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+            <Accessors>
+             <Accessor Name="#get_CommandLineArguments()">
+              <Messages>
+               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2010-01-12 12:49:32Z" FixCategory="Breaking">
+                <Issue Name="PropertyGetter" Level="Warning">
+                 <Item>'SqtppOptions.CommandLineArguments.get()'</Item>
+                 <Item>'NotImplementedException'</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+           <Member Name="#m_includeDirectories">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'SqtppOptions.m_includeDirectories'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_inputFile">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'SqtppOptions.m_inputFile'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_macroDefinitions">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'SqtppOptions.m_macroDefinitions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_otherArguments">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'SqtppOptions.m_otherArguments'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#m_outputFile">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
+              <Issue>
+               <Item>'SqtppOptions.m_outputFile'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="csql.Sybase">
+        <Types>
+         <Type Name="SybaseMessageEventArgs">
+          <Members>
+           <Member Name="#GetSeverity(csql.Sybase.SybaseError)">
+            <Messages>
+             <Message Id="message" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-01-12 12:49:32Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'message'</Item>
+               <Item>'SybaseMessageEventArgs.GetSeverity(SybaseError)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
          </Type>
         </Types>
        </Namespace>
@@ -294,14 +652,32 @@
    </Target>
   </Targets>
   <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
    <Rule TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813">
     <Resolution Name="Default">Seal {0}, if possible.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
+    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
    </Rule>
    <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
     <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
    </Rule>
+   <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
+    <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122">
+    <Resolution Name="Default">{0} calls into {1} which has a LinkDemand. By making this call, {1} is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: {2}</Resolution>
+   </Rule>
    <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
     <Resolution Name="Default">{0} initializes field {1} of type {2} to {3}. Remove this initialization because it will be done automatically by the runtime.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065">
+    <Resolution Name="PropertyGetter">{0} creates an exception of type {1}, an exception type that should not be raised in a property. If this exception instance might be raised, use a different exception type, convert this property into a method, or change this property's logic so that it no longer raises an exception.</Resolution>
    </Rule>
    <Rule TypeName="EnumsShouldHaveZeroValue" Category="Microsoft.Design" CheckId="CA1008">
     <Resolution Name="FlagsRename">In enum {0}, change the name of {1} to 'None'.</Resolution>
@@ -309,14 +685,22 @@
    <Rule TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714">
     <Resolution Name="Default">If enumeration name {0} is singular, change it to a plural form.</Resolution>
    </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Assembly">Correct the casing of '{0}' in assembly name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="Namespace">Correct the casing of '{0}' in namespace name '{1}' by changing it to '{2}'.</Resolution>
+   </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
     <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
    </Rule>
-   <Rule TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063">
-    <Resolution Name="DisposeImplementation">Modify {0} so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Resolution>
+   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
    </Rule>
-   <Rule TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032">
-    <Resolution Name="MissingConstructor">Add the following constructor to {0}: {1}.</Resolution>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
    </Rule>
    <Rule TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060">
     <Resolution Name="Default">Because it is a P/Invoke method, {0} should be defined in a class named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Resolution>
