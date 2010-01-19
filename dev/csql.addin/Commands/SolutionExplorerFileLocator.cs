@@ -55,12 +55,6 @@ namespace csql.addin.Commands
 			if ( uiItem != null ) {
 				uiItem.Select( vsUISelectionType.vsUISelectionTypeSelect ); //own
 				application.ToolWindows.SolutionExplorer.Parent.Activate();
-
-				application.ToolWindows.OutputWindow.ActivePane.OutputString( "Item '" + application.ActiveDocument.Name + "' found.\n" );
-
-			} else {
-				application.ToolWindows.OutputWindow.ActivePane.OutputString( "Item '" + application.ActiveDocument.Name + "' not found.\n" );
-
 			}
 		}
 

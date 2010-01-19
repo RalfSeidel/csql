@@ -68,20 +68,25 @@
     </Compile>
     <Compile Include="Bases\ViewModel.cs" />
     <Compile Include="Bases\ViewModelWrapper.cs" />
+    <Compile Include="Commands\AboutDialogCommand.cs" />
+    <Compile Include="Commands\SettingsCommand.cs" />
+    <Compile Include="Commands\ExecuteScriptCommand.cs" />
     <Compile Include="Commands\FileGrouper.cs" />
+    <Compile Include="Commands\GroupFilesCommand.cs" />
+    <Compile Include="Commands\LocateFileCommand.cs" />
     <Compile Include="Commands\SolutionExplorerFileLocator.cs" />
-    <Compile Include="Globals\ImageHelper.cs" />
+    <Compile Include="Sqt.VisualStudio\ImageHelper.cs" />
     <Compile Include="Gui\Commands\CommandBehavior.cs" />
     <Compile Include="Gui\Commands\CommandBehaviorBinding.cs" />
     <Compile Include="Gui\Commands\EventHandlerGenerator.cs" />
     <Compile Include="Gui\Commands\SimpleCommand.cs" />
-    <Compile Include="Connect.cs">
+    <Compile Include="CSqlAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\ScriptExecutor.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Globals\ExtensionMethods.cs" />
-    <Compile Include="Globals\ImageTranslator.cs">
+    <Compile Include="Sqt.VisualStudio\ImageConverter.cs">
     </Compile>
     <Compile Include="Globals\Messages.cs" />
     <Compile Include="Globals\XamlConverters\NegationConverter.cs" />
@@ -101,6 +106,10 @@
     <Compile Include="Settings\SettingsFilePersistensProvider.cs" />
     <Compile Include="Gui\Views\SettingsItemViewModel.cs" />
     <Compile Include="Gui\Views\SettingsPanelViewModel.cs" />
+    <Compile Include="Sqt.VisualStudio\VsAddin.cs" />
+    <Compile Include="Sqt.VisualStudio\VsCommand.cs" />
+    <Compile Include="Sqt.VisualStudio\VsCommandEventArgs.cs" />
+    <Compile Include="Sqt.VisualStudio\VsCommandIcon.cs" />
     <Compile Include="WpfHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -161,9 +170,9 @@
       <Link>csqladdin - For Testing.AddIn</Link>
     </Content>
     <Content Include="csqladdin.addin" />
-    <EmbeddedResource Include="Resources\Images\Commands\ExecuteAll.bmp" />
-    <EmbeddedResource Include="Resources\Images\Commands\ViewAboutDialog.bmp" />
-    <EmbeddedResource Include="Resources\Images\Commands\ViewSettingsPanel.bmp" />
+    <EmbeddedResource Include="Resources\Images\Commands\ExecuteScript.bmp" />
+    <EmbeddedResource Include="Resources\Images\Commands\AboutDialog.bmp" />
+    <EmbeddedResource Include="Resources\Images\Commands\Settings.bmp" />
     <Resource Include="Resources\Icon.ico" />
     <Resource Include="Resources\Images\Cancel.png" />
     <Resource Include="Resources\Images\CreateCopy.png" />
