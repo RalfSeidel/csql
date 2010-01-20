@@ -9,6 +9,7 @@ using Extensibility;
 using Microsoft.VisualStudio.CommandBars;
 using System.Drawing;
 using stdole;
+using System.Collections.Specialized;
 
 namespace Sqt.VisualStudio
 {
@@ -125,8 +126,22 @@ namespace Sqt.VisualStudio
 		void IDTExtensibility2.OnDisconnection( ext_DisconnectMode RemoveMode, ref Array custom )
 		{
 			if ( RemoveMode == ext_DisconnectMode.ext_dm_UserClosed ) {
+				StringDictionary commandBarNames = new StringDictionary();
+				// Remove all commands and collect their command bar names
 				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
+					string commandBarName = vsCommand.CommandBarName;
+					if ( !String.IsNullOrEmpty( commandBarName ) && !commandBarNames.ContainsKey( commandBarName ) ) {
+						commandBarNames.Add( commandBarName, commandBarName );
+					}
 					RemoveIdeCommand( vsCommand );
+				}
+
+				// Delete the command bars which are empty now.
+				foreach ( string commandBarName in commandBarNames.Keys ) {
+					CommandBar commandBar = GetCommandBar( commandBarName );
+					if ( commandBar != null && !commandBar.BuiltIn && commandBar.Controls.Count == 0 ) {
+						commandBar.Delete();
+					}
 				}
 			}
 		}
@@ -238,19 +253,23 @@ namespace Sqt.VisualStudio
 					null,
 					ref this.contextGuids,
 					(int)vsCommandStatus.vsCommandStatusSupported | (int)vsCommandStatus.vsCommandStatusEnabled,
-					(int)vsCommandStyle.vsCommandStylePictAndText,
+					(int)vsCommandStyle.vsCommandStyleText,
 					vsCommandControlType.vsCommandControlTypeButton );
 			}
 
 			string[] temp = vsCommand.CommandBarName.Split( '.' );
 			CommandBar commandBar = GetCommandBar( temp[0] );
-			object commandControl;
+			object commandControl = null;
 
 			if ( temp.Length == 1 ) {
-				commandControl= ideCommand.AddControl( commandBar, vsCommand.Position );
+				if ( !ContainsCommand( commandBar.Controls, ideCommand ) ) {
+					commandControl= ideCommand.AddControl( commandBar, vsCommand.Position );
+				}
 			} else if ( temp.Length == 2 ) {
 				CommandBarPopup commandBarPopup = (CommandBarPopup)commandBar.Controls[this.GetLocalizedName( temp[1] )];
-				commandControl = ideCommand.AddControl( commandBarPopup.CommandBar, vsCommand.Position );
+				if ( !ContainsCommand( commandBarPopup.Controls, ideCommand ) ) {
+					commandControl = ideCommand.AddControl( commandBarPopup.CommandBar, vsCommand.Position );
+				}
 			} else {
 				throw new NotSupportedException( "A command hierarchy greater then two is not supported yet" );
 			}
@@ -264,9 +283,25 @@ namespace Sqt.VisualStudio
 					commandButton.Mask = iconMask;
 					commandButton.Style = MsoButtonStyle.msoButtonIconAndCaption;
 				} else {
-					commandButton.Style = MsoButtonStyle.msoButtonAutomatic;
+					commandButton.Style = MsoButtonStyle.msoButtonCaption;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Determines whether one of the specified command bar controls is associated with the specified command.
+		/// </summary>
+		private bool ContainsCommand( CommandBarControls commandBarControls, Command ideCommand )
+		{
+			foreach ( CommandBarControl commandBarControl in commandBarControls ) {
+				string commandGuid;
+				int commandId;
+				application.Commands.CommandInfo( commandBarControl, out commandGuid, out commandId );
+				Command controlCommand = application.Commands.Item( commandGuid, commandId );
+				if ( ideCommand.Equals( controlCommand ) )
+					return true;
+			}
+			return false;
 		}
 
 		private Command GetIdeCommand( VsCommand vsCommand )
@@ -289,16 +324,9 @@ namespace Sqt.VisualStudio
 		/// </summary>
 		private void RemoveIdeCommand( VsCommand vsCommand )
 		{
-			Commands2 ideCommands = (Commands2)this.Application.Commands;
-			string commandName = GetFullCommandName( vsCommand.Name );
-			foreach ( Object item in ideCommands ) {
-				Command ideCommand = item as Command;
-				if ( ideCommand == null )
-					continue;
-
-				if ( ideCommand.Name.Equals( commandName ) ) {
-					ideCommand.Delete();
-				}
+			Command ideCommand = GetIdeCommand( vsCommand );
+			if ( ideCommand != null ) {
+				ideCommand.Delete();
 			}
 		}
 
