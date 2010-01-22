@@ -398,6 +398,7 @@ namespace csql
 			NamedPipe pipe = null;
 			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, traceMessage );
 			ProcessStartInfo ppStartInfo = new ProcessStartInfo( ppCommand, ppArguments );
+			ppStartInfo.CreateNoWindow = true;
 			ppStartInfo.UseShellExecute = false;
 			ppStartInfo.RedirectStandardOutput = true;
 			ppStartInfo.RedirectStandardError = true;
