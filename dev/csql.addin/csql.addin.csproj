@@ -170,6 +170,8 @@
       <Link>csqladdin - For Testing.AddIn</Link>
     </Content>
     <Content Include="csqladdin.addin" />
+    <EmbeddedResource Include="Resources\Images\Commands\GroupFiles.bmp" />
+    <EmbeddedResource Include="Resources\Images\Commands\LocateFile.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\ExecuteScript.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\AboutDialog.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\Settings.bmp" />

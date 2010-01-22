@@ -2,6 +2,7 @@
 using EnvDTE;
 using EnvDTE80;
 using Sqt.VisualStudio;
+using System.Diagnostics;
 
 namespace csql.addin.Commands
 {
@@ -29,12 +30,19 @@ namespace csql.addin.Commands
 		public override void Execute( VsCommandEventArgs e )
 		{
 			DTE2 application = e.Application;
+			AddInTraceListener traceListener = new AddInTraceListener( application );
 			string documentPath = application.ActiveDocument.FullName;
 
 			SettingsItemViewModel settings = CSqlAddIn.GetCurrentSettings( application );
 			ScriptExecutor executionHelper = new ScriptExecutor( documentPath, settings );
 
-			executionHelper.Execute();
+			try {
+				Trace.Listeners.Add( traceListener );
+				executionHelper.Execute();
+			}
+			finally {
+				Trace.Listeners.Remove( traceListener );
+			}
 
 			// Dokument anzeigen, wenn dieses erstellt wurde und das Flag zur Erzeugung des Distributionfile gesetzt wurde
 			if ( System.IO.File.Exists( settings.Distributionfile.Value ) && settings.IsDistributionfileEnabled.Value ) {
