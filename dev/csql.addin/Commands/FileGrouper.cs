@@ -51,13 +51,29 @@ namespace csql.addin.Commands
 		/// <returns></returns>
 		private bool IsFile( UIHierarchyItem item )
 		{
-			if ( item.Object is EnvDTE.ProjectItem ) {
-				EnvDTE.ProjectItem prjItem = (EnvDTE.ProjectItem)item.Object;
-				//String kind = prjItem.Kind;
-				return prjItem.FileCount == 1;
-			} else {
-				return false;
-			}
+			string fileName = GetItemFileName( item );
+			return !String.IsNullOrEmpty( fileName );
+		}
+
+		/// <summary>
+		/// Gets the name of a project item that referes to file
+		/// </summary>
+		/// <param name="item">The project item.</param>
+		/// <returns>The name of the file or <c>null</c> if the item does not represent a single file.</returns>
+		private string GetItemFileName( UIHierarchyItem item )
+		{
+			if ( !(item.Object is EnvDTE.ProjectItem) )
+				return null;
+
+			EnvDTE.ProjectItem prjItem = (EnvDTE.ProjectItem)item.Object;
+			if ( prjItem.FileCount != 1 )
+				return null;
+
+			string fileName = prjItem.get_FileNames( 1 );
+			if ( String.IsNullOrEmpty( fileName ) )
+				return null;
+
+			return fileName;
 		}
 
 		/// <summary>
@@ -104,10 +120,9 @@ namespace csql.addin.Commands
 				bool isCsqlFile = false;
 				if ( IsFile( item ) ) {
 					ProjectItem prjItem = (EnvDTE.ProjectItem)item.Object;
-					string fileName = prjItem.get_FileNames( 1 );
-					string name = fileName.ToLower().Trim();
+					string fileName = GetItemFileName( item ).ToLower().Trim();
 
-					if ( name.Length > ".csql".Length && name.EndsWith( ".csql" ) ) {
+					if ( fileName.Length > ".csql".Length && fileName.EndsWith( ".csql" ) ) {
 						isCsqlFile = true;
 					}
 				}
