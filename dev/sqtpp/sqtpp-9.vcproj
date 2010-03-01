@@ -1109,6 +1109,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\test\cmd\input\ninclude.h"
+						>
+					</File>
+					<File
 						RelativePath=".\test\cmd\input\once.h"
 						>
 					</File>
@@ -1177,6 +1181,14 @@
 						</File>
 						<File
 							RelativePath=".\test\cmd\input\include\mixedcp_utf8.h"
+							>
+						</File>
+						<File
+							RelativePath=".\test\cmd\input\include\ninclude1.h"
+							>
+						</File>
+						<File
+							RelativePath=".\test\cmd\input\include\ninclude2.h"
 							>
 						</File>
 						<File

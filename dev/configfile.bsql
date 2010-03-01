@@ -1,26 +1,12 @@
 ; -----------------------------------------------------------------------------------------
 ; CSQL test configuration file.
 ; ----------------------------------------------------------------------------------------
-
-
-; -------------------------------------
-; Database Settings
-; -------------------------------------
-;System=MSSQL
-;Server=.
-
-
-System=SYBASE
-Server=146.220.74.208:4200
-Database=tva_adsalesng_cf
-;User=
-;Password=
-
+System=MSSQL
+Server=capella
 Database=tempdb
 
-
 BreakOnError=true
-PreprocessorArgs=/E /Co1200 /DA=1
-;Tempfile=c:\temp\bsqltmp.sql
+PreprocessorArgs=/E
+;Tempfile=c:\temp\bsqltmp.txt
 ;Distfile=c:\temp\bsqlout.sql
 

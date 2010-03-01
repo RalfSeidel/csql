@@ -100,6 +100,7 @@
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
     <Content Include="sqtpp.ico" />
     <Content Include="TestParameter1.txt" />
+    <Content Include="Test\Input\Include\Print1.h" />
     <Content Include="Test\mssql.cfg.txt" />
     <Content Include="Test\sybase.cfg.txt">
       <SubType>ASPXCodeBehind</SubType>
@@ -136,6 +137,7 @@
     <None Include="csql.FxCop" />
     <None Include="csql.snk" />
     <None Include="Test\Input\DependencyWarning.sql" />
+    <None Include="Test\Input\ErrorAfterInclude.sql" />
     <None Include="Test\Input\ErrorLineTest_2.sql" />
     <None Include="Test\Input\DistributionTest.sql" />
     <None Include="Test\Input\ErrorLineTest_1.sql" />
