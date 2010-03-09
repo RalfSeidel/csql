@@ -31,6 +31,11 @@ public:
 	/// Test __QUOTE
 	void quoteTest();
 
+	/// Test __DATE__
+	void dateTest();
+
+	/// Test __DATE__
+	void timeTest();
 
 };
 

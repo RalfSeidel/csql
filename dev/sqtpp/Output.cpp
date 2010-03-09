@@ -36,6 +36,31 @@ public:
 };
 
 /**
+** @brief Implementation of a object for emitting the output into a file created
+** by the program itself.
+*/
+class TestOutput : public Output
+{
+private:
+	std::wostream* m_pFileStream;
+
+public:
+	TestOutput( std::wostream* pFileStream )
+	: Output( *pFileStream )
+	, m_pFileStream( pFileStream )
+	{
+	}
+
+	/**
+	** @brief Closes the output file stream. 
+	*/
+	virtual void close()
+	{
+	}
+};
+
+
+/**
 ** @brief Implementation of a object for emitting the output to the console.
 */
 class ConsoleOutput : public Output
@@ -111,6 +136,15 @@ Output* Output::createOutput( const Options& options )
 		}
 	}
 
+	return pOutput;
+}
+
+/**
+** @brief Factory method to create the output stream for the unit tests.
+*/
+Output* Output::createOutput( std::wostream& stream )
+{
+	Output* pOutput = new TestOutput( &stream );
 	return pOutput;
 }
 

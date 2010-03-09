@@ -169,7 +169,7 @@ class BuildinDate::BuildinDateExpander : public sqtpp::MacroExpander
 		wchar_t        wcBuffer[128];
 		tm             localTime;
 
-		Util::getLocalTime( localTime );
+		processor.getTimestamp( localTime );
 
 
 		// Convert date to string.
@@ -206,11 +206,11 @@ class BuildinTime::BuildinTimeExpander : public sqtpp::MacroExpander
 		assert( argumentValues.size() == 0 );
 
 		const Options& options    = processor.getOptions();
-		const wstring  sFormat    = options.getDateFormat();
+		const wstring  sFormat    = options.getTimeFormat();
 		wchar_t        wcBuffer[128];
 		tm             localTime;
 
-		Util::getLocalTime( localTime );
+		processor.getTimestamp( localTime );
 
 		// Convert date to string.
 		size_t length = wcsftime( wcBuffer, sizeof(wcBuffer) / sizeof( wchar_t ), sFormat.c_str(), &localTime );
@@ -250,14 +250,13 @@ class BuildinTimestamp::BuildinTimestampExpander : public sqtpp::MacroExpander
 		wchar_t        wcBuffer[128];
 		tm             localTime;
 
-		Util::getLocalTime( localTime );
+		processor.getTimestamp( localTime );
 
 		// Convert date to string.
 		size_t length = wcsftime( wcBuffer, sizeof(wcBuffer) / sizeof( wchar_t ), sFormat.c_str(), &localTime );
 		if ( length == 0 ) {
 			throw RuntimeError( "The time format is to long." );
 		}
-
 
 		wstring sTimestamp( wcBuffer, length );
 		TokenExpression token( TOK_STRING, processor.getContext(), sTimestamp );

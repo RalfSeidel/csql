@@ -143,6 +143,10 @@ private:
 	/// information if more than one empty line is skipped.
 	size_t             m_nSkippedLineCount;
 
+	// Timestamp for the tests that overrides the default to use
+	// the current time.
+	const tm*          m_pTestTimestamp;
+
 private:
 	// Copy c'tor (not implemented);
 	Processor( const Processor& that );
@@ -168,9 +172,14 @@ public:
 	// Get the maximal severity of messages emitted during processing the input.
 	int getMaxMessageSeverity() const throw() { return m_nMaxMsgSeverity; }
 
+	// Get the current timestamp 
+	void getTimestamp( tm& timestamp ) const;
+
+	// For testing only: override the default timestamp to make test deterministic.
+	void setTimestamp( const tm* pTimestamp ) { this->m_pTestTimestamp = pTimestamp; }
+
 	// Get the file which is currently processed.
 	const File& getFile() const;
-
 	// Get the pre processing options.
 	const MacroSet& getMacros() const throw() { return m_macros; }
 

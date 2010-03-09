@@ -88,6 +88,7 @@ Processor::Processor( Options& options )
 , m_pOutput( NULL )
 , m_pErrStream( &std::wcerr )
 , m_pLogStream( &std::wclog )
+, m_pTestTimestamp( NULL )
 //, m_pIStream( NULL )
 {
 	//m_pOutStream->
@@ -125,9 +126,11 @@ void Processor::close()
 ** @attention The processor stores a pointer to the submitted reference.
 ** Do not pass a local variable.
 */
-void Processor::setOutStream( std::wostream& /*output*/ )
+void Processor::setOutStream( std::wostream& output )
 {
-	throw error::C1001( L"Not implemented" );
+	Output* pOutput = Output::createOutput( output );
+	delete m_pOutput;
+	m_pOutput = pOutput;
 }
 
 /**
@@ -161,6 +164,17 @@ Context Processor::getContext() const throw()
 	return m_tokenExpression.getContext();
 }
 
+/**
+** @brief Get the current file we are processing.
+*/
+void Processor::getTimestamp( tm& timestamp ) const
+{
+	if ( m_pTestTimestamp != NULL ) {
+		timestamp = *m_pTestTimestamp;
+	} else {
+		Util::getLocalTime( timestamp );
+	}
+}
 
 /**
 ** @brief Get the current file we are processing.

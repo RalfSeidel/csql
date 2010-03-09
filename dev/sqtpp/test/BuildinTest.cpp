@@ -22,6 +22,8 @@ void BuildinTest::run()
 	test.evalTest();
 	test.eval2Test();
 	test.quoteTest();
+	test.dateTest();
+	test.timeTest();
 }
 
 
@@ -210,6 +212,91 @@ void BuildinTest::quoteTest()
 	processor.processStream( input );
 	outputText = output.str();
 	assert( outputText == L"'B'" );
+}
+
+
+/**
+** @brief Test the __DATE__ macro
+*/
+void BuildinTest::dateTest()
+{
+	Options       options;
+	Processor     processor( options );
+	wstring       inputExpr;
+	wstring       inputText;
+	wstringstream input;
+	wstringstream output;
+	wstring       outputText;
+
+	tm           testTime;
+
+	memset( &testTime, 0, sizeof( testTime ) );
+	testTime.tm_year = 101; // 2001
+	testTime.tm_mon  = 8;   // Sep
+	testTime.tm_mday = 30;
+	testTime.tm_hour = 16;
+	testTime.tm_min = 45;
+	testTime.tm_sec = 10;
+	processor.setTimestamp( &testTime );
+
+	options.setLanguage( Options::LNG_SQL );
+	options.emitLine( false );
+	options.eliminateEmptyLines( true );
+
+	processor.setOutStream( output );
+	output.str( wstring() );
+	processor.processStream( input );
+	outputText = output.str();
+
+	inputText = L"__DATE__";
+	input.clear();
+	input.str( inputText );
+	output.str( wstring() );
+	processor.processStream( input );
+	outputText = output.str();
+	assert( outputText == L"'20010930'" );
+}
+
+/**
+** @brief Test the __TIME__ macro
+*/
+void BuildinTest::timeTest()
+{
+	Options       options;
+	Processor     processor( options );
+	wstring       inputExpr;
+	wstring       inputText;
+	wstringstream input;
+	wstringstream output;
+	wstring       outputText;
+
+	tm           testTime;
+
+	memset( &testTime, 0, sizeof( testTime ) );
+	testTime.tm_year = 101; // 2001
+	testTime.tm_mon  = 8;   // Sep
+	testTime.tm_mday = 30;
+	testTime.tm_hour = 16;
+	testTime.tm_min = 45;
+	testTime.tm_sec = 10;
+	processor.setTimestamp( &testTime );
+
+	options.setLanguage( Options::LNG_SQL );
+	options.emitLine( false );
+	options.eliminateEmptyLines( true );
+
+	processor.setOutStream( output );
+	output.str( wstring() );
+	processor.processStream( input );
+	outputText = output.str();
+
+	inputText = L"__TIME__";
+	input.clear();
+	input.str( inputText );
+	output.str( wstring() );
+	processor.processStream( input );
+	outputText = output.str();
+	assert( outputText == L"'16:45:10'" );
 }
 
 

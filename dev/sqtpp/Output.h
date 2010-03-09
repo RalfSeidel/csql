@@ -48,6 +48,7 @@ private:
 
 public:
 	static Output* createOutput( const Options& options );
+	static Output* createOutput( std::wostream& stream );
 };
 
 } // namespace
