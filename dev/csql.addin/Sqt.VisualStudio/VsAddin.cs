@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.CommandBars;
 using System.Drawing;
 using stdole;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace Sqt.VisualStudio
 {
@@ -100,17 +101,20 @@ namespace Sqt.VisualStudio
 		/// <param name="custom">An empty array that you can use to pass host-specific data for use in the add-in.</param>
 		void IDTExtensibility2.OnConnection( object Application, ext_ConnectMode ConnectMode, object AddInInst, ref Array custom )
 		{
+            Debug.WriteLine("OnConnection (Connection-Mode ist: " + ConnectMode + ")");
 			this.application = (DTE2)Application;
 			this.addin = (AddIn)AddInInst;
 			this.OnInitialize();
 
-			if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
+			//if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
 				this.contextGuids = new object[] { };
 
 				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
 					AddIdeCommand( vsCommand );
 				}
-			}
+			//}
+
+
 		}
 
 		/// <summary>
@@ -125,6 +129,8 @@ namespace Sqt.VisualStudio
 		/// </param>
 		void IDTExtensibility2.OnDisconnection( ext_DisconnectMode RemoveMode, ref Array custom )
 		{
+            Debug.WriteLine("OnDisconnection");
+
 			if ( RemoveMode == ext_DisconnectMode.ext_dm_UserClosed ) {
 				StringDictionary commandBarNames = new StringDictionary();
 				// Remove all commands and collect their command bar names
@@ -141,6 +147,7 @@ namespace Sqt.VisualStudio
 					CommandBar commandBar = GetCommandBar( commandBarName );
 					if ( commandBar != null && !commandBar.BuiltIn && commandBar.Controls.Count == 0 ) {
 						commandBar.Delete();
+                        Debug.WriteLine("Deleting Command-Bars");
 					}
 				}
 			}
@@ -183,13 +190,15 @@ namespace Sqt.VisualStudio
 		/// <param name="CommandText">The text to return if <see cref="F:EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedStatus"></see> is specified.</param>
 		void IDTCommandTarget.QueryStatus( string cmdName, vsCommandStatusTextWanted neededText, ref vsCommandStatus statusOption, ref object commandText )
 		{
+            Debug.WriteLine("QueryStatus("+cmdName+")");
+
 			if ( neededText == vsCommandStatusTextWanted.vsCommandStatusTextWantedNone ) {
 				if ( this.vsCommands.ContainsKey( cmdName ) ) {
 					VsCommand vsCommand = this.vsCommands[cmdName];
 					if ( vsCommand.CanExecute( new VsCommandEventArgs( this.application, this.addin ) ) ) {
 						statusOption = vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
 					} else {
-						statusOption = vsCommandStatus.vsCommandStatusUnsupported;
+                        statusOption = vsCommandStatus.vsCommandStatusSupported;
 					}
 				}
 			}
@@ -236,6 +245,8 @@ namespace Sqt.VisualStudio
 		/// <param name="vsCommand">The add in command properties</param>
 		private void AddIdeCommand( VsCommand vsCommand )
 		{
+            Debug.WriteLine("AddIdeCommand(" + vsCommand.Name + ")");
+
 			Command ideCommand = GetIdeCommand( vsCommand );
 
 			if ( ideCommand == null ) {

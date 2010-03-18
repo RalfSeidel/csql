@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_21557D6F05D947959E0007D88E88BFA8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_354902B44D0A4DA087698FD2659EF8BF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -63,8 +69,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7B6BE0D10D421EE97FD069078133A3A8"
+        "MsmKey" = "8:_902C66AB73914FF4F897BD2F8360D5AE"
         "OwnerKey" = "8:_1DBBBDD4A5654CEFABFED2C27588585D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_902C66AB73914FF4F897BD2F8360D5AE"
+        "OwnerKey" = "8:_21557D6F05D947959E0007D88E88BFA8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,7 +130,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7B6BE0D10D421EE97FD069078133A3A8"
+        "OwnerKey" = "8:_21557D6F05D947959E0007D88E88BFA8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -149,6 +161,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_354902B44D0A4DA087698FD2659EF8BF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_902C66AB73914FF4F897BD2F8360D5AE"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -423,14 +441,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7B6BE0D10D421EE97FD069078133A3A8"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_902C66AB73914FF4F897BD2F8360D5AE"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:csql.lib, Version=0.5.4.19215, Culture=neutral, PublicKeyToken=3b71d3c4424edfcf, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:csql.lib, Version=0.5.4.22113, Culture=neutral, PublicKeyToken=3b71d3c4424edfcf, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7B6BE0D10D421EE97FD069078133A3A8"
+                    "_902C66AB73914FF4F897BD2F8360D5AE"
                     {
                     "Name" = "8:csql.lib.dll"
                     "Attributes" = "3:512"
@@ -602,6 +620,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4A34927E6ED54E1F8BAFFBE0C06F61B5"
+                    {
+                    "Name" = "8:SQL Service GmbH"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E1FA423A04B74A298F1AFE68ACEC4283"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_BC26DBC3CD714CF48DB1740109540E66"
@@ -644,7 +673,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:csql"
         "ProductCode" = "8:{CFD868CF-02EA-4343-A199-3518FA145718}"
-        "PackageCode" = "8:{CB731BA0-DF59-4BA9-A132-660CF4F981BD}"
+        "PackageCode" = "8:{A435A054-2175-4918-BF18-922F45A770A1}"
         "UpgradeCode" = "8:{CED59ABF-5568-40FD-B1B9-A6935C4D27E6}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -763,6 +792,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_676A4ED6642C4D8B8C853D1E6D637CC1"
+            {
+            "Name" = "8:csql"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_21557D6F05D947959E0007D88E88BFA8"
+            "Folder" = "8:_4A34927E6ED54E1F8BAFFBE0C06F61B5"
+            "WorkingFolder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -1174,7 +1217,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_1DBBBDD4A5654CEFABFED2C27588585D"
             {
-            "SourcePath" = "8:..\\csql.addin\\obj\\Release\\csql.addin.dll"
+            "SourcePath" = "8:..\\csql.addin\\obj\\Debug\\csql.addin.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
@@ -1200,9 +1243,37 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_21557D6F05D947959E0007D88E88BFA8"
+            {
+            "SourcePath" = "8:..\\csql.exe\\obj\\Debug\\csql.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{15B41BEB-03B7-4B88-A6FA-A97F65202B43}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_354902B44D0A4DA087698FD2659EF8BF"
             {
-            "SourcePath" = "8:..\\setup.CustomActions\\obj\\Release\\csqlsetup.CustomActions.dll"
+            "SourcePath" = "8:..\\setup.CustomActions\\obj\\Debug\\csqlsetup.CustomActions.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"

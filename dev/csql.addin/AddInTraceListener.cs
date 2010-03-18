@@ -12,7 +12,7 @@ namespace csql.addin
 		{
 			this.dte = dte;
 		}
-
+         
 		public override void Write( string message )
 		{
 			if ( outputWindowPane == null ) {

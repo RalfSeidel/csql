@@ -45,9 +45,9 @@ namespace Setup.CustomActions
         {
             installContext.LogMessage("Removing AddIn - Links");
 
-            RemoveFileIfExists(GetVS2005Folder() + @"\Addins\sqtpp.AddIn");
-            RemoveFileIfExists(GetVS2008Folder() + @"\Addins\sqtpp.AddIn");
-            RemoveFileIfExists(GetVS2010Folder() + @"\Addins\sqtpp.AddIn");
+            RemoveFileIfExists(GetVS2005Folder() + @"\Addins\csql.AddIn");
+            RemoveFileIfExists(GetVS2008Folder() + @"\Addins\csql.AddIn");
+            RemoveFileIfExists(GetVS2010Folder() + @"\Addins\csql.AddIn");
         }
 
 		private void CreateDirectoryIfNotExisting( string directoryPath )
