@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace csql.addin.Settings
 {
@@ -23,10 +20,7 @@ namespace csql.addin.Settings
 		{
 			get
 			{
-				var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-				var assemblyDirectory = System.IO.Path.GetDirectoryName( assembly.Location );
-				var settingsPath = System.IO.Path.Combine( assemblyDirectory, "csql.addin.settings.xml" );
-				return settingsPath;
+                return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Sql Service GmbH\csql\settings.xml";
 			}
 		}
 
@@ -40,19 +34,14 @@ namespace csql.addin.Settings
 		public SettingsFilePersistensProvider( )
 		{
 			this.settingsPath = DefaultPath;
+
+		    if(! File.Exists(this.settingsPath))
+                SaveSettings(new SettingsCollection());
 		}
 
-		/// <summary>
-		/// Initializes the provider with an explicite path.
-		/// </summary>
-		/// <remarks>
-		/// This constructor is currently only used by the tests.
-		/// </remarks>
-		/// <param name="settingsPath">The settings file path.</param>
-		public SettingsFilePersistensProvider( string settingsPath )
-		{
-			this.settingsPath = settingsPath;
-		}
+
+
+
 
 		#region IStettingsPersistensProvider Members
 
@@ -106,6 +95,9 @@ namespace csql.addin.Settings
 		/// <param name="settings">The settings to save.</param>
 		public void SaveSettings( SettingsCollection settings )
 		{
+            if(! Directory.Exists(Path.GetDirectoryName(this.settingsPath)))
+                Directory.CreateDirectory(Path.GetDirectoryName(this.settingsPath));
+
 			using ( TextWriter textWriter = new StreamWriter( this.settingsPath ) ) {
 				XmlSerializer xmlSerializer = new XmlSerializer( settings.GetType() );
 				xmlSerializer.Serialize( textWriter, settings );

@@ -166,10 +166,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="C:\Users\Ralf\Documents\Visual Studio 2008\Addins\csqladdin - For Testing.AddIn">
-      <Link>csqladdin - For Testing.AddIn</Link>
-    </Content>
-    <Content Include="csqladdin.addin" />
+    <Content Include="csql.addin" />
     <EmbeddedResource Include="Resources\Images\Commands\GroupFiles.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\LocateFile.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\ExecuteScript.bmp" />
