@@ -237,7 +237,7 @@ namespace csql
 							case LineType.Exec:
 								string batch = m_batchBuilder.ToString();
 								if ( !IsWhiteSpaceOnly( batch ) ) {
-									CheckedProcessBatch( m_batchBuilder.ToString() );
+									CheckedProcessBatch( batch );
 									m_currentBatchNo++;
 								}
 								m_batchBuilder.Length = 0;

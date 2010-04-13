@@ -136,6 +136,7 @@
   <ItemGroup>
     <None Include="csql.FxCop" />
     <None Include="csql.snk" />
+    <None Include="Test\Input\ErrorLineTest_5.sql" />
     <None Include="Test\Input\DependencyWarning.sql" />
     <None Include="Test\Input\ErrorAfterInclude.sql" />
     <None Include="Test\Input\ErrorLineTest_2.sql" />

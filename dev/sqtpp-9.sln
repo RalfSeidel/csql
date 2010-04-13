@@ -52,12 +52,12 @@ Global
 		SccProjectUniqueName6 = sqtpp.test\\sqtpp.test.vcproj
 		SccProjectName6 = sqtpp.test
 		SccLocalPath6 = sqtpp.test
-		SccProjectUniqueName7 = setup.CustomActions\\setup.CustomActions.csproj
-		SccProjectName7 = setup.CustomActions
-		SccLocalPath7 = setup.CustomActions
-		SccProjectUniqueName8 = setup\\setup.vdproj
-		SccProjectName8 = setup
-		SccLocalPath8 = setup
+		SccProjectUniqueName7 = setup\\setup.vdproj
+		SccProjectName7 = setup
+		SccLocalPath7 = setup
+		SccProjectUniqueName8 = setup.CustomActions\\setup.CustomActions.csproj
+		SccProjectName8 = setup.CustomActions
+		SccLocalPath8 = setup.CustomActions
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = sqtpp-9.vsmdi
@@ -180,7 +180,6 @@ Global
 		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|Any CPU.ActiveCfg = Debug
 		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|Any CPU.Build.0 = Debug
 		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|Mixed Platforms.Build.0 = Debug
 		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|x64.ActiveCfg = Debug
 		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|x64.Build.0 = Debug
 		{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}.Debug|x86.ActiveCfg = Debug
