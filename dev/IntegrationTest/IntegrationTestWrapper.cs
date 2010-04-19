@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace IntegrationTest
 {
@@ -29,6 +30,8 @@ namespace IntegrationTest
             string path = Application.ExecutablePath;
 
             ComparerResult comparerResult = comparerContainer.Compare();
+            if (!comparerResult.IsEqual)
+                Debug.WriteLine(comparerResult.Message);
 
             Assert.IsTrue(comparerResult.IsEqual, comparerResult.Message);
         }

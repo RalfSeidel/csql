@@ -23,11 +23,11 @@ namespace IntegrationTest
             foreach (IComparer item in this.Comparers)
             {
                 ComparerResult itemComparerResult = item.Compare();
+                
                 if (!itemComparerResult.IsEqual)
-                {
                     comparerResult.IsEqual = false;
-                    comparerResult.Message += itemComparerResult.Message + "\n";
-                }
+                
+                comparerResult.Message += itemComparerResult.Message + "\n";
             }
 
             return comparerResult;

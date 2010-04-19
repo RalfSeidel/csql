@@ -54,8 +54,8 @@ namespace IntegrationTest
 
             ComparerResult comparerResult = fileComparer.Compare();
 
-            if (!comparerResult.IsEqual)
-                comparerResult.Message = this.inputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + ") : " + comparerResult.Message;
+            string identifier = this.inputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + ") : ";
+            comparerResult.Message = identifier + comparerResult.Message;
 
             return comparerResult;
         }

@@ -71,6 +71,7 @@ namespace IntegrationTest
                 }
             }
 
+            comparerResult.Message = "Test passed";
             comparerResult.IsEqual = true;
             return comparerResult;
         }
