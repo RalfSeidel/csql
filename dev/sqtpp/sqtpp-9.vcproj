@@ -27,7 +27,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			ManagedExtensions="0"
 			>
@@ -67,18 +67,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				AssemblyDebug="1"
-				SubSystem="1"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -90,9 +82,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -100,7 +89,7 @@
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
@@ -140,17 +129,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				TargetMachine="17"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -162,9 +144,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -172,7 +151,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -221,18 +200,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="1"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -244,9 +215,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -254,7 +222,7 @@
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -302,18 +270,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="1"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="17"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -323,9 +283,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -446,10 +403,6 @@
 			</File>
 			<File
 				RelativePath=".\Scanner.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\sqtpp.cpp"
 				>
 			</File>
 			<File
@@ -583,10 +536,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scanner.h"
 				>
 			</File>
@@ -616,940 +565,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\res\sqtpp.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\sqtpp.rc"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Test Files"
-			ParseFiles="false"
-			>
-			<File
-				RelativePath=".\test\BuildinTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\BuildinTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\CmdArgsTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\CmdArgsTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ConvertTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ConvertTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\DirectiveTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\DirectiveTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ErrorTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ErrorTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ExpressionTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ExpressionTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\FileTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\FileTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\MacroTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\MacroTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\NStringStreamTest.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\test\NStringStreamTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ProcessorTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ProcessorTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ScannerTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\ScannerTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\StreamsTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\StreamsTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\Test.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\Test.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\TokenTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\TokenTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\Utf7ConverterTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\Utf7ConverterTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\test\Utf8ConverterTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\test\Utf8ConverterTest.h"
-				>
-			</File>
-			<Filter
-				Name="sql"
-				>
-				<File
-					RelativePath=".\test\sql\CreateDefault.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\CreateInlineFunction.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\CreateRule.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\CreateType.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DbMacros.h"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DbMacrosDoc.cfg"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DbMarcosDoc.bat"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DropAllForeignKeys.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DropAllIndexes.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DropCreate.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\DropForeignKey.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\ObjectInfo.csql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\print1252.sql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\printutf16.sql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\printutf16be.sql"
-					>
-				</File>
-				<File
-					RelativePath=".\test\sql\printutf8.sql"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="cmd"
-				>
-				<File
-					RelativePath=".\test\cmd\readme.txt"
-					>
-				</File>
-				<File
-					RelativePath=".\test\cmd\run.bat"
-					>
-				</File>
-				<Filter
-					Name="input"
-					ParseFiles="false"
-					>
-					<File
-						RelativePath=".\test\cmd\input\ansiabc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\buildin.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\BuildinEval.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\charize.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\concate.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\concate2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ConditionalTest1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ConditionalTest2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\CP1252.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\CP850.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define2Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define3Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define4Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define5Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define6Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Define7Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1004-2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1012-1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1012-2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1014.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1017B.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1017C.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1018.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1019.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1020.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1021.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1070.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1071.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC1082.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2006.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2007.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2008.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2010-1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2010-2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2010-3.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2010-4.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2010-5.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2015.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2124.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2160.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC2161.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC4002.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC4006.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC4067.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC4067B.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ErrC4117.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\error.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\If1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\If2Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Ifdef1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\Ifndef1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\include1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\include2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\include3.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\message.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\mixedcp.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\multiline.sql"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\nested.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\ninclude.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\once.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\quote.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\stringize.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\temptable.sql"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\unicode.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\UTF16.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\UTF16BE.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\utf8.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\utf8abc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\utfabc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\utfbeabc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\input\&#1056;&#1086;&#1089;&#1089;&#1080;&#1103;.txt"
-						>
-					</File>
-					<Filter
-						Name="include"
-						>
-						<File
-							RelativePath=".\test\cmd\input\include\mixedcp_1252.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\mixedcp_utf16.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\mixedcp_utf16be.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\mixedcp_utf8.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\ninclude1.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\ninclude2.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\once_explicite.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\once_implicite.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\rinclude1.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\rinclude2.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\include\rinclude3.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="special"
-						>
-						<File
-							RelativePath=".\test\cmd\input\special\emitline1.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\special\emitline2.h"
-							>
-						</File>
-						<File
-							RelativePath=".\test\cmd\input\special\findfile.h"
-							>
-						</File>
-						<Filter
-							Name="include"
-							>
-							<File
-								RelativePath=".\test\cmd\input\special\include\emitline2_1.h"
-								>
-							</File>
-							<File
-								RelativePath=".\test\cmd\input\special\include\emitline2_2.h"
-								>
-							</File>
-							<File
-								RelativePath=".\test\cmd\input\special\include\findfile_include.h"
-								>
-							</File>
-						</Filter>
-					</Filter>
-				</Filter>
-				<Filter
-					Name="reference"
-					>
-					<File
-						RelativePath=".\test\cmd\reference\ansiabc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\buildin.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\BuildinEval.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\charize.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\concate.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\concate2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ConditionalTest1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ConditionalTest2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\CP1252.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\CP850.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define2Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define3Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define4Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define5Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define6Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Define7Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1004-2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1012-1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1012-2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1014.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1017B.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1017C.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1018.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1019.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1020.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1021.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1070.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1071.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC1082.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2006.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2007.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2008.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2010-1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2010-2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2010-3.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2010-4.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2010-5.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2015.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2124.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2160.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC2161.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC4002.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC4006.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC4067.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC4067B.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\ErrC4117.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\error.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\If1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\If2Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Ifdef1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\Ifndef1Test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\include1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\include2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\include3.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\message.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\mixedcp.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\multiline.sql"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\nested.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\once.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\quote.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\russia.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\special_emitline1.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\special_emitline2.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\stringize.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\temptable.sql"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\test.h"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\unicode.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\UTF16.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\UTF16BE.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\utf8.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\utf8abc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\utfabc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\utfbeabc.txt"
-						>
-					</File>
-					<File
-						RelativePath=".\test\cmd\reference\&#1056;&#1086;&#1089;&#1089;&#1080;&#1103;.txt"
-						>
-					</File>
-				</Filter>
-			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\mkzip.bat"

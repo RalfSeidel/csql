@@ -476,7 +476,7 @@ void CmdArgs::setEliminateEmptyLines( Options& options, const wchar_t* pwszArgum
 /**
 ** @brief /i Set the path of the input file.
 */
-void CmdArgs::setInputFile( Options& options, const wchar_t* pwszArgument )
+void CmdArgs::setInputFile( Options& /* options */, const wchar_t* pwszArgument )
 {
 	if ( *pwszArgument == L'\0' ) {
 		// {1} requires {2}; option ignored

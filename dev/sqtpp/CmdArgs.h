@@ -12,9 +12,6 @@
 #endif
 
 namespace sqtpp {
-namespace test {
-	class CmdArgsTest;
-}
 
 
 class Options;
@@ -59,7 +56,9 @@ public:
 	// Get the files to process.
 	const StringArray& getFiles();
 
-	// Get the macros defined a
+
+	/// @brief For testing: set option to ignore incomplete arguments.
+	void ignoreMissingArgs( const bool bIgnore ) { m_bIgnoreMissingArgs = bIgnore; }
 
 private:
 	// Handle /?
@@ -104,12 +103,8 @@ private:
 	// Handle /k
 	void setKeepComments( Options& options, const wchar_t* pwszArgument );
 
-	void ignoreMissingArgs( const bool bIgnore ) { m_bIgnoreMissingArgs = bIgnore; }
-
 	// Check the argument and elminiate leading and trailing quotes.
 	static wstring getFilePath( const wchar_t* pwszArgument );
-
-	friend class sqtpp::test::CmdArgsTest;
 };
 
 

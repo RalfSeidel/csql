@@ -20,14 +20,26 @@ public:
 	virtual ~TestBase();
 
 	/// <summary>
-	///Gets or sets the test context which provides
-	///information about and functionality for the current test run.
-	///</summary>
+	/// Gets or sets the test context which provides
+	/// information about and functionality for the current test run.
+	/// </summary>
 	property Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ TestContext
 	{
 		Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ get();
 		System::Void set( Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ value );
 	};
+
+
+	/// <summary>
+	/// Gets the directory where the input files of some tests are located.
+	/// information about and functionality for the current test run.
+	/// </summary>
+	property wstring TestFileDirectory
+	{
+		wstring get();
+	}
+
+
 
 
 	[AssemblyInitialize]
@@ -42,6 +54,7 @@ public:
 	[ClassCleanup]
 	static void ClassCleanup();
 
+protected:
 	void LogCurrentTest();
 };
 

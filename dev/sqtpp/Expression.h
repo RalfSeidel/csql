@@ -14,12 +14,10 @@
 #include "Token.h"
 
 namespace sqtpp {
-	class MacroSet;
-	class TokenExpression;
-	class TokenExpressions;
-};
 
-namespace sqtpp {
+class MacroSet;
+class TokenExpression;
+class TokenExpressions;
 
 class Expression
 {

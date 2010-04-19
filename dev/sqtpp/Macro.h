@@ -232,6 +232,8 @@ public:
 */
 class MacroSet : public std::map<std::wstring, Macro> 
 {
+public:
+	MacroSet();
 };
 
 /**
@@ -239,6 +241,8 @@ class MacroSet : public std::map<std::wstring, Macro>
 */
 class MacroArgumentValues : public std::vector<TokenExpressions> 
 {
+public:
+	MacroArgumentValues();
 };
 
 

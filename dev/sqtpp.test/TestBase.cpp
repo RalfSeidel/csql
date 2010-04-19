@@ -2,6 +2,8 @@
 #include "TestBase.h"
 #using <mscorlib.dll>
 
+using namespace Microsoft::VisualStudio::TestTools::UnitTesting;
+
 namespace sqtpp {
 namespace test {
 
@@ -42,6 +44,14 @@ TestContext^ TestBase::TestContext::get()
 System::Void TestBase::TestContext::set( Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ value )
 {
 	m_testContext = value;
+}
+
+/**
+** \brief Get the current test context.
+*/
+wstring TestBase::TestFileDirectory::get()
+{
+	return L"..\\..\\..\\IntegrationTest\\files\\sqtpp\\input\\";
 }
 
 
