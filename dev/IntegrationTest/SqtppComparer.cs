@@ -33,16 +33,35 @@ namespace IntegrationTest
 
         private void ExecuteSqtpp()
         {
-            string argumens = "-o" + this.outputFile + " " + this.inputFile;
+            string arguments = this.inputFile;
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(options.PathToSqtpp,argumens);
+            StringBuilder output = new StringBuilder();
+
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(options.PathToSqtpp, arguments);
             processStartInfo.CreateNoWindow = true;
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.UseShellExecute = false;
+            processStartInfo.WorkingDirectory = options.WorkingDirectory;
+
             Process process = new Process();
             process.StartInfo = processStartInfo;
+            process.OutputDataReceived += (s, e) => { if (e.Data != null) output.Append(e.Data + "\r\n"); };
+            process.ErrorDataReceived += (s, e) => { if (e.Data != null) output.Append(e.Data + "\r\n"); };
 
             process.Start();
+
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
             process.WaitForExit();
+
+            StreamWriter streamWriter = new StreamWriter(this.outputFile);
+            streamWriter.Write(output);
+            streamWriter.Close();
         }
+
+
 
         #region IComparer Members
 
@@ -50,7 +69,7 @@ namespace IntegrationTest
         {
             ExecuteSqtpp();
 
-            FileComparer fileComparer = new FileComparer(this.outputFile, this.referenceOutput);
+            FileComparer fileComparer = new FileComparer(this.outputFile, this.options.WorkingDirectory + this.referenceOutput);
 
             ComparerResult comparerResult = fileComparer.Compare();
 

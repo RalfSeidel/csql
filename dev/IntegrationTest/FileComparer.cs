@@ -19,7 +19,9 @@ namespace IntegrationTest
         private void LoadLinesFromFileIntoList(string path, List<string> list)
         {
             if (!File.Exists(path))
+            {
                 throw new FileNotFoundException("File '" + path + "' was not found.");
+            }
 
             StreamReader streamReader = new StreamReader(path, System.Text.Encoding.Default);
 
@@ -45,10 +47,20 @@ namespace IntegrationTest
             List<string> linesOfFirstFile = new List<string>();
             List<string> linesOfSecondFile = new List<string>();
 
-            LoadLinesFromFileIntoList(this.pathOfFirstFile, linesOfFirstFile);
-            LoadLinesFromFileIntoList(this.pathOfSecondFile, linesOfSecondFile);
-
             ComparerResult comparerResult = new ComparerResult();
+
+            try
+            {
+                LoadLinesFromFileIntoList(this.pathOfFirstFile, linesOfFirstFile);
+                LoadLinesFromFileIntoList(this.pathOfSecondFile, linesOfSecondFile);
+            }
+            catch (Exception exception)
+            {
+                comparerResult.IsEqual = false;
+                comparerResult.Message = "Exception during comparing files: " + exception.Message;
+            }
+
+            
 
             if (linesOfFirstFile.Count != linesOfSecondFile.Count)
             {

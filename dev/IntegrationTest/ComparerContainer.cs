@@ -27,7 +27,7 @@ namespace IntegrationTest
                 if (!itemComparerResult.IsEqual)
                     comparerResult.IsEqual = false;
                 
-                comparerResult.Message += itemComparerResult.Message + "\n";
+                comparerResult.Message += itemComparerResult.Message + "\r\n";
             }
 
             return comparerResult;
