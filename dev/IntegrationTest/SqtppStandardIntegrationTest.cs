@@ -5,16 +5,15 @@ using System.IO;
 namespace IntegrationTest
 {
     [TestClass]
-    public class SqtppIntegrationTest
+    public class SqtppStandardIntegrationTest
     {
         [TestMethod]
-        public void IntegrationTestWrapperMethod()
+        public void ExecuteTest()
         {
             SqtppComparerOptions options = new SqtppComparerOptions {
                 PathToSqtpp = @"D:\src\sqtpp\dev\Debug\sqtpp.exe",
-                PathToInputFiles = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\input\",
-                PathToReferenceFiles = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\reference\",
-                WorkingDirectory = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\"
+                PathToWorkingDirectory = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\",
+                OptionalArgumentsString = ""
             };
 
             string directory = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\input\";

@@ -9,56 +9,41 @@ namespace IntegrationTest
     public class SqtppComparer : IComparer
     {
 
-        private string inputFile;
-        private string outputFile;
-        private string referenceOutput;
+        private string relativePathToInputFile;
+        private string relativePathToReferenceOutputFile;
+        private string sqtppOutputFile;
         SqtppComparerOptions options;
 
-        public SqtppComparer(string pathToInputFile, string pathToReferenceOutputFile, SqtppComparerOptions options)
+        public SqtppComparer(string relativePathToInputFile, string relativePathToReferenceOutputFile, SqtppComparerOptions options)
         {
-            this.inputFile = pathToInputFile;
-            this.referenceOutput = pathToReferenceOutputFile;
-            this.outputFile = Path.GetTempFileName();
+            this.relativePathToInputFile = relativePathToInputFile;
+            this.relativePathToReferenceOutputFile = relativePathToReferenceOutputFile;
+
+            this.sqtppOutputFile = Path.GetTempFileName();
             this.options = options;
         }
 
-        public SqtppComparer(string fileName, SqtppComparerOptions options)
-        {
-            this.inputFile = options.PathToInputFiles + fileName;
-            this.referenceOutput = options.PathToReferenceFiles + fileName;
-            this.outputFile = Path.GetTempFileName();
-            this.options = options;
-        }
-
-
+      
         private void ExecuteSqtpp()
         {
-            string arguments = this.inputFile;
+            string arguments = this.options.OptionalArgumentsString + " -O" + this.sqtppOutputFile + " " + this.relativePathToInputFile;
+
+            if (this.relativePathToInputFile.Contains("findfile.h"))
+                Debugger.Break();
 
             StringBuilder output = new StringBuilder();
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo(options.PathToSqtpp, arguments);
             processStartInfo.CreateNoWindow = true;
-            processStartInfo.RedirectStandardOutput = true;
-            processStartInfo.RedirectStandardError = true;
             processStartInfo.UseShellExecute = false;
-            processStartInfo.WorkingDirectory = options.WorkingDirectory;
+            processStartInfo.WorkingDirectory = options.PathToWorkingDirectory;
 
             Process process = new Process();
             process.StartInfo = processStartInfo;
-            process.OutputDataReceived += (s, e) => { if (e.Data != null) output.Append(e.Data + "\r\n"); };
-            process.ErrorDataReceived += (s, e) => { if (e.Data != null) output.Append(e.Data + "\r\n"); };
 
             process.Start();
 
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
             process.WaitForExit();
-
-            StreamWriter streamWriter = new StreamWriter(this.outputFile);
-            streamWriter.Write(output);
-            streamWriter.Close();
         }
 
 
@@ -69,11 +54,11 @@ namespace IntegrationTest
         {
             ExecuteSqtpp();
 
-            FileComparer fileComparer = new FileComparer(this.outputFile, this.options.WorkingDirectory + this.referenceOutput);
+            FileComparer fileComparer = new FileComparer(this.sqtppOutputFile, this.options.PathToWorkingDirectory + this.relativePathToReferenceOutputFile);
 
             ComparerResult comparerResult = fileComparer.Compare();
 
-            string identifier = this.inputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + ") : ";
+            string identifier = this.options.PathToWorkingDirectory + this.relativePathToInputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + ") : ";
             comparerResult.Message = identifier + comparerResult.Message;
 
             return comparerResult;
