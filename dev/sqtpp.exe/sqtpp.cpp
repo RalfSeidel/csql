@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Options.h"
+#include "Output.h"
 #include "CmdArgs.h"
 #include "Error.h"
 #include "Streams.h"
@@ -30,26 +31,33 @@ int wmain(int argc, const wchar_t* const argv[])
 #	endif
 #	endif
 
-	Options  options;
+	Options   options;
+	Output*   pOutput = NULL;
 	Processor cpp( options );
-
+	wostream* pErrStream = &wcerr;
 
 	try {
 		CmdArgs  cmdargs( argc, argv );
 		try {
 			cmdargs.parse( options );
 		} catch ( const error::Error& error ) {
-			wcerr << error;
+			(*pErrStream) << error;
 			return 1;
 		} catch ( const std::exception& ex ) {
-			wcerr << ex.what();
+			(*pErrStream) << ex.what();
 			return 3;
 		}
 		const StringArray& files = cmdargs.getFiles();
 
+		pOutput = Output::createOutput( options );
+		pErrStream = &pOutput->getErrStream();
+
+		cpp.setOutput( pOutput );
+
 		if ( files.size() == 0 ) {
 			throw error::D8003();
 		}
+
 		StringArray::const_iterator it = files.begin();
 		while ( it != files.end() ) {
 			const wstring& fileName = *it;
@@ -58,10 +66,11 @@ int wmain(int argc, const wchar_t* const argv[])
 		}
 		cpp.close();
 	} catch ( const error::Error& error ) {
-		wcerr << error;
+		(*pErrStream)  << error;
 	} catch ( const std::exception& ex ) {
-		wcerr << ex.what();
+		(*pErrStream)  << ex.what();
 	}
+	delete pOutput;
 
 #	ifdef _DEBUG
 #	ifdef WIN32

@@ -9,6 +9,7 @@ namespace sqtpp {
 namespace test {
 
 [TestClass]
+[Ignore]
 public ref class NStringStreamTest : public TestBase
 {
 public:

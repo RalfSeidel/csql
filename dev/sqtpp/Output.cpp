@@ -89,6 +89,8 @@ public:
 */
 Output::Output( std::wostream& outStream )
 : m_outStream( outStream )
+, m_pErrStream( &std::wcerr )
+, m_pLogStream( &std::wclog )
 {
 }
 
@@ -115,25 +117,26 @@ Output* Output::createOutput( const Options& options )
 		wcout.imbue( codePageLocale );
 		pOutput = new ConsoleOutput();
 	} else {
-		FILE* file = _wfopen( sOutputFile.c_str(), L"wbS" );
+		const bool useTextOutput = options.getNewLineOutput() == Options::NLO_OS_DEFAULT;
+		const wchar_t* pszOpenMode = useTextOutput ? L"wtS" : L"wbS";
+		FILE* file = _wfopen( sOutputFile.c_str(), pszOpenMode );
 		if ( file == NULL ) {
 			throw error::C1083( sOutputFile );
 		}
 		std::wofstream* pOutStream = new std::wofstream( file );
 		pOutStream->imbue( codePageLocale );
 
-		//pOutStream->open( sOutputFile.c_str(), std::ios::out | std::ios::binary );
-		//if ( pOutStream->fail() ) {
-		//	throw error::C1083( sOutputFile );
-		//}
 		pOutStream->exceptions( wofstream::failbit | wofstream::badbit );
 
 		pOutput = new FileOutput( pOutStream );
 		if ( codePageInfo.getFileBom() != NULL ) {
 			fputs( codePageInfo.getFileBom(), file );
-			//pOutput->getStream() << codePageInfo.getFileBomW();
-
 		}
+	}
+
+	if ( options.writeErrorsToOutput() ) {
+		pOutput->m_pErrStream = &pOutput->m_outStream;
+		pOutput->m_pLogStream = &pOutput->m_outStream;
 	}
 
 	return pOutput;

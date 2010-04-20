@@ -46,8 +46,10 @@ Options::Options()
 	m_bEliminateEmptyLines     = false;
 	m_bIgnoreCWD               = false;
 	m_bUndefAllBuildin         = false;
-	m_bSupportAdSalesNG        = true;
 	m_bVerbose                 = false;
+	m_bWriteErrorsToOutput     = false;
+	m_bSupportAdSalesNG        = true;
+
 	m_nInputCodePage           = 1252;
 	m_nOutputCodePage          = 1252;
 

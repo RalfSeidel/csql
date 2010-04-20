@@ -50,6 +50,9 @@ void CmdArgs::usage()
 	wcout << L"-?              " << L"Show this help" << endl;
 	wcout << L"-V              " << L"Verbose message output" << endl;
 	wcout << L"-o              " << L"Output path. If ommited the ouput will be send to stdout." << endl;
+	wcout << L"-O              " << L"Output path for the emitted code aswell as error messages." << endl;
+	wcout << L"                This option is used for tests than want all sqtpp output in a" << endl;
+	wcout << L"                single file." << endl;
 	wcout << L"-C[io]Codepage  " << L"Set codepage of input and and ouput." << endl;
 	wcout << L"                List of supported code pages:" << endl;
 
@@ -142,6 +145,10 @@ void CmdArgs::parse( Options& options )
 					break;
 				case L'o':
 					setOutputFile( options, &pszArgument[2] );
+					break;
+				case L'O':
+					setOutputFile( options, &pszArgument[2] );
+					options.writeErrorsToOutput( true );
 					break;
 				default:
 					// Invalid argument {1}.

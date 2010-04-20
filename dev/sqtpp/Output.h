@@ -26,6 +26,10 @@ class Output
 private:
 	/// The output stream.
 	std::wostream& m_outStream;
+	/// The error out stream (wcerr by default).
+	std::wostream* m_pErrStream;
+	/// The log out stream (wclog by default).
+	std::wostream* m_pLogStream;
 
 protected:
 	Output( std::wostream& outStream );
@@ -37,6 +41,16 @@ public:
 	std::wostream& getStream()
 	{
 		return m_outStream;
+	}
+
+	std::wostream& getErrStream()
+	{
+		return *m_pErrStream;;
+	}
+
+	std::wostream& getLogStream()
+	{
+		return *m_pLogStream;;
 	}
 
 private:

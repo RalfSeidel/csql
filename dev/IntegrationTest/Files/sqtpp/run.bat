@@ -57,7 +57,7 @@ if not "%7" == "" set test_args=%test_args% %7
 if not "%8" == "" set test_args=%test_args% %8
 if not "%9" == "" set test_args=%test_args% %9
 rem echo %sqtpp% -iinput\%test_i% %test_args% ^> sqtppout\%test_o% 
-%sqtpp% -iinput\%test_i% %test_args% > sqtppout\%test_o% 2>&1 
+%sqtpp% -iinput\%test_i% %test_args% -Osqtppout\%test_o%
 fc /b sqtppout\%test_o% reference\%test_o% >nul
 if errorlevel 1 (
 	echo %test_i% failed

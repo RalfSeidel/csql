@@ -111,11 +111,9 @@ private:
 	/// The output stream.
 	Output*            m_pOutput;
 
-	/// The error out stream (wcerr).
-	std::wostream*     m_pErrStream;
-
-	/// The log out stream (wclog).
-	std::wostream*     m_pLogStream;
+	/// Flag that is set if the output is defined externaly 
+	/// i.e. not the default output managed by processor itself.
+	bool               m_bExternalOutput;
 
 	/// Number of lines read so far.
 	size_t             m_nProcessedLines;
@@ -160,14 +158,11 @@ public:
 	// Destructor.
 	~Processor();
 
+	// Set the output.
+	void setOutput( Output* pOutput );
+
 	// Override the default ouput stream (wcout).
 	void setOutStream( std::wostream& output );
-
-	// Override the default error out stream (wcerr).
-	void setErrStream( std::wostream& error );
-
-	// Override the default log out stream (wclog).
-	void setLogStream( std::wostream& error );
 
 	// Get the maximal severity of messages emitted during processing the input.
 	int getMaxMessageSeverity() const throw() { return m_nMaxMsgSeverity; }

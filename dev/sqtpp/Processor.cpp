@@ -86,8 +86,7 @@ Processor::Processor( Options& options )
 , m_nSkippedLineCount( 0 )
 , m_pTokenStream( NULL )
 , m_pOutput( NULL )
-, m_pErrStream( &std::wcerr )
-, m_pLogStream( &std::wclog )
+, m_bExternalOutput( false )
 , m_pTestTimestamp( NULL )
 //, m_pIStream( NULL )
 {
@@ -99,7 +98,8 @@ Processor::Processor( Options& options )
 */
 Processor::~Processor()
 {
-	delete m_pOutput;
+	if ( !m_bExternalOutput )
+		delete m_pOutput;
 	delete m_pScanner;
 	delete &m_conditionalStack;
 	delete &m_tokenStreamStack;
@@ -121,6 +121,19 @@ void Processor::close()
 }
 
 /**
+** @brief Set the output used for emitting the code and error messages.
+*/
+// 
+void Processor::setOutput( Output* pOutput )
+{
+	if ( !m_bExternalOutput ) 
+		delete m_pOutput;
+	m_pOutput = pOutput;
+	m_bExternalOutput = true;
+}
+
+
+/**
 ** @brief Set the stream to which the processor will write the result.
 **
 ** @attention The processor stores a pointer to the submitted reference.
@@ -129,32 +142,12 @@ void Processor::close()
 void Processor::setOutStream( std::wostream& output )
 {
 	Output* pOutput = Output::createOutput( output );
-	delete m_pOutput;
+	if ( !m_bExternalOutput ) 
+		delete m_pOutput;
 	m_pOutput = pOutput;
+	m_bExternalOutput = false;
 }
 
-/**
-** @brief Set the stream to which the processor will write informatioal, 
-** warning and error messages.
-**
-** @attention The processor stores a pointer to the submitted reference.
-** Do not pass a local variable.
-*/
-void Processor::setErrStream( std::wostream& output )
-{
-	m_pErrStream = &output;
-}
-
-/**
-** @brief Set the stream to which the processor will write log / trace messages.
-**
-** @attention The processor stores a pointer to the submitted reference.
-** Do not pass a local variable.
-*/
-void Processor::setLogStream( std::wostream& output )
-{
-	m_pLogStream = &output;
-}
 
 /**
 ** @brief Get the current scan/processing context.
@@ -300,7 +293,7 @@ void Processor::emitMessage( error::Error& error ) const
 		error.setFileInfo( file );
 	}
 
-	(*this->m_pErrStream) << error;
+	m_pOutput->getErrStream() << error;
 
 	if ( error.getSeverity() > m_nMaxMsgSeverity )
 		m_nMaxMsgSeverity = error.getSeverity();
@@ -370,7 +363,7 @@ void Processor::processStream( std::wistream& input )
 
 		if ( error.getFilePath().empty() ) {
 			error.setFileInfo( file );
-			(*m_pErrStream) << error;
+			m_pOutput->getErrStream() << error;
 		}
 		if ( !m_fileStack.empty() ) {
 			throw;
@@ -379,7 +372,7 @@ void Processor::processStream( std::wistream& input )
 		wstring message = Convert::str2wcs( ex.what() );
 		error::C1001 error( message );
 		error.setFileInfo( file );
-		(*m_pErrStream) << error;
+		m_pOutput->getErrStream() << error;
 		if ( !m_fileStack.empty() ) {
 			throw error;
 		}
@@ -428,7 +421,7 @@ void Processor::processFile( const std::wstring& fileName )
 
 		if ( error.getFilePath().empty() ) {
 			error.setFileInfo( file );
-			(*m_pErrStream) << error;
+			m_pOutput->getErrStream() << error;
 		}
 		if ( !m_fileStack.empty() ) {
 			throw;
@@ -438,7 +431,7 @@ void Processor::processFile( const std::wstring& fileName )
 		error::C1001 error( message );
 		error.setFileInfo( file );
 		if ( m_fileStack.empty() ) {
-			(*m_pErrStream) << error;
+			m_pOutput->getErrStream() << error;
 		} else {
 			throw error;
 		}
@@ -540,6 +533,7 @@ void Processor::applyOptions()
 
 	if ( m_pOutput == NULL ) {
 		m_pOutput = Output::createOutput( m_options );
+		m_bExternalOutput = false;
 	}
 
 	// Add buildin macros.
@@ -1826,7 +1820,7 @@ void Processor::processIncludeDirective()
 				bDoInclude = false;
 				break;
 			} else {
-				(*m_pLogStream) << L"Warning: " << sFilePath << L" has already been included." << endl;
+				m_pOutput->getLogStream() << L"Warning: " << sFilePath << L" has already been included." << endl;
 				includedCt++;
 			}
 		}
@@ -1844,7 +1838,7 @@ void Processor::processIncludeDirective()
 
 	if ( bDoInclude ) {
 		if (m_options.verbose())
-			(*m_pLogStream) << L"including " << sFilePath << endl;
+			m_pOutput->getLogStream() << L"including " << sFilePath << endl;
 
 		if ( includedCt > 1 ) {
 			throw error::C1014( sFilePath );

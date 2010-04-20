@@ -440,6 +440,14 @@ private:
 	bool	 m_bVerbose;
 
 	/**
+	** @brief Option to let sqtpp write all error messages
+	** to the normal output. 
+	** This option is used to support test scenarios than expect all 
+	** output in a single file 
+	*/
+	bool     m_bWriteErrorsToOutput;
+
+	/**
 	** @brief The codepage of the input.
 	** 
 	** Default is 1252 (ANSI - Latin I).
@@ -659,10 +667,14 @@ public:
 
 	/// Check if empty line should be suppressed.
 	bool eliminateEmptyLines() const throw()          { return m_bEliminateEmptyLines; }
-
 	/// Set if empty line should be suppressed.
 	void eliminateEmptyLines( bool bEliminate ) throw() { m_bEliminateEmptyLines = bEliminate; }
 
+
+	/// Get option it sqtpp uses the default output stream for error messages.
+	bool writeErrorsToOutput() const throw()          { return m_bWriteErrorsToOutput; }
+	/// Set option to let sqtpp use the default output stream for error messages.
+	void writeErrorsToOutput( bool bValue ) throw()   { m_bWriteErrorsToOutput = bValue; }
 
 	/// Add the given directories to the array of included directories.
 	void addIncludeDirectories( const wchar_t* pwszIncludeDirectories );
