@@ -10,17 +10,20 @@ namespace IntegrationTest
         [TestMethod]
         public void ExecuteTest()
         {
+			string testFileDirectory = Environment.TestFileDirectory;
+			string pathToSqtpp = Environment.PathToSqtpp;
+
+
             SqtppComparerOptions options = new SqtppComparerOptions {
-                PathToSqtpp = @"D:\src\sqtpp\dev\Debug\sqtpp.exe",
-                PathToWorkingDirectory = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\",
+				PathToSqtpp = pathToSqtpp,
+				PathToWorkingDirectory = Environment.WorkingDirectory,
                 OptionalArgumentsString = ""
             };
 
-            string directory = @"D:\src\sqtpp\dev\IntegrationTest\Files\sqtpp\input\";
 
-            ComparerContainer comparerContainer = new ComparerContainer();
-            
-            foreach (string item in Directory.GetFiles(directory))
+			ComparerContainer comparerContainer = new ComparerContainer();
+
+			foreach ( string item in Directory.GetFiles( testFileDirectory ) )
                 comparerContainer.Comparers.Add(new SqtppComparer( @"input\" + Path.GetFileName(item), @"reference\" + Path.GetFileName(item), options));
 
             ComparerResult comparerResult = comparerContainer.Compare();

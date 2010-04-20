@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ComparerContainer.cs" />
     <Compile Include="ComparerResult.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="SqtppSpecialIntegrationTest.cs" />
     <Compile Include="FileComparer.cs" />
     <Compile Include="IComparer.cs" />
@@ -248,9 +249,6 @@
       <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
       <Name>csql.lib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Test References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
