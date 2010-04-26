@@ -28,9 +28,6 @@ namespace IntegrationTest
         {
             string arguments = this.options.OptionalArgumentsString + " -O" + this.sqtppOutputFile + " " + this.relativePathToInputFile;
 
-            if (this.relativePathToInputFile.Contains("findfile.h"))
-                Debugger.Break();
-
             StringBuilder output = new StringBuilder();
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo(options.PathToSqtpp, arguments);

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ComparerContainer.cs" />
     <Compile Include="ComparerResult.cs" />
+    <Compile Include="DataDrivenTest.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="SqtppSpecialIntegrationTest.cs" />
     <Compile Include="FileComparer.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqtppComparer.cs" />
     <Compile Include="SqtppComparerOptions.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Files\csql\CreateDefault.csql" />

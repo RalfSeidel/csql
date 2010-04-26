@@ -17,7 +17,7 @@ namespace IntegrationTest
 		{
 			get
 			{
-				return @"D:\src\Codeplex\sqtpp\IntegrationTest\";
+				return @"D:\src\sqtpp\dev\IntegrationTest\";
 			}
 		}
 
@@ -46,6 +46,8 @@ namespace IntegrationTest
 				return pathToSqtpp;
 			}
 		}
+
+
 
 	}
 }
