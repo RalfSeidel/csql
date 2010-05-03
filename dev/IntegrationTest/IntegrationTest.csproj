@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="ComparerContainer.cs" />
     <Compile Include="ComparerResult.cs" />
-    <Compile Include="DataDrivenTest.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="SqtppSpecialIntegrationTest.cs" />
     <Compile Include="FileComparer.cs" />
