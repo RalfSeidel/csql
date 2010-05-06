@@ -45,13 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComparerContainer.cs" />
     <Compile Include="ComparerResult.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="SqtppSpecialIntegrationTest.cs" />
     <Compile Include="FileComparer.cs" />
     <Compile Include="IComparer.cs" />
-    <Compile Include="SqtppStandardIntegrationTest.cs" />
+    <Compile Include="SqtppDefaultIntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqtppComparer.cs" />
     <Compile Include="SqtppComparerOptions.cs" />

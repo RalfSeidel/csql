@@ -5,9 +5,24 @@ using System.Text;
 
 namespace IntegrationTest
 {
+	/// <summary>
+	/// 
+	/// </summary>
     [TestClass]
     public class SqtppSpecialIntegrationTest
     {
+		/// <summary>
+		/// Gets or sets the test context which provides
+		/// information about and functionality for the current test run.
+		/// </summary>
+		public TestContext TestContext { get; set; }
+
+		[ClassInitialize()]
+		public static void SqtppSpecialIntegrationTestInitialize( TestContext testContext )
+		{
+			Environment.InitializeSystemEnvironment();
+			InitializeDataSource( Path.Combine( testContext.TestDeploymentDir, "GeneratedTestData.csv" ) );
+		}
         
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "GeneratedTestData.csv", "GeneratedTestData#csv", DataAccessMethod.Sequential)]
         [TestMethod]
@@ -28,12 +43,6 @@ namespace IntegrationTest
         }
 
 
-        [ClassInitialize()]
-        public static void SqtppSpecialIntegrationTestInitialize(TestContext testContext)
-        {
-            InitializeDataSource(Path.Combine(testContext.TestDeploymentDir, "GeneratedTestData.csv"));
-        }
-
 
         private static void InitializeDataSource(string csvFilePath)
         {
@@ -50,26 +59,6 @@ namespace IntegrationTest
         {
             stringBuilder.Append(inputFilePath + "," + referenceFilePath + "," + options + "\r\n" );
         }
-
-
-        private TestContext testContextInstance;
-
-        // <summary>
-        //Gets or sets the test context which provides
-        //information about and functionality for the current test run.
-        //</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
 
     }
 }

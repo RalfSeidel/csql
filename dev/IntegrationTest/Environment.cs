@@ -17,7 +17,7 @@ namespace IntegrationTest
 		{
 			get
 			{
-				return @"D:\src\sqtpp\dev\IntegrationTest\";
+				return @"D:\src\Codeplex\sqtpp\IntegrationTest\";
 			}
 		}
 
@@ -45,6 +45,13 @@ namespace IntegrationTest
 				string pathToSqtpp = Environment.ProjectRootDirectory + @"..\Debug\sqtpp.exe";
 				return pathToSqtpp;
 			}
+		}
+
+
+		public static void InitializeSystemEnvironment()
+		{
+			System.Environment.SetEnvironmentVariable( "computername", "sqtpp_test_host" );
+			System.Environment.SetEnvironmentVariable( "username", "sqtpp_test_user" );
 		}
 
 

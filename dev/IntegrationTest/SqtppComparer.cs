@@ -55,7 +55,7 @@ namespace IntegrationTest
 
             ComparerResult comparerResult = fileComparer.Compare();
 
-            string identifier = this.options.PathToWorkingDirectory + this.relativePathToInputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + ") : ";
+            string identifier = this.relativePathToInputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + "): ";
             comparerResult.Message = identifier + comparerResult.Message;
 
             return comparerResult;
