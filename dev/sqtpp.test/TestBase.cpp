@@ -1,4 +1,5 @@
 #include "StdAfx.h"
+#include "Options.h"
 #include "TestBase.h"
 #using <mscorlib.dll>
 
@@ -62,6 +63,7 @@ wstring TestBase::TestFileDirectory::get()
 void TestBase::AssemblyInitialize( Microsoft::VisualStudio::TestTools::UnitTesting::TestContext^ )
 {
 	CrtDllInit::Initialize();
+	Options::setOsDefaultNewLine( L"\n" );
 }
 
 /**

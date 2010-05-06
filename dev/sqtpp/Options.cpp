@@ -14,6 +14,8 @@ Options::LanguageInfo::LanguageInfo( Language eLanguage, const wchar_t* pwszSymb
 
 const wchar_t Options::m_wcDirectorySeperator = L';';
 
+const wchar_t* Options::m_pszOsDefaultNewLine = L"\r\n";
+
 const Options::LanguageInfo Options::m_languageInfo[] = {
 	Options::LanguageInfo( Options::LNG_UNDEFINED, L"LNG_UNDEFINED", NULL ),
 	Options::LanguageInfo( Options::LNG_TEXT, L"LNG_TEXT", L"__SQTPP_TEXT" ),

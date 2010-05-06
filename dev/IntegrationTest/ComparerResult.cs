@@ -6,7 +6,7 @@ namespace IntegrationTest
 {
     public class ComparerResult
     {
-        public bool IsEqual { get; set; }
+        public bool AreEqual { get; set; }
         public string Message { get; set; }
         public string Identifier { get; set; }
         public int LineNumber { get; set; }
@@ -15,7 +15,7 @@ namespace IntegrationTest
         public ComparerResult()
         {
             this.Identifier = "";
-            this.IsEqual = false;
+            this.AreEqual = false;
             this.Message = "";
             this.LineNumber = 0;
             this.ColumnNumber = 0;

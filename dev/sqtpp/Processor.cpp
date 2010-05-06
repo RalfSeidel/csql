@@ -266,7 +266,7 @@ void Processor::emitLineFeed( std::wostream& output, const wstring& sNewLine )
 			}
 			break;
 		case Options::NLO_OS_DEFAULT:
-			output << endl;
+			output << m_options.getOsDefaultNewLine();
 			break;
 		case Options::NLO_LF:
 			output << L'\n';

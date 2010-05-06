@@ -9,7 +9,7 @@ namespace IntegrationTest
     {
         public static void WriteStringToFile(string theString, string path)
         {
-            StreamWriter streamWriter = new StreamWriter(path);
+			StreamWriter streamWriter = new StreamWriter( path, false, Encoding.Default );
             streamWriter.Write(theString);
             streamWriter.Close();
         }

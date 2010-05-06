@@ -8,59 +8,82 @@ namespace IntegrationTest
 {
     public class SqtppComparer : IComparer
     {
-
         private string relativePathToInputFile;
-        private string relativePathToReferenceOutputFile;
+        private string relativePathToReferenceFile;
         private string sqtppOutputFile;
-        SqtppComparerOptions options;
+        private SqtppComparerOptions options;
 
         public SqtppComparer(string relativePathToInputFile, string relativePathToReferenceOutputFile, SqtppComparerOptions options)
         {
             this.relativePathToInputFile = relativePathToInputFile;
-            this.relativePathToReferenceOutputFile = relativePathToReferenceOutputFile;
+            this.relativePathToReferenceFile = relativePathToReferenceOutputFile;
 
             this.sqtppOutputFile = Path.GetTempFileName();
             this.options = options;
         }
 
       
-        private void ExecuteSqtpp()
-        {
-            string arguments = this.options.OptionalArgumentsString + " -O" + this.sqtppOutputFile + " " + this.relativePathToInputFile;
-
-            StringBuilder output = new StringBuilder();
-
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(options.PathToSqtpp, arguments);
-            processStartInfo.CreateNoWindow = true;
-            processStartInfo.UseShellExecute = false;
-            processStartInfo.WorkingDirectory = options.PathToWorkingDirectory;
-
-            Process process = new Process();
-            process.StartInfo = processStartInfo;
-
-            process.Start();
-
-            process.WaitForExit();
-        }
-
-
-
         #region IComparer Members
 
+		/// <summary>
+		/// Execute sqtpp and compare its output with the reference output file.
+		/// </summary>
+		/// <returns></returns>
         public ComparerResult Compare()
         {
             ExecuteSqtpp();
 
-            FileComparer fileComparer = new FileComparer(this.sqtppOutputFile, this.options.PathToWorkingDirectory + this.relativePathToReferenceOutputFile);
+            FileComparer fileComparer = new FileComparer(this.sqtppOutputFile, this.options.PathToWorkingDirectory + this.relativePathToReferenceFile);
 
             ComparerResult comparerResult = fileComparer.Compare();
 
-            string identifier = this.relativePathToInputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + "): ";
-            comparerResult.Message = identifier + comparerResult.Message;
+			if ( !comparerResult.AreEqual ) {
+				string absoluteInputPath = System.IO.Path.GetFullPath( this.options.PathToWorkingDirectory + this.relativePathToInputFile );
+				string absoluteOutputPath = System.IO.Path.GetFullPath( this.sqtppOutputFile );
+				string absoluteReferencePath = System.IO.Path.GetFullPath( this.options.PathToWorkingDirectory + this.relativePathToReferenceFile );
+				Trace.WriteLine( "Test failed for " );
+				Trace.Write( '\t' );
+				Trace.WriteLine( absoluteInputPath );
+				Trace.WriteLine( "when comparing to " );
+				Trace.Write( '\t' );
+				Trace.WriteLine( absoluteOutputPath );
+				Trace.WriteLine( "with reference output in" );
+				Trace.Write( '\t' );
+				Trace.WriteLine( absoluteReferencePath );
+				Trace.WriteLine( "Error message:" );
+				Trace.Write( '\t' );
+				Trace.WriteLine( comparerResult.Message );
+				Trace.WriteLine( "" );
+
+				string identifier = this.relativePathToInputFile + " (" + comparerResult.LineNumber + "," + comparerResult.ColumnNumber + "): ";
+				comparerResult.Message = identifier + comparerResult.Message;
+			} else {
+				System.IO.File.Delete( this.sqtppOutputFile );
+			}
 
             return comparerResult;
         }
 
         #endregion
-    }
+
+		private void ExecuteSqtpp()
+		{
+			string arguments = this.options.OptionalArgumentsString + " -O" + this.sqtppOutputFile + " " + this.relativePathToInputFile;
+
+			StringBuilder output = new StringBuilder();
+
+			ProcessStartInfo processStartInfo = new ProcessStartInfo( options.PathToSqtpp, arguments );
+			processStartInfo.CreateNoWindow = true;
+			processStartInfo.UseShellExecute = false;
+			processStartInfo.WorkingDirectory = options.PathToWorkingDirectory;
+
+			Process process = new Process();
+			process.StartInfo = processStartInfo;
+
+			process.Start();
+
+			process.WaitForExit();
+		}
+
+	}
 }

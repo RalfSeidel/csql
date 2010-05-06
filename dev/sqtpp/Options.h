@@ -122,11 +122,16 @@ public:
 
 private:
 	/**
-	** @brief Character used to seperate directories.
+	** @brief Character used to seperate directories in the command line arguments.
 	**
 	** For Windows the character is a semicolon. For the others it is a colon.
 	*/
 	static const wchar_t m_wcDirectorySeperator;
+
+	/**
+	** @brief The string emitted for line feeds if the "use os default" option is used.
+	*/
+	static const wchar_t* m_pszOsDefaultNewLine;
 
 	/**
 	** @brief Informations about all definable source file languages.
@@ -576,9 +581,14 @@ public:
 	const LanguageInfo& getLanguageInfo() const throw()  { return Options::getLanguageInfo( m_eLanguage ); }
 
 	/// Get the quoting option.
-	Quoting getStringQuoting() const throw()               { return m_eQuoting; }
+	Quoting getStringQuoting() const throw()             { return m_eQuoting; }
 	/// Get the string quoting option.
-	void  setStringQuoting( Quoting quoting ) throw()      { m_eQuoting = quoting; }
+	void  setStringQuoting( Quoting quoting ) throw()    { m_eQuoting = quoting; }
+
+	/// Get the string to emit for line feeds if the "use os default" option is used.
+	static const wchar_t* getOsDefaultNewLine()          { return m_pszOsDefaultNewLine; }
+
+	static void setOsDefaultNewLine( const wchar_t* pszNewLine) { m_pszOsDefaultNewLine = pszNewLine; }
 
 	/// Get the new line (cr and/or lf) transformation option.
 	NewLineOutput getNewLineOutput() const throw()       { return m_eNewLineOutput; }

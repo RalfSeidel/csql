@@ -117,8 +117,7 @@ Output* Output::createOutput( const Options& options )
 		wcout.imbue( codePageLocale );
 		pOutput = new ConsoleOutput();
 	} else {
-		const bool useTextOutput = options.getNewLineOutput() == Options::NLO_OS_DEFAULT;
-		const wchar_t* pszOpenMode = useTextOutput ? L"wtS" : L"wbS";
+		const wchar_t* pszOpenMode = L"wbS";
 		FILE* file = _wfopen( sOutputFile.c_str(), pszOpenMode );
 		if ( file == NULL ) {
 			throw error::C1083( sOutputFile );

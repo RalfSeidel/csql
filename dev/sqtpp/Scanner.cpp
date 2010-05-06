@@ -308,7 +308,7 @@ void Scanner::readNewLine( std::wistream& input, wchar_t wcCurrent )
 			m_tokenBuffer.put( wcCurrent );
 			break;
 		case Options::NLO_OS_DEFAULT:
-			m_tokenBuffer << endl;
+			m_tokenBuffer << m_options.getOsDefaultNewLine();
 			break;
 		case Options::NLO_LF: 
 			m_tokenBuffer.put( L'\n' );

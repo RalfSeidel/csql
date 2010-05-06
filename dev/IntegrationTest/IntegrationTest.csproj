@@ -47,10 +47,10 @@
   <ItemGroup>
     <Compile Include="ComparerResult.cs" />
     <Compile Include="Environment.cs" />
-    <Compile Include="SqtppSpecialIntegrationTest.cs" />
+    <Compile Include="SpecialSqtppTest.cs" />
     <Compile Include="FileComparer.cs" />
     <Compile Include="IComparer.cs" />
-    <Compile Include="SqtppDefaultIntegrationTest.cs" />
+    <Compile Include="DefaultSqtppTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqtppComparer.cs" />
     <Compile Include="SqtppComparerOptions.cs" />
@@ -168,11 +168,13 @@
     <Content Include="Files\sqtpp\input\utfabc.txt" />
     <Content Include="Files\sqtpp\input\utfbeabc.txt" />
     <Content Include="Files\sqtpp\input\Россия.txt" />
-    <Content Include="Files\sqtpp\input\readme.txt" />
     <Content Include="Files\sqtpp\reference\ansiabc.txt" />
     <Content Include="Files\sqtpp\reference\buildin.h" />
     <Content Include="Files\sqtpp\reference\BuildinEval.h" />
     <Content Include="Files\sqtpp\reference\charize.h" />
+    <Content Include="Files\sqtpp\reference\Co1200_ansiabc.txt" />
+    <Content Include="Files\sqtpp\reference\Co1200_unicode.txt" />
+    <Content Include="Files\sqtpp\reference\Co1200_utf8abc.txt" />
     <Content Include="Files\sqtpp\reference\concate.h" />
     <Content Include="Files\sqtpp\reference\concate2.h" />
     <Content Include="Files\sqtpp\reference\ConditionalTest1.h" />
