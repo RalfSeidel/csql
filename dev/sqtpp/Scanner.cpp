@@ -391,7 +391,6 @@ Token Scanner::getSlashToken( std::wistream& input )
 
 	switch ( wcNext ) {
 		case L'/':
-			//token = TOK_LINE_COMMENT;
 			token = continueLineComment( input, TOK_LINE_COMMENT, false );
 			break;
 		case L'*':
@@ -433,7 +432,7 @@ Token Scanner::getDashToken( std::wistream& input )
 				m_tokenBuffer << identifier;
 				if ( readIfEqual( input, L']' ) ) {
 					// --[identifier]
-					m_lastToken.identifier = identifier;
+					m_tokenIdentifier = identifier;
 					token = TOK_ADSALESNG_DIRECTIVE;
 				}
 			}
@@ -520,7 +519,7 @@ Token Scanner::getSharpToken( std::wistream& input )
 		length     = streamsize(identifier.length());
 
 		m_tokenBuffer.write( identifier.c_str(), length );
-		m_lastToken.identifier = identifier;
+		m_tokenIdentifier = identifier;
 
 		// Skip any white space following the directive.
 		readSpace( input );
@@ -842,7 +841,6 @@ Token Scanner::continueDefault( std::wistream& input )
 */
 Token Scanner::continueLineComment( std::wistream& input, const Token contextToken, const bool bFollowup )
 {
-	assert( contextToken == TOK_LINE_COMMENT || contextToken == TOK_SQL_LINE_COMMENT );
 	Token   token = bFollowup ? TOK_UNDEFINED : contextToken;
 
 	if ( input.eof() ) {
@@ -1054,8 +1052,7 @@ Token Scanner::getNextToken( std::wistream& input, TokenExpression& tokenExpress
 
 	m_tokenBuffer.str( std::wstring() );
 	m_tokenBuffer.clear();
-
-	m_lastToken = TokenExpression();
+	m_tokenIdentifier.clear();
 
 	if ( input.eof() ) {
 		token = TOK_END_OF_FILE;
@@ -1063,11 +1060,14 @@ Token Scanner::getNextToken( std::wistream& input, TokenExpression& tokenExpress
 		token = getNextTokenCore( input );
 	}
 
+	m_lastToken = TokenExpression();
 	m_lastToken.token   = token;
 	m_lastToken.context = getContext();
 	m_lastToken.text    = m_tokenBuffer.str();
-	if ( m_lastToken.getIdentifier().empty() ) {
+	if ( m_tokenIdentifier.empty() ) {
 		m_lastToken.identifier = m_lastToken.getText();
+	} else {
+		m_lastToken.identifier = m_tokenIdentifier;
 	}
 
 	if ( token == TOK_NEW_LINE || token == TOK_END_OF_FILE ) {

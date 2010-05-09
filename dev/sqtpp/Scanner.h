@@ -59,8 +59,12 @@ private:
 	/// line was a backslash.
 	wchar_t                    m_wcLastNonSpaceChar;
 
-	/// Last token read.
+	/// Token read by the previous call (for look back)
 	TokenExpression&           m_lastToken;
+
+	/// The identifier assoziated with the current token e.g. for #define its "define"
+	std::wstring               m_tokenIdentifier;
+
 protected:
 
 	/// The read buffer.
