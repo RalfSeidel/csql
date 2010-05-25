@@ -7,6 +7,9 @@ using System.Windows.Input;
 
 namespace Sqt.VisualStudio
 {
+	/// <summary>
+	/// Properties of a visual studio command.
+	/// </summary>
 	public abstract class VsCommand
 	{
 		/// <summary>
@@ -33,11 +36,18 @@ namespace Sqt.VisualStudio
 		/// Gets the name of the command.
 		/// </summary>
 		/// <remarks>
-		/// The default implementation returns the type name of the command.
+		/// The default implementation returns the type name of the command 
+		/// but removes the "Command" string from the end of the type name.
 		/// </remarks>
 		public virtual string Name
 		{
-			get { return this.GetType().Name; }
+			get 
+			{
+				string name = this.GetType().Name;
+				if ( name.EndsWith( "Command" ) && name.Length != "Command".Length )
+					name = name.Substring( 0, name.Length - "Command".Length );
+				return name; 
+			}
 		}
 
 		/// <summary>
@@ -76,6 +86,10 @@ namespace Sqt.VisualStudio
 			set { this.icon = value; }
 		}
 
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		/// <param name="title">The title of the command i.e. the text that appears in the tool bar.</param>
 		public VsCommand( string title )
 		{
 			this.title = title;
