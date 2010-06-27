@@ -402,6 +402,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Range.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Scanner.cpp"
 				>
 			</File>
@@ -443,10 +447,6 @@
 			</File>
 			<File
 				RelativePath=".\Streams.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TextScanner.cpp"
 				>
 			</File>
 			<File
@@ -536,6 +536,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Range.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Scanner.h"
 				>
 			</File>
@@ -545,10 +549,6 @@
 			</File>
 			<File
 				RelativePath=".\Streams.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TextScanner.h"
 				>
 			</File>
 			<File

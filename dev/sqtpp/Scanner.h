@@ -114,7 +114,7 @@ public:
 protected:
 
 	// Implementation of getNextToken()
-	virtual Token getNextTokenCore( std::wistream& input );
+	virtual Token getNextTokenCore( std::wistream& input, size_t& nCharCountRead );
 
 	// Determine token which is introduced with a dot ('.').
 	Token getDotToken( std::wistream& input );

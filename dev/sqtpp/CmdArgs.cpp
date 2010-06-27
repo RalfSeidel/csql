@@ -80,6 +80,7 @@ void CmdArgs::usage()
 	wcout << L"-c[b|l|s][+|-]  " << L"Option to keep the comments in the output (+) or to eliminate them (-)." << endl;
 	wcout << L"                " << L"With the optional specifier b, l and s the elimination can be." << endl;
 	wcout << L"                " << L"switched on or off for (b)lock, (l)ine or (s)ql comments." << endl;
+	wcout << L"-rFrom-To       " << L"Option to restrict the output to the specified range in the input file." << endl;
 	exit( 0 );
 }
 
@@ -149,6 +150,9 @@ void CmdArgs::parse( Options& options )
 				case L'O':
 					setOutputFile( options, &pszArgument[2] );
 					options.writeErrorsToOutput( true );
+					break;
+				case L'r':
+					setOutputRange( options, &pszArgument[2] );
 					break;
 				default:
 					// Invalid argument {1}.
@@ -616,6 +620,47 @@ void CmdArgs::setExtraOptions( Options& options, const wchar_t* pwszArgument )
 		options.supportAdSalesNG( true );
 	}
 }
+
+
+
+/**
+** @brief /rFrom-To Handle option to restrict the range in the root input file
+** to emit output for.
+** 
+** Default is unrestricted.
+*/
+void CmdArgs::setOutputRange( Options& options, const wchar_t* pwszArgument )
+{
+	const wchar_t* pSeparator;
+	for ( pSeparator = pwszArgument; *pSeparator != L'\0'; ++pSeparator ) {
+		const wchar_t c = *pSeparator;
+		if ( c == L'-' || c == L',' || c == L';' ) 
+			break;
+	}
+
+	if ( *pSeparator == L'\0' ) {
+		// {1} requires {2}; option ignored
+		error::D9007 warning( L"-r", L"From-To");
+		wcerr << warning;
+		return;
+	}
+
+	const wchar_t* pFirstArg = pwszArgument;
+	const wchar_t* pSecondArg = pSeparator + 1;
+
+	int startIndex = _wtoi( pFirstArg );
+	int endIndex = _wtoi( pSecondArg );
+	if ( endIndex <= startIndex ) {
+		// Invalid argument {1}.
+		error::D9002 warning( pwszArgument );
+		wcerr << warning;
+		return;
+	}
+
+	Range range = Range( size_t( startIndex ), size_t( endIndex ) );
+	options.setOutputRange( range );
+}
+
 
 /**
 ** @brief Elimiated leading and trailing quote characters from the

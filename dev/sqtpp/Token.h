@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#include "Range.h"
+
 namespace sqtpp {
 
 enum Context;
@@ -108,6 +110,12 @@ private:
 	/// The index of the token in the token input stream.
 	size_t  tokenId;
 
+	/// The length of the token measured in number of characters.
+	size_t  tokenLength;
+
+	/// The range of the token in the input stream.
+	Range   tokenRange;
+
 public:
 	/// The token.
 	Token   token;
@@ -148,11 +156,24 @@ public:
 	// Reset everything to be empty / undefined.
 	void clear();
 
-	void setTokenId( size_t tokenId ) { this->tokenId = tokenId; }
+	void setTokenId( size_t tokenId ) throw() { this->tokenId = tokenId; }
+
+	void setToken( Token token ) throw() { this->token = token; }
 	Token getToken() const throw() { return this->token; }
+
+	void setTokenLength( size_t nCharCount ) throw() { this->tokenLength = nCharCount; }
+	size_t getTokenLength() const throw() { return this->tokenLength; }
+
+	void setTokenRange( size_t startIndex, size_t endIndex ) throw() { this->tokenRange = Range( startIndex, endIndex ); }
+	void setTokenRange( const Range& tokenRange ) throw() { this->tokenRange = tokenRange; }
+	const Range& getTokenRange() const throw() { return this->tokenRange; }
+
 	Context getContext() const throw() { return this->context; }
+
 	const wstring& getText() const throw() { return this->text; }
+
 	const wstring& getIdentifier() const throw() { return this->identifier; }
+
 
 };
 

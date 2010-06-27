@@ -108,8 +108,9 @@ const TokenInfo& TokenInfo::getTokenInfo( Token token )
 ** @brief Default constructor. Initializes everything as undefined / empty.
 */
 TokenExpression::TokenExpression()
-: token( TOK_UNDEFINED )
-, tokenId( 0 )
+: tokenId( 0 )
+, tokenLength( 0 )
+, token( TOK_UNDEFINED )
 , context( CTX_UNDEFINED )
 {
 }
@@ -119,6 +120,8 @@ TokenExpression::TokenExpression()
 */
 TokenExpression::TokenExpression( const TokenExpression& that )
 : tokenId( that.tokenId )
+, tokenLength( that.tokenLength )
+, tokenRange( that.tokenRange )
 , token( that.token )
 , context( that.context )
 , text( that.text )
@@ -132,6 +135,8 @@ TokenExpression::TokenExpression( const TokenExpression& that )
 TokenExpression& TokenExpression::operator=( const TokenExpression& that )
 {
 	this->tokenId = that.tokenId;
+	this->tokenLength = that.tokenLength;
+	this->tokenRange = that.tokenRange;
 	this->token = that.token;
 	this->context = that.context;
 	this->text = that.text;
@@ -172,6 +177,7 @@ void TokenExpression::clear()
 	this->token   = TOK_UNDEFINED;
 	this->context = CTX_UNDEFINED;
 	this->tokenId = 0;
+	this->tokenRange = Range();
 	this->text.clear();
 	this->identifier.clear();
 }

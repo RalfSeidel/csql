@@ -100,6 +100,9 @@ private:
 	// Handle /o
 	void setOutputFile( Options& options, const wchar_t* pwszArgument );
 
+	// Handle /r
+	void setOutputRange( Options& options, const wchar_t* pwszArgument );
+
 	// Handle /k
 	void setKeepComments( Options& options, const wchar_t* pwszArgument );
 

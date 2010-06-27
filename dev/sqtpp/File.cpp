@@ -11,6 +11,7 @@
 #include "Error.h"
 #include "Token.h"
 #include "Util.h"
+#include "Range.h"
 #include "File.h"
 
 namespace sqtpp {
@@ -21,6 +22,15 @@ struct File::Data {
 
 	/// Number of references to the file data
 	int             m_nRefCount;
+
+	/// The include level of the file.
+	int             m_nIncludeLevel;
+
+	/// The current position of the read pointer.
+	size_t          m_currentPosition;
+
+	/// The range of the current token in the input stream.
+	Range           m_currentTokenRange;
 
 	/// The path under which the file was openend.
 	std::wstring    m_relativePath;
@@ -71,6 +81,8 @@ struct File::Data {
 	Data()
 	{
 		m_nRefCount         = 1;
+		m_nIncludeLevel     = -1;
+		m_currentPosition   = 0;
 		m_pInternalStream   = NULL;
 		m_pExternalStream   = NULL;
 		m_isAttached        = false;
@@ -171,6 +183,32 @@ int File::getInstanceId() const throw()
 }
 
 /**
+** @brief Get the nesting include level of this file.
+*/
+int File::getIncludeLevel() const throw()
+{
+	return m_pData->m_nIncludeLevel;
+}
+
+/**
+** @brief Set the nesting include level of this file.
+*/
+void File::setIncludeLevel( int includeLevel ) throw()
+{
+	m_pData->m_nIncludeLevel = includeLevel;
+}
+
+/**
+** @brief Check if this file is the root file processed.
+*/
+bool File::isRootFile() const throw()
+{
+	return m_pData->m_nIncludeLevel == 0;
+}
+
+
+
+/**
 ** @brief Check if this file should be opened and read only once.
 */
 bool File::isIncludeOnce() const throw()    
@@ -229,6 +267,32 @@ const locale& File::getLocale() const throw()
 
 
 /**
+** @brief Get the current position in the file.
+*/
+size_t File::getPosition() const throw()
+{
+	return m_pData->m_currentPosition;
+}
+
+/**
+** @brief Set the current position in the file.
+*/
+void File::setPosition( size_t nPosition ) throw()
+{
+	m_pData->m_currentPosition = nPosition;
+}
+
+
+/**
+** @brief Get the the range of the current token measured in characters.
+*/
+const Range& File::getCurrentTokenRange() const throw()
+{
+	return m_pData->m_currentTokenRange;
+}
+
+
+/**
 ** @brief Get the current line number.
 */
 size_t File::getLine() const throw()
@@ -278,7 +342,7 @@ int File::getNextCounter() const throw()
 /**
 ** @brief Set the last (non white space) token found by the processor.
 */
-void File::setLastToken( Token token )
+void File::setLastToken( Token token, const Range& tokenRange )
 {
 	bool isWhite = token == TOK_BLOCK_COMMENT
 	            || token == TOK_LINE_COMMENT
@@ -300,6 +364,8 @@ void File::setLastToken( Token token )
 		}
 		m_pData->m_lastToken = token;
 	}
+
+	m_pData->m_currentTokenRange = tokenRange;
 }
 
 /**

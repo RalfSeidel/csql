@@ -172,14 +172,25 @@ void Processor::getTimestamp( tm& timestamp ) const
 /**
 ** @brief Get the current file we are processing.
 */
-File& Processor::getFile()
+const File& Processor::getRootFile() const
+{
+	const File& file = *m_fileStack.container().begin();
+
+	return file;
+}
+
+
+/**
+** @brief Get the current file we are processing.
+*/
+File& Processor::getCurrentFile()
 {
 	File& file = m_fileStack.top();
 
 	return file;
 }
 
-const File& Processor::getFile() const
+const File& Processor::getCurrentFile() const
 {
 	File& file = m_fileStack.top();
 
@@ -214,10 +225,10 @@ bool Processor::isBuildinMacro( const wstring& identifier ) const
 ** #line n "filename"
 ** @endcode
 */
-void Processor::emitLine( std::wostream& output )
+void Processor::emitLineDirective( std::wostream& output )
 {
 	// #line n "filename"
-	const File&    file     = getFile();
+	const File&    file     = getCurrentFile();
 	const wstring  fileName = file.getPath();
 	const wstring  sNewLine = file.getDefaultNewLine(); 
 	const size_t   line     = file.getLine();
@@ -289,7 +300,7 @@ void Processor::emitLineFeed( std::wostream& output, const wstring& sNewLine )
 void Processor::emitMessage( error::Error& error ) const
 {
 	if ( m_fileStack.size() != 0 ) {
-		const File& file = getFile();
+		const File& file = getCurrentFile();
 		error.setFileInfo( file );
 	}
 
@@ -311,9 +322,9 @@ void Processor::emitMessage( error::Error& error ) const
 */
 size_t Processor::emitBuffer( wostream& output )
 {
+	size_t  nCount = 0;
 	wstring line   = m_outputBuffer.str();
 	bool    bEmit  = true;
-	size_t  nCount = 0;
 
 	if ( m_options.trimTrailingBlanks() ) {
 		//line = line.trimLeft();
@@ -336,11 +347,31 @@ size_t Processor::emitBuffer( wostream& output )
 		}
 		m_prevLine = line;
 	}
-
 	m_outputBuffer.str( wstring() );
 	m_outputBuffer.clear();
 
 	return nCount;
+}
+
+
+/**
+** @brief Check if the output range is restricted and if yes if the current tokens
+** are within the input range.
+*/
+bool Processor::isWithinEmitRange()
+{
+	const Range& outputRange = m_options.getOutputRange();
+	if ( outputRange.isEmpty() ) {
+		return true;
+	}
+
+	if ( m_fileStack.size() == 0 )
+		return true;
+
+	const File& rootFile = getRootFile();
+	const Range& tokenRange = rootFile.getCurrentTokenRange();
+	bool overlapps = outputRange.isOverlapping( tokenRange );
+	return overlapps;
 }
 
 
@@ -385,7 +416,8 @@ void Processor::processStream( std::wistream& input )
 */
 void Processor::processFile( const std::wstring& fileName )
 {
-	File      file;
+	File file;
+	file.setIncludeLevel( m_fileStack.size() );
 	m_fileStack.push( file );
 
 	try {
@@ -444,8 +476,9 @@ void Processor::processFile( const std::wstring& fileName )
 */
 Token Processor::getNextToken( TokenExpression& tokenExpression )
 {
-	File&     currentFile   = getFile();
+	File&     currentFile   = getCurrentFile();
 	wistream& fileStream    = currentFile.getStream();
+	size_t    nOldPosition  = currentFile.getPosition();
 	Token     token         = TOK_UNDEFINED;
 	bool      bSetFileToken = getContext() == CTX_DEFAULT;
 
@@ -454,9 +487,12 @@ Token Processor::getNextToken( TokenExpression& tokenExpression )
 	tokenExpression.setTokenId( ++m_nProcessedTokenId );
 	token = m_pTokenStream->getNextToken( fileStream, tokenExpression );
 
-	if ( bSetFileToken && !m_fileStack.empty() ) {
-		File& currentFile = getFile();
-		currentFile.setLastToken( token );
+	size_t   nNewPosition = nOldPosition + tokenExpression.getTokenLength();
+	tokenExpression.setTokenRange( nOldPosition, nNewPosition );
+	currentFile.setPosition( nNewPosition );
+
+	if ( bSetFileToken ) {
+		currentFile.setLastToken( token, tokenExpression.getTokenRange() );
 	}
 	return token;
 }
@@ -518,7 +554,7 @@ const wstring Processor::getNextIdentifier()
 
 
 /**
-** @brief Process the current input stream.
+** @brief Apply the command line options.
 */
 void Processor::applyOptions()
 {
@@ -860,8 +896,14 @@ bool Processor::processToken( int scannerToken )
 		default:
 			m_outputBuffer << tokenText;
 			break;
-
 	}
+	if ( !isWithinEmitRange() ) {
+		m_outputBuffer.clear();
+		m_outputBuffer.str( wstring() );
+	}
+
+
+
 	return bContinue;
 }
 
@@ -890,7 +932,7 @@ bool Processor::collectMacroArgumentValues( const Macro& macro, MacroArgumentVal
 		switch ( token ) {
 			case TOK_NEW_LINE:
 				if ( this->m_pTokenStream == m_pScanner ) {
-					File&  file = getFile();
+					File&  file = getCurrentFile();
 					file.incLine();
 				}
 				break;
@@ -1065,6 +1107,18 @@ bool Processor::expandMacro( const Macro& macro, TokenExpressions& tokenExpressi
 	if ( bExpand ) {
 		macro.expand( *this, argumentValues, tokenExpressions );
 	}
+
+	if ( m_fileStack.size() > 0 ) {
+		// Set context information of every token epression to current file context
+		const File& currentFile = getCurrentFile();
+		const Range& currentRange = currentFile.getCurrentTokenRange();
+		for ( TokenExpressions::iterator it = tokenExpressions.begin(); it != tokenExpressions.end(); ++it ) {
+			TokenExpression& tokenExpression = *it;
+			tokenExpression.setTokenRange( currentRange );
+		}
+	}
+
+
 	return bExpand;
 }
 
@@ -1144,7 +1198,7 @@ void Processor::processIdentifier()
 */
 void Processor::processNewLine( const wstring* psNewLine )
 {
-	File&  file = getFile();
+	File&  file = getCurrentFile();
 
 	if ( psNewLine != NULL && !psNewLine->empty() && file.getDefaultNewLine().empty() ) {
 		file.setDefaultNewLine( *psNewLine );
@@ -1155,7 +1209,7 @@ void Processor::processNewLine( const wstring* psNewLine )
 
 	if ( nCharCount != 0 && this->m_pTokenStream == m_pScanner ) {
 		if ( m_options.emitLine() && (m_nOutputLineNumber != file.getLine() || file.getLine() == 1 ) ) {
-			emitLine( m_pOutput->getStream() );
+			emitLineDirective( m_pOutput->getStream() );
 			m_nOutputLineNumber = file.getLine();
 		}
 	}
@@ -1436,7 +1490,7 @@ void Processor::processDefineDirective()
 		emitMessage( warning );
 	} 
 
-	const File& file = this->getFile();
+	const File& file = getCurrentFile();
 	Macro macro( identifier, file.getPath(), file.getLine() );
 
 
@@ -1797,7 +1851,7 @@ void Processor::processIncludeDirective()
 	}
 
 	bool    bDoInclude  = true;
-	File&   currentFile = getFile();
+	File&   currentFile = getCurrentFile();
 	wstring sFullPath   = currentFile.findFile( sFilePath, m_options.getIncludeDirectories(), bSearchCwd );
 
 	if ( sFullPath.empty() ) {
@@ -1859,7 +1913,7 @@ void Processor::processIncludeDirective()
 */
 void Processor::processIfDirective()
 {
-	Location location( getFile() );
+	Location location( getCurrentFile() );
 	bool isTrue = evaluateConditionalDirective();
 
 	if ( !isTrue ) {
@@ -1877,7 +1931,7 @@ void Processor::processIfDirective()
 */
 void Processor::processIfdefDirective()
 {
-	Location location( getFile() );
+	Location location( getCurrentFile() );
 	wstring identifier = getNextIdentifier();
 
 	if ( identifier.empty() ) {
@@ -1908,7 +1962,7 @@ void Processor::processIfdefDirective()
 */
 void Processor::processIfndefDirective()
 {
-	Location location( getFile() );
+	Location location( getCurrentFile() );
 	wstring  identifier = getNextIdentifier();
 
 	if ( identifier.empty() ) {
@@ -2059,7 +2113,7 @@ void Processor::processPragmaDirective()
 */
 void Processor::processPragmaOnceDirective()
 {
-	File& file = getFile();
+	File& file = getCurrentFile();
 	file.setIncludeOnce( true );
 	m_includeOnceFiles.insert( file.getPath() );
 }
@@ -2165,7 +2219,7 @@ void Processor::processAdSalesNGDirective()
 			throw error::C2006( m_tokenExpression.getText() );
 		}
 		wstring sFilePath   = m_tokenExpression.getText() + L".syb";
-		File&   currentFile = getFile();
+		File&   currentFile = getCurrentFile();
 		wstring sFullPath   = currentFile.findFile( sFilePath, m_options.getIncludeDirectories(), true );
 
 		if ( sFullPath.empty() ) {

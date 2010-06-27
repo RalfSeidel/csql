@@ -174,7 +174,8 @@ public:
 	void setTimestamp( const tm* pTimestamp ) { this->m_pTestTimestamp = pTimestamp; }
 
 	// Get the file which is currently processed.
-	const File& getFile() const;
+	const File& getCurrentFile() const;
+
 	// Get the pre processing options.
 	const MacroSet& getMacros() const throw() { return m_macros; }
 
@@ -199,8 +200,11 @@ public:
 	// Close the out file if openend by this instance.
 	void close();
 private:
+	// Get the root file of the preprocessor.
+	const File& getRootFile() const;
+
 	// Get the current file we are processing.
-	File& getFile();
+	File& getCurrentFile();
 
 	// Check if the given identifier is the name of a predefined / buildin macro.
 	bool isBuildinMacro( const wstring& identifier ) const;
@@ -213,13 +217,17 @@ private:
 	const wstring getNextIdentifier();
 
 	// Emit the current line string to the ouput stream.
-	void emitLine( std::wostream& output );
+	void emitLineDirective( std::wostream& output );
 
 	// Emit the new line chacter(s).
 	void emitLineFeed( std::wostream& output, const wstring& sNewLine );
 
 	// Emit the current output buffer.
 	size_t emitBuffer( std::wostream& ouput );
+
+	// Check if the output range is restricted and if yes if the current tokens
+	// are within the input range.
+	bool isWithinEmitRange();
 
 	// Process the input stream to collect the macro argumentsw
 	bool collectMacroArgumentValues( const Macro& macro, MacroArgumentValues& argumentValues, TokenExpressions& tokenExpressions );

@@ -12,7 +12,6 @@
 #include "Options.h"
 #include "Logger.h"
 #include "Error.h"
-#include "TextScanner.h"
 #include "Scanner.h"
 
 namespace sqtpp {
@@ -55,18 +54,11 @@ Scanner* Scanner::createScanner( const Options& options )
 		case Options::LNG_UNDEFINED:
 			throw UnexpectedSwitchError();
 		case Options::LNG_TEXT:
-			return new TextScanner( options );
 		case Options::LNG_XML:
-			return new HtmlScanner( options );
 		case Options::LNG_C:
-			return new Scanner( options );
 		case Options::LNG_CPP:
-			return new Scanner( options );
 		case Options::LNG_ASM:
-			// return new Scanner( options );
-			throw NotSupportedError();
 		case Options::LNG_RC:
-			// return new Scanner( options );
 			throw NotSupportedError();
 		case Options::LNG_SQL:
 			return new Scanner( options );
@@ -1049,6 +1041,7 @@ Token Scanner::continueConditional( std::wistream& input )
 Token Scanner::getNextToken( std::wistream& input, TokenExpression& tokenExpression )
 {
 	Token token;
+	size_t nCharCountRead = 0;
 
 	m_tokenBuffer.str( std::wstring() );
 	m_tokenBuffer.clear();
@@ -1057,13 +1050,15 @@ Token Scanner::getNextToken( std::wistream& input, TokenExpression& tokenExpress
 	if ( input.eof() ) {
 		token = TOK_END_OF_FILE;
 	} else {
-		token = getNextTokenCore( input );
+		token = getNextTokenCore( input, nCharCountRead );
 	}
 
 	m_lastToken = TokenExpression();
-	m_lastToken.token   = token;
+	m_lastToken.setToken( token );
+	m_lastToken.setTokenLength( nCharCountRead );
 	m_lastToken.context = getContext();
 	m_lastToken.text    = m_tokenBuffer.str();
+
 	if ( m_tokenIdentifier.empty() ) {
 		m_lastToken.identifier = m_lastToken.getText();
 	} else {
@@ -1146,9 +1141,10 @@ const wstring& Scanner::getLastTokenIdentifier() const throw()
 ** @brief Read the next characters from the input stream and translate them into 
 ** scanner tokens.
 */ 
-Token Scanner::getNextTokenCore( std::wistream& input )
+Token Scanner::getNextTokenCore( std::wistream& input, size_t& nCharCountRead )
 {
 	Token token = TOK_UNDEFINED;
+	nCharCountRead = 0;
 
 	switch ( m_context ) {
 		case CTX_DEFAULT:
@@ -1174,6 +1170,13 @@ Token Scanner::getNextTokenCore( std::wistream& input )
 		default:
 			throw UnexpectedSwitchError( "Unknown context" );
 			break;
+	}
+
+	// Special case: new line counts as one character...
+	if ( token == TOK_NEW_LINE ) {
+		nCharCountRead = 1;
+	} else {
+		nCharCountRead = m_tokenBuffer.str().size();
 	}
 	return token;
 }

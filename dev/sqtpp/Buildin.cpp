@@ -75,7 +75,7 @@ class BuildinFile::BuildinFileExpander : public sqtpp::MacroExpander
 		assert( macro.getIdentifier() == L"__FILE__" );
 		assert( argumentValues.size() == 0 );
 
-		const File&    file      = processor.getFile();
+		const File&    file      = processor.getCurrentFile();
 		const Options& options   = processor.getOptions();
 		const wchar_t  delimiter = (wchar_t)options.getStringDelimiter();
 		wstring        filePath  = file.getPath();
@@ -134,7 +134,7 @@ class BuildinLine::BuildinLineExpander : public sqtpp::MacroExpander
 		assert( macro.getIdentifier() == L"__LINE__" );
 		assert( argumentValues.size() == 0 );
 
-		const File&  file  = processor.getFile();
+		const File&  file  = processor.getCurrentFile();
 		size_t       nLine = file.getLine();
 		wstring      sLine = lexical_cast<wstring>( (int)nLine );
 
@@ -393,7 +393,7 @@ public:
 		assert( macro.getIdentifier() == L"__COUNTER__" );
 		assert( argumentValues.size() == 0 );
 
-		const File& file = processor.getFile();
+		const File& file = processor.getCurrentFile();
 		size_t      cntr = file.getNextCounter();
 		wstring sCounter = lexical_cast<wstring>((unsigned int)cntr);
 

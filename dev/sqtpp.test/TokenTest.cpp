@@ -28,6 +28,22 @@ public:
 		Assert::IsTrue( gcnew String(tokenInfo.pwcSymbol) == "TOK_UNDEFINED" );
 
 	}
+
+	/**
+	** @brief Test the TokenInfo::getTokenInfo methode.
+	*/
+	[TestMethod]
+	void setRangeTest()
+	{
+		TokenExpression tokenExpression;
+		int rangeStart = 5;
+		int rangeEnd = 10;
+		tokenExpression.setTokenRange( rangeStart, rangeEnd );
+		
+		Assert::IsTrue( tokenExpression.getTokenRange().getStartIndex() == rangeStart );
+		Assert::IsTrue( tokenExpression.getTokenRange().getEndIndex() == rangeEnd );
+
+	}
 }; // class
 
 } // namespace test

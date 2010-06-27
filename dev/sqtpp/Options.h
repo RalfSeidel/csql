@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#include "Range.h"
+
 namespace sqtpp {
 
 class CmdArgs;
@@ -475,12 +477,23 @@ private:
 	*/
 	unsigned short m_nOutputCodePage;
 
+
+	/**
+	** @brief The range in the input file to emit output for.
+	** 
+	** Default is unrestricted i.e. emit output for all input.
+	** The range option is implemented to allow the caller
+	** of an GUI frontend to restrict the output to the 
+	** current selection in the an editor.
+	*/
+	Range m_outputRange;
+
 	/**
 	** @brief The file to which output should be written (default is "" / stdout).
 	** 
 	** If no file is specified the preprocessor will write all output to stdout.
 	*/
-	wstring         m_sOutputFile;
+	wstring m_sOutputFile;
 
 	/**
 	** @brief Include directories specified as command line parameter.
@@ -563,6 +576,13 @@ public:
 	unsigned short getInputCodePage() const throw()      { return m_nInputCodePage; }
 	/// Set the codepage of the (8 bit) input files.
 	void setInputCodePage( unsigned short cp ) throw()   { m_nInputCodePage = cp; }
+
+	/// Get the range in the _input_ file to restrict output for.
+	const Range& getOutputRange() const throw()          { return m_outputRange; }
+	/// Set the range in the _input_ file to restrict output for.
+	void setOutputRange( const Range& range ) throw()    { m_outputRange = range; }
+
+
 
 	/// Get the codepage for the output file.
 	unsigned short getOutputCodePage() const throw()     { return m_nOutputCodePage; }

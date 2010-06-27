@@ -7,6 +7,7 @@
 namespace sqtpp {
 namespace test {
 
+[TestClass]
 public ref class CmdArgsTest : TestBase 
 {
 public:
@@ -41,6 +42,38 @@ public:
 		Assert::IsTrue( !options.keepBlockComments() );
 		Assert::IsTrue( !options.keepLineComments() );
 		Assert::IsTrue( options.keepSqlComments() );
+	}
+
+	[TestMethod]
+	void norangeOptionTest()
+	{
+		const int argc = 1;
+		const wchar_t* argv[] = { L"sqtpp.exe" };
+		Options options;
+		CmdArgs cmdArgs( argc, argv );
+
+		cmdArgs.ignoreMissingArgs( true );
+		cmdArgs.parse( options );
+
+		const Range& outputRange = options.getOutputRange();
+		Assert::IsTrue( outputRange.isEmpty() );
+	}
+
+
+	[TestMethod]
+	void rangeOptionTest()
+	{
+		const int argc = 2;
+		const wchar_t* argv[] = { L"sqtpp.exe", L"/r10-20" };
+		Options options;
+		CmdArgs cmdArgs( argc, argv );
+
+		cmdArgs.ignoreMissingArgs( true );
+		cmdArgs.parse( options );
+
+		const Range& outputRange = options.getOutputRange();
+		Assert::IsTrue( outputRange.getStartIndex() == 10 );
+		Assert::IsTrue( outputRange.getEndIndex() == 20 );
 	}
 
 }; // class

@@ -15,6 +15,7 @@ namespace sqtpp {
 
 class Error;
 class CodePageInfo;
+struct Range;
 enum Token;
 enum CodePageId;
 
@@ -85,6 +86,15 @@ public:
 	// Get the instance id
 	int getInstanceId() const throw();
 
+	// Get the nesting include level of this file.
+	int getIncludeLevel() const throw();
+
+	// Set the nesting include level of this file.
+	void setIncludeLevel( int includeLevel ) throw();
+
+	// Check if this file is the root file processed.
+	bool isRootFile() const throw();
+
 	// Check if this file should be opened and read only once.
 	bool isIncludeOnce() const throw();
 
@@ -103,6 +113,15 @@ public:
 	// Get the file locale (code page).
 	const locale& getLocale() const throw();
 
+	// Get the current position in the file.
+	size_t getPosition() const throw();
+
+	// Set the current position in the file.
+	void setPosition( size_t nPosition ) throw();
+
+	// Get the the range of the current token measured in characters.
+	const Range& getCurrentTokenRange() const throw();
+
 	// Get the current line number.
 	size_t getLine() const throw();
 
@@ -119,11 +138,10 @@ public:
 	int  getNextCounter() const throw();
 
 	// Set the last (non white space) token found by the processor.
-	void setLastToken( Token token );
+	void setLastToken( Token token, const Range& tokenRange );
 
 	// Check if the first, second and last (non white space) token found is a #ifndef, #define / #endif pair.
 	bool isAutoIncludedOnce();
-
 
 private:
 	// Auto detect the character set of the file.
