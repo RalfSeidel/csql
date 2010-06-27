@@ -4,9 +4,13 @@ using System.IO;
 
 namespace Setup.CustomActions
 {
-    class AddInFilePreparer
+	/// <summary>
+	/// Retrieves the addin file template and replaces the variables with the 
+	/// values used on the target machine.
+	/// </summary>
+    static class AddInFilePreparer
     {
-        public AddInFilePreparer(string pathToXmlAddInFile, string pathToAddInAssembly, InstallContext installContext)
+        public static void Prepare(string pathToXmlAddInFile, string pathToAddInAssembly, InstallContext installContext)
         {
             installContext.LogMessage("Preparing AddIn - File " + pathToXmlAddInFile + " with value " + pathToAddInAssembly);
 
@@ -16,7 +20,7 @@ namespace Setup.CustomActions
         }
 
 
-		private string ReadFile( String sFilename )
+		private static string ReadFile( String sFilename )
         {
             string sContent = "";
 
@@ -30,13 +34,11 @@ namespace Setup.CustomActions
         }
 
 
-		private void WriteFile( String sFilename, String sLines )
+		private static void WriteFile( String sFilename, String sLines )
         {
             StreamWriter myFile = new StreamWriter(sFilename);
             myFile.Write(sLines);
             myFile.Close();
         }
-
-
     }
 }

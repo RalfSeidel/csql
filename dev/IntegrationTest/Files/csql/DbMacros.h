@@ -2,7 +2,7 @@
 /**
 ** @file
 ** <copyright file="DbMacros.h" company="SQL Service GmbH">
-** Copyright (c) SQL Service GmbH.  All rights reserved.
+** Copyright (c) SQL Service GmbH. All rights reserved.
 ** </copyright>
 ** <summary>
 ** Common helper macros for MS Transact SQL Scripts / Sample macro
@@ -27,8 +27,19 @@
 /// CSQL_CREATE_xxx macro will be implictly defined.
 /// </summary>
 /// <remarks>
-/// If no other flow control is defined this definition will be 
-/// set by default.
+/// If no other flow control is defined before this file is included
+/// this definition will be set by default.
+/// </remarks>
+
+/// @def CSQL_DROP_ALL
+/// @ingroup Control
+/// <summary>
+/// If this definition is set when this file is include any other
+/// CSQL_DROP_xxx macro will be implictly defined.
+/// </summary>
+/// <remarks>
+/// If no other flow control is defined before this file is included
+/// this definition will be set by default.
 /// </remarks>
 
 /// @def CSQL_DROP_CREATE
@@ -43,6 +54,22 @@
 /// set by default.
 /// </remarks>
 /// @example DropCreate.csql
+
+
+/// @def CSQL_DROP_SCHEMAS
+/// @ingroup Control
+/// <summary>
+/// Use this defintion to include/excluded sections in your script
+/// that are dropping schemas.
+/// </summary>
+
+/// @def CSQL_CREATE_SCHEMAS
+/// @ingroup Control
+/// <summary>
+/// Use this defintion to include/excluded sections in your script
+/// that are creating schemas.
+/// </summary>
+
 
 /// @def CSQL_DROP_DEFAULTS
 /// @ingroup Control
@@ -313,6 +340,7 @@
 #undef CSQL_DBMACROS_INCLUDED
 
 #undef CSQL_DROP_ALL
+#undef CSQL_DROP_SCHEMAS
 #undef CSQL_DROP_DEFAULTS
 #undef CSQL_DROP_RULES
 #undef CSQL_DROP_TYPES
@@ -329,6 +357,7 @@
 #undef CSQL_DROP_SYNONYMS
 
 #undef CSQL_CREATE_ALL
+#undef CSQL_CREATE_SCHEMAS
 #undef CSQL_CREATE_DEFAULTS
 #undef CSQL_CREATE_RULES
 #undef CSQL_CREATE_TYPES
@@ -367,29 +396,33 @@
 ** to drop and create everything.
 */
 
-#if !( defined(CSQL_CREATE_ALL)             || defined(CSQL_CREATE_ALL_BUT_TABLES) \
-    || defined(CSQL_CREATE_DEFAULTS )       || defined(CSQL_CREATE_RULES ) \
-    || defined(CSQL_CREATE_TYPES)           || defined(CSQL_CREATE_TABLES) \
-    || defined(CSQL_CREATE_PRIMARY_KEYS)    || defined(CSQL_CREATE_FOREIGN_KEYS)  \
-    || defined(CSQL_CREATE_PKEYS)           || defined(CSQL_CREATE_FKEYS)  \
-    || defined(CSQL_CREATE_INDEXES)         || defined(CSQL_CREATE_TRIGGERS) \
-    || defined(CSQL_CREATE_VIEWS)           || defined(CSQL_CREATE_PROCEDURES) \
-    || defined(CSQL_CREATE_FUNCTIONS)       || defined(CSQL_CREATE_SYNONYMS) \
-    || defined(CSQL_GRANT_ALL) \
-    || defined(CSQL_GRANT_TABLES)           || defined(CSQL_GRANT_VIEWS) \
-    || defined(CSQL_GRANT_PROCEDURES)       || defined(CSQL_GRANT_FUNCTIONS) \
-    || defined(CSQL_INSERT_DEFAULT_DATA) \
-	|| defined(CSQL_DELETE_DICTIONARY_DATA) || defined(CSQL_INSERT_DICTIONARY_DATA) \
-    || defined(CSQL_EXECUTE_TESTS)   \
-    || defined(CSQL_DROP_ALL) \
-    || defined(CSQL_DROP_DEFAULTS)          || defined(CSQL_DROP_RULES) \
-    || defined(CSQL_DROP_TYPES)             || defined(CSQL_DROP_TABLES) \
-    || defined(CSQL_DROP_PRIMARY_KEYS)      || defined(CSQL_DROP_FOREIGN_KEYS)  \
-    || defined(CSQL_DROP_PKEYS)             || defined(CSQL_DROP_FKEYS)  \
-    || defined(CSQL_DROP_INDEXES)           || defined(CSQL_DROP_TRIGGERS) \
-    || defined(CSQL_DROP_VIEWS)             || defined(CSQL_DROP_PROCEDURES) \
-    || defined(CSQL_DROP_FUNCTIONS)         || defined(CSQL_DROP_SYNONYMS))
+#if !( defined( CSQL_CREATE_ALL )             || defined( CSQL_CREATE_ALL_BUT_TABLES ) \
+    || defined( CSQL_CREATE_SCHEMAS ) \
+    || defined( CSQL_CREATE_DEFAULTS  )       || defined( CSQL_CREATE_RULES  ) \
+    || defined( CSQL_CREATE_TYPES )           || defined( CSQL_CREATE_TABLES ) \
+    || defined( CSQL_CREATE_PRIMARY_KEYS )    || defined( CSQL_CREATE_FOREIGN_KEYS )  \
+    || defined( CSQL_CREATE_PKEYS )           || defined( CSQL_CREATE_FKEYS )  \
+    || defined( CSQL_CREATE_INDEXES )         || defined( CSQL_CREATE_TRIGGERS ) \
+    || defined( CSQL_CREATE_VIEWS )           || defined( CSQL_CREATE_PROCEDURES ) \
+    || defined( CSQL_CREATE_FUNCTIONS )       || defined( CSQL_CREATE_SYNONYMS ) \
+    || defined( CSQL_GRANT_ALL ) \
+    || defined( CSQL_GRANT_TABLES )           || defined( CSQL_GRANT_VIEWS ) \
+    || defined( CSQL_GRANT_PROCEDURES )       || defined( CSQL_GRANT_FUNCTIONS ) \
+    || defined( CSQL_INSERT_DEFAULT_DATA ) \
+    || defined( CSQL_DELETE_DICTIONARY_DATA ) || defined( CSQL_INSERT_DICTIONARY_DATA ) \
+    || defined( CSQL_EXECUTE_TESTS ) \
+    || defined( CSQL_DROP_ALL ) \
+    || defined( CSQL_DROP_SCHEMAS ) \
+    || defined( CSQL_DROP_DEFAULTS )          || defined( CSQL_DROP_RULES ) \
+    || defined( CSQL_DROP_TYPES )             || defined( CSQL_DROP_TABLES ) \
+    || defined( CSQL_DROP_PRIMARY_KEYS )      || defined( CSQL_DROP_FOREIGN_KEYS )  \
+    || defined( CSQL_DROP_PKEYS )             || defined( CSQL_DROP_FKEYS )  \
+    || defined( CSQL_DROP_INDEXES )           || defined( CSQL_DROP_TRIGGERS ) \
+    || defined( CSQL_DROP_VIEWS )             || defined( CSQL_DROP_PROCEDURES ) \
+    || defined( CSQL_DROP_FUNCTIONS )         || defined( CSQL_DROP_SYNONYMS ) )
+
 #define CSQL_CREATE_ALL
+#define CSQL_DROP_ALL
 #define CSQL_DROP_CREATE
 #define CSQL_GRANT_ALL
 #define CSQL_INSERT_DEFAULT_DATA
@@ -404,6 +437,7 @@
 */
 
 #if defined( CSQL_CREATE_ALL ) || defined( CSQL_CREATE_ALL_BUT_TABLES )
+#undef CSQL_CREATE_SCHEMAS
 #undef CSQL_CREATE_DEFAULTS
 #undef CSQL_CREATE_RULES
 #undef CSQL_CREATE_TYPES
@@ -420,6 +454,7 @@
 #undef CSQL_CREATE_SYNONYMS
 
 #ifdef CSQL_CREATE_ALL_BUT_TABLES
+#define CSQL_CREATE_SCHEMAS      CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_DEFAULTS     CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_RULES        CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_TYPES        CSQL_CREATE_ALL_BUT_TABLES
@@ -432,6 +467,7 @@
 #define CSQL_CREATE_FUNCTIONS    CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_SYNONYMS     CSQL_CREATE_ALL_BUT_TABLES
 #else
+#define CSQL_CREATE_SCHEMAS      CSQL_CREATE_ALL
 #define CSQL_CREATE_DEFAULTS     CSQL_CREATE_ALL
 #define CSQL_CREATE_RULES        CSQL_CREATE_ALL
 #define CSQL_CREATE_TYPES        CSQL_CREATE_ALL
@@ -448,6 +484,7 @@
 #endif // CSQL_CREATE_ALL
 
 #if defined( CSQL_DROP_ALL ) || defined( CSQL_DROP_CREATE )
+#undef CSQL_DROP_SCHEMAS
 #undef CSQL_DROP_DEFAULTS
 #undef CSQL_DROP_RULES
 #undef CSQL_DROP_TYPES
@@ -467,6 +504,9 @@
 
 #if defined( CSQL_DROP_CREATE )
 
+#ifdef CSQL_CREATE_SCHEMAS
+#define CSQL_DROP_SCHEMAS      CSQL_CREATE_SCHEMAS
+#endif
 #ifdef CSQL_CREATE_DEFAULTS
 #define CSQL_DROP_DEFAULTS     CSQL_CREATE_DEFAULTS
 #endif
@@ -507,13 +547,16 @@
 
 #elif defined( CSQL_DROP_ALL ) || defined( CSQL_DROP_ALL_BUT_TABLES )
 
+#define CSQL_DROP_SCHEMAS      CSQL_DROP_ALL
 #define CSQL_DROP_DEFAULTS     CSQL_DROP_ALL
 #define CSQL_DROP_RULES        CSQL_DROP_ALL
 #define CSQL_DROP_TYPES        CSQL_DROP_ALL
 #ifndef CSQL_DROP_ALL_BUT_TABLES
 #define CSQL_DROP_TABLES       CSQL_DROP_ALL
 #endif
+#define CSQL_DROP_PRIMARY_KEYS CSQL_DROP_ALL
 #define CSQL_DROP_PKEYS        CSQL_DROP_ALL
+#define CSQL_DROP_FOREIGN_KEYS CSQL_DROP_ALL
 #define CSQL_DROP_FKEYS        CSQL_DROP_ALL
 #define CSQL_DROP_INDEXES      CSQL_DROP_ALL
 #define CSQL_DROP_TRIGGERS     CSQL_DROP_ALL
@@ -639,12 +682,13 @@ print '*** Context: ' + @@servername + '.' + db_name() + ' ***'
 /// Macro to create a schema.
 /// </summary>
 /// <remarks>
-/// The default is only created if it doesn't alread exist.
+/// The schema is only created if it doesn't exist.
 /// </remarks>
 /// <param name="X">
-/// The name of the schema 
+/// The name of the schema.
 /// </param>
-/// @example CreateDefault.csql
+/// @example CreateSchema.csql
+#ifdef CSQL_CREATE_SCHEMAS
 #define CSQL_CREATE_SCHEMA( X ) \
 if not exists ( select 1 from sys.schemas where name = #@X ) \
 begin \
@@ -653,6 +697,32 @@ begin \
 	print @SqlStmt \
 	exec( @SqlStmt ) \
 end
+#else  // !CSQL_CREATE_SCHEMAS
+#define CSQL_CREATE_SCHEMA( X )
+#endif // CSQL_CREATE_SCHEMAS
+
+
+/// @ingroup Action
+/// <summary>
+/// Macro to drop a schema.
+/// </summary>
+/// <param name="X">
+/// The name of the schema.
+/// </param>
+/// @example CreateSchema.csql
+#ifdef CSQL_DROP_SCHEMAS
+#define CSQL_DROP_SCHEMA( X ) \
+if exists ( select 1 from sys.schemas where name = #@X ) \
+begin \
+	declare @SqlStmt nvarchar( max ) \
+	set @SqlStmt = 'drop schema ' + #@X \
+	print @SqlStmt \
+	exec( @SqlStmt ) \
+end
+#else  // !CSQL_DROP_SCHEMAS
+#define CSQL_DROP_SCHEMA( X )
+#endif // CSQL_DROP_SCHEMAS
+
 
 
 
@@ -1107,6 +1177,36 @@ end
 #define CSQL_DROP_TRIGGER(X)
 #endif // CSQL_DROP_TRIGGERS
 
+/// @ingroup Action
+/// <summary>
+/// Macro to drop all trigger for the specifed table.
+/// </summary>
+/// <param name="X">
+/// The (schema qualified) name of the table for which to drop the triggers.
+/// </param>
+#ifdef CSQL_DROP_TRIGGERS
+#define CSQL_DROP_ALL_TRIGGERS( X ) \
+declare c cursor local forward_only for \
+	select 'drop trigger ' + schema_name( o.schema_id ) + '.' + o.name \
+	  from sys.objects o \
+	 where o.parent_object_id = object_id( #@X ) \
+	   and o.type = 'TR' \
+declare @SqlStmt nvarchar(max) \
+open c \
+fetch c into @SqlStmt \
+while @@fetch_status = 0 \
+begin \
+	print @SqlStmt  \
+	exec( @SqlStmt ) \
+	fetch c into @SqlStmt \
+end \
+close c \
+deallocate c 
+#else  // !CSQL_DROP_TRIGGERS
+#define CSQL_DROP_ALL_TRIGGERS(X)
+#endif // CSQL_DROP_TRIGGERS
+
+
 
 /// @ingroup Action
 /// <summary>
@@ -1308,6 +1408,7 @@ end
 /// <param name="Detail">
 /// The qualified name of the table for which the constraints are defined.
 /// </param>
+/// @example DropAllForeignKeys.csql
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_ALL_FOREIGN_KEYS( Detail ) \
 declare c cursor local forward_only for \
@@ -1398,6 +1499,7 @@ end
 /// <param name="X">
 /// The (schema qualified) name of the table for which to drop the indexes.
 /// </param>
+/// @example DropAllIndexes.csql
 #ifdef CSQL_DROP_INDEXES
 #define CSQL_DROP_ALL_INDEXES( X ) \
 declare c cursor local forward_only for \

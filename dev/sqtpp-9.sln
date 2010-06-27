@@ -24,7 +24,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.test", "sqtpp.test\sq
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C} = {8B66DF77-727B-4CD9-A9EB-7459D539338C}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "setup.CustomActions", "setup.CustomActions\setup.CustomActions.csproj", "{EC48F459-91DE-484D-AA12-14562C1DC38A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setup.CustomActions", "setup.CustomActions\Setup.CustomActions.csproj", "{EC48F459-91DE-484D-AA12-14562C1DC38A}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}"
 EndProject
@@ -35,9 +35,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.exe", "sqtpp.exe\sqtp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbcProvider", "DbcProvider\DbcProvider.csproj", "{C404D769-C642-461B-A5C1-4295F5B7542C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbcProvider.Test", "DbcProvider.Test\DbcProvider.Test.csproj", "{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbcProvider.GuiTest", "DbcProvider.GuiTest\DbcProvider.GuiTest.csproj", "{FD081581-1F61-4127-8432-65FC15240D2C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs08.codeplex.com/
 		SccLocalPath0 = .
@@ -71,6 +77,15 @@ Global
 		SccProjectUniqueName10 = IntegrationTest\\IntegrationTest.csproj
 		SccProjectName10 = IntegrationTest
 		SccLocalPath10 = IntegrationTest
+		SccProjectUniqueName11 = DbcProvider\\DbcProvider.csproj
+		SccProjectName11 = DbcProvider
+		SccLocalPath11 = DbcProvider
+		SccProjectUniqueName12 = DbcProvider.Test\\DbcProvider.Test.csproj
+		SccProjectName12 = DbcProvider.Test
+		SccLocalPath12 = DbcProvider.Test
+		SccProjectUniqueName13 = DbcProvider.GuiTest\\DbcProvider.GuiTest.csproj
+		SccProjectName13 = DbcProvider.GuiTest
+		SccLocalPath13 = DbcProvider.GuiTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = sqtpp-9.vsmdi
@@ -196,6 +211,7 @@ Global
 		{8B31549C-624D-4F80-B8BE-1EA0D50FC2A1}.Release|x64.ActiveCfg = Debug|Win32
 		{8B31549C-624D-4F80-B8BE-1EA0D50FC2A1}.Release|x86.ActiveCfg = Debug|Win32
 		{EC48F459-91DE-484D-AA12-14562C1DC38A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC48F459-91DE-484D-AA12-14562C1DC38A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC48F459-91DE-484D-AA12-14562C1DC38A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{EC48F459-91DE-484D-AA12-14562C1DC38A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{EC48F459-91DE-484D-AA12-14562C1DC38A}.Debug|Win32.ActiveCfg = Debug|Any CPU
@@ -258,6 +274,52 @@ Global
 		{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}.Release|Win32.ActiveCfg = Release|Any CPU
 		{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}.Release|x64.ActiveCfg = Release|Any CPU
 		{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|Win32.ActiveCfg = Debug|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|x64.ActiveCfg = Debug|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|x86.ActiveCfg = Debug|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Debug|x86.Build.0 = Debug|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|Win32.ActiveCfg = Release|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|x64.ActiveCfg = Release|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|x86.ActiveCfg = Release|x86
+		{C404D769-C642-461B-A5C1-4295F5B7542C}.Release|x86.Build.0 = Release|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|Win32.ActiveCfg = Debug|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|x64.ActiveCfg = Debug|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|x86.ActiveCfg = Debug|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Debug|x86.Build.0 = Debug|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|Mixed Platforms.Build.0 = Release|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|Win32.ActiveCfg = Release|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|x64.ActiveCfg = Release|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|x86.ActiveCfg = Release|x86
+		{EDC57EAB-1AAF-463F-9925-6E3FD07B5151}.Release|x86.Build.0 = Release|x86
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|Win32.ActiveCfg = Release|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

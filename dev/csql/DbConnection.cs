@@ -16,7 +16,7 @@ namespace csql
 		/// <summary>
 		/// The command line arguments.
 		/// </summary>
-        private readonly CsqlOptions csqlOptions;
+        private readonly CSqlOptions csqlOptions;
 
 		/// <summary>
 		/// The inner exception that is used for the database communication.
@@ -34,7 +34,7 @@ namespace csql
 		/// Initializes a new instance of the <see cref="DbConnection"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The object holding the command line arguments of the program instance.</param>
-        protected DbConnection(CsqlOptions csqlOptions)
+        protected DbConnection(CSqlOptions csqlOptions)
 		{
             this.csqlOptions = csqlOptions;
 		}
@@ -94,7 +94,7 @@ namespace csql
 		/// </remarks>
 		/// <param name="cmdArgs">The command line arguments.</param>
 		/// <returns>The method has to return an open database connection object.</returns>
-        protected abstract IDbConnection CreateAdoConnection(CsqlOptions csqlOptions);
+        protected abstract IDbConnection CreateAdoConnection(CSqlOptions csqlOptions);
 
 		/// <summary>
 		/// Create a statement batch that will just echo the given messages texts.
@@ -138,14 +138,14 @@ namespace csql
 	/// </summary>
 	public class OleDbConnection : DbConnection
 	{
-		public OleDbConnection( CsqlOptions csqlOptions )
+		public OleDbConnection( CSqlOptions csqlOptions )
             : base(csqlOptions)
 		{
 			System.Data.OleDb.OleDbConnection connection = (System.Data.OleDb.OleDbConnection)AdoConnection;
 			connection.InfoMessage += new System.Data.OleDb.OleDbInfoMessageEventHandler( InfoMessageEventHandler );
 		}
 
-        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
+        protected override IDbConnection CreateAdoConnection(CSqlOptions csqlOptions)
 		{
 			throw new NotImplementedException( "TODO" );
 		}
@@ -182,14 +182,14 @@ namespace csql
 	/// </summary>
 	public class OdbcConnection : DbConnection
 	{
-        public OdbcConnection(CsqlOptions csqlOptions)
+        public OdbcConnection(CSqlOptions csqlOptions)
 			: base( csqlOptions )
 		{
 			System.Data.Odbc.OdbcConnection connection = (System.Data.Odbc.OdbcConnection)AdoConnection;
 			connection.InfoMessage += new System.Data.Odbc.OdbcInfoMessageEventHandler( InfoMessageEventHandler );
 		}
 
-        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
+        protected override IDbConnection CreateAdoConnection(CSqlOptions csqlOptions)
 		{
 			throw new NotImplementedException( "TODO" );
 			//connection.InfoMessage += new System.Data.Odbc.OdbcInfoMessageEventHandler( InfoMessageEventHandler );

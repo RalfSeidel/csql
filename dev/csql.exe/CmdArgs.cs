@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using CommandLine;
+using System.Security.Permissions;
 
 // Disable the not initialized and not used warning because the field
 // values are managed by the command line parser.
@@ -50,7 +51,7 @@ namespace csql.exe
 		public DbDriver Driver;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[Argument( ArgumentType.AtMostOnce, HelpText = "The server/datasource name.", ShortName = "S" )]
+		[Argument( ArgumentType.Required | ArgumentType.AtMostOnce, HelpText="The server/datasource name.", ShortName="S" )]
 		public string Server;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
@@ -110,9 +111,10 @@ namespace csql.exe
 		/// Creates the options for the script processor.
 		/// </summary>
 		/// <returns>The options instance created based on the command line arguments provided.</returns>
-		public CsqlOptions CreateCsqlOptions()
+		[SecurityPermission( SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode )]
+		public CSqlOptions CreateCsqlOptions()
 		{
-			CsqlOptions csqlOptions = new CsqlOptions();
+			CSqlOptions csqlOptions = new CSqlOptions();
 
 			csqlOptions.ScriptFile = this.ScriptFile;
 			csqlOptions.TempFile = this.TempFile;
@@ -128,7 +130,7 @@ namespace csql.exe
 			csqlOptions.BreakOnError = this.BreakOnError;
 			csqlOptions.NoLogo = this.NoLogo;
 			csqlOptions.Verbosity.Level = (TraceLevel)Verbose;
-			csqlOptions.AdditionalPreprocessorArguments = this.PreprocessorArgs;
+			csqlOptions.PreprocessorOptions.AdvancedArguments = this.PreprocessorArgs;
 
 			return csqlOptions;
 		}

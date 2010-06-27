@@ -15,7 +15,7 @@ namespace csql
 		/// Initializes a new instance of the <see cref="ExecutionProcessor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The CMD args.</param>
-        public ExecutionProcessor(CsqlOptions csqlOptions)
+        public ExecutionProcessor(CSqlOptions csqlOptions)
             : base(csqlOptions)
 		{
             m_connection = ConnectionFactory.CreateConnection(csqlOptions);

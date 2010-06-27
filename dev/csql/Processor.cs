@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Globalization;
 
 namespace csql
 {
@@ -17,7 +18,7 @@ namespace csql
 	/// </remarks>
 	public abstract class Processor : IDisposable
 	{
-		private readonly CsqlOptions m_options;
+		private readonly CSqlOptions m_options;
 		private string m_pipeName;
 		private string m_currentFile;
 		private int m_currentFileLineNo;
@@ -50,7 +51,7 @@ namespace csql
 		/// Initializes a new instance of the <see cref="Processor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The parsed command line arguments.</param>
-		protected Processor( CsqlOptions csqlOptions )
+		protected Processor( CSqlOptions csqlOptions )
 		{
 			this.m_options = csqlOptions;
 		}
@@ -61,7 +62,7 @@ namespace csql
 		/// <value>
 		/// The command line arguments.
 		/// </value>
-		protected CsqlOptions Options
+		protected CSqlOptions Options
 		{
 			get { return m_options; }
 		}
@@ -106,7 +107,7 @@ namespace csql
 				Debug.Assert( UseNamedPipes );
 				if ( m_pipeName == null ) {
 					int currentProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
-					m_pipeName = "de.sqlservice.sqtpp\\" + currentProcessId.ToString();
+					m_pipeName = "de.sqlservice.sqtpp\\" + currentProcessId.ToString( CultureInfo.InvariantCulture );
 				}
 				return m_pipeName;
 			}
@@ -140,12 +141,9 @@ namespace csql
 		{
 			get
 			{
-				Process thisProcess = System.Diagnostics.Process.GetCurrentProcess();
 				Assembly assembly = Assembly.GetExecutingAssembly();
 
-				//string thisPath = thisProcess.MainModule.FileName;
 				string thisPath = assembly.Location;
-
 				string root = Path.GetPathRoot( thisPath );
 				string folder = Path.GetDirectoryName( thisPath );
 				string sqtppPath = Path.Combine( Path.Combine( root, folder ), "sqtpp.exe" );
@@ -162,12 +160,11 @@ namespace csql
 		{
 			get
 			{
-				string ppArguments = m_options.GeneratePreprocessorArguments();
-				string ppInputFile = m_options.ScriptFile;
-				string ppOutFile   = UseNamedPipes ? NamedPipe.GetPipePath( NamedPipeName ) : TempFileName;
+				SqtppOptions ppOption = m_options.PreprocessorOptions;
+				ppOption.InputFile = m_options.ScriptFile;
+				ppOption.OutputFile = UseNamedPipes ? NamedPipe.GetPipePath( NamedPipeName ) : TempFileName;
+				string ppArguments = ppOption.CommandLineArguments;
 
-				ppArguments += " -o\"" + ppOutFile + "\"";
-				ppArguments += " " + ppInputFile;
 				return ppArguments;
 			}
 		}
@@ -181,8 +178,8 @@ namespace csql
 			if ( GlobalSettings.Verbosity.TraceInfo && !m_options.NoLogo ) {
 				StringBuilder sb = new StringBuilder();
 				Assembly assembly = Assembly.GetExecutingAssembly();
-				string name = assembly.GetName().Name;
 				Version version = assembly.GetName().Version;
+				string name = GlobalSettings.CSqlProductName;
 				sb.Append( name );
 				sb.Append( " " );
 				if ( GlobalSettings.Verbosity.TraceVerbose ) {
@@ -191,6 +188,7 @@ namespace csql
 					sb.Append( version.ToString( 2 ) );
 				}
 				sb.Append( " (c) SQL Service GmbH" );
+				sb.Append( " - Processing " ).Append( m_options.ScriptFile );
 
 				string message = sb.ToString();
 				Trace.WriteLine( message );
@@ -329,7 +327,7 @@ namespace csql
 		private void ProcessLine( string line )
 		{
 			string[] parts = line.Split( ' ' );
-			this.m_currentFileLineNo = int.Parse( parts[1] );
+			this.m_currentFileLineNo = int.Parse( parts[1], CultureInfo.InvariantCulture );
 
 			// The pre processor may omit the file name if it hasn't changed 
 			// since the last #line directive.
@@ -425,9 +423,12 @@ namespace csql
 					}
 
 					stream = new FileStream( TempFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
-				} else {
+				} else if ( !m_ppProcess.HasExited  ) {
 					stream = pipe.Open();
+				} else {
+					stream = null;
 				}
+
 
 				return stream;
 			}

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+	<Words>
+		<Deprecated>
+			<!-- Words that should be flagged as obsolete. -->
+		</Deprecated>
+		<Recognized>
+			<!-- Words that should not cause a violation. -->
+			<Word>exe</Word>
+			<Word>csql</Word>
+			<Word>sqtpp</Word>
+			<Word>Util</Word>
+			<!-- Sequel Tools Namespace -->
+			<Word>Sqt</Word>
+			<!-- Most Recently Used -->
+			<Word>Mru</Word>
+			<!-- Db Connection -->
+			<Word>Dbc</Word>
+		</Recognized>
+		<Unrecognized>
+			<!-- Words that should cause a violation. -->
+		</Unrecognized>
+		<Inappropriate>
+			<!-- Words that should cause a violation. -->
+		</Inappropriate>
+	</Words>
+	<Acronyms>
+		<CasingExceptions>
+			<Acronym>sqtpp</Acronym>
+			<Acronym>csql</Acronym>
+			<Acronym>CSql</Acronym>
+			<Acronym>exe</Acronym>
+			<Acronym>Dbc</Acronym>
+			<Acronym>Db</Acronym>
+			<Acronym>Ms</Acronym>
+			<Acronym>Vs</Acronym>
+		</CasingExceptions>
+	</Acronyms>
+</Dictionary>

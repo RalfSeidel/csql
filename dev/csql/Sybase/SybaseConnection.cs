@@ -16,35 +16,31 @@ namespace csql.Sybase
 	/// </summary>
 	public class SybaseConnection : DbConnection
 	{
-        public SybaseConnection(CsqlOptions csqlOptions)
-            : base(csqlOptions)
+		public SybaseConnection( CSqlOptions csqlOptions )
+			: base( csqlOptions )
 		{
 		}
 
-        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
+		protected override IDbConnection CreateAdoConnection( CSqlOptions csqlOptions )
 		{
 			StringBuilder sb = new StringBuilder();
 
-            if (csqlOptions.DbServer.Length != 0)
-            {
-                sb.Append("DataSource=").Append(csqlOptions.DbServer).Append(";");
+			if ( !String.IsNullOrEmpty( csqlOptions.DbServer ) ) {
+				sb.Append( "DataSource=" ).Append( csqlOptions.DbServer ).Append( ";" );
 			}
-            if (csqlOptions.DbServerPort != 0)
-            {
-                sb.Append("Port=").Append(csqlOptions.DbServerPort).Append(";");
+			if ( csqlOptions.DbServerPort != 0 ) {
+				sb.Append( "Port=" ).Append( csqlOptions.DbServerPort ).Append( ";" );
 			}
-            if (!String.IsNullOrEmpty(csqlOptions.DbDatabase))
-            {
-                sb.Append("Database=").Append(csqlOptions.DbDatabase).Append(";");
+			if ( !String.IsNullOrEmpty( csqlOptions.DbDatabase ) ) {
+				sb.Append( "Database=" ).Append( csqlOptions.DbDatabase ).Append( ";" );
 			}
-            if (!String.IsNullOrEmpty(csqlOptions.DbUser))
-            {
-                sb.Append("User ID=").Append(csqlOptions.DbUser).Append(";");
-                sb.Append("Password=").Append(csqlOptions.DbPassword).Append(";");
+			if ( !String.IsNullOrEmpty( csqlOptions.DbUser ) ) {
+				sb.Append( "User ID=" ).Append( csqlOptions.DbUser ).Append( ";" );
+				sb.Append( "Password=" ).Append( csqlOptions.DbPassword ).Append( ";" );
 			} else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}
-			sb.Append( "Application Name=" ).Append( "csql" ).Append( ";" );
+			sb.Append( "Application Name=" ).Append( GlobalSettings.CSqlProductName ).Append( ";" );
 			// The following property is a work around for the 
 			// error "30182 Invalid amount of parameters Optionen" sometime
 			// raised by the provider if it encounters variable names.
@@ -69,7 +65,7 @@ namespace csql.Sybase
 		{
 			get
 			{
-                string file = @"Sybase.AdoNet2.AseClient.dll";
+				string file = @"Sybase.AdoNet2.AseClient.dll";
 				string root;
 				string path;
 
@@ -107,7 +103,7 @@ namespace csql.Sybase
 					return path;
 
 
-                Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, "Can't find sybase data provider assembly (" + file + ").");
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceWarning, "Can't find sybase data provider assembly (" + file + ")." );
 				return null;
 			}
 		}
@@ -122,20 +118,20 @@ namespace csql.Sybase
 			{
 				string assemblyPath = AseAssemblyPath;
 
-                try {
-                    if ( assemblyPath != null ) {
-                        Assembly assembly = Assembly.LoadFile( assemblyPath );
-                        return assembly;
-                    } else {
-                        // Try to load from GAC
-                        Assembly assembly = Assembly.Load( "Sybase.Data.AseClient" );
-                        return assembly;
-                    }
-                }
-                catch ( Exception ex ) {
+				try {
+					if ( assemblyPath != null ) {
+						Assembly assembly = Assembly.LoadFile( assemblyPath );
+						return assembly;
+					} else {
+						// Try to load from GAC
+						Assembly assembly = Assembly.Load( "Sybase.Data.AseClient" );
+						return assembly;
+					}
+				}
+				catch ( Exception ex ) {
 					Trace.TraceError( "Can't load sybase provider assembly: " + ex.Message );
-                    throw new TerminateException( ExitCode.SqlInitializeError );
-                }
+					throw new TerminateException( ExitCode.SqlInitializeError );
+				}
 			}
 		}
 
@@ -150,10 +146,10 @@ namespace csql.Sybase
 			Assembly assembly = AseAssembly;
 			Object connection = assembly.CreateInstance( "Sybase.Data.AseClient.AseConnection" );
 
-			Type       connectionType   = connection.GetType();
-			EventInfo  eventInfo        = connectionType.GetEvent( "InfoMessage" );
-			Type       eventHandlerType = eventInfo.EventHandlerType;
-			Type       thisType         = GetType();
+			Type connectionType   = connection.GetType();
+			EventInfo eventInfo        = connectionType.GetEvent( "InfoMessage" );
+			Type eventHandlerType = eventInfo.EventHandlerType;
+			Type thisType         = GetType();
 			MethodInfo eventHandler     = thisType.GetMethod( "OnAseConnectionInfoEvent" );
 
 			Delegate d = Delegate.CreateDelegate( eventHandlerType, this, eventHandler, true );

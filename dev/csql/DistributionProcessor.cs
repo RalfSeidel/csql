@@ -20,7 +20,7 @@ namespace csql
 		/// Initializes a new instance of the <see cref="DistributionProcessor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The CMD args.</param>
-        public DistributionProcessor(CsqlOptions csqlOptions)
+        public DistributionProcessor(CSqlOptions csqlOptions)
             : base(csqlOptions)
 		{
             string outputFilePath = csqlOptions.DistributionFile;

@@ -1,0 +1,25 @@
+/// ---------------------------------------------------------------------
+/// <summary>
+/// Test and exmaple for the CSQL_CREATE_SCHEMA and CSQL_DROP_SCHEMA 
+/// macros.
+/// </summary>
+/// ---------------------------------------------------------------------
+#include "DbMacros.h"
+
+CSQL_SET_CATALOG( tempdb )
+go
+
+CSQL_CREATE_SCHEMA( csql_test )
+go
+
+if not exists ( select 1 from sys.schemas where name = 'csql_test' )
+	raiserror 50000 'Schema was not created.'
+go
+
+
+CSQL_DROP_SCHEMA( csql_test )
+go
+
+if exists ( select 1 from sys.schemas where name = 'csql_test' )
+	raiserror 50000 'Schema was not dropped.'
+go

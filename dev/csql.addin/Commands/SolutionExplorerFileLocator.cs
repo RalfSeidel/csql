@@ -107,23 +107,30 @@ namespace csql.addin.Commands
 		/// <param name="item">The current item in the recursion.</param>
 		private void CreateItemsStack( Stack s, object item )
 		{
-			if ( item is ProjectItem ) {
-				ProjectItem pi = (ProjectItem)item;
-				s.Push( pi );
-				CreateItemsStack( s, pi.Collection.Parent );
-			} else if ( item is Project ) {
-				Project p = (Project)item;
-				s.Push( p );
-				if ( p.ParentProjectItem != null ) {
+			ProjectItem projectItem = item as ProjectItem;
+			if ( projectItem != null ) {
+				s.Push( projectItem );
+				CreateItemsStack( s, projectItem.Collection.Parent );
+				return;
+			} 
+			
+			Project project = item as Project;
+			if ( project != null ) {
+				s.Push( project );
+				if ( project.ParentProjectItem != null ) {
 					//top nodes dont have solution as parent, but is null 
-					CreateItemsStack( s, p.ParentProjectItem );
+					CreateItemsStack( s, project.ParentProjectItem );
 				}
-			} else if ( item is Solution ) {
+				return;
+			} 
+			
+			Solution solution = item as Solution;
+			if ( solution != null ) {
 				// doesnt seem to ever happend... 
-				Solution sol = (Solution)item;
-			} else {
-				throw new NotSupportedException( "Unknown project item type: " + item.GetType().FullName );
-			}
+				return;
+			} 
+			
+			throw new NotSupportedException( "Unknown project item type: " + item.GetType().FullName );
 		}
 	}
 }

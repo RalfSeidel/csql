@@ -6,7 +6,7 @@ namespace csql.addin.Gui.Views
 	/// <summary>
 	/// Interaction logic for the about/info dialog.
 	/// </summary>
-	public partial class AboutDialog : Window
+	partial class AboutDialog : Window
 	{
 		public AboutDialog()
 		{

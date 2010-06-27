@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<MruConnections
+	xmlns="http://schemas.sql-service.de/etc/MruConnections.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://schemas.sql-service.de/etc/MruConnections.xsd ..\DbcProvider\MruConnections.xsd"
+	>
+	
+	<Datasources Provider="MSSQL">
+		<Datasource Name="ms01">
+			<Authentications>
+				<Authentication Integrated="true" />
+				<Authentication Integrated="false" UserID="user" Password="user_password" />
+				<Authentication Integrated="false" UserID="sa" Password="password" />
+			</Authentications>
+			<Catalogs>
+				<Catalog>master</Catalog>
+				<Catalog>tempdb</Catalog>
+			</Catalogs>
+		</Datasource>
+	</Datasources>
+
+	<Datasources Provider="Sybase">
+		<Datasource Name="sab01">
+			<Authentications>
+				<Authentication Integrated="false" UserID="wega_user" Password="wega_user_password" />
+				<Authentication Integrated="false" UserID="wega_sa" Password="wega_sa_password" />
+			</Authentications>
+			<Catalogs>
+				<Catalog>wega_db1</Catalog>
+				<Catalog>wega_db2</Catalog>
+			</Catalogs>
+		</Datasource>
+		<Datasource Name="syb02">
+			<Authentications>
+				<Authentication Integrated="false" UserID="syb003_user" Password="syb003_user_password" />
+				<Authentication Integrated="false" UserID="syb003_sa" Password="syb003_sa_password" />
+			</Authentications>
+			<Catalogs>
+				<Catalog>syb003_test</Catalog>
+			</Catalogs>
+		</Datasource>
+	</Datasources>
+</MruConnections>

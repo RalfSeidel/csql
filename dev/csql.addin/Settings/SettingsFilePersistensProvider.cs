@@ -8,7 +8,7 @@ namespace csql.addin.Settings
 	/// Implementation of a setting persistens provider to load and save
 	/// the setting to a file.
 	/// </summary>
-	public class SettingsFilePersistensProvider : ISettingsPersistensProvider
+	internal class SettingsFilePersistensProvider : ISettingsPersistensProvider
 	{
 		private readonly string settingsPath;
 

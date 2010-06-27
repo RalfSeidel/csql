@@ -40,13 +40,43 @@
  </Rules>
  <FxCopReport Version="1.36">
   <Namespaces>
+   <Namespace Name="csql">
+    <Messages>
+     <Message Id="csql" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql</Item>
+       <Item>Csql</Item>
+      </Issue>
+     </Message>
+     <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
    <Namespace Name="csql.exe">
     <Messages>
+     <Message Id="csql" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql.exe</Item>
+       <Item>Csql</Item>
+      </Issue>
+     </Message>
      <Message Id="exe" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-01-12 12:49:32Z">
       <Issue Name="Namespace">
        <Item>exe</Item>
        <Item>csql.exe</Item>
        <Item>Exe</Item>
+      </Issue>
+     </Message>
+     <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql.exe</Item>
       </Issue>
      </Message>
     </Messages>
@@ -58,12 +88,45 @@
        <Item>csql.MsSql</Item>
       </Issue>
      </Message>
+     <Message Id="Ms" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>Ms</Item>
+       <Item>csql.MsSql</Item>
+       <Item>MS</Item>
+      </Issue>
+     </Message>
+     <Message Id="csql" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql.MsSql</Item>
+       <Item>Csql</Item>
+      </Issue>
+     </Message>
+     <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql.MsSql</Item>
+      </Issue>
+     </Message>
     </Messages>
    </Namespace>
    <Namespace Name="csql.Sybase">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-01-12 12:49:32Z">
       <Issue>
+       <Item>csql.Sybase</Item>
+      </Issue>
+     </Message>
+     <Message Id="csql" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
+       <Item>csql.Sybase</Item>
+       <Item>Csql</Item>
+      </Issue>
+     </Message>
+     <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+      <Issue Name="Namespace">
+       <Item>csql</Item>
        <Item>csql.Sybase</Item>
       </Issue>
      </Message>
@@ -80,241 +143,36 @@
          <Item>'csql.exe'</Item>
         </Issue>
        </Message>
-       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2010-01-12 12:49:32Z">
-        <Issue>
+       <Message Id="csql" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+        <Issue Name="Assembly">
+         <Item>csql</Item>
+         <Item>'csql.exe'</Item>
+         <Item>Csql</Item>
+        </Issue>
+       </Message>
+       <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+        <Issue Name="Assembly">
+         <Item>csql</Item>
          <Item>'csql.exe'</Item>
         </Issue>
        </Message>
       </Messages>
-      <Namespaces>
-       <Namespace Name="CommandLine">
-        <Types>
-         <Type Name="ArgumentAttribute">
+      <Types>
+       <Type Name="CmdArgs">
+        <Members>
+         <Member Name="#CreateCsqlOptions()">
           <Messages>
-           <Message TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813" Created="2009-03-27 19:26:08Z">
-            <Issue>
-             <Item>'ArgumentAttribute'</Item>
+           <Message Id="Csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Member">
+             <Item>Csql</Item>
+             <Item>'CmdArgs.CreateCsqlOptions()'</Item>
             </Issue>
            </Message>
           </Messages>
-          <Members>
-           <Member Name="#LongName">
-            <Accessors>
-             <Accessor Name="#set_LongName(System.String)">
-              <Messages>
-               <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2009-03-27 19:26:08Z">
-                <Issue Name="IsNullOrEmpty">
-                 <Item>'string.operator !=(string, string)'</Item>
-                 <Item>'ArgumentAttribute.LongName.set(string)'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Type">
-            <Messages>
-             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2009-03-27 19:26:08Z" FixCategory="NonBreaking">
-              <Issue Name="BaseType">
-               <Item>'ArgumentAttribute.Type'</Item>
-               <Item>'object.GetType()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="ArgumentType">
-          <Messages>
-           <Message TypeName="EnumsShouldHaveZeroValue" Category="Microsoft.Design" CheckId="CA1008" Created="2009-03-27 19:26:08Z" FixCategory="Breaking">
-            <Issue Name="FlagsRename">
-             <Item>'ArgumentType'</Item>
-             <Item>'ArgumentType.AtMostOnce'</Item>
-            </Issue>
-           </Message>
-           <Message TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714" Created="2009-03-27 19:26:08Z">
-            <Issue>
-             <Item>'ArgumentType'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#LastOccurenceWins">
-            <Messages>
-             <Message Id="Occurence" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2009-03-27 19:26:08Z">
-              <Issue Name="Member">
-               <Item>Occurence</Item>
-               <Item>'ArgumentType.LastOccurenceWins'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="DefaultArgumentAttribute">
-          <Messages>
-           <Message TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813" Created="2009-03-27 19:26:08Z">
-            <Issue>
-             <Item>'DefaultArgumentAttribute'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
-         <Type Name="Parser">
-          <Members>
-           <Member Name="#DefaultValue(CommandLine.ArgumentAttribute,System.Reflection.FieldInfo)">
-            <Messages>
-             <Message Id="field" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2009-03-27 19:26:08Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'field'</Item>
-               <Item>'Parser.DefaultValue(ArgumentAttribute, FieldInfo)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#GetConsoleScreenBufferInfo(System.Int32,CommandLine.Parser+CONSOLE_SCREEN_BUFFER_INFO&amp;)">
-            <Messages>
-             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.GetConsoleScreenBufferInfo(int, ref Parser.CONSOLE_SCREEN_BUFFER_INFO)'</Item>
-              </Issue>
-             </Message>
-             <Message Id="0" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Created="2009-03-27 19:26:08Z" FixCategory="NonBreaking">
-              <Issue Name="Parameter">
-               <Item>'hConsoleOutput'</Item>
-               <Item>'Parser.GetConsoleScreenBufferInfo(int, ref Parser.CONSOLE_SCREEN_BUFFER_INFO)'</Item>
-               <Item>4</Item>
-               <Item>64-bit</Item>
-               <Item>8</Item>
-               <Item>'int'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#GetConsoleWindowWidth()">
-            <Messages>
-             <Message Id="rc" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.GetConsoleWindowWidth()'</Item>
-               <Item>'rc'</Item>
-               <Item>'int'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2009-03-27 19:26:08Z">
-              <Issue Certainty="50">
-               <Item>'Parser.GetConsoleWindowWidth()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#GetStdHandle(System.Int32)">
-            <Messages>
-             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.GetStdHandle(int)'</Item>
-              </Issue>
-             </Message>
-             <Message Id="return" TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901" Created="2009-03-27 19:26:08Z" FixCategory="NonBreaking">
-              <Issue Name="Return">
-               <Item>'Parser.GetStdHandle(int)'</Item>
-               <Item>4</Item>
-               <Item>64-bit</Item>
-               <Item>8</Item>
-               <Item>'int'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#HelpText(CommandLine.ArgumentAttribute,System.Reflection.FieldInfo)">
-            <Messages>
-             <Message Id="field" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2009-03-27 19:26:08Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'field'</Item>
-               <Item>'Parser.HelpText(ArgumentAttribute, FieldInfo)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#LexFileArguments(System.String,System.String[]&amp;)">
-            <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.LexFileArguments(string, out string[])'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Parser+Argument">
-          <Members>
-           <Member Name="#.ctor(CommandLine.ArgumentAttribute,System.Reflection.FieldInfo,CommandLine.ErrorReporter)">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.Argument.Argument(ArgumentAttribute, FieldInfo, ErrorReporter)'</Item>
-               <Item>'Parser.Argument.seenValue'</Item>
-               <Item>'bool'</Item>
-               <Item>false</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2009-03-27 19:26:08Z">
-              <Issue Name="IsNullOrEmpty">
-               <Item>'string.operator !=(string, string)'</Item>
-               <Item>'Parser.Argument.Argument(ArgumentAttribute, FieldInfo, ErrorReporter)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#ParseValue(System.Type,System.String,System.Object&amp;)">
-            <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.Argument.ParseValue(Type, string, out object)'</Item>
-               <Item>'object'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Parser+HelpArgument">
-          <Members>
-           <Member Name="#.ctor()">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2009-03-27 19:26:08Z">
-              <Issue>
-               <Item>'Parser.HelpArgument.HelpArgument()'</Item>
-               <Item>'Parser.HelpArgument.help'</Item>
-               <Item>'bool'</Item>
-               <Item>false</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Types>
-        <Type Name="CmdArgs">
-         <Members>
-          <Member Name="#CreateCsqlOptions()">
-           <Messages>
-            <Message TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122" Created="2010-01-12 14:51:43Z">
-             <Issue>
-              <Item>'CmdArgs.CreateCsqlOptions()'</Item>
-              <Item>'TraceSwitch.Level.set(TraceLevel)'</Item>
-              <Item>&#xD;&#xA;   -&gt;'CmdArgs.CreateCsqlOptions()'&#xD;&#xA;   -&gt;'CmdArgs.CreateCsqlOptions()'</Item>
-             </Issue>
-            </Message>
-           </Messages>
-          </Member>
-         </Members>
-        </Type>
-       </Types>
-      </Namespaces>
+         </Member>
+        </Members>
+       </Type>
+      </Types>
      </Module>
     </Modules>
    </Target>
@@ -322,117 +180,120 @@
     <Modules>
      <Module Name="csql.lib.dll">
       <Messages>
-       <Message Id="lib" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-01-12 12:49:32Z">
+       <Message Id="csql" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
         <Issue Name="Assembly">
-         <Item>lib</Item>
+         <Item>csql</Item>
          <Item>'csql.lib.dll'</Item>
-         <Item>Lib</Item>
+         <Item>Csql</Item>
+        </Issue>
+       </Message>
+       <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+        <Issue Name="Assembly">
+         <Item>csql</Item>
+         <Item>'csql.lib.dll'</Item>
         </Issue>
        </Message>
       </Messages>
       <Namespaces>
        <Namespace Name="csql">
         <Types>
-         <Type Name="ConnectionFactory">
+         <Type Name="BatchProcessorFactory">
           <Members>
-           <Member Name="#CreateConnection(csql.CsqlOptions)">
+           <Member Name="#CreateProcessor(csql.CSqlOptions)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateConnection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreateIbmdb2Connection(csql.CsqlOptions)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateIbmdb2Connection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreateMsjetConnection(csql.CsqlOptions)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateMsjetConnection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateMsjetConnection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreateMssqlConnection(csql.CsqlOptions)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateMssqlConnection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreateOracleConnection(csql.CsqlOptions)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateOracleConnection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#CreateSybaseConnection(csql.CsqlOptions)">
-            <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-01-12 12:49:32Z">
-              <Issue Name="IncorrectParameterName">
-               <Item>'ConnectionFactory.CreateSybaseConnection(CsqlOptions)'</Item>
-               <Item>cmdArgs</Item>
-               <Item>'paramName'</Item>
-               <Item>'ArgumentException'</Item>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'BatchProcessorFactory.CreateProcessor(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="CsqlOptions">
+         <Type Name="CSqlOptions">
+          <Messages>
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectPrefix" Category="Microsoft.Naming" CheckId="CA1722" Created="2010-06-24 19:53:53Z">
+            <Issue>
+             <Item>'CSqlOptions'</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
-           <Member Name="#DistibutionFile">
+           <Member Name="#DbDatabase">
             <Messages>
-             <Message Id="Distibution" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
               <Issue Name="Member">
-               <Item>Distibution</Item>
-               <Item>'CsqlOptions.DistibutionFile'</Item>
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbDatabase'</Item>
+               <Item>DB</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#SqtppOptions">
+           <Member Name="#DbDriver">
             <Messages>
-             <Message Id="Sqtpp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
               <Issue Name="Member">
-               <Item>Sqtpp</Item>
-               <Item>'CsqlOptions.SqtppOptions'</Item>
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbDriver'</Item>
+               <Item>DB</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DbPassword">
+            <Messages>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbPassword'</Item>
+               <Item>DB</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DbServer">
+            <Messages>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbServer'</Item>
+               <Item>DB</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DbServerPort">
+            <Messages>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbServerPort'</Item>
+               <Item>DB</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DbSystem">
+            <Messages>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbSystem'</Item>
+               <Item>DB</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DbUser">
+            <Messages>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'CSqlOptions.DbUser'</Item>
+               <Item>DB</Item>
               </Issue>
              </Message>
             </Messages>
@@ -488,41 +349,218 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="ExitCode">
+         <Type Name="DbConnection">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'DbConnection'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
-           <Member Name="#SqlIntializeError">
+           <Member Name="#.ctor(csql.CSqlOptions)">
             <Messages>
-             <Message Id="Intialize" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'DbConnection.DbConnection(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateAdoConnection(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'DbConnection.CreateAdoConnection(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnDbMessage(csql.DbMessageEventArgs)">
+            <Messages>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
               <Issue Name="Member">
-               <Item>Intialize</Item>
-               <Item>'ExitCode.SqlIntializeError'</Item>
+               <Item>Db</Item>
+               <Item>'DbConnection.OnDbMessage(DbMessageEventArgs)'</Item>
+               <Item>DB</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="GlobalSettings">
+         <Type Name="DbDriver">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'DbDriver'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
-           <Member Name="#Verbosity">
+           <Member Name="#OleDb">
             <Messages>
-             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2010-01-12 12:49:32Z">
-              <Issue>
-               <Item>'GlobalSettings.Verbosity'</Item>
-               <Item>'VerbositySwitch'</Item>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'DbDriver.OleDb'</Item>
+               <Item>DB</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="NamedPipe">
+         <Type Name="DbException">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'DbException'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="DbMessage">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'DbMessage'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="DbMessageEventArgs">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'DbMessageEventArgs'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="DbSystem">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'DbSystem'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
           <Members>
-           <Member Name="#UseVistaFlags">
+           <Member Name="#IbmDb2">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-01-12 12:49:32Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'NamedPipe.UseVistaFlags'</Item>
+             <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Db</Item>
+               <Item>'DbSystem.IbmDb2'</Item>
+               <Item>DB</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MsJet">
+            <Messages>
+             <Message Id="Ms" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Ms</Item>
+               <Item>'DbSystem.MsJet'</Item>
+               <Item>MS</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#MsSql">
+            <Messages>
+             <Message Id="Ms" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+              <Issue Name="Member">
+               <Item>Ms</Item>
+               <Item>'DbSystem.MsSql'</Item>
+               <Item>MS</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DistributionProcessor">
+          <Members>
+           <Member Name="#.ctor(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'DistributionProcessor.DistributionProcessor(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ExecutionProcessor">
+          <Members>
+           <Member Name="#.ctor(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'ExecutionProcessor.ExecutionProcessor(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OdbcConnection">
+          <Members>
+           <Member Name="#.ctor(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'OdbcConnection.OdbcConnection(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="OleDbConnection">
+          <Messages>
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
+            <Issue Name="Type">
+             <Item>Db</Item>
+             <Item>'OleDbConnection'</Item>
+             <Item>DB</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'OleDbConnection.OleDbConnection(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -531,6 +569,17 @@
          </Type>
          <Type Name="Processor">
           <Members>
+           <Member Name="#.ctor(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'Processor.Processor(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#PreprocessorPath">
             <Accessors>
              <Accessor Name="#get_PreprocessorPath()">
@@ -548,78 +597,28 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="SqtppOptions">
+        </Types>
+       </Namespace>
+       <Namespace Name="csql.MsSql">
+        <Types>
+         <Type Name="MsSqlConnection">
           <Messages>
-           <Message Id="Sqtpp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-01-12 12:49:32Z">
+           <Message Id="Ms" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-06-24 19:53:53Z">
             <Issue Name="Type">
-             <Item>Sqtpp</Item>
-             <Item>'SqtppOptions'</Item>
+             <Item>Ms</Item>
+             <Item>'MsSqlConnection'</Item>
+             <Item>MS</Item>
             </Issue>
            </Message>
           </Messages>
           <Members>
-           <Member Name="#CommandLineArguments">
+           <Member Name="#.ctor(csql.CSqlOptions)">
             <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-01-12 12:49:32Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'SqtppOptions.CommandLineArguments'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-            <Accessors>
-             <Accessor Name="#get_CommandLineArguments()">
-              <Messages>
-               <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2010-01-12 12:49:32Z" FixCategory="Breaking">
-                <Issue Name="PropertyGetter" Level="Warning">
-                 <Item>'SqtppOptions.CommandLineArguments.get()'</Item>
-                 <Item>'NotImplementedException'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#m_includeDirectories">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
-              <Issue>
-               <Item>'SqtppOptions.m_includeDirectories'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#m_inputFile">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
-              <Issue>
-               <Item>'SqtppOptions.m_inputFile'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#m_macroDefinitions">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
-              <Issue>
-               <Item>'SqtppOptions.m_macroDefinitions'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#m_otherArguments">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
-              <Issue>
-               <Item>'SqtppOptions.m_otherArguments'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#m_outputFile">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-01-12 12:49:32Z">
-              <Issue>
-               <Item>'SqtppOptions.m_outputFile'</Item>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'MsSqlConnection.MsSqlConnection(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -630,6 +629,21 @@
        </Namespace>
        <Namespace Name="csql.Sybase">
         <Types>
+         <Type Name="SybaseConnection">
+          <Members>
+           <Member Name="#.ctor(csql.CSqlOptions)">
+            <Messages>
+             <Message Id="csql" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-06-24 19:53:53Z">
+              <Issue Name="MemberParameter">
+               <Item>'SybaseConnection.SybaseConnection(CSqlOptions)'</Item>
+               <Item>csql</Item>
+               <Item>'csqlOptions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="SybaseMessageEventArgs">
           <Members>
            <Member Name="#GetSeverity(csql.Sybase.SybaseError)">
@@ -658,71 +672,32 @@
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
    </Rule>
-   <Rule TypeName="AvoidUnsealedAttributes" Category="Microsoft.Performance" CheckId="CA1813">
-    <Resolution Name="Default">Seal {0}, if possible.</Resolution>
-   </Rule>
    <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
     <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
    </Rule>
-   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
-    <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
-    <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotIndirectlyExposeMethodsWithLinkDemands" Category="Microsoft.Security" CheckId="CA2122">
-    <Resolution Name="Default">{0} calls into {1} which has a LinkDemand. By making this call, {1} is indirectly exposed to user code. Review the following call stack that might expose a way to circumvent security protection: {2}</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
-    <Resolution Name="Default">{0} initializes field {1} of type {2} to {3}. Remove this initialization because it will be done automatically by the runtime.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065">
-    <Resolution Name="PropertyGetter">{0} creates an exception of type {1}, an exception type that should not be raised in a property. If this exception instance might be raised, use a different exception type, convert this property into a method, or change this property's logic so that it no longer raises an exception.</Resolution>
-   </Rule>
-   <Rule TypeName="EnumsShouldHaveZeroValue" Category="Microsoft.Design" CheckId="CA1008">
-    <Resolution Name="FlagsRename">In enum {0}, change the name of {1} to 'None'.</Resolution>
-   </Rule>
-   <Rule TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714">
-    <Resolution Name="Default">If enumeration name {0} is singular, change it to a plural form.</Resolution>
-   </Rule>
    <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
     <Resolution Name="Assembly">Correct the casing of '{0}' in assembly name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
     <Resolution Name="Namespace">Correct the casing of '{0}' in namespace name '{1}' by changing it to '{2}'.</Resolution>
+    <Resolution Name="Type">Correct the casing of '{0}' in type name {1} by changing it to '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
     <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
-    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+    <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
    </Rule>
-   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
-    <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
-    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   <Rule TypeName="IdentifiersShouldNotHaveIncorrectPrefix" Category="Microsoft.Naming" CheckId="CA1722">
+    <Resolution Name="Default">Remove the leading 'C' from type name {0}.</Resolution>
    </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
     <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
-   </Rule>
-   <Rule TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060">
-    <Resolution Name="Default">Because it is a P/Invoke method, {0} should be defined in a class named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Resolution>
-   </Rule>
-   <Rule TypeName="PInvokeDeclarationsShouldBePortable" Category="Microsoft.Portability" CheckId="CA1901">
-    <Resolution Name="Parameter">As it is declared in your code, parameter {0} of P/Invoke {1} will be {2} bytes wide on {3} platforms. This is not correct, as the actual native declaration of this API indicates it should be {4} bytes wide on {3} platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of {5}.</Resolution>
-    <Resolution Name="Return">As it is declared in your code, the return type of P/Invoke {0} will be {1} bytes wide on {2} platforms. This is not correct, as the actual native declaration of this API indicates it should be {3} bytes wide on {2} platforms. Consult the MSDN Platform SDK documentation for help determining what data type should be used instead of {4}.</Resolution>
-   </Rule>
-   <Rule TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721">
-    <Resolution Name="BaseType">The property name {0} is confusing given the existence of inherited method {1}. Rename or remove this property.</Resolution>
    </Rule>
    <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
     <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
    </Rule>
    <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
     <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
-   </Rule>
-   <Rule TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820">
-    <Resolution Name="IsNullOrEmpty">Replace the call to {0} in {1} with a call to 'String.IsNullOrEmpty'.</Resolution>
-   </Rule>
-   <Rule TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024">
-    <Resolution Name="Default">Change {0} to a property if appropriate.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

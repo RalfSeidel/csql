@@ -16,7 +16,7 @@
     <FriendlyName>csql</FriendlyName>
     <Description>Addin to execute macro enhanced SQL scripts.</Description>
     <Assembly>%AssemblyPath%</Assembly>
-    <FullClassName>csql.addin.CSqlAddIn</FullClassName>
+    <FullClassName>csql.addin.CSqlAddin</FullClassName>
     <LoadBehavior>1</LoadBehavior>
     <CommandPreload>1</CommandPreload>
     <CommandLineSafe>0</CommandLineSafe>

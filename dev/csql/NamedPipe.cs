@@ -187,10 +187,19 @@ namespace csql
 		/// <returns>A stream for the pipe.</returns>
 		public Stream Open()
 		{
-			int success = NativeMethods.ConnectNamedPipe( m_pipeHandle, IntPtr.Zero );
+			// TODO: create overlapped structure to avoid waiting forever.
+			IntPtr lpOverlapped = new IntPtr(0);
+			int success = NativeMethods.ConnectNamedPipe( m_pipeHandle, lpOverlapped );
 			if ( success == -1 ) {
 				throw new System.ComponentModel.Win32Exception( "ConnectNamedPipe Api call failed" );
 			}
+
+			/*
+			uint rc = NativeMethods.WaitForSingleObject( lpOverlapped, 5000 );
+			if ( rc != NativeMethods.WAIT_OBJECT_0 ) {
+				throw new System.ComponentModel.Win32Exception( "ConnectNamedPipe Api call failed" );
+			}
+			*/
 
 			FileStream stream = new FileStream( m_pipeHandle, FileAccess.Read, m_pipeBufferSize, false );
 			return stream;

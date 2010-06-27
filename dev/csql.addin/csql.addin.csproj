@@ -17,8 +17,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +51,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -63,12 +63,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddInTraceListener.cs" />
+    <Compile Include="OutputPaneTraceListener.cs" />
+    <Compile Include="Gui\Output.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Bases\ViewModel.cs" />
-    <Compile Include="Bases\ViewModelWrapper.cs" />
     <Compile Include="Commands\AboutDialogCommand.cs" />
     <Compile Include="Commands\SettingsCommand.cs" />
     <Compile Include="Commands\ExecuteScriptCommand.cs" />
@@ -76,53 +75,49 @@
     <Compile Include="Commands\GroupFilesCommand.cs" />
     <Compile Include="Commands\LocateFileCommand.cs" />
     <Compile Include="Commands\SolutionExplorerFileLocator.cs" />
-    <Compile Include="Sqt.VisualStudio\ImageHelper.cs" />
-    <Compile Include="Gui\Commands\CommandBehavior.cs" />
-    <Compile Include="Gui\Commands\CommandBehaviorBinding.cs" />
-    <Compile Include="Gui\Commands\EventHandlerGenerator.cs" />
-    <Compile Include="Gui\Commands\SimpleCommand.cs" />
-    <Compile Include="CSqlAddIn.cs">
+    <Compile Include="CSqlAddin.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\ScriptExecutor.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Globals\ExtensionMethods.cs" />
-    <Compile Include="Sqt.VisualStudio\ImageConverter.cs">
-    </Compile>
-    <Compile Include="Globals\Messages.cs" />
-    <Compile Include="Globals\XamlConverters\NegationConverter.cs" />
-    <Compile Include="Gui\Controls\GridViewEditBox.cs" />
-    <Compile Include="Gui\Controls\GridViewEditBoxAdorner.cs" />
     <Compile Include="Gui\Views\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Views\SettingsPanel.xaml.cs">
-      <DependentUpon>SettingsPanel.xaml</DependentUpon>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\CSqlSettings.cs" />
+    <Compile Include="Settings\Gui\PreprocessorDefinitionCollectionConverter.cs" />
+    <Compile Include="Settings\Gui\OutputFileEditor.cs" />
+    <Compile Include="Settings\Gui\PathCollectionConverter.cs" />
+    <Compile Include="Settings\Gui\PreprocessorDefinitionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\Gui\PreprocessorDefinitionDialog.Designer.cs">
+      <DependentUpon>PreprocessorDefinitionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Gui\PreprocessorDefinitionEditor.cs" />
+    <Compile Include="Settings\Gui\StringDomainConverter.cs" />
+    <Compile Include="Settings\Gui\SettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings\Gui\SettingsControl.Designer.cs">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\ISettingsPersistensProvider.cs" />
     <Compile Include="Settings\PreprocessorDefinition.cs" />
-    <Compile Include="Gui\Views\PreprocessorDefinitionViewModel.cs" />
     <Compile Include="Settings\SettingsCollection.cs" />
-    <Compile Include="Settings\SettingsItem.cs" />
+    <Compile Include="Settings\CSqlParameter.cs" />
     <Compile Include="Settings\SettingsFilePersistensProvider.cs" />
-    <Compile Include="Gui\Views\SettingsItemViewModel.cs" />
-    <Compile Include="Gui\Views\SettingsPanelViewModel.cs" />
-    <Compile Include="Sqt.VisualStudio\VsAddin.cs" />
-    <Compile Include="Sqt.VisualStudio\VsCommand.cs" />
-    <Compile Include="Sqt.VisualStudio\VsCommandEventArgs.cs" />
-    <Compile Include="Sqt.VisualStudio\VsCommandIcon.cs" />
-    <Compile Include="WpfHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WpfHost.designer.cs">
-      <DependentUpon>WpfHost.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CommandBar.resx" />
-    <EmbeddedResource Include="WpfHost.resx">
-      <DependentUpon>WpfHost.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Sqt\VisualStudio\Util\ImageConverter.cs" />
+    <Compile Include="Sqt\VisualStudio\Util\ImageHelper.cs" />
+    <Compile Include="Sqt\VisualStudio\Util\VsApplicationExtensions.cs" />
+    <Compile Include="Sqt\VisualStudio\VsAddin.cs" />
+    <Compile Include="Sqt\VisualStudio\VsCommand.cs" />
+    <Compile Include="Sqt\VisualStudio\VsCommandEventArgs.cs" />
+    <Compile Include="Sqt\VisualStudio\VsCommandIcon.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
@@ -167,11 +162,28 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
     <Content Include="csql.addin" />
-    <EmbeddedResource Include="Resources\Images\Commands\GroupFiles.bmp" />
-    <EmbeddedResource Include="Resources\Images\Commands\LocateFile.bmp" />
-    <EmbeddedResource Include="Resources\Images\Commands\ExecuteScript.bmp" />
-    <EmbeddedResource Include="Resources\Images\Commands\AboutDialog.bmp" />
+    <EmbeddedResource Include="Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\Gui\PreprocessorDefinitionDialog.resx">
+      <DependentUpon>PreprocessorDefinitionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\Gui\SettingsControl.resx">
+      <DependentUpon>SettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="..\csql.snk">
+      <Link>csql.snk</Link>
+    </None>
+    <None Include="Resources\Images\Commands\GroupFiles.bmp" />
+    <None Include="Resources\Images\Commands\LocateFile.bmp" />
+    <None Include="Resources\Images\Commands\ExecuteScript.bmp" />
+    <None Include="Resources\Images\Commands\AboutDialog.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\Settings.bmp" />
     <Resource Include="Resources\Icon.ico" />
     <Resource Include="Resources\Images\Cancel.png" />
@@ -188,19 +200,22 @@
       <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
       <Name>csql.lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DbcProvider\DbcProvider.csproj">
+      <Project>{C404D769-C642-461B-A5C1-4295F5B7542C}</Project>
+      <Name>DbcProvider</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Gui\Views\AboutDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Gui\Views\SettingsPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Setup\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

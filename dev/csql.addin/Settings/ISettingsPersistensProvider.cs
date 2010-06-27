@@ -4,7 +4,7 @@ namespace csql.addin.Settings
 	/// <summary>
 	/// Interface for loading and storing settings.
 	/// </summary>
-	public interface ISettingsPersistensProvider
+	internal interface ISettingsPersistensProvider
 	{
 		/// <summary>
 		/// Gets the location url of the settings store.

@@ -16,7 +16,7 @@ namespace csql
 		/// </summary>
 		/// <param name="cmdArgs">The command line arguments.</param>
 		/// <returns>The script processor</returns>
-		public static Processor CreateProcessor(CsqlOptions csqlOptions )
+		public static Processor CreateProcessor(CSqlOptions csqlOptions )
 		{
             //Setting the Global Trace Level
             GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;

@@ -8,7 +8,7 @@ namespace csql
 {
 	static class ConnectionFactory
 	{
-		public static DbConnection CreateConnection( CsqlOptions csqlOptions )
+		public static DbConnection CreateConnection( CSqlOptions csqlOptions )
 		{
 			DbSystem dbSystem = csqlOptions.DbSystem;
 
@@ -28,7 +28,7 @@ namespace csql
 			}
 		}
 
-		private static DbConnection CreateMssqlConnection( CsqlOptions csqlOptions )
+		private static DbConnection CreateMssqlConnection( CSqlOptions csqlOptions )
 		{
 			DbDriver dbDriver = csqlOptions.DbDriver;
 
@@ -42,7 +42,7 @@ namespace csql
 			return cnt;
 		}
 
-		private static DbConnection CreateMsjetConnection( CsqlOptions csqlOptions )
+		private static DbConnection CreateMsjetConnection( CSqlOptions csqlOptions )
 		{
 			DbDriver dbDriver = csqlOptions.DbDriver;
 
@@ -56,7 +56,7 @@ namespace csql
 			}
 		}
 
-		private static DbConnection CreateSybaseConnection( CsqlOptions csqlOptions )
+		private static DbConnection CreateSybaseConnection( CSqlOptions csqlOptions )
 		{
 			DbDriver dbDriver = csqlOptions.DbDriver;
 			DbConnection connection;
@@ -75,7 +75,7 @@ namespace csql
 			return connection;
 		}
 
-		private static DbConnection CreateOracleConnection( CsqlOptions csqlOptions )
+		private static DbConnection CreateOracleConnection( CSqlOptions csqlOptions )
 		{
 			DbDriver dbDriver = csqlOptions.DbDriver;
 
@@ -89,7 +89,7 @@ namespace csql
 			}
 		}
 
-		private static DbConnection CreateIbmdb2Connection( CsqlOptions csqlOptions )
+		private static DbConnection CreateIbmdb2Connection( CSqlOptions csqlOptions )
 		{
 			DbDriver dbDriver = csqlOptions.DbDriver;
 

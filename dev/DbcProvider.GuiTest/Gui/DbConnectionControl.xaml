@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="Sqt.DbcProvider.DbConnectionControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Sqt.DbcProvider.Gui"
+    >
+	<UserControl.Resources>
+		<local:NullableBooleanConverter x:Key="NullableBooleanConverter"/>
+		<local:NotConverter x:Key="NotConverter"/>
+
+		<Style x:Key="CellStyle" >
+			<Setter Property="Control.BorderThickness" Value="1" />
+			<Setter Property="Control.BorderBrush" Value="LightGray" />
+			<Setter Property="TextBox.Padding" Value="2,2,2,2" />
+			<Setter Property="Label.HorizontalContentAlignment" Value="Right" />
+			<Setter Property="Control.VerticalContentAlignment" Value="Center" />
+		</Style>
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Label Grid.Row="0" Grid.Column="0" Style="{StaticResource CellStyle}">Provider:</Label>
+		<Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CellStyle}" Margin="0">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<ComboBox Grid.Column="0" HorizontalContentAlignment="Stretch" MinWidth="120px" IsEditable="False" 
+				  ItemsSource="{Binding Path=Providers}" DisplayMemberPath="Name" SelectedValuePath="ID" SelectedValue="{Binding Path=Provider, Mode=TwoWay}"
+				  Padding="2,2,2,2"
+						  />
+				<StackPanel Grid.Column="1" Orientation="Horizontal">
+					<Button Command="{Binding Path=TestConnection}" CommandParameter="{Binding Path=ConnectionParameter, Mode=OneWay}"
+						Background="Transparent"
+						BorderBrush="Transparent"
+						ToolTip="Test Connection">
+						<Image Source="/Sqt.DbcProvider;component/Resources/Icons/BlueCheckmark16hp.png"/>
+					</Button>
+					<Button Command="{Binding Path=Save}" CommandParameter="{Binding Path=ConnectionParameter, Mode=OneWay}"
+						Background="Transparent"
+						BorderBrush="Transparent"
+						ToolTip="Save Connection Parameter">
+						<Image Source="/Sqt.DbcProvider;component/Resources/Icons/SaveBlue16hp.png"/>
+					</Button>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<Label Grid.Row="1" Grid.Column="0" Style="{StaticResource CellStyle}">Server:</Label>
+		<ComboBox Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Stretch" MinWidth="120px" IsEditable="True" Style="{StaticResource CellStyle}"
+				  ItemsSource="{Binding Path=Datasources, Mode=OneWay}" Text="{Binding Path=Datasource, Mode=TwoWay}" />
+
+		<Label Grid.Row="2" Grid.Column="0" Style="{StaticResource CellStyle}">Database:</Label>
+		<ComboBox Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Stretch" MinWidth="120px" IsEditable="True" Style="{StaticResource CellStyle}"
+				  ItemsSource="{Binding Path=Catalogs, Mode=OneWay}" Text="{Binding Path=Catalog, Mode=TwoWay}" />
+
+		<Label Grid.Row="3" Grid.Column="0" Style="{StaticResource CellStyle}">Login:</Label>
+		<Border Grid.Row="3" Grid.Column="1" Style="{StaticResource CellStyle}" Margin="0">
+			<StackPanel Orientation="Horizontal" >
+				<RadioButton Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="3px,0,3px,0"
+                IsChecked="{Binding Path=IntegratedSecurity, Mode=TwoWay, Converter={StaticResource NullableBooleanConverter}, ConverterParameter=true}"
+                >
+					Integrated Security
+				</RadioButton>
+				<RadioButton Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="3px,0,3px,0"
+                IsChecked="{Binding Path=IntegratedSecurity, Mode=TwoWay, Converter={StaticResource NullableBooleanConverter}, ConverterParameter=false}"
+                >
+					Server Security
+				</RadioButton>
+			</StackPanel>
+		</Border>
+
+		<Label Grid.Row="4" Grid.Column="0" Style="{StaticResource CellStyle}">User:</Label>
+		<TextBox Grid.Row="4" Grid.Column="1" HorizontalContentAlignment="Stretch" MinWidth="120px" 
+                IsEnabled="{Binding Path=IntegratedSecurity, Mode=OneWay, Converter={StaticResource NotConverter}}"
+                Style="{StaticResource CellStyle}"
+                />
+
+		<Label Grid.Row="5" Grid.Column="0" Style="{StaticResource CellStyle}" >Password:</Label>
+		<TextBox Grid.Row="5" Grid.Column="1" HorizontalContentAlignment="Stretch" MinWidth="120px" Text="{Binding Password}"
+            IsEnabled="{Binding Path=IntegratedSecurity, Mode=OneWay, Converter={StaticResource NotConverter}}"
+            Style="{StaticResource CellStyle}"
+            />
+	</Grid>
+</UserControl>

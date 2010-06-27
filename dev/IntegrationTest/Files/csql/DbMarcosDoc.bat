@@ -1,5 +1,5 @@
 @echo off
-set cmd="%ProgramFiles%\doxygen\bin\doxygen.exe"
+set cmd="%ProgramFiles%\tools\doxygen\bin\doxygen.exe"
 
 %cmd% DbMacrosDoc.cfg
 

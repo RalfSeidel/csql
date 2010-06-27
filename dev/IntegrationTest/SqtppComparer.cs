@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace IntegrationTest
 {
-    public class SqtppComparer : IComparer
+    internal class SqtppComparer : IComparer
     {
         private string relativePathToInputFile;
         private string relativePathToReferenceFile;

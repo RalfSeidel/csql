@@ -29,7 +29,7 @@ namespace Setup.CustomActions
 
 			var xmlFile = Context.Parameters["addinxmlfile"];
 			var dllFile = Context.Parameters["addinassembly"];
-			new AddInFilePreparer( xmlFile, dllFile, this.Context );
+			AddInFilePreparer.Prepare( xmlFile, dllFile, this.Context );
             new AddInLink(this.Context).CreateAddInLinks( xmlFile );
         }
 

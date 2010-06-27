@@ -55,7 +55,7 @@ namespace csql.exe
 					didTraceCommandLine = true;
 				}
 				try {
-					CsqlOptions csqlOptions = cmdArgs.CreateCsqlOptions();
+					CSqlOptions csqlOptions = cmdArgs.CreateCsqlOptions();
 
 					using ( Processor processor = BatchProcessorFactory.CreateProcessor( csqlOptions ) ) {
 						processor.SignIn();

@@ -19,7 +19,7 @@
     <ApplicationIcon>sqtpp.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>csql.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -68,7 +68,7 @@
   <ItemGroup>
     <Compile Include="BatchContext.cs" />
     <Compile Include="ConnectionFactory.cs" />
-    <Compile Include="CsqlOptions.cs" />
+    <Compile Include="CSqlOptions.cs" />
     <Compile Include="DataReaderTracer.cs" />
     <Compile Include="DbConnection.cs" />
     <Compile Include="DbException.cs" />
@@ -97,9 +97,8 @@
     <Compile Include="VerbositySwitch.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+    <CodeAnalysisDictionary Include="..\CustomDictionary.xml" />
     <Content Include="sqtpp.ico" />
-    <Content Include="TestParameter1.txt" />
     <Content Include="Test\Input\Include\Print1.h" />
     <Content Include="Test\mssql.cfg.txt" />
     <Content Include="Test\sybase.cfg.txt">
@@ -135,7 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="csql.FxCop" />
-    <None Include="csql.snk" />
+    <None Include="..\csql.snk" />
     <None Include="Test\Input\ErrorLineTest_5.sql" />
     <None Include="Test\Input\DependencyWarning.sql" />
     <None Include="Test\Input\ErrorAfterInclude.sql" />

@@ -12,35 +12,31 @@ namespace csql.MsSql
 	/// </summary>
 	public class MsSqlConnection : DbConnection
 	{
-        public MsSqlConnection(CsqlOptions csqlOptions)
-            : base(csqlOptions)
+		public MsSqlConnection( CSqlOptions csqlOptions )
+			: base( csqlOptions )
 		{
 		}
 
-        protected override IDbConnection CreateAdoConnection(CsqlOptions csqlOptions)
+		protected override IDbConnection CreateAdoConnection( CSqlOptions csqlOptions )
 		{
 			StringBuilder sb = new StringBuilder();
 
-            if (csqlOptions.DbServer.Length != 0)
-            {
-                sb.Append("Server=").Append(csqlOptions.DbServer).Append(";");
+			if ( !String.IsNullOrEmpty( csqlOptions.DbServer ) ) {
+				sb.Append( "Server=" ).Append( csqlOptions.DbServer ).Append( ";" );
 			}
-            if (csqlOptions.DbServerPort != 0)
-            {
-                sb.Append("Server Port=").Append(csqlOptions.DbServerPort).Append(";");
+			if ( csqlOptions.DbServerPort != 0 ) {
+				sb.Append( "Server Port=" ).Append( csqlOptions.DbServerPort ).Append( ";" );
 			}
-            if (!String.IsNullOrEmpty(csqlOptions.DbDatabase))
-            {
-                sb.Append("Database=").Append(csqlOptions.DbDatabase).Append(";");
+			if ( !String.IsNullOrEmpty( csqlOptions.DbDatabase ) ) {
+				sb.Append( "Database=" ).Append( csqlOptions.DbDatabase ).Append( ";" );
 			}
-            if (!String.IsNullOrEmpty(csqlOptions.DbUser))
-            {
-                sb.Append("User ID=").Append(csqlOptions.DbUser).Append(";");
-                sb.Append("Password=").Append(csqlOptions.DbPassword).Append(";");
+			if ( !String.IsNullOrEmpty( csqlOptions.DbUser ) ) {
+				sb.Append( "User ID=" ).Append( csqlOptions.DbUser ).Append( ";" );
+				sb.Append( "Password=" ).Append( csqlOptions.DbPassword ).Append( ";" );
 			} else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}
-			sb.Append( "Application Name=" ).Append( "csql" ).Append( ";" );
+			sb.Append( "Application Name=" ).Append( GlobalSettings.CSqlProductName ).Append( ";" );
 
 			string connectionString = sb.ToString();
 			SqlConnection adoConnection = new SqlConnection( connectionString );

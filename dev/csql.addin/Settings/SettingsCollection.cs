@@ -4,13 +4,13 @@ using System;
 namespace csql.addin.Settings
 {
 	[Serializable]
-	public class SettingsCollection
+	internal class SettingsCollection
 	{
-		public List<SettingsItem> SettingsObjects { get; set; }
+		public List<CSqlParameter> SettingsObjects { get; set; }
 
 		public SettingsCollection()
 		{
-			this.SettingsObjects = new List<SettingsItem>();
+			this.SettingsObjects = new List<CSqlParameter>();
 		}
 	}
 }
