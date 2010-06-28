@@ -46,9 +46,10 @@ namespace csql.Sybase
 			// raised by the provider if it encounters variable names.
 			sb.Append( "NamedParameters=false;" );
 
+			string connectionString = sb.ToString();
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, "Connecting to Sybase ASE Server using following connection string:\r\n" + connectionString );
 
 			IDbConnection adoConnection = CreateAseConnection();
-			string connectionString = sb.ToString();
 			adoConnection.ConnectionString = connectionString;
 			adoConnection.Open();
 			return adoConnection;

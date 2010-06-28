@@ -144,32 +144,44 @@ namespace csql
 			DbPassword = "";
 
 			this.preprocessorOptions = new SqtppOptions();
-			InitPreprocessorMacros( preprocessorOptions.MacroDefinitions );
+			AddPreprocessorMacros( preprocessorOptions.MacroDefinitions );
 			this.verbosity = new VerbositySwitch();
 			verbosity.Level = System.Diagnostics.TraceLevel.Info;
 		}
 
-
-		public void InitPreprocessorMacros( IDictionary<string, string> macros )
+		/// <summary>
+		/// Add the preprocessor definitions predefined by csql specifying certain 
+		/// runtime options.
+		/// </summary>
+		/// <param name="macros"></param>
+		public void AddPreprocessorMacros( IDictionary<string, string> macros )
 		{
 			var assembly = Assembly.GetExecutingAssembly();
 			var assemblyName = assembly.GetName();
 			var assemblyVersion = assemblyName.Version;
 			var version = String.Format( CultureInfo.InvariantCulture, "{0:d2}.{1:d2}", assemblyVersion.Major, assemblyVersion.Minor );
 
-			macros.Add( "_CSQL_SYSTEM_", this.DbSystem.ToString().ToUpper() );
+			// Specify the database system used e.g. _CSQL_SYSTEM_MSSQL
+			macros.Add( "_CSQL_SYSTEM_" + this.DbSystem.ToString().ToUpper(), "" );
 
 			if ( !String.IsNullOrEmpty( this.DbServer ) ) {
-				macros.Add( "_CSQL_SERVER=", this.DbServer );
+				macros.Add( "_CSQL_SERVER", this.DbServer );
 			}
 			if ( !String.IsNullOrEmpty( this.DbDatabase ) ) {
-				macros.Add( "_CSQL_DATABASE=", this.DbDatabase );
+				macros.Add( "_CSQL_DATABASE", this.DbDatabase );
 			}
 			if ( !String.IsNullOrEmpty( this.DbUser ) ) {
-				macros.Add( "_CSQL_USER=", this.DbUser );
+				macros.Add( "_CSQL_USER", this.DbUser );
 			}
 			if ( !String.IsNullOrEmpty( version ) ) {
-				macros.Add( "_CSQL_VERSION=", version );
+				macros.Add( "_CSQL_VERSION", version );
+			}
+			if ( !String.IsNullOrEmpty( DistributionFile ) ) {
+				string value = DistributionFile;
+				if ( value.Contains( " " ) ) {
+					value = '"' + value + '"';
+				}
+				macros.Add( "_CSQL_OUTPUT", value );
 			}
 		}
 	}

@@ -162,6 +162,7 @@ namespace csql.addin.Commands
 			}
 
 			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( csqlParameter );
+			csqlOptions.AddPreprocessorMacros( csqlOptions.PreprocessorOptions.MacroDefinitions );
 
 			csqlOptions.Verbosity.Level = csqlParameter.Verbosity;
 

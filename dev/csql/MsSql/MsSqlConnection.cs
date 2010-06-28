@@ -38,7 +38,10 @@ namespace csql.MsSql
 			}
 			sb.Append( "Application Name=" ).Append( GlobalSettings.CSqlProductName ).Append( ";" );
 
+
 			string connectionString = sb.ToString();
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, "Connecting to MS SQL Server using following connection string:\r\n" + connectionString );
+
 			SqlConnection adoConnection = new SqlConnection( connectionString );
 			adoConnection.InfoMessage += new SqlInfoMessageEventHandler( InfoMessageHandler );
 			adoConnection.Open();

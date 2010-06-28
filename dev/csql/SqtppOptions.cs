@@ -96,7 +96,14 @@ namespace csql
 				foreach ( var directory in this.includeDirectories ) {
 					if ( !String.IsNullOrEmpty( directory ) ) {
 						sb.Append( separator );
-						sb.Append( "/I" + directory );
+						sb.Append( "/I" );
+						if ( directory.IndexOf( ' ' ) >= 0 ) {
+							sb.Append( '"' );
+							sb.Append( directory );
+							sb.Append( '"' );
+						} else {
+							sb.Append( directory );
+						}
 						separator = " ";
 					}
 				}
@@ -130,12 +137,24 @@ namespace csql
 				if ( !String.IsNullOrEmpty( OutputFile ) ) {
 					sb.Append( separator );
 					sb.Append( "/o" );
-					sb.Append( OutputFile );
+					if ( OutputFile.IndexOf( ' ' ) >= 0 ) {
+						sb.Append( '"' );
+						sb.Append( OutputFile );
+						sb.Append( '"' );
+					} else {
+						sb.Append( OutputFile );
+					}
 					separator = " ";
 				}
 
 				sb.Append( separator );
-				sb.Append( InputFile );
+				if ( InputFile.IndexOf( ' ' ) >= 0 ) {
+					sb.Append( '"' );
+					sb.Append( InputFile );
+					sb.Append( '"' );
+				} else {
+					sb.Append( InputFile );
+				}
 
 				return sb.ToString();
 			}
