@@ -1,8 +1,7 @@
-﻿using EnvDTE;
-using EnvDTE80;
+﻿using System;
 using System.Diagnostics;
-using System;
 using System.Globalization;
+using EnvDTE;
 
 namespace csql.addin
 {
@@ -40,7 +39,10 @@ namespace csql.addin
 		}
 
 
-
+		/// <summary>
+		/// Filter to restrict the cache output to messages emitted
+		/// of a certain thread.
+		/// </summary>
 		private class ThreadTraceFilter : TraceFilter
 		{
 			private readonly string threadId;
@@ -52,7 +54,7 @@ namespace csql.addin
 
 			public override bool ShouldTrace( TraceEventCache cache, string source, TraceEventType eventType, int id, string formatOrMessage, object[] args, object data1, object[] data )
 			{
-				return cache.ThreadId == this.threadId;
+				return cache != null && String.Equals( cache.ThreadId, this.threadId );
 			}
 		}
 	}
