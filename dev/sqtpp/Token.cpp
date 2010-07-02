@@ -111,7 +111,7 @@ TokenExpression::TokenExpression()
 : tokenId( 0 )
 , tokenLength( 0 )
 , token( TOK_UNDEFINED )
-, context( CTX_UNDEFINED )
+, context( CTX_DEFAULT )
 {
 }
 

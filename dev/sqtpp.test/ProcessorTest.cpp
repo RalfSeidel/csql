@@ -380,7 +380,7 @@ public:
 
 
 		inputText = L"#define A 1 | 2\n"
-					L"#define B (A) << 1\n"
+		         L"#define B (A) << 1\n"
 					L"B";
 
 		input.str( inputText );
@@ -1125,6 +1125,54 @@ public:
 		processor.processStream( input );
 		outputText = output.str();
 		Assert::IsTrue( outputText == L"U X" );
+	}
+
+
+	/*
+	** @brief Check Support of range option.
+	**
+	** Check that only for the the selected input output is emitted.
+	*/
+	[TestMethod]
+	void rangeTest1()
+	{
+		Options       options;
+		Processor     processor( options );
+		wstringstream input;
+		wstringstream output;
+		wstring       outputText;
+
+		options.emitLine( false );
+		options.keepComments( false );
+		options.eliminateEmptyLines( true );
+		options.expandMacroArguments( false );
+		options.multiLineMacroExpansion( true );
+
+		input << L"ABC DEF GHI" << ends;
+		processor.setOutStream( output );
+
+		options.setOutputRange( Range(0,3) );
+		output.str( wstring() );
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"ABC" );
+
+		options.setOutputRange( Range(3,4) );
+		output.str( wstring() );
+		input.clear();
+		input.seekg(0);
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L" " );
+
+		options.setOutputRange( Range(4,7) );
+		output.str( wstring() );
+		input.clear();
+		input.seekg(0);
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"DEF" );
+
 	}
 
 }; // class

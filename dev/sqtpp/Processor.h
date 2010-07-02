@@ -227,7 +227,7 @@ private:
 
 	// Check if the output range is restricted and if yes if the current tokens
 	// are within the input range.
-	bool isWithinEmitRange();
+	bool isRootFilePositionWithinEmitRange();
 
 	// Process the input stream to collect the macro argumentsw
 	bool collectMacroArgumentValues( const Macro& macro, MacroArgumentValues& argumentValues, TokenExpressions& tokenExpressions );
@@ -328,6 +328,9 @@ private:
 
 	// Process the S4M AdSalesNG directive: --[identifier] 
 	void processAdSalesNGDirective();
+
+	// Add the specified text to the output buffer.
+	void appendToOutputLineBuffer( const wstring& output );
 };
 
 } // namespace sqtpp

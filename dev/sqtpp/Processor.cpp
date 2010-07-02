@@ -358,7 +358,7 @@ size_t Processor::emitBuffer( wostream& output )
 ** @brief Check if the output range is restricted and if yes if the current tokens
 ** are within the input range.
 */
-bool Processor::isWithinEmitRange()
+bool Processor::isRootFilePositionWithinEmitRange()
 {
 	const Range& outputRange = m_options.getOutputRange();
 	if ( outputRange.isEmpty() ) {
@@ -480,7 +480,8 @@ Token Processor::getNextToken( TokenExpression& tokenExpression )
 	wistream& fileStream    = currentFile.getStream();
 	size_t    nOldPosition  = currentFile.getPosition();
 	Token     token         = TOK_UNDEFINED;
-	bool      bSetFileToken = getContext() == CTX_DEFAULT;
+	Context   tokenContext  = getContext();
+	bool      bSetFileToken = tokenContext == CTX_DEFAULT;
 
 	assert( m_pTokenStream != NULL );
 
@@ -746,9 +747,10 @@ bool Processor::processToken( int scannerToken )
 			if ( m_options.keepLineComments() ) {
 				// Translate C++ // comments into SQL -- comments.
 				if ( m_options.getLanguage() == Options::LNG_SQL && tokenText.substr( 0, 2 ) == L"//" ) {
-					m_outputBuffer << L"--" << tokenText.substr(2);
+					appendToOutputLineBuffer( L"--" );
+					appendToOutputLineBuffer( tokenText.substr(2) );
 				} else {
-					m_outputBuffer << tokenText;
+					appendToOutputLineBuffer( tokenText );
 				}
 			}
 			break;
@@ -756,19 +758,19 @@ bool Processor::processToken( int scannerToken )
 			processBlockComment();
 			break;
 		case TOK_SQL_LINE_COMMENT:
-			m_outputBuffer << tokenText;
+			appendToOutputLineBuffer( tokenText );
 			break;
 		case TOK_NEW_LINE:
 			processNewLine( &tokenText );
 			break;
 		case TOK_SPACE:
-			m_outputBuffer << tokenText;
+			appendToOutputLineBuffer( tokenText );
 			break;
 		case TOK_STRING:
-			m_outputBuffer << tokenText;
+			appendToOutputLineBuffer( tokenText );
 			break;
 		case TOK_NUMBER:
-			m_outputBuffer << tokenText;
+			appendToOutputLineBuffer( tokenText );
 			break;
 		case TOK_IDENTIFIER:
 			processIdentifier();
@@ -885,7 +887,7 @@ bool Processor::processToken( int scannerToken )
 			processAdSalesNGDirective();
 			break;
 		case TOK_OTHER:
-			m_outputBuffer << tokenText;
+			appendToOutputLineBuffer(  tokenText );
 			break;
 		case TOK_EOL_BACKSLASH:
 			// to not emit. 
@@ -894,15 +896,9 @@ bool Processor::processToken( int scannerToken )
 			bContinue = false;
 			break;
 		default:
-			m_outputBuffer << tokenText;
+			appendToOutputLineBuffer(  tokenText );
 			break;
 	}
-	if ( !isWithinEmitRange() ) {
-		m_outputBuffer.clear();
-		m_outputBuffer.str( wstring() );
-	}
-
-
 
 	return bContinue;
 }
@@ -1131,7 +1127,7 @@ void Processor::processIdentifier()
 
 	if ( !m_pTokenStream->expandMacros() ) {
 		// Currently processing an expanded macro: no recursion here.
-		m_outputBuffer << identifier;
+		appendToOutputLineBuffer( identifier );
 		return;
 	}
 
@@ -1139,7 +1135,7 @@ void Processor::processIdentifier()
 
 	if ( itMacro == m_macros.end() ) {
 		// no macro: return as is.
-		m_outputBuffer << identifier;
+		appendToOutputLineBuffer( identifier );
 		return;
 	}
 
@@ -1148,7 +1144,7 @@ void Processor::processIdentifier()
 
 	// No recursive macro expansion
 	if ( macro.isExpanding() ) {
-		m_outputBuffer << identifier;
+		appendToOutputLineBuffer( identifier );
 		return;
 	}
 
@@ -1265,7 +1261,7 @@ void Processor::processBlockComment()
 			case TOK_BLOCK_COMMENT:
 				if ( m_options.keepBlockComments() ) {
 					const wstring& commentText = m_tokenExpression.text;
-					m_outputBuffer << commentText;
+					appendToOutputLineBuffer(  commentText );
 				}
 				break;
 			case TOK_NEW_LINE:
@@ -1318,7 +1314,7 @@ void Processor::finishDirective( bool bEmit )
 			case TOK_BLOCK_COMMENT:
 			case TOK_LINE_COMMENT:
 				if ( bEmit ) {
-					m_outputBuffer << m_tokenExpression.getText();
+					appendToOutputLineBuffer( m_tokenExpression.getText() );
 				}
 				break;
 			case TOK_EOL_BACKSLASH:
@@ -1329,7 +1325,7 @@ void Processor::finishDirective( bool bEmit )
 				break;
 			default:
 				if ( bEmit ) {
-					m_outputBuffer << m_tokenExpression.getText();
+					appendToOutputLineBuffer( m_tokenExpression.getText() );
 				} else if ( !bDidWarn ) {
 					// Unexpected text following preprocessor directive - expected a newline.
 					error::C4067C warning;
@@ -1364,7 +1360,7 @@ void Processor::processDirective()
 			// table like in the following example:
 			//	select * from 
 			//			#temptable
-			m_outputBuffer << m_tokenExpression.getText();
+			appendToOutputLineBuffer( m_tokenExpression.getText() );
 			return;
 		} else {
 			// Unknown preprocessor directive {1}.
@@ -2231,7 +2227,21 @@ void Processor::processAdSalesNGDirective()
 		finishDirective( false );
 		processFile( sFullPath );
 	} else {
-		m_outputBuffer << m_tokenExpression.getText();
+		appendToOutputLineBuffer( m_tokenExpression.getText() );
+	}
+}
+
+
+/**
+** @brief Add the specified text to the output buffer.
+** 
+** If the output range is restricted the text is only emitted if the current token is within
+** the specified range (see Options.get/setOutputRange).
+*/
+void Processor::appendToOutputLineBuffer( const wstring& output )
+{
+	if ( isRootFilePositionWithinEmitRange() ) {
+		m_outputBuffer << output;
 	}
 }
 
