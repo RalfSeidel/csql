@@ -69,11 +69,30 @@
     <None Include="Files\csql\DropAllIndexes.csql" />
     <None Include="Files\csql\DropCreate.csql" />
     <None Include="Files\csql\DropForeignKey.csql" />
+    <None Include="Files\csql\Input\DependencyWarning.sql" />
+    <None Include="Files\csql\Input\DistributionTest.sql" />
+    <None Include="Files\csql\Input\ErrorAfterInclude.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_1.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_2.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_3.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_4.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_5.sql" />
+    <None Include="Files\csql\Input\Include\ErrorLineTest_4.1.sql" />
+    <None Include="Files\csql\Input\PrintFromProcedure.sql" />
+    <None Include="Files\csql\Input\SelectTest.sql" />
     <None Include="Files\csql\ObjectInfo.csql" />
     <None Include="Files\csql\print1252.sql" />
     <None Include="Files\csql\printutf16.sql" />
     <None Include="Files\csql\printutf16be.sql" />
     <None Include="Files\csql\printutf8.sql" />
+    <None Include="Files\csql\Reference\DependencyWarning.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_1.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_2.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_3.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_4.mssql.log" />
+    <None Include="Files\csql\Reference\PrintFromProcedure.mssql.log" />
+    <None Include="Files\csql\Reference\SelectTest.mssql.log" />
+    <None Include="Files\csql\run.bat" />
     <None Include="Files\sqtpp\input\multiline.sql" />
     <None Include="Files\sqtpp\input\temptable.sql" />
     <None Include="Files\sqtpp\reference\multiline.sql" />
@@ -82,6 +101,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Files\csql\DbMacros.h" />
+    <Content Include="Files\csql\Input\Include\Print1.h" />
+    <Content Include="Files\csql\mssql.cfg.txt" />
+    <Content Include="Files\csql\sybase.cfg.txt">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Files\sqtpp\input\ansiabc.txt" />
     <Content Include="Files\sqtpp\input\buildin.h" />
     <Content Include="Files\sqtpp\input\BuildinEval.h" />

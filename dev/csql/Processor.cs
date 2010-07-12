@@ -24,6 +24,7 @@ namespace csql
 		private int m_currentFileLineNo;
 		private int m_currentBatchNo;
 		private int m_currentBatchLineNo;
+		private int m_errorCount;
 		private IList<BatchContext> m_currentBatchContexts;
 		private StringBuilder m_batchBuilder;
 		private Process m_ppProcess;
@@ -85,6 +86,15 @@ namespace csql
 		public int CurrentBatchLineOffset
 		{
 			get { return this.m_currentBatchLineNo; }
+		}
+
+		/// <summary>
+		/// Gets the first batch context i.e. the starting context of the current batch processed.
+		/// </summary>
+		/// <value>The starting batch context.</value>
+		private BatchContext FirstBatchContext
+		{
+			get { return m_currentBatchContexts[0]; }
 		}
 
 		/// <summary>
@@ -200,7 +210,28 @@ namespace csql
 		/// </summary>
 		public virtual void SignOut()
 		{
-			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, "** Finished" );
+			if ( !GlobalSettings.Verbosity.TraceInfo )
+				return;
+
+			string message = "\r\n*** Finished ";
+			switch ( m_errorCount ) {
+				case 0:
+					message+= "without any error :-)";
+					break;
+				case 1:
+					message+= "with one error";
+					if ( m_options.BreakOnError ) {
+						message+= " that caused the script execution to stop";
+					}
+					message+= " :-(";
+					break;
+				default:
+					message+= "with " + m_errorCount + " errors :-(";
+					break;
+			}
+
+
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, message );
 		}
 
 
@@ -225,9 +256,7 @@ namespace csql
 						LineType type = GetLineType( line );
 						switch ( type ) {
 							case LineType.Text:
-								m_batchBuilder.AppendLine( line );
-								m_currentBatchLineNo++;
-								m_currentFileLineNo++;
+								ProcessText( line );
 								break;
 							case LineType.Line:
 								ProcessLine( line );
@@ -283,6 +312,7 @@ namespace csql
 				ProcessBatch( batch );
 			}
 			catch ( DbException ex ) {
+				++m_errorCount;
 				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
@@ -290,6 +320,7 @@ namespace csql
 				}
 			}
 			catch ( System.Data.SqlClient.SqlException ex ) {
+				++m_errorCount;
 				string message = FormatError( TraceLevel.Error, ex.Message, ex.LineNumber );
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
@@ -297,6 +328,7 @@ namespace csql
 				}
 			}
 			catch ( System.Data.Odbc.OdbcException ex ) {
+				++m_errorCount;
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
@@ -304,6 +336,7 @@ namespace csql
 				}
 			}
 			catch ( System.Data.OleDb.OleDbException ex ) {
+				++m_errorCount;
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
@@ -311,11 +344,31 @@ namespace csql
 				}
 			}
 			catch ( System.Data.Common.DbException ex ) {
+				++m_errorCount;
 				string message = FormatError( TraceLevel.Error, ex.Message, 0 );
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
 				if ( m_options.BreakOnError ) {
 					throw new TerminateException( ExitCode.SqlCommandError );
 				}
+			}
+		}
+
+		/// <summary>
+		/// Process a line that appends to the current command batch.
+		/// </summary>
+		/// <param name="line">The line.</param>
+		private void ProcessText( string line )
+		{
+			// As long as the batch is still empty skip any leading empty lines
+			// and adjust the start context information instead.
+			if ( String.IsNullOrEmpty( line.Trim() ) && m_batchBuilder.Length == 0 ) {
+				BatchContext startContext = FirstBatchContext;
+				startContext.LineNumber = ++m_currentFileLineNo;
+				return;
+			} else {
+				m_batchBuilder.AppendLine( line );
+				m_currentBatchLineNo++;
+				m_currentFileLineNo++;
 			}
 		}
 
@@ -348,8 +401,15 @@ namespace csql
 						m_currentFile = m_currentFile.Substring( 0, m_currentFile.Length - 1 );
 				}
 			}
-			BatchContext newContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
-			m_currentBatchContexts.Add( newContext );
+
+			if ( m_batchBuilder.Length == 0 ) {
+				BatchContext startContext = FirstBatchContext;
+				startContext.File = m_currentFile;
+				startContext.LineNumber = m_currentFileLineNo;
+			} else {
+				BatchContext newContext = new BatchContext( m_currentBatchLineNo, m_currentFile, m_currentFileLineNo );
+				m_currentBatchContexts.Add( newContext );
+			}
 		}
 
 		/// <summary>

@@ -78,7 +78,7 @@ std::codecvt_base::result SbcsConverter::do_in( mbstate_t& state
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/out/">c++ documentation</a> for details.
 */
-std::codecvt_base::result SbcsConverter::do_out( mbstate_t& state
+std::codecvt_base::result SbcsConverter::do_out( mbstate_t& /* state */
  , const wchar_t* pFrom , const wchar_t* pFromMax , const wchar_t*& pFromNext 
  , char* pTo, char* pToMax, char*& pToNext ) const
 {
@@ -120,7 +120,7 @@ std::codecvt_base::result SbcsConverter::do_out( mbstate_t& state
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/unshift/">c++ documentation</a> for details.
 */
-std::codecvt_base::result SbcsConverter::do_unshift( mbstate_t& state, char* pTo, char* pToMax, char*& pToNext ) const
+std::codecvt_base::result SbcsConverter::do_unshift( mbstate_t& /* state */, char* pTo, char* pToMax, char*& pToNext ) const
 {
     return noconv;
 }
@@ -128,7 +128,7 @@ std::codecvt_base::result SbcsConverter::do_unshift( mbstate_t& state, char* pTo
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int SbcsConverter::do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax, size_t toLength ) const throw() 
+int SbcsConverter::do_length( const mbstate_t& /* state */, const char* pFrom, const char* pFromMax, size_t toLength ) const throw() 
 {
 	assert( pFrom != NULL );
 	assert( pFromMax != NULL );
@@ -243,7 +243,7 @@ std::codecvt_base::result Utf7Converter::do_in( mbstate_t& state
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/out/">c++ documentation</a> for details.
 */
-std::codecvt_base::result Utf7Converter::do_out( mbstate_t& state
+std::codecvt_base::result Utf7Converter::do_out( mbstate_t& /* state */
  , const wchar_t* pFrom , const wchar_t* pFromMax , const wchar_t*& pFromNext 
  , char* pTo, char* pToMax, char*& pToNext ) const
 {
@@ -284,7 +284,7 @@ std::codecvt_base::result Utf7Converter::do_out( mbstate_t& state
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/unshift/">c++ documentation</a> for details.
 */
-std::codecvt_base::result Utf7Converter::do_unshift( mbstate_t& state, char* pTo, char* pToMax, char*& pToNext ) const
+std::codecvt_base::result Utf7Converter::do_unshift( mbstate_t& /* state */, char* pTo, char* pToMax, char*& pToNext ) const
 {
     return noconv;
 }
@@ -292,7 +292,7 @@ std::codecvt_base::result Utf7Converter::do_unshift( mbstate_t& state, char* pTo
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int Utf7Converter::do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax, size_t toLength ) const throw()
+int Utf7Converter::do_length( const mbstate_t& /* state */, const char* pFrom, const char* pFromMax, size_t toLength ) const throw()
 {
 	assert( pFrom != NULL );
 	assert( pFromMax != NULL );

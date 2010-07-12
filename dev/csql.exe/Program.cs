@@ -54,18 +54,18 @@ namespace csql.exe
 					TraceCommandLine( args );
 					didTraceCommandLine = true;
 				}
+				Processor processor = null;
 				try {
 					CSqlOptions csqlOptions = cmdArgs.CreateCsqlOptions();
+					processor = BatchProcessorFactory.CreateProcessor( csqlOptions );
 
-					using ( Processor processor = BatchProcessorFactory.CreateProcessor( csqlOptions ) ) {
-						processor.SignIn();
+					processor.SignIn();
 
-						processor.Process();
+					processor.Process();
 
-						processor.SignOut();
+					processor.SignOut();
 
-						exitCode = ExitCode.Success;
-					}
+					exitCode = ExitCode.Success;
 				}
 				catch ( FileNotFoundException ex ) {
 					if ( !didTraceCommandLine && verbosity.TraceError ) {
@@ -82,8 +82,12 @@ namespace csql.exe
 					exitCode = ExitCode.FileIOError;
 				}
 				catch ( TerminateException ex ) {
+					processor.SignOut();
 					if ( !didTraceCommandLine && verbosity.TraceError ) {
 						TraceCommandLine( args );
+					}
+					if ( processor != null ) {
+						processor.SignOut();
 					}
 					exitCode = ex.ExitCode;
 				}
@@ -96,6 +100,9 @@ namespace csql.exe
 				}
 				finally {
 					Trace.Flush();
+					if ( processor != null ) {
+						processor.Dispose();
+					}
 				}
 			}
 

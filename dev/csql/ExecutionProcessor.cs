@@ -7,7 +7,7 @@ namespace csql
 	/// <summary>
 	/// Processor for SQL script execution of the database server.
 	/// </summary>
-    public class ExecutionProcessor : Processor// , IBatchProcessor
+	public class ExecutionProcessor : Processor// , IBatchProcessor
 	{
 		private readonly DbConnection m_connection;
 
@@ -15,12 +15,12 @@ namespace csql
 		/// Initializes a new instance of the <see cref="ExecutionProcessor"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The CMD args.</param>
-        public ExecutionProcessor(CSqlOptions csqlOptions)
-            : base(csqlOptions)
+		public ExecutionProcessor( CSqlOptions csqlOptions )
+			: base( csqlOptions )
 		{
-            m_connection = ConnectionFactory.CreateConnection(csqlOptions);
+			m_connection = ConnectionFactory.CreateConnection( csqlOptions );
 			m_connection.InfoMessage += new EventHandler<DbMessageEventArgs>( InfoMessageEventHandler );
-            
+
 		}
 
 
@@ -31,10 +31,8 @@ namespace csql
 		/// <param name="e">The <see cref="csql.DbMessageEventArgs"/> instance containing the message.</param>
 		void InfoMessageEventHandler( object sender, DbMessageEventArgs e )
 		{
-            if (GlobalSettings.Verbosity.Level >= e.TraceLevel)
-            {
-                if (GlobalSettings.Verbosity.TraceVerbose)
-                {
+			if ( GlobalSettings.Verbosity.Level >= e.TraceLevel ) {
+				if ( GlobalSettings.Verbosity.TraceVerbose ) {
 					Trace.WriteLine( e.ToString() );
 				} else {
 					if ( e.TraceLevel <= TraceLevel.Warning ) {
@@ -60,7 +58,7 @@ namespace csql
 
 		protected override void ProcessProgress( string progressInfo )
 		{
-            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, progressInfo);
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, progressInfo );
 		}
 
 		/// <summary>
@@ -74,7 +72,7 @@ namespace csql
 		protected override void ProcessBatch( string batch )
 		{
 			try {
-				using ( IDbCommand command = m_connection.CreateCommand( batch ) ) 
+				using ( IDbCommand command = m_connection.CreateCommand( batch ) )
 				using ( IDataReader dataReader = m_connection.Execute( command ) ) {
 					while ( dataReader != null && !dataReader.IsClosed ) {
 						if ( dataReader.FieldCount != 0 ) {
@@ -87,10 +85,10 @@ namespace csql
 				}
 			}
 			catch ( Exception ex ) {
-				Exception mappedException = m_connection.GetMappedException(ex);
-				if ( mappedException != null ) 
+				Exception mappedException = m_connection.GetMappedException( ex );
+				if ( mappedException != null )
 					throw mappedException;
-				else 
+				else
 					throw;
 			}
 		}
@@ -100,13 +98,13 @@ namespace csql
 		/// Traces the result of a database query.
 		/// </summary>
 		/// <param name="dataReader">The data reader returned by the execute call.</param>
-        private static void TraceResult( IDataReader dataReader )
-        {
-            if (!GlobalSettings.Verbosity.TraceInfo)
-                return;
+		private static void TraceResult( IDataReader dataReader )
+		{
+			if ( !GlobalSettings.Verbosity.TraceInfo )
+				return;
 
 			DataReaderTracer tracer = new DataReaderTracer( dataReader );
 			tracer.TraceAll();
-        }
-    }
+		}
+	}
 }
