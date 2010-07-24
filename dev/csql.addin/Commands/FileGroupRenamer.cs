@@ -8,7 +8,7 @@ namespace csql.addin.Commands
 	/// </summary>
 	internal static class FileGroupRenamer
 	{
-		private static bool isRenaming = false;
+		private static bool isRenaming;
 
 		/// <summary>
 		/// Apply the renaming of a grouped script to all items in the group.

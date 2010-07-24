@@ -8,14 +8,17 @@
 			<!-- Words that should not cause a violation. -->
 			<Word>exe</Word>
 			<Word>csql</Word>
+			<Word>CSql</Word>
 			<Word>sqtpp</Word>
+			<Word>addin</Word>
 			<Word>Util</Word>
 			<!-- Sequel Tools Namespace -->
 			<Word>Sqt</Word>
-			<!-- Most Recently Used -->
-			<Word>Mru</Word>
 			<!-- Db Connection -->
 			<Word>Dbc</Word>
+			<!-- That is misspelled and should be DataSource, but to much effort to correct it. -->
+			<Word>Datasource</Word>
+			<Word>Datasources</Word>
 		</Recognized>
 		<Unrecognized>
 			<!-- Words that should cause a violation. -->
@@ -34,6 +37,10 @@
 			<Acronym>Db</Acronym>
 			<Acronym>Ms</Acronym>
 			<Acronym>Vs</Acronym>
+			<!-- Most Recently Used -->
+			<Acronym>Mru</Acronym>
+			<!-- Most Recently Used -->
+			<Acronym>MruDb</Acronym>
 		</CasingExceptions>
 	</Acronyms>
 </Dictionary>

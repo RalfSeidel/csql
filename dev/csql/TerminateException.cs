@@ -13,7 +13,7 @@ namespace csql
 	[Serializable]
 	public sealed class TerminateException : Exception
 	{
-		private readonly ExitCode m_exitCode;
+		private readonly ExitCode exitCode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TerminateException"/> class.
@@ -21,7 +21,7 @@ namespace csql
 		/// <param name="exitCode">The exit code for the application.</param>
 		public TerminateException( ExitCode exitCode )
 		{
-			m_exitCode = exitCode;
+			this.exitCode = exitCode;
 		}
 
 		/// <summary>
@@ -31,7 +31,7 @@ namespace csql
 		public TerminateException()
 		: base( "Program Termination" )
 		{
-			m_exitCode = ExitCode.GeneralError;
+			exitCode = ExitCode.GeneralError;
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace csql
 		public TerminateException( string message )
 		: base( message ) 
 		{
-			m_exitCode = ExitCode.GeneralError;
+			exitCode = ExitCode.GeneralError;
 		}
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace csql
 		public TerminateException( string message, Exception innerException )
 		: base( message, innerException )
 		{
-            m_exitCode = ExitCode.GeneralError;
+            exitCode = ExitCode.GeneralError;
         }
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace csql
 		/// <value>The exit code.</value>
 		public ExitCode ExitCode
 		{
-			get { return m_exitCode; }
+			get { return exitCode; }
 		}
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace csql
 		public override void GetObjectData( System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context )
 		{
 			base.GetObjectData( info, context );
-			info.AddValue( "ExitCode", m_exitCode );
+			info.AddValue( "ExitCode", exitCode );
 		}
 	}
 }

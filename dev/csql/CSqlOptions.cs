@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.Globalization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Reflection;
 using System.Security.Permissions;
 
 namespace csql
@@ -11,6 +11,8 @@ namespace csql
 	/// <summary>
 	/// Options for the script processor.
 	/// </summary>
+	[SuppressMessage( "Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "CSql", Justification = "CSql is the best readable spelling for the product." )]
+	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification = "CSql is the best readable spelling for the product." )]
 	public class CSqlOptions
 	{
 		#region Data member

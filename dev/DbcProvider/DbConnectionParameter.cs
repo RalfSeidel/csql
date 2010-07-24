@@ -4,6 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Reflection;
 using System.Xml.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sqt.DbcProvider
 {
@@ -15,7 +16,11 @@ namespace Sqt.DbcProvider
 	{
 		#region Private fields
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		[EditorBrowsable( EditorBrowsableState.Never )]
+		private readonly Authentication authentication = new Authentication();
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		[EditorBrowsable( EditorBrowsableState.Never )]
 		private ProviderType provider;
 
@@ -36,14 +41,46 @@ namespace Sqt.DbcProvider
 		private string catalog;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable(EditorBrowsableState.Never) ]
-		private readonly Authentication authentication = new Authentication();
-
-		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		[EditorBrowsable( EditorBrowsableState.Never )]
 		private int timeout;
 
 		#endregion
+
+		/// <summary>
+		/// Default contructor.
+		/// </summary>
+		public DbConnectionParameter()
+		{
+			Provider = ProviderType.MsSql;
+			DatasourceAddress = "";
+			Catalog = "";
+			UserId = "";
+			Password = "";
+			IntegratedSecurity = true;
+			Timeout = 2;
+
+			Type thisType = GetType();
+			PropertyDescriptorCollection pdCollection = TypeDescriptor.GetProperties( thisType );
+			PropertyDescriptor pdName = pdCollection["DatasourceComment"];
+			TypeConverter nameConverter = pdName.Converter;
+			StringLookupConverter nameLookupConverter = (StringLookupConverter)nameConverter;
+			nameLookupConverter.GetLookupValues += new EventHandler<StringLookupGetValuesEventArgs>( DatasourceName_GetLookupValues );
+
+			PropertyDescriptor pdDatasource = pdCollection["DatasourceAddress"];
+			TypeConverter datasourceConverter = pdDatasource.Converter;
+			StringLookupConverter datasourceLookupConverter = (StringLookupConverter)datasourceConverter;
+			datasourceLookupConverter.GetLookupValues += new EventHandler<StringLookupGetValuesEventArgs>( DatasourceAddress_GetLookupValues );
+
+			PropertyDescriptor pdCatalog = pdCollection["Catalog"];
+			TypeConverter catalogConverter = pdCatalog.Converter;
+			StringLookupConverter catalogLookupConverter = (StringLookupConverter)catalogConverter;
+			catalogLookupConverter.GetLookupValues += new EventHandler<StringLookupGetValuesEventArgs>( Catalog_GetLookupValues );
+
+			PropertyDescriptor pdUserId = pdCollection["UserId"];
+			TypeConverter userIDConverter = pdUserId.Converter;
+			StringLookupConverter userIDLookupConverter = (StringLookupConverter)userIDConverter;
+			userIDLookupConverter.GetLookupValues += new EventHandler<StringLookupGetValuesEventArgs>( UserId_GetLookupValues );
+		}
 
 		#region Events
 
@@ -54,6 +91,9 @@ namespace Sqt.DbcProvider
 		public event EventHandler<StringLookupGetValuesEventArgs> GetCatalogValues;
 
 		public event EventHandler<StringLookupGetValuesEventArgs> GetUserIdValues;
+
+		/// <inheritdoc />
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion
 
@@ -76,7 +116,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				this.provider = value;
-				OnPropertyChanged( "Provider" );
+				RaisePropertyChanged( "Provider" );
 			}
 		}
 
@@ -97,7 +137,7 @@ namespace Sqt.DbcProvider
 			{
 				if ( !Object.Equals( datasoureComment, value ) ) {
 					datasoureComment = value;
-					OnPropertyChanged( "DatasourceComment" );
+					RaisePropertyChanged( "DatasourceComment" );
 				}
 			}
 		}
@@ -124,7 +164,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				this.datasourceAddress = value;
-				OnPropertyChanged( "DatasourceAddress" );
+				RaisePropertyChanged( "DatasourceAddress" );
 			}
 		}
 
@@ -149,7 +189,7 @@ namespace Sqt.DbcProvider
 				if ( datasourcePort == value  ) 
 					return;
 				datasourcePort = value;
-				OnPropertyChanged( "DatasourcePort" );
+				RaisePropertyChanged( "DatasourcePort" );
 			}
 		}
 
@@ -174,7 +214,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				this.catalog = value;
-				OnPropertyChanged( "Catalog" );
+				RaisePropertyChanged( "Catalog" );
 			}
 		}
 
@@ -195,7 +235,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				authentication.Integrated = value;
-				OnPropertyChanged( "IntegratedSecurity" );
+				RaisePropertyChanged( "IntegratedSecurity" );
 			}
 		}
 
@@ -221,7 +261,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				authentication.UserId = value;
-				OnPropertyChanged( "UserId" );
+				RaisePropertyChanged( "UserId" );
 			}
 		}
 
@@ -245,7 +285,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				authentication.Password = value;
-				OnPropertyChanged( "Password" );
+				RaisePropertyChanged( "Password" );
 			}
 		}
 
@@ -266,92 +306,11 @@ namespace Sqt.DbcProvider
 				if ( timeout == value )
 					return;
 				timeout = value;
-				OnPropertyChanged( "Timeout" );
+				RaisePropertyChanged( "Timeout" );
 			}
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Default contructor.
-		/// </summary>
-		public DbConnectionParameter()
-		{
-			Provider = ProviderType.MsSql;
-			DatasourceAddress = "";
-			Catalog = "";
-			UserId = "";
-			Password = "";
-			IntegratedSecurity = true;
-			Timeout = 2;
-
-			Type thisType = GetType();
-			PropertyDescriptorCollection pdCollection = TypeDescriptor.GetProperties( thisType );
-			PropertyDescriptor pdName = pdCollection["DatasourceComment"];
-			TypeConverter nameConverter = pdName.Converter;
-			StringLookupConverter nameLookupConverter = (StringLookupConverter)nameConverter;
-			nameLookupConverter.GetLookupValues+=new EventHandler<StringLookupGetValuesEventArgs>( DatasourceName_GetLookupValues );
-
-			PropertyDescriptor pdDatasource = pdCollection["DatasourceAddress"];
-			TypeConverter datasourceConverter = pdDatasource.Converter;
-			StringLookupConverter datasourceLookupConverter = (StringLookupConverter)datasourceConverter;
-			datasourceLookupConverter.GetLookupValues+=new EventHandler<StringLookupGetValuesEventArgs>( DatasourceAddress_GetLookupValues );
-
-			PropertyDescriptor pdCatalog = pdCollection["Catalog"];
-			TypeConverter catalogConverter = pdCatalog.Converter;
-			StringLookupConverter catalogLookupConverter = (StringLookupConverter)catalogConverter;
-			catalogLookupConverter.GetLookupValues+=new EventHandler<StringLookupGetValuesEventArgs>( Catalog_GetLookupValues );
-
-			PropertyDescriptor pdUserId = pdCollection["UserId"];
-			TypeConverter userIDConverter = pdUserId.Converter;
-			StringLookupConverter userIDLookupConverter = (StringLookupConverter)userIDConverter;
-			userIDLookupConverter.GetLookupValues+=new EventHandler<StringLookupGetValuesEventArgs>( UserId_GetLookupValues );
-		}
-
-		#region Event Handler to retrieve standard values for some fields.
-
-		private void DatasourceName_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
-		{
-			if ( !Object.Equals( args.Context.Instance, this ) )
-				return;
-
-			if ( this.GetDatasourceNameValues != null ) {
-				GetDatasourceNameValues( this, args );
-			}
-		}
-
-		private void DatasourceAddress_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
-		{
-			if ( !Object.Equals( args.Context.Instance, this ) )
-				return;
-
-			if ( this.GetDatasourceAddressValues != null ) {
-				GetDatasourceAddressValues( this, args );
-			}
-		}
-
-		private void Catalog_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
-		{
-			if ( !Object.Equals( args.Context.Instance, this ) )
-				return;
-
-			if ( this.GetCatalogValues != null ) {
-				GetCatalogValues( this, args );
-			}
-		}
-
-		private void UserId_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
-		{
-			if ( !Object.Equals( args.Context.Instance, this ) )
-				return;
-
-			if ( this.GetUserIdValues != null ) {
-				GetUserIdValues( this, args );
-			}
-		}
-
-		#endregion
-
 
 		#region Common Object Overrides
 
@@ -435,18 +394,61 @@ namespace Sqt.DbcProvider
 
 		#region INotifyPropertyChanged Members
 
-		/// <inheritdoc />
-		public event PropertyChangedEventHandler PropertyChanged;
-
 		/// <summary>
 		/// Raises the property changed event.
 		/// </summary>
-		protected internal void OnPropertyChanged( string propertyName )
+		[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "This method raises an event." )]
+		protected internal void RaisePropertyChanged( string propertyName )
 		{
 			if ( PropertyChanged != null ) {
 				PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 			}
 		}
 		#endregion
+
+		#region Event Handler to retrieve standard values for some fields.
+
+		private void DatasourceName_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
+		{
+			if ( !Object.Equals( args.Context.Instance, this ) )
+				return;
+
+			if ( this.GetDatasourceNameValues != null ) {
+				GetDatasourceNameValues( this, args );
+			}
+		}
+
+		private void DatasourceAddress_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
+		{
+			if ( !Object.Equals( args.Context.Instance, this ) )
+				return;
+
+			if ( this.GetDatasourceAddressValues != null ) {
+				GetDatasourceAddressValues( this, args );
+			}
+		}
+
+		private void Catalog_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
+		{
+			if ( !Object.Equals( args.Context.Instance, this ) )
+				return;
+
+			if ( this.GetCatalogValues != null ) {
+				GetCatalogValues( this, args );
+			}
+		}
+
+		private void UserId_GetLookupValues( object sender, StringLookupGetValuesEventArgs args )
+		{
+			if ( !Object.Equals( args.Context.Instance, this ) )
+				return;
+
+			if ( this.GetUserIdValues != null ) {
+				GetUserIdValues( this, args );
+			}
+		}
+
+		#endregion
+
 	}
 }
