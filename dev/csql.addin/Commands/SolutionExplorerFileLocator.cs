@@ -53,7 +53,7 @@ namespace csql.addin.Commands
 			UIHierarchyItem uiItem = FindHierarchyItem( solutionItems.Item( 1 ).UIHierarchyItems, projectItem );
 
 			if ( uiItem != null ) {
-				uiItem.Select( vsUISelectionType.vsUISelectionTypeSelect ); //own
+				uiItem.Select( vsUISelectionType.vsUISelectionTypeSelect );
 				application.ToolWindows.SolutionExplorer.Parent.Activate();
 			}
 		}
@@ -69,7 +69,6 @@ namespace csql.addin.Commands
 		{
 			// Enumerating children recursive would work, but it may be slow on large solution. 
 			// This tries to be smarter and faster 
-
 			Stack itemStack = new Stack();
 			CreateItemsStack( itemStack, item );
 
@@ -79,7 +78,7 @@ namespace csql.addin.Commands
 					items.Expanded = true;
 				if ( !items.Expanded ) {
 					// Workaround: expand dont always work... 
-					UIHierarchyItem parent = ((UIHierarchyItem)items.Parent);
+					UIHierarchyItem parent = (UIHierarchyItem)items.Parent;
 					parent.Select( vsUISelectionType.vsUISelectionTypeSelect );
 					this.application.ToolWindows.SolutionExplorer.DoDefaultAction();
 				}
@@ -118,7 +117,7 @@ namespace csql.addin.Commands
 			if ( project != null ) {
 				s.Push( project );
 				if ( project.ParentProjectItem != null ) {
-					//top nodes dont have solution as parent, but is null 
+					// Top nodes dont have solution as parent, but null.
 					CreateItemsStack( s, project.ParentProjectItem );
 				}
 				return;
@@ -126,7 +125,7 @@ namespace csql.addin.Commands
 			
 			Solution solution = item as Solution;
 			if ( solution != null ) {
-				// doesnt seem to ever happend... 
+				// doesn't seem to ever happend... 
 				return;
 			} 
 			

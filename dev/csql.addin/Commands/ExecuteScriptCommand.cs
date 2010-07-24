@@ -26,15 +26,14 @@ namespace csql.addin.Commands
 				return false;
 
 			DTE2 application = e.Application;
-			if ( application.ActiveDocument == null ) {
+			Document activeDocument = application.ActiveDocument;
+			if ( activeDocument == null ) {
 				return false;
 			}
 
-			string fileName = application.ActiveDocument.FullName.ToLowerInvariant();
-			if ( !fileName.EndsWith( ".csql" ) && !fileName.EndsWith( ".sql" ) )
-				return false;
-
-			return true;
+			string fileName = activeDocument.FullName;
+			bool isSqlScript = FileClassification.IsSqlScript( fileName );
+			return isSqlScript;
 		}
 
 		public override void Execute( VsCommandEventArgs e )
@@ -70,20 +69,16 @@ namespace csql.addin.Commands
 				csqlOptions.PreprocessorOptions.SetRange( fromChar, toChar );
 			}
 
-			try {
-				var thread = new System.Threading.Thread( Thread_Start );
-				var parameter = new ThreadParameter();
-				parameter.Application = application;
-				parameter.CSqlOptions = csqlOptions;
+			var thread = new System.Threading.Thread( Thread_Start );
+			var parameter = new ThreadParameter();
+			parameter.Application = application;
+			parameter.CSqlOptions = csqlOptions;
 
-				thread.IsBackground = true;
-				thread.Start( parameter );
-					 
-				if ( !csqGuiParameter.IsOutputFileEnabled ) {
-					settingsManager.SaveDbConnectionParameter( dbConnectionParameter );
-				}
-			}
-			finally {
+			thread.IsBackground = true;
+			thread.Start( parameter );
+
+			if ( !csqGuiParameter.IsOutputFileEnabled ) {
+				settingsManager.SaveDbConnectionParameter( dbConnectionParameter );
 			}
 
 		}
@@ -116,7 +111,7 @@ namespace csql.addin.Commands
 				this.isExecuting = false;
 				Commands2 commands = application.Commands as Commands2;
 				if ( commands != null ) {
-					commands.UpdateCommandUI(false);
+					commands.UpdateCommandUI( false );
 				}
 			}
 			finally {
@@ -156,7 +151,8 @@ namespace csql.addin.Commands
 			if ( dbConnectionParameter.IntegratedSecurity ) {
 				csqlOptions.DbUser = null;
 				csqlOptions.DbPassword = null;
-			} else {
+			}
+			else {
 				csqlOptions.DbUser = dbConnectionParameter.UserId;
 				csqlOptions.DbPassword = dbConnectionParameter.Password;
 			}
@@ -168,7 +164,6 @@ namespace csql.addin.Commands
 
 			csqlOptions.NoLogo = false;
 
-
 			return csqlOptions;
 		}
 
@@ -179,8 +174,8 @@ namespace csql.addin.Commands
 			switch ( provider ) {
 				case ProviderType.MsSql:
 					return DbSystem.MsSql;
-				//case ProviderType.MSJET:
-				//	return DbSystem.MsJet;
+				//// case ProviderType.MSJET:
+				//// 	return DbSystem.MsJet;
 				case ProviderType.Sybase:
 					return DbSystem.Sybase;
 				case ProviderType.Oracle:
@@ -220,8 +215,8 @@ namespace csql.addin.Commands
 
 		private class ThreadParameter
 		{
-			public DTE2 Application;
-			public CSqlOptions CSqlOptions;
+			public DTE2 Application { get; set; }
+			public CSqlOptions CSqlOptions { get; set; }
 		}
 	}
 }

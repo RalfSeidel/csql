@@ -7,7 +7,7 @@ using EnvDTE80;
 
 namespace csql.addin.Commands
 {
-	class GroupFilesCommand : VsCommand
+	internal class GroupFilesCommand : VsCommand
 	{
 		internal GroupFilesCommand() : base( "Group Files" )
 		{

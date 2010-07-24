@@ -18,7 +18,7 @@ namespace Sqt.VisualStudio
 		/// <summary>
 		/// The command title <see cref="P:Title"/>
 		/// </summary>
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private string title;
 
 		/// <summary>
@@ -48,6 +48,15 @@ namespace Sqt.VisualStudio
 		#endregion
 
 		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		/// <param name="title">The title of the command i.e. the text that appears in the tool bar.</param>
+		public VsCommand( string title )
+		{
+			this.title = title;
+		}
+
+		/// <summary>
 		/// Gets the name of the command.
 		/// </summary>
 		/// <remarks>
@@ -58,12 +67,12 @@ namespace Sqt.VisualStudio
 		/// </remarks>
 		public virtual string Name
 		{
-			get 
+			get
 			{
 				string name = this.GetType().Name;
 				if ( name.EndsWith( "Command" ) && name.Length != "Command".Length )
 					name = name.Substring( 0, name.Length - "Command".Length );
-				return name; 
+				return name;
 			}
 		}
 
@@ -81,11 +90,12 @@ namespace Sqt.VisualStudio
 		/// </summary>
 		public virtual string CommandBarName
 		{
-			get 
+			get
 			{
 				if ( String.IsNullOrEmpty( this.commandBarName ) ) {
 					return "Tools";
-				} else {
+				}
+				else {
 					return this.commandBarName;
 				}
 			}
@@ -105,10 +115,10 @@ namespace Sqt.VisualStudio
 		/// Gets the visual button image.
 		/// </summary>
 		/// <remarks>
-		/// Out first approach to build toolbars with commands used this image
+		/// Our first approach to build toolbars with commands used this image
 		/// when creating the toolbar buttons. However this doesn't work in
-		/// Visual Studio 2010. The current implementation assoziates the 
-		/// command with an image. 
+		/// Visual Studio 2010. The current implementation associates the 
+		/// command with an image that is identified by and integer id.
 		/// </remarks>
 		public virtual VsCommandIcon Icon
 		{
@@ -141,7 +151,7 @@ namespace Sqt.VisualStudio
 		/// Downcast the context guid to an array of object
 		/// used for calling AddNamedCommand2.
 		/// </summary>
-		internal object[] VsContextGuidsObjectArray 
+		internal object[] VsContextGuidsObjectArray
 		{
 			get
 			{
@@ -157,15 +167,6 @@ namespace Sqt.VisualStudio
 			}
 		}
 
-
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		/// <param name="title">The title of the command i.e. the text that appears in the tool bar.</param>
-		public VsCommand( string title )
-		{
-			this.title = title;
-		}
 
 		public virtual bool CanExecute( VsCommandEventArgs e )
 		{

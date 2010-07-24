@@ -22,9 +22,10 @@ namespace csql.addin.Settings.Gui
 		/// </returns>
 		public override bool CanConvertFrom( ITypeDescriptorContext context, Type sourceType )
 		{
-			if ( sourceType == typeof( String ) ) {
+			if ( sourceType == typeof( string ) ) {
 				return true;
-			} else {
+			}
+			else {
 				return base.CanConvertFrom( context, sourceType );
 			}
 		}
@@ -47,7 +48,8 @@ namespace csql.addin.Settings.Gui
 					result.Add( item );
 				}
 				return result;
-			} else {
+			}
+			else {
 				return base.ConvertFrom( context, culture, value );
 			}
 		}
@@ -65,7 +67,8 @@ namespace csql.addin.Settings.Gui
 		{
 			if ( destinationType == typeof( string ) ) {
 				return true;
-			} else {
+			}
+			else {
 				return base.CanConvertTo( context, destinationType );
 			}
 		}
@@ -86,7 +89,8 @@ namespace csql.addin.Settings.Gui
 					separator = ";";
 				}
 				return sb.ToString();
-			} else {
+			}
+			else {
 				return base.ConvertTo( context, culture, value, destinationType );
 			}
 		}

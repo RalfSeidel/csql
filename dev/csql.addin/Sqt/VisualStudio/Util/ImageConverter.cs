@@ -39,7 +39,7 @@ namespace Sqt.VisualStudio.Util
 			/// <remarks>
 			/// Don't know why Christoph implemented this method.
 			/// </remarks>
-			[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification="Don't know why this method is implemented" )]
+			[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Don't know why this method is implemented" )]
 			public static Image GetImage( object pictureDisp )
 			{
 				return GetPictureFromIPictureDisp( pictureDisp );

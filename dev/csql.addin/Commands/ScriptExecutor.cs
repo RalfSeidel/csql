@@ -36,7 +36,7 @@ namespace csql.addin.Commands
 			catch ( IOException ex ) {
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, ex.Message );
 			}
-			catch ( TerminateException ex ) {
+			catch ( TerminateException ) {
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, "Caught TerminateException" );
 
 				if ( processor != null ) {

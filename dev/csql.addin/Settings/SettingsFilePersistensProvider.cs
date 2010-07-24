@@ -13,6 +13,22 @@ namespace csql.addin.Settings
 		private readonly string settingsPath;
 
 		/// <summary>
+		/// Initializes a new file persistens provider using 
+		/// the <see cref="P:DefaultPath"/> for the the 
+		/// setting file.
+		/// </summary>
+		/// <param name="settingsPath">The settings path.</param>
+		public SettingsFilePersistensProvider()
+		{
+			this.settingsPath = DefaultPath;
+
+			if ( !File.Exists( this.settingsPath ) )
+				SaveSettings( new SettingsCollection() );
+		}
+
+
+
+		/// <summary>
 		/// Gets the default path for the settings files
 		/// </summary>
 		/// <value>The default path.</value>
@@ -23,22 +39,6 @@ namespace csql.addin.Settings
                 return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Sql Service GmbH\csql\settings.xml";
 			}
 		}
-
-
-		/// <summary>
-		/// Initializes a new file persistens provider using 
-		/// the <see cref="P:DefaultPath"/> for the the 
-		/// setting file.
-		/// </summary>
-		/// <param name="settingsPath">The settings path.</param>
-		public SettingsFilePersistensProvider( )
-		{
-			this.settingsPath = DefaultPath;
-
-		    if(! File.Exists(this.settingsPath))
-                SaveSettings(new SettingsCollection());
-		}
-
 
 
 
@@ -95,7 +95,7 @@ namespace csql.addin.Settings
 		/// <param name="settings">The settings to save.</param>
 		public void SaveSettings( SettingsCollection settings )
 		{
-            if(! Directory.Exists(Path.GetDirectoryName(this.settingsPath)))
+            if ( !Directory.Exists(Path.GetDirectoryName(this.settingsPath)) )
                 Directory.CreateDirectory(Path.GetDirectoryName(this.settingsPath));
 
 			using ( TextWriter textWriter = new StreamWriter( this.settingsPath ) ) {

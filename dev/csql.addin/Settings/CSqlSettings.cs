@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Sqt.DbcProvider;
-using System.ComponentModel;
 
 namespace csql.addin.Settings
 {
@@ -12,6 +12,7 @@ namespace csql.addin.Settings
 		private DbConnectionParameter dbConnectionParameter;
 		private CSqlParameter csqlParameter;
 
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>
 		/// Add summary description
@@ -51,15 +52,6 @@ namespace csql.addin.Settings
 		}
 
 
-
-
-
-
-		#region INotifyPropertyChanged Members
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-
 		/// <summary>
 		/// Raises the property changed event.
 		/// </summary>
@@ -69,7 +61,5 @@ namespace csql.addin.Settings
 				PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 			}
 		}
-
-		#endregion
 	}
 }

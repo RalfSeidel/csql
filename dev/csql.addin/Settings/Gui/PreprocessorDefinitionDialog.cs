@@ -29,7 +29,8 @@ namespace csql.addin.Settings.Gui
 			{
 				if ( value == null ) {
 					this.gridView.DataSource = new BindingList<PreprocessorDefinition>();
-				} else {
+				}
+				else {
 					BindingList<PreprocessorDefinition> list = new BindingList<PreprocessorDefinition>();
 					foreach ( var item in value ) {
 						list.Add( item );

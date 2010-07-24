@@ -11,7 +11,7 @@ namespace csql.addin
 		private readonly int threadId;
 
 		/// <summary>
-		/// Constructor.
+		/// Constructor with specified output window pane.
 		/// </summary>
 		public OutputPaneTraceListener( OutputWindowPane outputWindowPane )
 		{

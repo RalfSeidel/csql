@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
@@ -23,6 +24,8 @@ namespace Sqt.VisualStudio
 	[ComVisible( true )]
 	public abstract class VsAddin : IDTExtensibility2, IDTCommandTarget
 	{
+		#region Private fields
+
 		/// <summary>
 		/// Reference to the Visual Studio application object passed 
 		/// to the <see cref="M:OnConnection"/>  method.
@@ -42,6 +45,16 @@ namespace Sqt.VisualStudio
 		/// </summary>
 		private Dictionary<string, VsCommand> vsCommands;
 
+		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VsAddin"/> class.
+		/// </summary>
+		public VsAddin()
+		{
+			this.vsCommands = new Dictionary<string, VsCommand>();
+		}
+
 		/// <summary>
 		/// Gets the Visual Studio application object.
 		/// </summary>
@@ -56,37 +69,6 @@ namespace Sqt.VisualStudio
 		public AddIn AddIn
 		{
 			get { return this.addin; }
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VsAddin"/> class.
-		/// </summary>
-		public VsAddin()
-		{
-			this.vsCommands = new Dictionary<string, VsCommand>();
-		}
-
-		/// <summary>
-		/// Registers a command for later integration (during <see cref="M:OnConnection"/>)
-		/// </summary>
-		/// <param name="command">The command to register.</param>
-		protected void RegisterCommand( VsCommand command )
-		{
-			string fullCommandName = GetFullCommandName( command.Name );
-
-			if ( this.vsCommands.ContainsKey( fullCommandName ) ) {
-				throw new ArgumentException( "The command " + fullCommandName + " is already registered", "command" );
-			}
-
-			this.vsCommands.Add( fullCommandName, command );
-			if ( command.Position == 0 ) {
-				int maxPosition = 0;
-				foreach ( var c in this.vsCommands.Values ) {
-					if ( c.Position > maxPosition )
-						maxPosition = c.Position;
-				}
-				command.Position = maxPosition + 1;
-			}
 		}
 
 		/// <summary>
@@ -117,15 +99,16 @@ namespace Sqt.VisualStudio
 		/// <param name="custom">
 		/// An empty array that you can use to pass host-specific data for use in the add-in.
 		/// </param>
+		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
 		void IDTExtensibility2.OnConnection( object Application, ext_ConnectMode ConnectMode, object AddInInst, ref Array custom )
 		{
-			Debug.WriteLine( GetType().Name + ".OnConnection( ConnectMode=" + ConnectMode + " )");
+			Debug.WriteLine( GetType().Name + ".OnConnection( ConnectMode=" + ConnectMode + " )" );
 			this.application = (DTE2)Application;
 			this.addin = (AddIn)AddInInst;
-			this.OnInitialize();
+			this.OnInitialize( ConnectMode );
 
-			if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
-			//if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
+			// if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
+			if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
 				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
 					AddIdeCommand( vsCommand );
 				}
@@ -142,12 +125,14 @@ namespace Sqt.VisualStudio
 		/// <param name="custom">
 		/// An empty array that you can use to pass host-specific data for use after the add-in unloads.
 		/// </param>
+		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
 		void IDTExtensibility2.OnDisconnection( ext_DisconnectMode RemoveMode, ref Array custom )
 		{
 			Debug.WriteLine( "OnDisconnection" );
 
 			if ( RemoveMode == ext_DisconnectMode.ext_dm_UserClosed ) {
 				StringDictionary commandBarNames = new StringDictionary();
+
 				// Remove all commands and collect their command bar names
 				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
 					string commandBarName = vsCommand.CommandBarName;
@@ -184,12 +169,13 @@ namespace Sqt.VisualStudio
 		/// <param name="VariantIn">A value passed to the command.</param>
 		/// <param name="VariantOut">A value passed back to the invoker Exec method after the command executes.</param>
 		/// <param name="Handled">true indicates that the command was implemented. false indicates that it was not.</param>
-		void IDTCommandTarget.Exec( string cmdName, vsCommandExecOption ExecuteOption, ref object VariantIn, ref object VariantOut, ref bool Handled )
+		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
+		void IDTCommandTarget.Exec( string CmdName, vsCommandExecOption ExecuteOption, ref object VariantIn, ref object VariantOut, ref bool Handled )
 		{
 			Handled = false;
 			if ( ExecuteOption == vsCommandExecOption.vsCommandExecOptionDoDefault ) {
-				if ( this.vsCommands.ContainsKey( cmdName ) ) {
-					VsCommand vsCommand = this.vsCommands[cmdName];
+				if ( this.vsCommands.ContainsKey( CmdName ) ) {
+					VsCommand vsCommand = this.vsCommands[CmdName];
 					vsCommand.Execute( new VsCommandEventArgs( this.application, this.addin ) );
 					Handled = true;
 				}
@@ -203,16 +189,18 @@ namespace Sqt.VisualStudio
 		/// <param name="NeededText">A <see cref="T:EnvDTE.vsCommandStatusTextWanted"></see> constant specifying if information is returned from the check, and if so, what type of information is returned.</param>
 		/// <param name="StatusOption">A <see cref="T:EnvDTE.vsCommandStatus"></see> specifying the current status of the command.</param>
 		/// <param name="CommandText">The text to return if <see cref="F:EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedStatus"></see> is specified.</param>
-		void IDTCommandTarget.QueryStatus( string cmdName, vsCommandStatusTextWanted neededText, ref vsCommandStatus statusOption, ref object commandText )
+		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
+		void IDTCommandTarget.QueryStatus( string CmdName, vsCommandStatusTextWanted neededText, ref vsCommandStatus statusOption, ref object commandText )
 		{
-			Debug.WriteLine( "QueryStatus("+cmdName+")" );
+			Debug.WriteLine( "QueryStatus(" + CmdName + ")" );
 
 			if ( neededText == vsCommandStatusTextWanted.vsCommandStatusTextWantedNone ) {
-				if ( this.vsCommands.ContainsKey( cmdName ) ) {
-					VsCommand vsCommand = this.vsCommands[cmdName];
+				if ( this.vsCommands.ContainsKey( CmdName ) ) {
+					VsCommand vsCommand = this.vsCommands[CmdName];
 					if ( vsCommand.CanExecute( new VsCommandEventArgs( this.application, this.addin ) ) ) {
 						statusOption = vsCommandStatus.vsCommandStatusSupported | vsCommandStatus.vsCommandStatusEnabled;
-					} else {
+					}
+					else {
 						statusOption = vsCommandStatus.vsCommandStatusSupported;
 					}
 				}
@@ -222,8 +210,31 @@ namespace Sqt.VisualStudio
 		/// <summary>
 		/// Called immediatly before the addin commands are added.
 		/// </summary>
-		protected virtual void OnInitialize()
+		protected virtual void OnInitialize( ext_ConnectMode connectMode )
 		{
+		}
+
+		/// <summary>
+		/// Registers a command for later integration (during <see cref="M:OnConnection"/>)
+		/// </summary>
+		/// <param name="command">The command to register.</param>
+		protected void RegisterCommand( VsCommand command )
+		{
+			string fullCommandName = GetFullCommandName( command.Name );
+
+			if ( this.vsCommands.ContainsKey( fullCommandName ) ) {
+				throw new ArgumentException( "The command " + fullCommandName + " is already registered", "command" );
+			}
+
+			this.vsCommands.Add( fullCommandName, command );
+			if ( command.Position == 0 ) {
+				int maxPosition = 0;
+				foreach ( var c in this.vsCommands.Values ) {
+					if ( c.Position > maxPosition )
+						maxPosition = c.Position;
+				}
+				command.Position = maxPosition + 1;
+			}
 		}
 
 		/// <summary>
@@ -278,14 +289,16 @@ namespace Sqt.VisualStudio
 
 			if ( temp.Length == 1 ) {
 				if ( !ContainsCommand( commandBar.Controls, ideCommand ) ) {
-					commandControl= ideCommand.AddControl( commandBar, vsCommand.Position );
+					commandControl = ideCommand.AddControl( commandBar, vsCommand.Position );
 				}
-			} else if ( temp.Length == 2 ) {
+			}
+			else if ( temp.Length == 2 ) {
 				CommandBarPopup commandBarPopup = (CommandBarPopup)commandBar.Controls[temp[1]];
 				if ( !ContainsCommand( commandBarPopup.Controls, ideCommand ) ) {
 					commandControl = ideCommand.AddControl( commandBarPopup.CommandBar, vsCommand.Position );
 				}
-			} else {
+			}
+			else {
 				throw new NotSupportedException( "A command hierarchy greater than two is not supported yet" );
 			}
 
@@ -298,7 +311,8 @@ namespace Sqt.VisualStudio
 					StdPicture iconMask = vsCommand.Icon.IconMask;
 					commandButton.Mask = iconMask;
 					commandButton.Style = MsoButtonStyle.msoButtonIconAndCaption;
-				} else {
+				}
+				else {
 					commandButton.Style = MsoButtonStyle.msoButtonAutomatic;
 				}
 			}
@@ -336,7 +350,7 @@ namespace Sqt.VisualStudio
 		{
 			Commands2 ideCommands = (Commands2)this.Application.Commands;
 			string commandName = GetFullCommandName( vsCommand.Name );
-			foreach ( Object item in ideCommands ) {
+			foreach ( object item in ideCommands ) {
 				Command ideCommand = item as Command;
 				if ( ideCommand == null )
 					continue;

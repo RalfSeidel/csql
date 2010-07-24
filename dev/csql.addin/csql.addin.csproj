@@ -63,6 +63,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\FileGroupRenamer.cs" />
+    <Compile Include="Commands\FileClassification.cs" />
     <Compile Include="OutputPaneTraceListener.cs" />
     <Compile Include="Gui\Output.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

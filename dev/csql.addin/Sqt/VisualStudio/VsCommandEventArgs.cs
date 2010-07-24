@@ -1,7 +1,7 @@
 using System;
+using System.Diagnostics;
 using EnvDTE;
 using EnvDTE80;
-using System.Diagnostics;
 
 namespace Sqt.VisualStudio
 {
@@ -10,10 +10,26 @@ namespace Sqt.VisualStudio
 	/// </summary>
 	public class VsCommandEventArgs : EventArgs
 	{
+		#region Private fields 
+
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private readonly DTE2 dte;
+
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private readonly AddIn addIn;
+
+		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VsCommandEventArgs"/> class.
+		/// </summary>
+		/// <param name="dte">The Visual Studio application object.</param>
+		/// <param name="addIn">The Visual Studio add in object.</param>
+		public VsCommandEventArgs( DTE2 application, AddIn addIn )
+		{
+			this.dte = application;
+			this.addIn = addIn;
+		}
 
 		/// <summary>
 		/// Gets the Visual Studio application object.
@@ -31,15 +47,5 @@ namespace Sqt.VisualStudio
 			get { return this.addIn; }
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VsCommandEventArgs"/> class.
-		/// </summary>
-		/// <param name="dte">The Visual Studio application object.</param>
-		/// <param name="addIn">The Visual Studio add in object.</param>
-		public VsCommandEventArgs( DTE2 application, AddIn addIn )
-		{
-			this.dte = application;
-			this.addIn = addIn;
-		}
 	}
 }

@@ -100,7 +100,7 @@ namespace csql.addin.Commands
 				AddItemToMasterItem( masterItem, subItem );
 			}
 			if ( childItem.Collection != masterItem.ProjectItems ) {
-				String fileName = childItem.get_FileNames( 0 );
+				string fileName = childItem.get_FileNames( 0 );
 				childItem.Remove();
 				masterItem.ProjectItems.AddFromFile( fileName );
 			}
@@ -133,7 +133,8 @@ namespace csql.addin.Commands
 					ItemGroup group = groups.GetGroup( groupName );
 					group.Items.Add( item );
 					AddSubItemsToItemGroup( group, item );
-				} else {
+				}
+				else {
 					GroupItems( item.UIHierarchyItems );
 				}
 			}
@@ -160,11 +161,22 @@ namespace csql.addin.Commands
 		/// </summary>
 		private class ItemGroup
 		{
+			/// <summary>
+			/// See <see cref="P:Name"/>
+			/// </summary>
+			private readonly string groupName;
+
+			/// <summary>
+			/// See <see cref="P:Items"/>
+			/// </summary>
+			private IList<UIHierarchyItem> groupItems = new List<UIHierarchyItem>();
+
+
 			#region Constructor
 
 			public ItemGroup( string groupName )
 			{
-				this.m_groupName = groupName;
+				this.groupName = groupName;
 			}
 
 			#endregion
@@ -172,31 +184,21 @@ namespace csql.addin.Commands
 			#region Properties
 
 			/// <summary>
-			/// See <see cref="P:Name"/>
-			/// </summary>
-			private string m_groupName;
-
-			/// <summary>
 			/// The name of the group i.e. the stem the file name up to the first 
 			/// appearance of a dot.
 			/// </summary>
 			public string Name
 			{
-				get { return m_groupName; }
+				get { return this.groupName; }
 			}
 
-
-			/// <summary>
-			/// See <see cref="P:Items"/>
-			/// </summary>
-			private IList<UIHierarchyItem> m_groupItems = new List<UIHierarchyItem>();
 
 			/// <summary>
 			/// All file items found having the same name and ending with .csql.
 			/// </summary>
 			public IList<UIHierarchyItem> Items
 			{
-				get { return this.m_groupItems; }
+				get { return this.groupItems; }
 			}
 
 			/// <summary>
@@ -230,24 +232,6 @@ namespace csql.addin.Commands
 			}
 
 			/// <summary>
-			/// Finds the item with the specified full name.
-			/// </summary>
-			/// <param name="fullName">The full name converted in lower case .</param>
-			/// <returns>The item with the same name if if exists. <c>null</c> otherwise</returns>
-			private UIHierarchyItem FindItem( string fullName )
-			{
-				foreach ( UIHierarchyItem item in this.m_groupItems ) {
-					String name = item.Name.ToLower();
-
-					if ( name.Equals( fullName ) ) {
-						return item;
-					}
-				}
-				return null;
-			}
-
-
-			/// <summary>
 			/// Gets all the child items of the master.
 			/// </summary>
 			/// <value>The child items.</value>
@@ -258,7 +242,7 @@ namespace csql.addin.Commands
 					UIHierarchyItem master = this.MasterItem;
 					List<UIHierarchyItem> childs = new List<UIHierarchyItem>( this.Items.Count );
 
-					foreach ( UIHierarchyItem item in this.m_groupItems ) {
+					foreach ( UIHierarchyItem item in this.groupItems ) {
 						if ( item != master ) {
 							childs.Add( item );
 						}
@@ -272,11 +256,11 @@ namespace csql.addin.Commands
 			/// Check that all files in this group exists. If not we will not build 
 			/// the group.
 			/// </summary>
-			public bool FilesExists
+			private bool FilesExists
 			{
 				get
 				{
-					foreach ( UIHierarchyItem item in this.m_groupItems ) {
+					foreach ( UIHierarchyItem item in this.groupItems ) {
 						ProjectItem prjItem = (ProjectItem)item.Object;
 						if ( prjItem.FileCount != 1 ) {
 							return false;
@@ -291,12 +275,29 @@ namespace csql.addin.Commands
 			}
 
 			#endregion
+
+			/// <summary>
+			/// Finds the item with the specified full name.
+			/// </summary>
+			/// <param name="fullName">The full name converted in lower case .</param>
+			/// <returns>The item with the same name if if exists. <c>null</c> otherwise</returns>
+			private UIHierarchyItem FindItem( string fullName )
+			{
+				foreach ( UIHierarchyItem item in this.groupItems ) {
+					string name = item.Name.ToLower();
+
+					if ( name.Equals( fullName ) ) {
+						return item;
+					}
+				}
+				return null;
+			}
 		}
 
 		/// <summary>
 		/// Helper class to collect item groups.
 		/// </summary>
-		private class ItemGroups : Dictionary<String, ItemGroup>
+		private class ItemGroups : Dictionary<string, ItemGroup>
 		{
 			/// <summary>
 			/// Get the group with the given name.
@@ -324,14 +325,14 @@ namespace csql.addin.Commands
 			/// <summary>
 			/// <see cref="P:Instance"/>
 			/// </summary>
-			private static ChildItemComparer m_instance = new ChildItemComparer();
+			private static ChildItemComparer instance = new ChildItemComparer();
 
 			/// <summary>
 			/// Get the singleton instance of this class.
 			/// </summary>
 			public static ChildItemComparer Instance
 			{
-				get { return m_instance; }
+				get { return instance; }
 			}
 
 			public override int Compare( UIHierarchyItem x, UIHierarchyItem y )

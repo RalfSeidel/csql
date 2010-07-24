@@ -7,6 +7,9 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private System.Windows.Forms.PropertyGrid propertyGrid;
+		private System.Windows.Forms.ComboBox editorObjects;
+
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
@@ -71,9 +74,5 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.PropertyGrid propertyGrid;
-		private System.Windows.Forms.ComboBox editorObjects;
-
 	}
 }

@@ -22,9 +22,10 @@ namespace csql.addin.Settings
 		/// </returns>
 		public override bool CanConvertFrom( ITypeDescriptorContext context, Type sourceType )
 		{
-			if ( sourceType == typeof( String ) ) {
+			if ( sourceType == typeof( string ) ) {
 				return true;
-			} else {
+			}
+			else {
 				return base.CanConvertFrom( context, sourceType );
 			}
 		}
@@ -49,7 +50,8 @@ namespace csql.addin.Settings
 					result.Add( pd );
 				}
 				return result;
-			} else {
+			}
+			else {
 				return base.ConvertFrom( context, culture, value );
 			}
 		}
@@ -60,7 +62,8 @@ namespace csql.addin.Settings
 		{
 			if ( destinationType == typeof( string ) ) {
 				return true;
-			} else {
+			}
+			else {
 				return base.CanConvertTo( context, destinationType );
 			}
 		}
@@ -75,7 +78,7 @@ namespace csql.addin.Settings
 				StringBuilder sb = new StringBuilder();
 				string separator = "";
 				foreach ( var item in items ) {
-					if ( !item.IsEnabled ) 
+					if ( !item.IsEnabled )
 						continue;
 
 					sb.Append( separator );
@@ -88,7 +91,7 @@ namespace csql.addin.Settings
 				}
 
 				foreach ( var item in items ) {
-					if ( item.IsEnabled ) 
+					if ( item.IsEnabled )
 						continue;
 
 					sb.Append( separator );
@@ -101,7 +104,8 @@ namespace csql.addin.Settings
 					separator = ";";
 				}
 				return sb.ToString();
-			} else {
+			}
+			else {
 				return base.ConvertTo( context, culture, value, destinationType );
 			}
 		}
@@ -147,7 +151,8 @@ namespace csql.addin.Settings
 			if ( name.StartsWith( "!" ) ) {
 				enabled = false;
 				name = name.TrimStart( '!' ).Trim();
-			} else {
+			}
+			else {
 				enabled = true;
 			}
 

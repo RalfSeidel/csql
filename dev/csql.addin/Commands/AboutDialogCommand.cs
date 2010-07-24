@@ -2,7 +2,7 @@
 
 namespace csql.addin.Commands
 {
-	class AboutDialogCommand : VsCommand
+	internal class AboutDialogCommand : VsCommand
 	{
 		internal AboutDialogCommand()
 			: base( "About" )

@@ -42,7 +42,7 @@ namespace csql.addin.Commands
 				Windows2 windows2 = (Windows2)application.Windows;
 				Type userCtrlType = typeof( SettingsControl );
 				Assembly userCtrlAssembly = userCtrlType.Assembly;
-				String windowGuid = "{858C3FCD-3333-4540-A592-F31C1520B174}";
+				string windowGuid = "{858C3FCD-3333-4540-A592-F31C1520B174}";
 
 				toolWindow = windows2.CreateToolWindow2( addInInstance, userCtrlAssembly.Location, userCtrlType.FullName, "CSql Settings", windowGuid, ref programmableObject );
 

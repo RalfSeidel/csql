@@ -9,7 +9,7 @@ namespace Sqt.VisualStudio.Util
 	/// <summary>
 	/// Helpers for images and bitmap handling.
 	/// </summary>
-	static class ImageHelper
+	internal static class ImageHelper
 	{
 		/// <summary>
 		/// Loads an embedded resource image.
@@ -40,7 +40,7 @@ namespace Sqt.VisualStudio.Util
 		/// The color used when an image pixel has not a masking color.
 		/// If the value is <see cref="P:Color.Empty"/> the original color
 		/// will be used.
-		///.</param>
+		/// </param>
 		/// <param name="colorsToMask">The colors to replace with the maskColor color.</param>
 		/// <returns></returns>
 		internal static Image GetMask( Image image, Color maskColor, Color unmaskColor, params Color[] colorsToMask )
@@ -84,14 +84,14 @@ namespace Sqt.VisualStudio.Util
 		{
 			private Color pixel;
 
+			public EqualColorPredicate()
+			{
+			}
+
 			public Color Pixel
 			{
 				get { return this.pixel; }
 				set { this.pixel = value; }
-			}
-
-			public EqualColorPredicate()
-			{
 			}
 
 			public bool Matches( Color color )

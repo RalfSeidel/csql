@@ -15,7 +15,6 @@ namespace csql.addin.Settings.Gui
 
 		public override TypeConverter.StandardValuesCollection GetStandardValues( ITypeDescriptorContext context )
 		{
-
 			List<string> domainValues = new List<string>();
 			domainValues.Add( "test1" );
 			domainValues.Add( "test2" );

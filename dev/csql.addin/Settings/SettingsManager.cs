@@ -22,11 +22,6 @@ namespace csql.addin.Settings
 		private static readonly string dbConnectionVariableName = typeof( CSqlAddin ).FullName.Replace( '.', '_' ) + "_" + typeof( DbConnectionParameter ).Name;
 		private static readonly string csqlParameterVariableName   = typeof( CSqlAddin ).FullName.Replace( '.', '_' ) + "_" + typeof( CSqlParameter ).Name;
 
-		private static SettingsManager instance;
-		private MruConnections mruDbConnectionParameters;
-		private DbConnectionParameter dbConnectionParameter;
-		private CSqlParameter currentScriptParameter;
-
 		private readonly _DTE application;
 
 		/// <summary>
@@ -38,35 +33,26 @@ namespace csql.addin.Settings
 		/// </seealso>
 		private readonly EnvDTE.SolutionEvents solutionEvents;
 
+		private static SettingsManager instance;
+
+		private MruConnections mruDbConnectionParameters;
+		private DbConnectionParameter dbConnectionParameter;
+		private CSqlParameter currentScriptParameter;
+
+
 		#endregion
 
 		private SettingsManager( _DTE application )
 		{
 			this.application = application;
 			this.solutionEvents = application.Events.SolutionEvents;
-			solutionEvents.Opened+=new _dispSolutionEvents_OpenedEventHandler( Solution_Opened );
+			solutionEvents.Opened += new _dispSolutionEvents_OpenedEventHandler( Solution_Opened );
 		}
 
 		/// <summary>
 		/// Event raised whenever the settings have been reladed.
 		/// </summary>
 		public event SettingsReloadedDelegate SettingsReloaded;
-
-		/// <summary>
-		/// Get or create the singleton instance of the parameter acessors.
-		/// </summary>
-		/// <param name="application"></param>
-		/// <returns></returns>
-		public static SettingsManager GetInstance( _DTE application )
-		{
-			if ( application == null )
-				throw new ArgumentNullException( "application" );
-
-			if ( instance == null ) {
-				instance = new SettingsManager( application );
-			}
-			return instance;
-		}
 
 		/// <summary>
 		/// Get the collection of most recently used database connections.
@@ -118,40 +104,23 @@ namespace csql.addin.Settings
 			}
 		}
 
-		private CSqlParameter LoadSolutionScriptParameter()
+		/// <summary>
+		/// Get or create the singleton instance of the parameter acessors.
+		/// </summary>
+		/// <param name="application"></param>
+		/// <returns></returns>
+		public static SettingsManager GetInstance( _DTE application )
 		{
-			string csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
-			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameter( csqlParameterPath );
-				if ( parameter != null )
-					return parameter;
-			}
-			csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.xml" );
-			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameter( csqlParameterPath );
-				if ( parameter != null )
-					return parameter;
-			}
+			if ( application == null )
+				throw new ArgumentNullException( "application" );
 
-			return null;
+			if ( instance == null ) {
+				instance = new SettingsManager( application );
+			}
+			return instance;
 		}
 
-		private CSqlParameter LoadScriptParameter( string csqlParameterPath )
-		{
-			try {
-				using ( Stream stream = new FileStream( csqlParameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
-					XmlSerializer serializer = new XmlSerializer( typeof( CSqlParameter ) );
-					CSqlParameter parameter = (CSqlParameter)serializer.Deserialize( stream );
-					stream.Close();
-					return parameter;
-				}
-			}
-			catch ( Exception ex ) {
-				string context = MethodInfo.GetCurrentMethod().Name;
-				Debug.WriteLine( String.Format( "{0}: Failed to load parameter because [{1}].", context, ex.Message ) );
-			}
-			return null;
-		}
+
 
 		internal void SaveDbConnectionParameter( DbConnectionParameter dbConnectionParameter )
 		{
@@ -207,6 +176,68 @@ namespace csql.addin.Settings
 		}
 
 
+		/// <summary>
+		/// Gets the absolute file path for the given file name in the current solution directory.
+		/// </summary>
+		/// <param name="name">The file name.</param>
+		/// <returns>The absolute path or <c>null</c> if no solution is loaded.</returns>
+		private static string GetSolutionFilePath( _DTE application, string name )
+		{
+			string solutionPath = application.Solution.FileName;
+			if ( !String.IsNullOrEmpty( solutionPath ) ) {
+				string solutionDirectory = Path.GetDirectoryName( solutionPath );
+				string mruConnectionsPath = Path.Combine( solutionDirectory, name );
+				return mruConnectionsPath;
+			}
+			else {
+				return null;
+			}
+		}
+
+		private static string GetGlobalFilePath( string name )
+		{
+			string directory = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
+			directory = Path.Combine( directory, @"SqlService\csql\" );
+			string result = Path.Combine( directory, name );
+			return result;
+		}
+
+		private CSqlParameter LoadSolutionScriptParameter()
+		{
+			string csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
+			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
+				CSqlParameter parameter = LoadScriptParameter( csqlParameterPath );
+				if ( parameter != null )
+					return parameter;
+			}
+			csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.xml" );
+			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
+				CSqlParameter parameter = LoadScriptParameter( csqlParameterPath );
+				if ( parameter != null )
+					return parameter;
+			}
+
+			return null;
+		}
+
+
+		private CSqlParameter LoadScriptParameter( string csqlParameterPath )
+		{
+			try {
+				using ( Stream stream = new FileStream( csqlParameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
+					XmlSerializer serializer = new XmlSerializer( typeof( CSqlParameter ) );
+					CSqlParameter parameter = (CSqlParameter)serializer.Deserialize( stream );
+					stream.Close();
+					return parameter;
+				}
+			}
+			catch ( Exception ex ) {
+				string context = MethodInfo.GetCurrentMethod().Name;
+				Debug.WriteLine( String.Format( "{0}: Failed to load parameter because [{1}].", context, ex.Message ) );
+			}
+			return null;
+		}
+
 		private MruConnections LoadMruConnectionParameters()
 		{
 			string mruConnectionsName = "CSqlConnection.xml";
@@ -243,31 +274,6 @@ namespace csql.addin.Settings
 			return null;
 		}
 
-
-		/// <summary>
-		/// Gets the absolute file path for the given file name in the current solution directory.
-		/// </summary>
-		/// <param name="name">The file name.</param>
-		/// <returns>The absolute path or <c>null</c> if no solution is loaded.</returns>
-		private static string GetSolutionFilePath( _DTE application, string name )
-		{
-			string solutionPath = application.Solution.FileName;
-			if ( !String.IsNullOrEmpty( solutionPath ) ) {
-				string solutionDirectory = Path.GetDirectoryName( solutionPath );
-				string mruConnectionsPath = Path.Combine( solutionDirectory, name );
-				return mruConnectionsPath;
-			} else {
-				return null;
-			}
-		}
-
-		private static string GetGlobalFilePath( string name )
-		{
-			string directory = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-			directory = Path.Combine( directory, @"SqlService\csql\" );
-			string result = Path.Combine( directory, name );
-			return result;
-		}
 
 		private void Solution_Opened()
 		{

@@ -4,7 +4,7 @@ using Sqt.VisualStudio;
 
 namespace csql.addin.Commands
 {
-	class LocateFileCommand : VsCommand
+	internal class LocateFileCommand : VsCommand
 	{
 		internal LocateFileCommand()
 			: base( "Locate File" )

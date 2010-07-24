@@ -20,7 +20,7 @@ namespace csql.addin.Settings.Gui
 		/// Default constructor.
 		/// </summary>
 		public PreprocessorDefinitionEditor()
-			:base( typeof( PreprocessorDefinition ) )
+			: base( typeof( PreprocessorDefinition ) )
 		{
 		}
 

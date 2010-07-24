@@ -1,7 +1,7 @@
-﻿using EnvDTE;
-using Microsoft.VisualStudio.CommandBars;
-using System;
+﻿using System;
 using System.Diagnostics;
+using EnvDTE;
+using Microsoft.VisualStudio.CommandBars;
 
 namespace Sqt.VisualStudio.Util
 {

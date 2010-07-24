@@ -10,6 +10,27 @@ namespace csql.addin.Settings
 	[Serializable]
 	public class PreprocessorDefinition
 	{
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public PreprocessorDefinition()
+		{
+			IsEnabled = true;
+			Name = "Name";
+			Value = string.Empty;
+		}
+
+
+		/// <summary>
+		/// Copy constructor.
+		/// </summary>
+		public PreprocessorDefinition( PreprocessorDefinition preprocessorDefinition )
+		{
+			this.IsEnabled = preprocessorDefinition.IsEnabled;
+			this.Name = preprocessorDefinition.Name;
+			this.Value = preprocessorDefinition.Value;
+		}
+
 		[Description( "The macro name" )]
 		public string Name { get; set; }
 
@@ -23,24 +44,5 @@ namespace csql.addin.Settings
 		public bool IsEnabled { get; set; }
 
 
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		public PreprocessorDefinition()
-		{
-			IsEnabled = true;
-			Name = "Name";
-			Value = string.Empty;
-		}
-
-		/// <summary>
-		/// Copy constructor.
-		/// </summary>
-		public PreprocessorDefinition( PreprocessorDefinition preprocessorDefinition )
-		{
-			this.IsEnabled = preprocessorDefinition.IsEnabled;
-			this.Name = preprocessorDefinition.Name;
-			this.Value = preprocessorDefinition.Value;
-		}
 	}
 }

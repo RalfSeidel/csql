@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using csql.addin.Settings.Gui;
-using System;
-using System.Reflection;
 
 namespace csql.addin.Settings
 {
@@ -19,6 +18,12 @@ namespace csql.addin.Settings
 		#region Data fields
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private readonly List<string> includeDirectories = new List<string>();
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private readonly List<PreprocessorDefinition> preprocessorDefinitions = new List<PreprocessorDefinition>();
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private string name;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
@@ -27,13 +32,56 @@ namespace csql.addin.Settings
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private string temporaryFile;
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly List<string> includeDirectories = new List<string>();
-
-		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private readonly List<PreprocessorDefinition> preprocessorDefinitions = new List<PreprocessorDefinition>();
-
 		#endregion
+
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public CSqlParameter()
+		{
+			this.name = "New";
+			this.Verbosity = TraceLevel.Info;
+			this.AdvancedPreprocessorParameter = "";
+
+			this.outputFile = "";
+			IsOutputFileEnabled = false;
+			IsPreprocessorEnabled = true;
+			IsBreakOnErrosEnabled = true;
+			TemporaryFile = "";
+			IsTemporaryFileEnabled = false;
+		}
+
+		/// <summary>
+		/// Copy Construktor
+		/// </summary>
+		/// <param name="settingsObject">The settings object to copy.</param>
+		public CSqlParameter( CSqlParameter settingsObject )
+			: this()
+		{
+			this.Name = settingsObject.Name + " (Copy)";
+			this.Verbosity = Verbosity;
+
+			this.IncludeDirectories.Clear();
+			foreach ( string item in settingsObject.IncludeDirectories )
+				this.IncludeDirectories.Add( item );
+
+			this.preprocessorDefinitions.Clear();
+			foreach ( PreprocessorDefinition def in settingsObject.PreprocessorDefinitions ) {
+				PreprocessorDefinition defCopy = new PreprocessorDefinition( def );
+				this.preprocessorDefinitions.Add( defCopy );
+			}
+
+			this.AdvancedPreprocessorParameter = settingsObject.AdvancedPreprocessorParameter;
+			this.OutputFile = settingsObject.OutputFile;
+			this.IsOutputFileEnabled = settingsObject.IsOutputFileEnabled;
+			this.IsPreprocessorEnabled = settingsObject.IsPreprocessorEnabled;
+			this.IsBreakOnErrosEnabled = settingsObject.IsBreakOnErrosEnabled;
+			this.TemporaryFile = settingsObject.TemporaryFile;
+			this.IsTemporaryFileEnabled = settingsObject.IsTemporaryFileEnabled;
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
 
 		[Category( "CSql" )]
 		[DefaultValue( "New" )]
@@ -175,55 +223,7 @@ namespace csql.addin.Settings
 		[DefaultValue( "" )]
 		public string AdvancedPreprocessorParameter { get; set; }
 
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		public CSqlParameter()
-		{
-			this.name = "New";
-			this.Verbosity = TraceLevel.Info;
-			this.AdvancedPreprocessorParameter = "";
-
-			this.outputFile = "";
-			IsOutputFileEnabled = false;
-			IsPreprocessorEnabled = true;
-			IsBreakOnErrosEnabled = true;
-			TemporaryFile = "";
-			IsTemporaryFileEnabled = false;
-		}
-
-		/// <summary>
-		/// Copy Construktor
-		/// </summary>
-		/// <param name="settingsObject">The settings object to copy.</param>
-		public CSqlParameter( CSqlParameter settingsObject )
-			: this()
-		{
-			this.Name   = settingsObject.Name + " (Copy)";
-			this.Verbosity = Verbosity;
-
-			this.IncludeDirectories.Clear();
-			foreach ( string item in settingsObject.IncludeDirectories )
-				this.IncludeDirectories.Add( item );
-
-			this.preprocessorDefinitions.Clear();
-			foreach ( PreprocessorDefinition def in settingsObject.PreprocessorDefinitions ) {
-				PreprocessorDefinition defCopy = new PreprocessorDefinition( def );
-				this.preprocessorDefinitions.Add( defCopy );
-			}
-
-			this.AdvancedPreprocessorParameter = settingsObject.AdvancedPreprocessorParameter;
-			this.OutputFile = settingsObject.OutputFile;
-			this.IsOutputFileEnabled = settingsObject.IsOutputFileEnabled;
-			this.IsPreprocessorEnabled = settingsObject.IsPreprocessorEnabled;
-			this.IsBreakOnErrosEnabled = settingsObject.IsBreakOnErrosEnabled;
-			this.TemporaryFile = settingsObject.TemporaryFile;
-			this.IsTemporaryFileEnabled = settingsObject.IsTemporaryFileEnabled;
-		}
-
 		#region INotifyPropertyChanged Members
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>
 		/// Raises the property changed event.
