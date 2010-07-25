@@ -6,6 +6,7 @@ using EnvDTE;
 using EnvDTE80;
 using Sqt.DbcProvider;
 using Sqt.VisualStudio;
+using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Commands
 {
@@ -27,7 +28,8 @@ namespace csql.addin.Commands
 		/// <summary>
 		/// Create and show the settings panel.
 		/// </summary>
-		/// <param name="e"></param>
+		/// <param name="e">The event arguments.</param>
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Catching general exception to keep visual studio alive no matter what happend while executing the command." )]
 		public override void Execute( VsCommandEventArgs e )
 		{
 			if ( toolWindow != null ) {

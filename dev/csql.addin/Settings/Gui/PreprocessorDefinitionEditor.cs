@@ -7,6 +7,7 @@ using System.Windows.Forms.Design;
 using System.ComponentModel.Design;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace csql.addin.Settings.Gui
 {
@@ -14,6 +15,7 @@ namespace csql.addin.Settings.Gui
 	/// A designer editor like the <see cref="System.Windows.Forms.Design.FileNameEditor"/> editor
 	/// used to edit the list of preprocessor definitions.
 	/// </summary>
+	[ComVisible(false)]
 	public class PreprocessorDefinitionEditor : CollectionEditor
 	{
 		/// <summary>

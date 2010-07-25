@@ -8,41 +8,41 @@ namespace csql
 	/// </summary>
 	public class DbMessageEventArgs : EventArgs
 	{
-		private readonly DbMessage m_message;
+		private readonly DbMessage message;
 
 		public DbMessageEventArgs( string message )
 		{
-			m_message = new DbMessage( message );
+			this.message = new DbMessage( message );
 		}
 
 		public DbMessageEventArgs( TraceLevel severity, string server, string catalog, string procedure, int lineNo, string message )
 		{
-			m_message = new DbMessage( severity, server, catalog, procedure, lineNo, message );
+			this.message = new DbMessage( severity, server, catalog, procedure, lineNo, message );
 		}
 
 		public string Server
 		{
-			get { return m_message.Server; }
+			get { return this.message.Server; }
 		}
 
 		public string Catalog
 		{
-			get { return m_message.Catalog; }
+			get { return this.message.Catalog; }
 		}
 
 		public string Procedure
 		{
-			get { return m_message.Procedure; }
+			get { return this.message.Procedure; }
 		}
 
 		public int LineNumber
 		{
-			get { return m_message.LineNumber; }
+			get { return this.message.LineNumber; }
 		}
 
 		public TraceLevel TraceLevel
 		{
-			get { return m_message.TraceLevel; }
+			get { return this.message.TraceLevel; }
 		}
 
 		/// <summary>
@@ -51,13 +51,12 @@ namespace csql
 		/// <value>The message text.</value>
 		public string Message
 		{
-			get { return m_message.Message; }
+			get { return this.message.Message; }
 		}
 
 		public override string ToString()
 		{
-			return m_message.ToString();
+			return this.message.ToString();
 		}
-
 	}
 }

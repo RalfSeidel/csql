@@ -47,44 +47,11 @@
   <Namespaces>
    <Namespace Name="csql.addin.Commands">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-07-24 18:33:07Z">
-      <Issue>
-       <Item>csql.addin.Commands</Item>
-      </Issue>
-     </Message>
      <Message Id="addin" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-07-24 18:33:07Z">
       <Issue Name="Namespace">
        <Item>addin</Item>
        <Item>csql.addin.Commands</Item>
        <Item>Addin</Item>
-      </Issue>
-     </Message>
-     <Message Id="addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-      <Issue Name="Namespace">
-       <Item>addin</Item>
-       <Item>csql.addin.Commands</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
-   <Namespace Name="csql.addin.Gui.Views">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-07-24 18:33:07Z">
-      <Issue>
-       <Item>csql.addin.Gui.Views</Item>
-      </Issue>
-     </Message>
-     <Message Id="addin" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-07-24 18:33:07Z">
-      <Issue Name="Namespace">
-       <Item>addin</Item>
-       <Item>csql.addin.Gui.Views</Item>
-       <Item>Addin</Item>
-      </Issue>
-     </Message>
-     <Message Id="addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-      <Issue Name="Namespace">
-       <Item>addin</Item>
-       <Item>csql.addin.Gui.Views</Item>
       </Issue>
      </Message>
     </Messages>
@@ -103,12 +70,6 @@
        <Item>Addin</Item>
       </Issue>
      </Message>
-     <Message Id="addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-      <Issue Name="Namespace">
-       <Item>addin</Item>
-       <Item>csql.addin.Settings</Item>
-      </Issue>
-     </Message>
     </Messages>
    </Namespace>
    <Namespace Name="csql.addin.Settings.Gui">
@@ -123,12 +84,6 @@
        <Item>addin</Item>
        <Item>csql.addin.Settings.Gui</Item>
        <Item>Addin</Item>
-      </Issue>
-     </Message>
-     <Message Id="addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-      <Issue Name="Namespace">
-       <Item>addin</Item>
-       <Item>csql.addin.Settings.Gui</Item>
       </Issue>
      </Message>
     </Messages>
@@ -151,24 +106,6 @@
      </Message>
     </Messages>
    </Namespace>
-   <Namespace Name="Sqt.VisualStudio">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-07-24 18:33:07Z">
-      <Issue>
-       <Item>Sqt.VisualStudio</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
-   <Namespace Name="Sqt.VisualStudio.Util">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-07-24 18:33:07Z">
-      <Issue>
-       <Item>Sqt.VisualStudio.Util</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
   </Namespaces>
   <Targets>
    <Target Name="$(ProjectDir)/Debug/csql.addin.dll">
@@ -180,22 +117,6 @@
          <Item>addin</Item>
          <Item>'csql.addin.dll'</Item>
          <Item>Addin</Item>
-        </Issue>
-       </Message>
-       <Message Id="addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-        <Issue Name="Assembly">
-         <Item>addin</Item>
-         <Item>'csql.addin.dll'</Item>
-        </Issue>
-       </Message>
-       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2010-07-24 18:33:07Z">
-        <Issue Name="AttributeTrue" Level="Error">
-         <Item>'csql.addin.dll'</Item>
-        </Issue>
-       </Message>
-       <Message TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824" Created="2010-07-24 18:33:07Z">
-        <Issue>
-         <Item>'csql.addin.dll'</Item>
         </Issue>
        </Message>
       </Messages>
@@ -211,12 +132,6 @@
              <Item>Csql</Item>
             </Issue>
            </Message>
-           <Message Id="Addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-            <Issue Name="Type">
-             <Item>Addin</Item>
-             <Item>'CSqlAddin'</Item>
-            </Issue>
-           </Message>
            <Message TypeName="IdentifiersShouldNotHaveIncorrectPrefix" Category="Microsoft.Naming" CheckId="CA1722" Created="2010-07-24 18:33:07Z">
             <Issue>
              <Item>'CSqlAddin'</Item>
@@ -228,28 +143,6 @@
        </Namespace>
        <Namespace Name="csql.addin.Commands">
         <Types>
-         <Type Name="ExecuteScriptCommand">
-          <Members>
-           <Member Name="#CreatePreprocessorArguments(csql.addin.Settings.CSqlParameter)">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-07-24 18:33:07Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'ExecuteScriptCommand.CreatePreprocessorArguments(CSqlParameter)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#GetDbSystemForProvider(Sqt.DbcProvider.ProviderType)">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-07-24 18:33:07Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'ExecuteScriptCommand.GetDbSystemForProvider(ProviderType)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="FileGrouper">
           <Members>
            <Member Name="#AddSubItemsToItemGroup(csql.addin.Commands.FileGrouper+ItemGroup,EnvDTE.UIHierarchyItem)">
@@ -300,22 +193,6 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="FileGroupRenamer">
-          <Members>
-           <Member Name="#.cctor()">
-            <Messages>
-             <Message TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'FileGroupRenamer.FileGroupRenamer()'</Item>
-               <Item>'FileGroupRenamer.isRenaming'</Item>
-               <Item>'bool'</Item>
-               <Item>false</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
          <Type Name="ScriptExecutor">
           <Members>
            <Member Name="#Execute()">
@@ -343,20 +220,6 @@
             </Messages>
            </Member>
           </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="csql.addin.Gui.Views">
-        <Types>
-         <Type Name="AboutDialog">
-          <Messages>
-           <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Created="2010-07-24 18:33:07Z">
-            <Issue>
-             <Item>'AboutDialog'</Item>
-             <Item> System.Windows.Window, System.Windows.Controls.ContentControl, System.Windows.Controls.Control, System.Windows.FrameworkElement, System.Windows.UIElement, System.Windows.Media.Visual, System.Windows.DependencyObject, System.Windows.Threading.DispatcherObject</Item>
-            </Issue>
-           </Message>
-          </Messages>
          </Type>
         </Types>
        </Namespace>
@@ -488,11 +351,6 @@
                <Item>'Exception'</Item>
               </Issue>
              </Message>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-07-24 18:33:07Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'SettingsManager.LoadMruConnectionParameters(string)'</Item>
-              </Issue>
-             </Message>
             </Messages>
            </Member>
            <Member Name="#LoadScriptParameter(System.String)">
@@ -579,132 +437,48 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#DbConnectionParameter_PropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
-            <Messages>
-             <Message TypeName="DoNotUseTimersThatPreventPowerStateChanges" Category="Microsoft.Mobility" CheckId="CA1601" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'Timer.Interval.set(int)'</Item>
-               <Item>'SettingsControl.DbConnectionParameter_PropertyChanged(object, PropertyChangedEventArgs)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
           </Members>
-         </Type>
-         <Type Name="StringDomainConverter">
-          <Messages>
-           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2010-07-24 18:33:07Z">
-            <Issue>
-             <Item>'StringDomainConverter'</Item>
-            </Issue>
-           </Message>
-          </Messages>
          </Type>
         </Types>
        </Namespace>
        <Namespace Name="Sqt.VisualStudio">
         <Types>
          <Type Name="VsAddin">
-          <Messages>
-           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2010-07-24 18:33:07Z">
-            <Issue>
-             <Item>'VsAddin'</Item>
-            </Issue>
-           </Message>
-           <Message Id="Addin" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-07-24 18:33:07Z">
-            <Issue Name="Type">
-             <Item>Addin</Item>
-             <Item>'VsAddin'</Item>
-            </Issue>
-           </Message>
-          </Messages>
           <Members>
-           <Member Name="#EnvDTE.IDTCommandTarget.Exec(System.String,EnvDTE.vsCommandExecOption,System.Object&amp;,System.Object&amp;,System.Boolean&amp;)">
+           <Member Name="#AddIn">
             <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTCommandTarget.Exec(string, vsCommandExecOption, ref object, ref object, ref bool)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#EnvDTE.IDTCommandTarget.QueryStatus(System.String,EnvDTE.vsCommandStatusTextWanted,EnvDTE.vsCommandStatus&amp;,System.Object&amp;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTCommandTarget.QueryStatus(string, vsCommandStatusTextWanted, ref vsCommandStatus, ref object)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Extensibility.IDTExtensibility2.OnAddInsUpdate(System.Array&amp;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTExtensibility2.OnAddInsUpdate(ref Array)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Extensibility.IDTExtensibility2.OnBeginShutdown(System.Array&amp;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTExtensibility2.OnBeginShutdown(ref Array)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Extensibility.IDTExtensibility2.OnConnection(System.Object,Extensibility.ext_ConnectMode,System.Object,System.Array&amp;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTExtensibility2.OnConnection(object, ext_ConnectMode, object, ref Array)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Extensibility.IDTExtensibility2.OnDisconnection(Extensibility.ext_DisconnectMode,System.Array&amp;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTExtensibility2.OnDisconnection(ext_DisconnectMode, ref Array)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Extensibility.IDTExtensibility2.OnStartupComplete(System.Array&amp;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsAddin'</Item>
-               <Item>'IDTExtensibility2.OnStartupComplete(ref Array)'</Item>
+             <Message Id="AddIn" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-07-25 06:36:58Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>AddIn</Item>
+               <Item>'VsAddin.AddIn'</Item>
+               <Item>Addin</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="VsCommand">
-          <Messages>
-           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2010-07-24 18:33:07Z">
-            <Issue>
-             <Item>'VsCommand'</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="VsCommandEventArgs">
           <Members>
-           <Member Name="#VsContextGuids">
+           <Member Name="#.ctor(EnvDTE80.DTE2,EnvDTE.AddIn)">
             <Messages>
-             <Message TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'VsCommand.VsContextGuids'</Item>
+             <Message Id="addIn" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-07-25 06:36:58Z">
+              <Issue Name="MemberParameterShouldBeDiscreteTerm">
+               <Item>'VsCommandEventArgs.VsCommandEventArgs(DTE2, AddIn)'</Item>
+               <Item>addIn</Item>
+               <Item>'addIn'</Item>
+               <Item>addin</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#AddIn">
+            <Messages>
+             <Message Id="AddIn" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-07-25 06:36:58Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>AddIn</Item>
+               <Item>'VsCommandEventArgs.AddIn'</Item>
+               <Item>Addin</Item>
               </Issue>
              </Message>
             </Messages>
@@ -723,23 +497,6 @@
             </Issue>
            </Message>
           </Messages>
-         </Type>
-         <Type Name="ImageHelper+EqualColorPredicate">
-          <Members>
-           <Member Name="#Pixel">
-            <Accessors>
-             <Accessor Name="#get_Pixel()">
-              <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-07-24 18:33:07Z">
-                <Issue>
-                 <Item>'ImageHelper.EqualColorPredicate.Pixel.get()'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-          </Members>
          </Type>
          <Type Name="VsApplicationExtensions">
           <Members>
@@ -867,9 +624,6 @@
    </Target>
   </Targets>
   <Rules>
-   <Rule TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012">
-    <Resolution Name="Default">Change the accessibility of all public constructors in {0} to protected.</Resolution>
-   </Rule>
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
    </Rule>
@@ -889,6 +643,7 @@
     <Resolution Name="Default">{0} is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: {1}</Resolution>
    </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberParameterShouldBeDiscreteTerm">In member {0}, the compound word '{1}' in parameter name {2} exists as a discrete term. If your usage is intended to be single word, case it as '{3}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="TypeShouldBeDiscreteTerm">The compound word '{0}' in type name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}'.</Resolution>
    </Rule>
@@ -898,21 +653,12 @@
    <Rule TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002">
     <Resolution Name="Default">Change {0} in {1} to use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; or KeyedCollection&lt;K,V&gt;</Resolution>
    </Rule>
-   <Rule TypeName="DoNotInitializeUnnecessarily" Category="Microsoft.Performance" CheckId="CA1805">
-    <Resolution Name="Default">{0} initializes field {1} of type {2} to {3}. Remove this initialization because it will be done automatically by the runtime.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotUseTimersThatPreventPowerStateChanges" Category="Microsoft.Mobility" CheckId="CA1601">
-    <Resolution Name="Default">Modify the call to {0} in method {1} to set the timer interval to a value that's greater than or equal to one second.</Resolution>
-   </Rule>
    <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
     <Resolution Name="Assembly">Correct the casing of '{0}' in assembly name {1} by changing it to '{2}'.</Resolution>
     <Resolution Name="Namespace">Correct the casing of '{0}' in namespace name '{1}' by changing it to '{2}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
-    <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
     <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
-    <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
-    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldNotHaveIncorrectPrefix" Category="Microsoft.Naming" CheckId="CA1722">
     <Resolution Name="Default">Remove the leading 'C' from type name {0}.</Resolution>
@@ -920,20 +666,8 @@
    <Rule TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810">
     <Resolution Name="Default">Initialize all static fields in {0} when those fields are declared and remove the explicit static constructor.</Resolution>
    </Rule>
-   <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
-    <Resolution Name="Default">Make {0} sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of {1} and is visible to derived classes.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
-    <Resolution Name="AttributeTrue">Consider changing the ComVisible attribute on {0} to false, and opting in at the type level.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824">
-    <Resolution Name="Default">Because assembly {0} contains a ResX-based resource file, mark it with the NeutralResourcesLanguage attribute, specifying the language of the resources within the assembly. This could improve lookup performance the first time a resource is retrieved.</Resolution>
-   </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
     <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
-   </Rule>
-   <Rule TypeName="PropertiesShouldNotReturnArrays" Category="Microsoft.Performance" CheckId="CA1819">
-    <Resolution Name="Default">Change {0} to return a collection or make it a method.</Resolution>
    </Rule>
    <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
     <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>

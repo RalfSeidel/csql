@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using EnvDTE80;
 using EnvDTE;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace Sqt.VisualStudio
@@ -51,7 +52,7 @@ namespace Sqt.VisualStudio
 		/// Default constructor.
 		/// </summary>
 		/// <param name="title">The title of the command i.e. the text that appears in the tool bar.</param>
-		public VsCommand( string title )
+		protected VsCommand( string title )
 		{
 			this.title = title;
 		}
@@ -144,6 +145,7 @@ namespace Sqt.VisualStudio
 		/// An array of context guid's in which the command 
 		/// is available.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Visual Studio API requieres an array." )]
 		public Guid[] VsContextGuids { get; set; }
 
 
@@ -151,6 +153,7 @@ namespace Sqt.VisualStudio
 		/// Downcast the context guid to an array of object
 		/// used for calling AddNamedCommand2.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Visual Studio API requieres an array." )]
 		internal object[] VsContextGuidsObjectArray
 		{
 			get
@@ -168,11 +171,18 @@ namespace Sqt.VisualStudio
 		}
 
 
+		/// <summary>
+		/// Default implementation of the CanExecute method that simply returns <c>true</c>
+		/// </summary>
+		/// <returns>Always <c>true</c></returns>
 		public virtual bool CanExecute( VsCommandEventArgs e )
 		{
 			return true;
 		}
 
+		/// <summary>
+		/// Implement this method in derived class to perform the command action.
+		/// </summary>
 		public abstract void Execute( VsCommandEventArgs e );
 	}
 }

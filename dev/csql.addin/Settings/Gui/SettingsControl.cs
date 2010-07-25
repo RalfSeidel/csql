@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Sqt.DbcProvider;
 using EnvDTE;
+using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Settings.Gui
 {
@@ -198,6 +199,7 @@ namespace csql.addin.Settings.Gui
 		/// <summary>
 		/// Start a time that will defer the updates a bit deferred.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer is stoped after it eplapsed for the first time." )]
 		private void DbConnectionParameter_PropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			if ( this.ignoreParameterPropertyChanges )

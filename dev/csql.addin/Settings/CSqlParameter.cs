@@ -46,7 +46,7 @@ namespace csql.addin.Settings
 			this.outputFile = "";
 			IsOutputFileEnabled = false;
 			IsPreprocessorEnabled = true;
-			IsBreakOnErrosEnabled = true;
+			IsBreakOnErrorEnabled = true;
 			TemporaryFile = "";
 			IsTemporaryFileEnabled = false;
 		}
@@ -75,7 +75,7 @@ namespace csql.addin.Settings
 			this.OutputFile = settingsObject.OutputFile;
 			this.IsOutputFileEnabled = settingsObject.IsOutputFileEnabled;
 			this.IsPreprocessorEnabled = settingsObject.IsPreprocessorEnabled;
-			this.IsBreakOnErrosEnabled = settingsObject.IsBreakOnErrosEnabled;
+			this.IsBreakOnErrorEnabled = settingsObject.IsBreakOnErrorEnabled;
 			this.TemporaryFile = settingsObject.TemporaryFile;
 			this.IsTemporaryFileEnabled = settingsObject.IsTemporaryFileEnabled;
 		}
@@ -133,7 +133,7 @@ namespace csql.addin.Settings
 		[Category( "CSql" )]
 		[DefaultValue( true )]
 		[DisplayName("Stop on First Error")]
-		public bool IsBreakOnErrosEnabled { get; set; }
+		public bool IsBreakOnErrorEnabled { get; set; }
 
 		[Category( "CSql" )]
 		[DefaultValue( TraceLevel.Info )]
@@ -150,7 +150,7 @@ namespace csql.addin.Settings
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		[Editor( @"System.Windows.Forms.Design.StringCollectionEditor,  System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof( System.Drawing.Design.UITypeEditor ) )]
 		[TypeConverter(typeof(PathCollectionConverter))]
-		public List<string> IncludeDirectories 
+		public ICollection<string> IncludeDirectories 
 		{ 
 			get { return includeDirectories; }
 			set 
@@ -160,7 +160,7 @@ namespace csql.addin.Settings
 
 				this.includeDirectories.Clear();
 				foreach ( var directory in value ) {
-					if ( !String.IsNullOrEmpty( directory  ) ) 
+					if ( !String.IsNullOrEmpty( directory ) ) 
 						this.includeDirectories.Add( directory ); 
 				}
 				OnPropertyChanged( "IncludeDirectories" );
@@ -171,7 +171,7 @@ namespace csql.addin.Settings
 		[DisplayName( "Preprocess Definitions" )]
 		[Editor( typeof( PreprocessorDefinitionEditor ), typeof( UITypeEditor ) )]
 		[TypeConverter( typeof( PreprocessorDefinitionCollectionConverter ) )]
-		public List<PreprocessorDefinition> PreprocessorDefinitions
+		public ICollection<PreprocessorDefinition> PreprocessorDefinitions
 		{
 			get 
 			{ 

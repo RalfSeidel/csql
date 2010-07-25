@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Commands\FileGroupRenamer.cs" />
     <Compile Include="Commands\FileClassification.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OutputPaneTraceListener.cs" />
     <Compile Include="Gui\Output.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -101,7 +102,6 @@
       <DependentUpon>PreprocessorDefinitionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\Gui\PreprocessorDefinitionEditor.cs" />
-    <Compile Include="Settings\Gui\StringDomainConverter.cs" />
     <Compile Include="Settings\Gui\SettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

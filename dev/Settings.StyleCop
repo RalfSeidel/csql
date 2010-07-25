@@ -9,6 +9,9 @@
 	<Analyzers>
 		<Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.DocumentationRules">
 			<Rules>
+				<!-- 
+					Good naming is more important than documentation.
+				-->
 				<Rule Name="ElementsMustBeDocumented">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -19,6 +22,9 @@
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
 					</RuleSettings>
 				</Rule>
+				<!-- 
+					Good naming is more important than documentation.
+				-->
 				<Rule Name="EnumerationItemsMustBeDocumented">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -29,6 +35,9 @@
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
 					</RuleSettings>
 				</Rule>
+				<!-- 
+					Good naming is more important than documentation.
+				-->
 				<Rule Name="ElementDocumentationMustHaveSummary">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -49,6 +58,9 @@
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
 					</RuleSettings>
 				</Rule>
+				<!-- 
+					Good naming is more important than documentation.
+				-->
 				<Rule Name="ElementParametersMustBeDocumented">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -192,6 +204,9 @@
 		</Analyzer>
 		<Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.LayoutRules">
 			<Rules>
+				<!-- 
+					Allow some personal styling.
+				-->
 				<Rule Name="CurlyBracketsForMultiLineStatementsMustNotShareLine">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -244,14 +259,20 @@
 				</Rule>
 				<Rule Name="DebugFailMustProvideMessageText">
 					<RuleSettings>
-						<BooleanProperty Name="Enabled">False</BooleanProperty>
+						<BooleanProperty Name="Enabled">True</BooleanProperty>
 					</RuleSettings>
 				</Rule>
+				<!-- 
+					To many bracket are just making the expression less readable.
+				-->
 				<Rule Name="ArithmeticExpressionsMustDeclarePrecedence">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
 					</RuleSettings>
 				</Rule>
+				<!-- 
+					To many bracket are just making the expression less readable.
+				-->
 				<Rule Name="ConditionalExpressionsMustDeclarePrecedence">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -262,11 +283,6 @@
 		</Analyzer>
 		<Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.NamingRules">
 			<Rules>
-				<Rule Name="ElementMustBeginWithLowerCaseLetter">
-					<RuleSettings>
-						<BooleanProperty Name="Enabled">False</BooleanProperty>
-					</RuleSettings>
-				</Rule>
 				<Rule Name="FieldNamesMustNotContainUnderscore">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -275,7 +291,10 @@
 			</Rules>
 			<AnalyzerSettings>
 				<CollectionProperty Name="Hungarian">
+					<!-- Common abbreviation for database -->
 					<Value>db</Value>
+					<!-- Common abbreviation for visual studio -->
+					<Value>vs</Value>
 				</CollectionProperty>
 			</AnalyzerSettings>
 		</Analyzer>
@@ -296,6 +315,9 @@
 		</Analyzer>
 		<Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.SpacingRules">
 			<Rules>
+				<!-- 
+					Just set tab width to four.
+				-->
 				<Rule Name="TabsMustNotBeUsed">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
@@ -332,6 +354,16 @@
 					</RuleSettings>
 				</Rule>
 				<Rule Name="UsingDirectivesMustBeOrderedAlphabeticallyByNamespace">
+					<RuleSettings>
+						<BooleanProperty Name="Enabled">False</BooleanProperty>
+					</RuleSettings>
+				</Rule>
+				<!--
+					While this is a good rule for public or protected methods
+					we don't see a benifit for private methods which usually should
+					be placed near to their callers.
+				-->
+				<Rule Name="StaticElementsMustAppearBeforeInstanceElements">
 					<RuleSettings>
 						<BooleanProperty Name="Enabled">False</BooleanProperty>
 					</RuleSettings>

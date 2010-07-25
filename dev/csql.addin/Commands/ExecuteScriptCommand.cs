@@ -84,6 +84,94 @@ namespace csql.addin.Commands
 		}
 
 
+
+
+		private static DbSystem GetDbSystemForProvider( ProviderType provider )
+		{
+			switch ( provider ) {
+				case ProviderType.MsSql:
+					return DbSystem.MsSql;
+				//// case ProviderType.MSJET:
+				//// 	return DbSystem.MsJet;
+				case ProviderType.Sybase:
+					return DbSystem.Sybase;
+				case ProviderType.Oracle:
+					return DbSystem.Oracle;
+				case ProviderType.IbmDb2:
+					return DbSystem.IbmDb2;
+				case ProviderType.Undefined:
+				default:
+					Debug.WriteLine( "Unsupported provider: " + provider );
+					throw new ArgumentException( "Unsupported provider: " + provider );
+			}
+		}
+
+		private static SqtppOptions CreatePreprocessorArguments( CSqlParameter csqlParameter )
+		{
+			SqtppOptions result = new SqtppOptions();
+
+			foreach ( var pd in csqlParameter.PreprocessorDefinitions ) {
+				if ( pd.IsEnabled && !String.IsNullOrEmpty( pd.Name ) ) {
+					result.MacroDefinitions.Add( pd.Name, pd.Value );
+				}
+			}
+
+			foreach ( var directory in csqlParameter.IncludeDirectories ) {
+				if ( !String.IsNullOrEmpty( directory ) ) {
+					result.IncludeDirectories.Add( directory );
+				}
+			}
+
+			if ( !String.IsNullOrEmpty( csqlParameter.AdvancedPreprocessorParameter ) ) {
+				result.AdvancedArguments = csqlParameter.AdvancedPreprocessorParameter;
+			}
+
+			return result;
+		}
+
+		private static CSqlOptions CreateCSqlOptions( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter, string scriptfile )
+		{
+			CSqlOptions csqlOptions = new CSqlOptions();
+
+			csqlOptions.ScriptFile = scriptfile;
+			if ( csqlParameter.IsOutputFileEnabled )
+				csqlOptions.DistributionFile = csqlParameter.OutputFile;
+			else
+				csqlOptions.DistributionFile = null;
+
+			if ( csqlParameter.IsTemporaryFileEnabled )
+				csqlOptions.TempFile = csqlParameter.TemporaryFile;
+			else
+				csqlOptions.TempFile = null;
+
+			csqlOptions.BreakOnError = csqlParameter.IsBreakOnErrorEnabled;
+			csqlOptions.UsePreprocessor = csqlParameter.IsPreprocessorEnabled;
+
+			csqlOptions.DbSystem = GetDbSystemForProvider( dbConnectionParameter.Provider );
+			csqlOptions.DbDriver = DbDriver.Default;
+			csqlOptions.DbServer = dbConnectionParameter.DatasourceAddress;
+			csqlOptions.DbDatabase = dbConnectionParameter.Catalog;
+			csqlOptions.DbServerPort = dbConnectionParameter.DatasourcePort;
+
+			if ( dbConnectionParameter.IntegratedSecurity ) {
+				csqlOptions.DbUser = null;
+				csqlOptions.DbPassword = null;
+			}
+			else {
+				csqlOptions.DbUser = dbConnectionParameter.UserId;
+				csqlOptions.DbPassword = dbConnectionParameter.Password;
+			}
+
+			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( csqlParameter );
+			csqlOptions.AddPreprocessorMacros( csqlOptions.PreprocessorOptions.MacroDefinitions );
+
+			csqlOptions.Verbosity.Level = csqlParameter.Verbosity;
+
+			csqlOptions.NoLogo = false;
+
+			return csqlOptions;
+		}
+
 		private void Thread_Start( object obj )
 		{
 			ThreadParameter parameter = (ThreadParameter)obj;
@@ -123,95 +211,6 @@ namespace csql.addin.Commands
 				}
 			}
 		}
-
-		private CSqlOptions CreateCSqlOptions( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter, string scriptfile )
-		{
-			CSqlOptions csqlOptions = new CSqlOptions();
-
-			csqlOptions.ScriptFile = scriptfile;
-			if ( csqlParameter.IsOutputFileEnabled )
-				csqlOptions.DistributionFile = csqlParameter.OutputFile;
-			else
-				csqlOptions.DistributionFile = null;
-
-			if ( csqlParameter.IsTemporaryFileEnabled )
-				csqlOptions.TempFile = csqlParameter.TemporaryFile;
-			else
-				csqlOptions.TempFile = null;
-
-			csqlOptions.BreakOnError = csqlParameter.IsBreakOnErrosEnabled;
-			csqlOptions.UsePreprocessor = csqlParameter.IsPreprocessorEnabled;
-
-			csqlOptions.DbSystem = GetDbSystemForProvider( dbConnectionParameter.Provider );
-			csqlOptions.DbDriver = DbDriver.Default;
-			csqlOptions.DbServer = dbConnectionParameter.DatasourceAddress;
-			csqlOptions.DbDatabase = dbConnectionParameter.Catalog;
-			csqlOptions.DbServerPort = dbConnectionParameter.DatasourcePort;
-
-			if ( dbConnectionParameter.IntegratedSecurity ) {
-				csqlOptions.DbUser = null;
-				csqlOptions.DbPassword = null;
-			}
-			else {
-				csqlOptions.DbUser = dbConnectionParameter.UserId;
-				csqlOptions.DbPassword = dbConnectionParameter.Password;
-			}
-
-			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( csqlParameter );
-			csqlOptions.AddPreprocessorMacros( csqlOptions.PreprocessorOptions.MacroDefinitions );
-
-			csqlOptions.Verbosity.Level = csqlParameter.Verbosity;
-
-			csqlOptions.NoLogo = false;
-
-			return csqlOptions;
-		}
-
-
-
-		private DbSystem GetDbSystemForProvider( ProviderType provider )
-		{
-			switch ( provider ) {
-				case ProviderType.MsSql:
-					return DbSystem.MsSql;
-				//// case ProviderType.MSJET:
-				//// 	return DbSystem.MsJet;
-				case ProviderType.Sybase:
-					return DbSystem.Sybase;
-				case ProviderType.Oracle:
-					return DbSystem.Oracle;
-				case ProviderType.IbmDb2:
-					return DbSystem.IbmDb2;
-				case ProviderType.Undefined:
-				default:
-					Debug.WriteLine( "Unsupported provider: " + provider );
-					throw new ArgumentException( "Unsupported provider: " + provider );
-			}
-		}
-
-		private SqtppOptions CreatePreprocessorArguments( CSqlParameter csqlParameter )
-		{
-			SqtppOptions result = new SqtppOptions();
-
-			foreach ( var pd in csqlParameter.PreprocessorDefinitions ) {
-				if ( pd.IsEnabled && !String.IsNullOrEmpty( pd.Name ) ) {
-					result.MacroDefinitions.Add( pd.Name, pd.Value );
-				}
-			}
-
-			foreach ( var directory in csqlParameter.IncludeDirectories ) {
-				if ( !String.IsNullOrEmpty( directory ) ) {
-					result.IncludeDirectories.Add( directory );
-				}
-			}
-
-			if ( !String.IsNullOrEmpty( csqlParameter.AdvancedPreprocessorParameter ) ) {
-				result.AdvancedArguments = csqlParameter.AdvancedPreprocessorParameter;
-			}
-
-			return result;
-		}
-
 
 		private class ThreadParameter
 		{

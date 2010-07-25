@@ -9,7 +9,7 @@ namespace csql
 	[Serializable]
 	public class DbException : System.Data.Common.DbException
 	{
-		private readonly DbMessage m_message;
+		private readonly DbMessage message;
 
 		public DbException()
 		{
@@ -18,13 +18,13 @@ namespace csql
 		public DbException( string message )
 			: base( message )
 		{
-			m_message = new DbMessage( message );
+			this.message = new DbMessage( message );
 		}
 
 		public DbException( string message, Exception innerException )
 			: base( message, innerException )
 		{
-			m_message = new DbMessage( message );
+			this.message = new DbMessage( message );
 		}
 
 		protected DbException( System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context )
@@ -35,33 +35,33 @@ namespace csql
 		public DbException( DbMessage message )
 			: base( message.Message )
 		{
-			m_message = message;
+			this.message = message;
 		}
 
 		public DbException( DbMessage message, Exception innerException )
 			: base( message.Message, innerException )
 		{
-			m_message = message;
+			this.message = message;
 		}
 
 		public string Server
 		{
-			get { return m_message.Server; }
+			get { return this.message.Server; }
 		}
 
 		public string Catalog
 		{
-			get { return m_message.Catalog; }
+			get { return this.message.Catalog; }
 		}
 
 		public string Procedure
 		{
-			get { return m_message.Procedure; }
+			get { return this.message.Procedure; }
 		}
 
 		public int LineNumber
 		{
-			get { return m_message.LineNumber; }
+			get { return this.message.LineNumber; }
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace csql
 		/// <value>The message text.</value>
 		public override string Message
 		{
-			get { return m_message.Message; }
+			get { return this.message.Message; }
 		}
 
 		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
@@ -78,7 +78,7 @@ namespace csql
         {
 			base.GetObjectData( info, context );
 
-            info.AddValue( "Message", m_message );
+            info.AddValue( "Message", this.message );
         }
 	}
 

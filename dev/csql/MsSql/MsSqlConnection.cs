@@ -33,7 +33,8 @@ namespace csql.MsSql
 			if ( !String.IsNullOrEmpty( csqlOptions.DbUser ) ) {
 				sb.Append( "User ID=" ).Append( csqlOptions.DbUser ).Append( ";" );
 				sb.Append( "Password=" ).Append( csqlOptions.DbPassword ).Append( ";" );
-			} else {
+			}
+			else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}
 			sb.Append( "Application Name=" ).Append( GlobalSettings.CSqlProductName ).Append( ";" );
@@ -61,7 +62,8 @@ namespace csql.MsSql
 			if ( errors == null || errors.Count == 0 ) {
 				DbMessageEventArgs eventArgs = new DbMessageEventArgs( e.Message );
 				OnDbMessage( eventArgs );
-			} else {
+			}
+			else {
 				foreach ( SqlError error in errors ) {
 					TraceLevel severity = GetSeverity( error );
 					string server = error.Server;

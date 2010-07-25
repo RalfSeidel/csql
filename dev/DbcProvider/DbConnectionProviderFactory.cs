@@ -10,12 +10,10 @@ namespace Sqt.DbcProvider
 	/// </summary>
 	public static class DbConnectionProviderFactory
 	{
-		private static readonly IDictionary<ProviderType, IDbcProvider> provider;
+		private static readonly IDictionary<ProviderType, IDbcProvider> provider = new Dictionary<ProviderType, IDbcProvider>();
 
 		static DbConnectionProviderFactory() 
 		{
-			provider = new Dictionary<ProviderType, IDbcProvider>();
-
 			provider.Add( ProviderType.MsSql, new MsSqlConnectionFactory() );
 			provider.Add( ProviderType.Sybase, new SybaseConnectionFactory() );
 			provider.Add( ProviderType.Oracle, new OracleConnectionFactory() );

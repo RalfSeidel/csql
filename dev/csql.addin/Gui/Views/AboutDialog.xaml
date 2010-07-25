@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
     Title="About CSQL Script Processor" WindowStyle="ThreeDBorderWindow" KeyDown="Window_KeyDown"
+		x:ClassModifier="internal"
         Background="White"
         Height="180" Width="420" WindowStartupLocation="CenterScreen">
     

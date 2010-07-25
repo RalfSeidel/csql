@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Commands
 {
@@ -17,6 +18,7 @@ namespace csql.addin.Commands
 		}
 
 
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Catching general exception to keep visual studio alive no matter what happend while executing the command." )]
 		public void Execute()
 		{
 			GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;

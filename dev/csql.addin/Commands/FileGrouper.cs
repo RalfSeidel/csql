@@ -81,7 +81,7 @@ namespace csql.addin.Commands
 		/// </summary>
 		/// <param name="group"></param>
 		/// <param name="item"></param>
-		private void AddSubItemsToItemGroup( ItemGroup group, UIHierarchyItem item )
+		private static void AddSubItemsToItemGroup( ItemGroup group, UIHierarchyItem item )
 		{
 			UIHierarchyItems subitems = item.UIHierarchyItems;
 			foreach ( UIHierarchyItem subitem in subitems ) {
@@ -94,7 +94,7 @@ namespace csql.addin.Commands
 		/// </summary>
 		/// <param name="masterItem"></param>
 		/// <param name="childItem"></param>
-		private void AddItemToMasterItem( ProjectItem masterItem, ProjectItem childItem )
+		private static void AddItemToMasterItem( ProjectItem masterItem, ProjectItem childItem )
 		{
 			foreach ( ProjectItem subItem in childItem.ProjectItems ) {
 				AddItemToMasterItem( masterItem, subItem );
@@ -117,16 +117,15 @@ namespace csql.addin.Commands
 
 			// Build the groups
 			foreach ( UIHierarchyItem item in items ) {
-				bool isCsqlFile = false;
+				bool isCSqlFile = false;
 				if ( IsFile( item ) ) {
-					ProjectItem prjItem = (EnvDTE.ProjectItem)item.Object;
 					string fileName = GetItemFileName( item ).ToLower().Trim();
 
 					if ( fileName.Length > ".csql".Length && fileName.EndsWith( ".csql" ) ) {
-						isCsqlFile = true;
+						isCSqlFile = true;
 					}
 				}
-				if ( isCsqlFile ) {
+				if ( isCSqlFile ) {
 					string name = item.Name;
 					int firstDot = name.IndexOf( '.' );
 					string groupName = name.Substring( 0, firstDot );
@@ -141,15 +140,16 @@ namespace csql.addin.Commands
 
 			// Restructure the project hierarchy.
 			foreach ( ItemGroup group in groups.Values ) {
-				if ( group.MasterItem != null ) {
-					UIHierarchyItem master = group.MasterItem;
-					IEnumerable<UIHierarchyItem> childs = group.ChildItems;
-					ProjectItem masterItem = (ProjectItem)master.Object;
+				if ( group.MasterItem == null )
+					continue;
 
-					foreach ( UIHierarchyItem item in childs ) {
-						ProjectItem childItem = (ProjectItem)item.Object;
-						AddItemToMasterItem( masterItem, childItem );
-					}
+				UIHierarchyItem master = group.MasterItem;
+				IEnumerable<UIHierarchyItem> childs = group.ChildItems;
+				ProjectItem masterItem = (ProjectItem)master.Object;
+
+				foreach ( UIHierarchyItem item in childs ) {
+					ProjectItem childItem = (ProjectItem)item.Object;
+					AddItemToMasterItem( masterItem, childItem );
 				}
 			}
 		}

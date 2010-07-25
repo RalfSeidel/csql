@@ -10,6 +10,14 @@ namespace csql.addin.Settings.Gui
 	internal partial class PreprocessorDefinitionDialog : Form
 	{
 		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public PreprocessorDefinitionDialog()
+		{
+			InitializeComponent();
+		}
+
+		/// <summary>
 		/// Gets or sets the values edited in the grid.
 		/// </summary>
 		public ICollection<PreprocessorDefinition> Definitions
@@ -39,16 +47,5 @@ namespace csql.addin.Settings.Gui
 				}
 			}
 		}
-
-
-
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		public PreprocessorDefinitionDialog()
-		{
-			InitializeComponent();
-		}
-
 	}
 }

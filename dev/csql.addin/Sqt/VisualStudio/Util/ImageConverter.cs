@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using stdole;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sqt.VisualStudio.Util
 {
@@ -29,6 +30,7 @@ namespace Sqt.VisualStudio.Util
 		/// Extension of <see cref="T:System.Windows.Forms.AxHost"/> to gain 
 		/// access to some of the proctected methods.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is requiered to make protected methods accessible." )]
 		private class AxHostWrapper : System.Windows.Forms.AxHost
 		{
 			public AxHostWrapper()

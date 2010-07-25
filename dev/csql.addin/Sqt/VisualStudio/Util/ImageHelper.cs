@@ -96,8 +96,8 @@ namespace Sqt.VisualStudio.Util
 
 			public bool Matches( Color color )
 			{
-				return color.R == pixel.R && color.G == pixel.G 
-						&& color.B == pixel.B && color.A == pixel.A;
+				return color.R == Pixel.R && color.G == Pixel.G 
+						&& color.B == Pixel.B && color.A == Pixel.A;
 			}
 		}
 

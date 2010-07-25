@@ -12,7 +12,7 @@ namespace csql
 	/// Processor for the creation of a distribution file i.e. a script
 	/// that contains the ouput of the preprosessor.
 	/// </summary>
-	public class DistributionProcessor : Processor //, IBatchProcessor
+	public class DistributionProcessor : Processor ////, IBatchProcessor
 	{
 		private readonly TextWriter m_outputFileWriter;
 
@@ -37,12 +37,12 @@ namespace csql
             // Emit console informations as defined in the base class.
             base.SignIn();
 
-            String scriptFile = Options.ScriptFile;
+            string scriptFile = Options.ScriptFile;
             
             
             scriptFile = Path.GetFullPath( scriptFile );
 
-            String distFile = Options.DistributionFile;
+            string distFile = Options.DistributionFile;
             distFile = Path.GetFullPath( distFile );
 
             // Create the dstribution file header
@@ -73,7 +73,7 @@ namespace csql
             footerBuilder.AppendLine( "**************************************************************************** */" );
             m_outputFileWriter.Write( footerBuilder.ToString() );
 
-            String distFile = Options.DistributionFile;
+            string distFile = Options.DistributionFile;
             distFile = Path.GetFullPath( distFile );
             Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created.");
         }

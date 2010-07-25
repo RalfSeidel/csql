@@ -38,7 +38,7 @@ namespace csql.addin.Settings.Gui
 		{
 			string stringValue = value as string;
 			if ( stringValue != null ) {
-				ICollection<string> result = new List<String>();
+				ICollection<string> result = new List<string>();
 				string[] items = stringValue.Split( ';' );
 				foreach ( var i in items ) {
 					string item = i.Trim();

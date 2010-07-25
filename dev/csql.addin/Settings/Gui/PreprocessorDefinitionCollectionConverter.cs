@@ -113,7 +113,7 @@ namespace csql.addin.Settings
 		/// <summary>
 		/// Check if the given type is compatible with IEnumerable&lt;string&gt;
 		/// </summary>
-		private bool IsEnumerablePreprocessorDefinitionType( Type type )
+		private static bool IsEnumerablePreprocessorDefinitionType( Type type )
 		{
 			if ( !type.IsGenericType )
 				return false;
@@ -134,7 +134,7 @@ namespace csql.addin.Settings
 		}
 
 
-		private PreprocessorDefinition ConvertStringItemToObject( string item )
+		private static PreprocessorDefinition ConvertStringItemToObject( string item )
 		{
 			string[] nameValue = item.Split( '=' );
 			bool enabled = false;

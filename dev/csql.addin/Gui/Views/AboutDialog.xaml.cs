@@ -1,12 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Runtime.InteropServices;
 
 namespace csql.addin.Gui.Views
 {
 	/// <summary>
 	/// Interaction logic for the about/info dialog.
 	/// </summary>
-	partial class AboutDialog : Window
+	[ComVisible(false)]
+	internal partial class AboutDialog : Window
 	{
 		public AboutDialog()
 		{
@@ -18,6 +20,5 @@ namespace csql.addin.Gui.Views
 			if ( e.Key == Key.Escape ) 
 				this.Close();
 		}
-
 	}
 }

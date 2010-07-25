@@ -50,7 +50,7 @@ namespace Sqt.VisualStudio
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VsAddin"/> class.
 		/// </summary>
-		public VsAddin()
+		protected VsAddin()
 		{
 			this.vsCommands = new Dictionary<string, VsCommand>();
 		}
@@ -75,6 +75,7 @@ namespace Sqt.VisualStudio
 		/// Occurs whenever an add-in is loaded or unloaded from the Visual Studio integrated development environment (IDE).
 		/// </summary>
 		/// <param name="custom">An empty array that you can use to pass host-specific data for use in the add-in.</param>
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTExtensibility2.OnAddInsUpdate( ref Array custom )
 		{
 		}
@@ -83,6 +84,7 @@ namespace Sqt.VisualStudio
 		/// Occurs whenever the Visual Studio integrated development environment (IDE) shuts down while an add-in is running.
 		/// </summary>
 		/// <param name="custom">An empty array that you can use to pass host-specific data for use in the add-in.</param>
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTExtensibility2.OnBeginShutdown( ref Array custom )
 		{
 		}
@@ -100,6 +102,7 @@ namespace Sqt.VisualStudio
 		/// An empty array that you can use to pass host-specific data for use in the add-in.
 		/// </param>
 		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTExtensibility2.OnConnection( object Application, ext_ConnectMode ConnectMode, object AddInInst, ref Array custom )
 		{
 			Debug.WriteLine( GetType().Name + ".OnConnection( ConnectMode=" + ConnectMode + " )" );
@@ -107,8 +110,8 @@ namespace Sqt.VisualStudio
 			this.addin = (AddIn)AddInInst;
 			this.OnInitialize( ConnectMode );
 
-			// if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
-			if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
+			if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
+			// if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
 				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
 					AddIdeCommand( vsCommand );
 				}
@@ -126,6 +129,7 @@ namespace Sqt.VisualStudio
 		/// An empty array that you can use to pass host-specific data for use after the add-in unloads.
 		/// </param>
 		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTExtensibility2.OnDisconnection( ext_DisconnectMode RemoveMode, ref Array custom )
 		{
 			Debug.WriteLine( "OnDisconnection" );
@@ -157,6 +161,7 @@ namespace Sqt.VisualStudio
 		/// Occurs whenever an add-in, which is set to load when Visual Studio starts, loads.
 		/// </summary>
 		/// <param name="custom">An empty array that you can use to pass host-specific data for use when the add-in loads.</param>
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTExtensibility2.OnStartupComplete( ref Array custom )
 		{
 		}
@@ -170,6 +175,7 @@ namespace Sqt.VisualStudio
 		/// <param name="VariantOut">A value passed back to the invoker Exec method after the command executes.</param>
 		/// <param name="Handled">true indicates that the command was implemented. false indicates that it was not.</param>
 		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTCommandTarget.Exec( string CmdName, vsCommandExecOption ExecuteOption, ref object VariantIn, ref object VariantOut, ref bool Handled )
 		{
 			Handled = false;
@@ -190,6 +196,7 @@ namespace Sqt.VisualStudio
 		/// <param name="StatusOption">A <see cref="T:EnvDTE.vsCommandStatus"></see> specifying the current status of the command.</param>
 		/// <param name="CommandText">The text to return if <see cref="F:EnvDTE.vsCommandStatusTextWanted.vsCommandStatusTextWantedStatus"></see> is specified.</param>
 		[SuppressMessage( "Microsoft.StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Naming follows the declaration in the interface." )]
+		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTCommandTarget.QueryStatus( string CmdName, vsCommandStatusTextWanted neededText, ref vsCommandStatus statusOption, ref object commandText )
 		{
 			Debug.WriteLine( "QueryStatus(" + CmdName + ")" );
@@ -346,6 +353,14 @@ namespace Sqt.VisualStudio
 		}
 
 
+		/// <summary>
+		/// Seeks for an existing Visual Studio IDE command with the name name as the specified command.
+		/// </summary>
+		/// <param name="vsCommand">The command that is seeked.</param>
+		/// <returns>
+		/// The existing IDE command or <c>null</c> if the command is not yet added to
+		/// the Visual Studio IDE.
+		/// </returns>
 		private Command FindIdeCommand( VsCommand vsCommand )
 		{
 			Commands2 ideCommands = (Commands2)this.Application.Commands;

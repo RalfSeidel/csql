@@ -259,7 +259,7 @@ namespace csql.addin.Settings
 			return null;
 		}
 
-		private MruConnections LoadMruConnectionParameters( string mruConnectionsPath )
+		private static MruConnections LoadMruConnectionParameters( string mruConnectionsPath )
 		{
 			if ( !String.IsNullOrEmpty( mruConnectionsPath ) && File.Exists( mruConnectionsPath ) ) {
 				try {

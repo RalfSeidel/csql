@@ -338,7 +338,7 @@ namespace Sqt.DbcProvider.Gui
 
 				result.Provider = this.Provider;
 				result.DatasourceAddress = this.Datasource;
-				//result.DatasourcePort = this.Port;
+				// result.DatasourcePort = this.Port;
 				result.Catalog = this.Catalog;
 				result.IntegratedSecurity = this.IntegratedSecurity;
 				result.UserId = this.UserId;
@@ -635,8 +635,8 @@ namespace Sqt.DbcProvider.Gui
 				string result = "";
 				string separator = "";
 				foreach ( var item in this.items ) {
-					result+= separator;
-					result+= item.ToString();
+					result += separator;
+					result += item.ToString();
 					separator = ", ";
 				}
 				return result;
@@ -712,7 +712,7 @@ namespace Sqt.DbcProvider.Gui
 					var listItem = new ComboListItem( false, catalog );
 					items.Add( listItem );
 				}
-				//items.Add( new CatalogListItem( true, "<Refresh>" ) );
+				// items.Add( new CatalogListItem( true, "<Refresh>" ) );
 			}
 
 			public bool Contains( string catalog )
