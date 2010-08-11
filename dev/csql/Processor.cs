@@ -213,6 +213,9 @@ namespace csql
 			if ( !GlobalSettings.Verbosity.TraceInfo )
 				return;
 
+			if ( m_ppProcess != null && m_ppProcess.ExitCode != 0 )
+				++m_errorCount;
+
 			string message = "\r\n*** Finished ";
 			switch ( m_errorCount ) {
 				case 0:
@@ -284,6 +287,7 @@ namespace csql
 				}
 			}
 			catch ( TerminateException ) {
+				++m_errorCount;
 				throw;
 			}
 			catch ( Exception ex ) {
@@ -428,7 +432,7 @@ namespace csql
 		/// Opens the input file.
 		/// </summary>
 		/// <remarks>
-		/// If preprocessor ussage is switched off by the command line arguments
+		/// If preprocessor usage is switched off by the command line arguments
 		/// the method will just return a read only stream for the input file.
 		/// Otherwise the method returns a stream to the preprocessor output.
 		/// </remarks>
@@ -436,11 +440,13 @@ namespace csql
 		/// <returns>The open stream for reading</returns>
 		private Stream OpenInputFile()
 		{
+			// Always try to open the file even if preprocessor is used to check if it is accessible.
+			Stream stream = new FileStream( m_options.ScriptFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
 			if ( m_options.UsePreprocessor ) {
-				return Preprocess();
-			} else {
-				return new FileStream( m_options.ScriptFile, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
+				stream.Dispose();
+				stream = Preprocess();
 			}
+			return stream;
 		}
 
 		/// <summary>
@@ -483,10 +489,13 @@ namespace csql
 					}
 
 					stream = new FileStream( TempFileName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan );
-				} else if ( !m_ppProcess.HasExited  ) {
-					stream = pipe.Open();
 				} else {
-					stream = null;
+					if ( !m_ppProcess.HasExited ) {
+						stream = pipe.Open();
+					}
+					else {
+						throw new TerminateException( ExitCode.PreprocessorError );
+					}
 				}
 
 

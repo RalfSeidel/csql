@@ -12,6 +12,7 @@
 #endif
 #include "Token.h"
 #include "Context.h"
+#include "Error.h"
 
 namespace sqtpp {
 
@@ -30,10 +31,6 @@ class TokenExpression;
 class TokenExpressions;
 class ITokenStream;
 class TokenStreamStack;
-
-namespace error {
-class Error;
-}
 }
 
 namespace sqtpp {
@@ -125,7 +122,7 @@ private:
 	size_t             m_nProcessedTokenId;
 
 	/// Maximal severity of messesages emitted during processing.
-	mutable int        m_nMaxMsgSeverity;
+	mutable error::Error::Severity m_eMaxMsgSeverity;
 
 	/// Number off errors encountered.
 	mutable int        m_nErrorCount;
@@ -165,7 +162,7 @@ public:
 	void setOutStream( std::wostream& output );
 
 	// Get the maximal severity of messages emitted during processing the input.
-	int getMaxMessageSeverity() const throw() { return m_nMaxMsgSeverity; }
+	error::Error::Severity getMaxMessageSeverity() const throw() { return m_eMaxMsgSeverity; }
 
 	// Get the current timestamp 
 	void getTimestamp( tm& timestamp ) const;

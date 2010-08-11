@@ -79,7 +79,7 @@ Processor::Processor( Options& options )
 , m_conditionalStack( *new LocationStack() )
 , m_nProcessedLines( 0 )
 , m_nProcessedTokenId( 0 )
-, m_nMaxMsgSeverity( error::Error::SEV_UNDEFINED )
+, m_eMaxMsgSeverity( error::Error::SEV_UNDEFINED )
 , m_nErrorCount( 0 )
 , m_nWarningCount( 0 )
 , m_nOutputLineNumber( 1 )
@@ -299,15 +299,15 @@ void Processor::emitLineFeed( std::wostream& output, const wstring& sNewLine )
 */
 void Processor::emitMessage( error::Error& error ) const
 {
-	if ( m_fileStack.size() != 0 ) {
+	if ( error.getFilePath().empty() && m_fileStack.size() != 0 ) {
 		const File& file = getCurrentFile();
 		error.setFileInfo( file );
 	}
 
 	m_pOutput->getErrStream() << error;
 
-	if ( error.getSeverity() > m_nMaxMsgSeverity )
-		m_nMaxMsgSeverity = error.getSeverity();
+	if ( error.getSeverity() > m_eMaxMsgSeverity )
+		m_eMaxMsgSeverity = error.getSeverity();
 	if ( error.getSeverity() > error::Error::SEV_ERROR ) 
 		++m_nErrorCount;
 	if ( error::Error::SEV_INFO < error.getSeverity() && error.getSeverity() < error::Error::SEV_ERROR ) 
@@ -453,7 +453,7 @@ void Processor::processFile( const std::wstring& fileName )
 
 		if ( error.getFilePath().empty() ) {
 			error.setFileInfo( file );
-			m_pOutput->getErrStream() << error;
+			emitMessage( error );
 		}
 		if ( !m_fileStack.empty() ) {
 			throw;
@@ -463,7 +463,7 @@ void Processor::processFile( const std::wstring& fileName )
 		error::C1001 error( message );
 		error.setFileInfo( file );
 		if ( m_fileStack.empty() ) {
-			m_pOutput->getErrStream() << error;
+			emitMessage( error );
 		} else {
 			throw error;
 		}
@@ -1852,9 +1852,7 @@ void Processor::processIncludeDirective()
 
 	if ( sFullPath.empty() ) {
 		// Cannot open file: '{1}': No such file or directory.
-		error::C1083 err( sFilePath );
-		emitMessage( err );
-		bDoInclude  = false;
+		throw error::C1083( sFilePath );
 	}
 
 	if ( bDoInclude ) {

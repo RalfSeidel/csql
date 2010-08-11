@@ -82,7 +82,6 @@ namespace csql.exe
 					exitCode = ExitCode.FileIOError;
 				}
 				catch ( TerminateException ex ) {
-					processor.SignOut();
 					if ( !didTraceCommandLine && verbosity.TraceError ) {
 						TraceCommandLine( args );
 					}

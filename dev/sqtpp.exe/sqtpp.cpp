@@ -35,6 +35,7 @@ int wmain(int argc, const wchar_t* const argv[])
 	Output*   pOutput = NULL;
 	Processor cpp( options );
 	wostream* pErrStream = &wcerr;
+	error::Error::Severity maxMessageSeverity = error::Error::SEV_UNDEFINED;
 
 	try {
 		CmdArgs  cmdargs( argc, argv );
@@ -65,9 +66,16 @@ int wmain(int argc, const wchar_t* const argv[])
 			++it;
 		}
 		cpp.close();
+		maxMessageSeverity = cpp.getMaxMessageSeverity();
 	} catch ( const error::Error& error ) {
+		if ( maxMessageSeverity < error::Error::SEV_FATAL ) {
+			maxMessageSeverity = error::Error::SEV_FATAL;
+		}
 		(*pErrStream)  << error;
 	} catch ( const std::exception& ex ) {
+		if ( maxMessageSeverity < error::Error::SEV_FATAL ) {
+			maxMessageSeverity = error::Error::SEV_FATAL;
+		}
 		(*pErrStream)  << ex.what();
 	}
 	delete pOutput;
@@ -84,11 +92,11 @@ int wmain(int argc, const wchar_t* const argv[])
 #	endif
 #	endif
 
-	if ( cpp.getMaxMessageSeverity() >= error::Error::SEV_FATAL ) {
+	if ( maxMessageSeverity >= error::Error::SEV_FATAL ) {
 		return 3;
 	}
 
-	if ( cpp.getMaxMessageSeverity() >= error::Error::SEV_ERROR ) {
+	if ( maxMessageSeverity >= error::Error::SEV_ERROR ) {
 		return 2;
 	}
 

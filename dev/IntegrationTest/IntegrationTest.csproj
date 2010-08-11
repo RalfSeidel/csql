@@ -69,6 +69,7 @@
     <None Include="Files\csql\DropAllIndexes.csql" />
     <None Include="Files\csql\DropCreate.csql" />
     <None Include="Files\csql\DropForeignKey.csql" />
+    <None Include="Files\csql\Input\NotExistingIncludeTest.sql" />
     <None Include="Files\csql\Input\DependencyWarning.sql" />
     <None Include="Files\csql\Input\DistributionTest.sql" />
     <None Include="Files\csql\Input\ErrorAfterInclude.sql" />
@@ -94,6 +95,7 @@
     <None Include="Files\csql\Reference\SelectTest.mssql.log" />
     <None Include="Files\csql\run.bat" />
     <None Include="Files\sqtpp\input\multiline.sql" />
+    <Content Include="Files\sqtpp\input\ErrC1083.h" />
     <None Include="Files\sqtpp\input\temptable.sql" />
     <None Include="Files\sqtpp\reference\multiline.sql" />
     <None Include="Files\sqtpp\reference\temptable.sql" />
@@ -227,6 +229,7 @@
     <Content Include="Files\sqtpp\reference\ErrC1070.h" />
     <Content Include="Files\sqtpp\reference\ErrC1071.h" />
     <Content Include="Files\sqtpp\reference\ErrC1082.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1083.h" />
     <Content Include="Files\sqtpp\reference\ErrC2006.h" />
     <Content Include="Files\sqtpp\reference\ErrC2007.h" />
     <Content Include="Files\sqtpp\reference\ErrC2008.h" />
