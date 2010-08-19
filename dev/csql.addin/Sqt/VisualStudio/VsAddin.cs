@@ -108,10 +108,37 @@ namespace Sqt.VisualStudio
 			Debug.WriteLine( GetType().Name + ".OnConnection( ConnectMode=" + ConnectMode + " )" );
 			this.application = (DTE2)Application;
 			this.addin = (AddIn)AddInInst;
-			this.OnInitialize( ConnectMode );
 
+			switch ( ConnectMode ) {
+				case ext_ConnectMode.ext_cm_AfterStartup:
+					// The add-in was loaded by hand after startup using the Add-In Manager
+					// Initialize it in the same way that when is loaded on startup
+					AddIdeCommands();
+					OnAfterStartupComplete();
+					break;
+				case ext_ConnectMode.ext_cm_Startup:
+					// The add-in was marked to load on startup and visual studio just started.
+					// Do nothing here because the IDE may not be fully initialized.
+					// Visual Studio will call OnStartupComplete when fully initialized.
+					break;
+				case ext_ConnectMode.ext_cm_UISetup:
+					// One time initialisation.
+					// Do nothing here because commands and the command bars are recreated after
+					// every startup.
+					break;
+				case ext_ConnectMode.ext_cm_CommandLine:
+					break;
+				case ext_ConnectMode.ext_cm_External:
+					break;
+				case ext_ConnectMode.ext_cm_Solution:
+					break;
+				default:
+					break;
+			}
+
+
+			////if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
 			if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
-			// if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
 				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
 					AddIdeCommand( vsCommand );
 				}
@@ -164,6 +191,8 @@ namespace Sqt.VisualStudio
 		[SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class is intended to hide the complexity of the COM interface" )]
 		void IDTExtensibility2.OnStartupComplete( ref Array custom )
 		{
+			AddIdeCommands();
+			OnAfterStartupComplete();
 		}
 
 		/// <summary>
@@ -217,8 +246,9 @@ namespace Sqt.VisualStudio
 		/// <summary>
 		/// Called immediatly before the addin commands are added.
 		/// </summary>
-		protected virtual void OnInitialize( ext_ConnectMode connectMode )
+		protected virtual void OnAfterStartupComplete()
 		{
+			Debug.WriteLine( "OnAfterStartupComplete()" );
 		}
 
 		/// <summary>
@@ -257,6 +287,13 @@ namespace Sqt.VisualStudio
 				application.GetMenuBar( name );
 			}
 			return commandBar;
+		}
+
+		/// <summary>
+		/// Add all registered commands to the visual studio shell.
+		/// </summary>
+		private void AddIdeCommands()
+		{
 		}
 
 		/// <summary>
