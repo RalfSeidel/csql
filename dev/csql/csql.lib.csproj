@@ -64,12 +64,15 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchContext.cs" />
     <Compile Include="ConnectionFactory.cs" />
     <Compile Include="CSqlOptions.cs" />
-    <Compile Include="DataReaderTracer.cs" />
+    <Compile Include="ResultTrace\ColumnFormat.cs" />
+    <Compile Include="ResultTrace\ColumnInfo.cs" />
+    <Compile Include="ResultTrace\DataReaderTracer.cs" />
     <Compile Include="DbConnection.cs" />
     <Compile Include="DbException.cs" />
     <Compile Include="DbMessage.cs" />

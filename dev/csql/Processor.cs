@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Globalization;
+using System.Threading;
 
 namespace csql
 {
@@ -163,7 +164,7 @@ namespace csql
 		}
 
 		/// <summary>
-		/// Gets the arguemtns for the preprocessor sqtpp.
+		/// Gets the arguments for the preprocessor sqtpp.
 		/// </summary>
 		/// <value>The preprocessor arguemtns.</value>
 		protected string PreprocessorArguments
@@ -179,62 +180,15 @@ namespace csql
 			}
 		}
 
-
 		/// <summary>
-		/// Emits an entry message.
+		/// Check if the preprocessor encountered an error.
 		/// </summary>
-		public virtual void SignIn()
+		private bool PreprocessorExitedWithError
 		{
-			if ( GlobalSettings.Verbosity.TraceInfo && !m_options.NoLogo ) {
-				StringBuilder sb = new StringBuilder();
-				Assembly assembly = Assembly.GetExecutingAssembly();
-				Version version = assembly.GetName().Version;
-				string name = GlobalSettings.CSqlProductName;
-				sb.Append( name );
-				sb.Append( " " );
-				if ( GlobalSettings.Verbosity.TraceVerbose ) {
-					sb.Append( version.ToString() );
-				} else {
-					sb.Append( version.ToString( 2 ) );
-				}
-				sb.Append( " (c) SQL Service GmbH" );
-				sb.Append( " - Processing " ).Append( m_options.ScriptFile );
-
-				string message = sb.ToString();
-				Trace.WriteLine( message );
+			get
+			{
+				return m_ppProcess != null && m_ppProcess.HasExited && m_ppProcess.ExitCode != 0;
 			}
-		}
-
-		/// <summary>
-		/// Emits the an exit/finished message.
-		/// </summary>
-		public virtual void SignOut()
-		{
-			if ( !GlobalSettings.Verbosity.TraceInfo )
-				return;
-
-			if ( m_ppProcess != null && m_ppProcess.ExitCode != 0 )
-				++m_errorCount;
-
-			string message = "\r\n*** Finished ";
-			switch ( m_errorCount ) {
-				case 0:
-					message+= "without any error :-)";
-					break;
-				case 1:
-					message+= "with one error";
-					if ( m_options.BreakOnError ) {
-						message+= " that caused the script execution to stop";
-					}
-					message+= " :-(";
-					break;
-				default:
-					message+= "with " + m_errorCount + " errors :-(";
-					break;
-			}
-
-
-			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, message );
 		}
 
 
@@ -254,7 +208,7 @@ namespace csql
 			try {
 				using ( Stream stream = OpenInputFile() )
 				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
-					while ( !reader.EndOfStream ) {
+					while ( !reader.EndOfStream && !PreprocessorExitedWithError ) {
 						string line = reader.ReadLine();
 						LineType type = GetLineType( line );
 						switch ( type ) {
@@ -303,6 +257,74 @@ namespace csql
 		}
 
 
+		/// <summary>
+		/// Emits an entry message.
+		/// </summary>
+		public virtual void SignIn()
+		{
+			if ( GlobalSettings.Verbosity.TraceInfo && !m_options.NoLogo ) {
+				StringBuilder sb = new StringBuilder();
+				Assembly assembly = Assembly.GetExecutingAssembly();
+				Version version = assembly.GetName().Version;
+				string name = GlobalSettings.CSqlProductName;
+				sb.Append( name );
+				sb.Append( " " );
+				if ( GlobalSettings.Verbosity.TraceVerbose ) {
+					sb.Append( version.ToString() );
+				} else {
+					sb.Append( version.ToString( 2 ) );
+				}
+				sb.Append( " (c) SQL Service GmbH" );
+				sb.Append( " - Processing " ).Append( m_options.ScriptFile );
+
+				string message = sb.ToString();
+				Trace.WriteLine( message );
+			}
+		}
+
+		/// <summary>
+		/// Emits the an exit/finished message.
+		/// </summary>
+		public virtual void SignOut()
+		{
+			if ( !GlobalSettings.Verbosity.TraceInfo )
+				return;
+
+			try {
+				if ( m_ppProcess != null ) {
+					if ( !m_ppProcess.HasExited ) 
+						Thread.Sleep( 100 );
+
+					if ( PreprocessorExitedWithError )
+						++m_errorCount;
+				}
+			}
+			catch ( InvalidOperationException ) {
+				// Ignore any invalid operation when trying to determine the preprocessor exit code.
+			}
+
+
+			string message = "\r\n*** Finished ";
+			switch ( m_errorCount ) {
+				case 0:
+					message+= "without any error :-)";
+					break;
+				case 1:
+					message+= "with one error";
+					if ( m_options.BreakOnError ) {
+						message+= " that caused the script execution to stop";
+					}
+					message+= " :-(";
+					break;
+				default:
+					message+= "with " + m_errorCount + " errors :-(";
+					break;
+			}
+
+
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, message );
+			Trace.Flush();
+		}
 
 		/// <summary>
 		/// Emits the current batch.

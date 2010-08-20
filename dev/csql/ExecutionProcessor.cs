@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using csql.ResultTrace;
 
 namespace csql
 {

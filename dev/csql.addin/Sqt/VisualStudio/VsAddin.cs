@@ -135,14 +135,6 @@ namespace Sqt.VisualStudio
 				default:
 					break;
 			}
-
-
-			////if ( ConnectMode == ext_ConnectMode.ext_cm_UISetup ) {
-			if ( ConnectMode == ext_ConnectMode.ext_cm_AfterStartup || ConnectMode == ext_ConnectMode.ext_cm_Startup ) {
-				foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
-					AddIdeCommand( vsCommand );
-				}
-			}
 		}
 
 		/// <summary>
@@ -294,6 +286,9 @@ namespace Sqt.VisualStudio
 		/// </summary>
 		private void AddIdeCommands()
 		{
+			foreach ( VsCommand vsCommand in this.vsCommands.Values ) {
+				AddIdeCommand( vsCommand );
+			}
 		}
 
 		/// <summary>

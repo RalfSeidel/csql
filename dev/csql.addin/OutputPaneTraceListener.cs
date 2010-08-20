@@ -23,9 +23,9 @@ namespace csql.addin
 		/// <inheritdoc/>
 		public override void Write( string message )
 		{
-			if ( outputWindowPane != null && this.threadId == System.Threading.Thread.CurrentThread.ManagedThreadId ) {
+			//if ( outputWindowPane != null && this.threadId == System.Threading.Thread.CurrentThread.ManagedThreadId ) {
 				outputWindowPane.OutputString( message );
-			}
+			//}
 		}
 
 		/// <inheritdoc/>
