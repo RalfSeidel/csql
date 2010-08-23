@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace csql
+namespace Sqt.DbcProvider
 {
 	/// <summary>
 	/// An info message send by the SQL server encapsulated into an event argument structure.

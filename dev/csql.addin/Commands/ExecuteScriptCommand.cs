@@ -83,29 +83,6 @@ namespace csql.addin.Commands
 
 		}
 
-
-
-
-		private static DbSystem GetDbSystemForProvider( ProviderType provider )
-		{
-			switch ( provider ) {
-				case ProviderType.MsSql:
-					return DbSystem.MsSql;
-				//// case ProviderType.MSJET:
-				//// 	return DbSystem.MsJet;
-				case ProviderType.Sybase:
-					return DbSystem.Sybase;
-				case ProviderType.Oracle:
-					return DbSystem.Oracle;
-				case ProviderType.IbmDb2:
-					return DbSystem.IbmDb2;
-				case ProviderType.Undefined:
-				default:
-					Debug.WriteLine( "Unsupported provider: " + provider );
-					throw new ArgumentException( "Unsupported provider: " + provider );
-			}
-		}
-
 		private static SqtppOptions CreatePreprocessorArguments( CSqlParameter csqlParameter )
 		{
 			SqtppOptions result = new SqtppOptions();
@@ -146,22 +123,7 @@ namespace csql.addin.Commands
 
 			csqlOptions.BreakOnError = csqlParameter.IsBreakOnErrorEnabled;
 			csqlOptions.UsePreprocessor = csqlParameter.IsPreprocessorEnabled;
-
-			csqlOptions.DbSystem = GetDbSystemForProvider( dbConnectionParameter.Provider );
-			csqlOptions.DbDriver = DbDriver.Default;
-			csqlOptions.DbServer = dbConnectionParameter.DatasourceAddress;
-			csqlOptions.DbDatabase = dbConnectionParameter.Catalog;
-			csqlOptions.DbServerPort = dbConnectionParameter.DatasourcePort;
-
-			if ( dbConnectionParameter.IntegratedSecurity ) {
-				csqlOptions.DbUser = null;
-				csqlOptions.DbPassword = null;
-			}
-			else {
-				csqlOptions.DbUser = dbConnectionParameter.UserId;
-				csqlOptions.DbPassword = dbConnectionParameter.Password;
-			}
-
+			csqlOptions.ConnectionParameter = dbConnectionParameter;
 			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( csqlParameter );
 			csqlOptions.AddPreprocessorMacros( csqlOptions.PreprocessorOptions.MacroDefinitions );
 

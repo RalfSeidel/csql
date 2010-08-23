@@ -26,7 +26,6 @@ namespace csql
 		/// </summary>
 		public const uint WAIT_FAILED    = 0xFFFFFFFF;
 
-
 		/// <summary>
 		/// See <see cref="http://msdn.microsoft.com/en-us/library/aa365150.aspx"/>
 		/// </summary>
@@ -46,15 +45,15 @@ namespace csql
 		/// Connects the named pipe.
 		/// </summary>
 		[DllImport( "kernel32.dll", SetLastError=true )]
-		public static extern int ConnectNamedPipe(
-		   SafeFileHandle hNamedPipe,
-		   IntPtr lpOverlapped );
+		public static extern int ConnectNamedPipe( SafeFileHandle hNamedPipe, IntPtr lpOverlapped );
 
+		/*
 		/// <summary>
 		/// Waits until the object referenced by the handle is in the signaled state or a time-out occurred.
 		/// </summary>
 		/// <seealso cref="http://msdn.microsoft.com/en-us/library/ms687032.aspx"/>
 		[DllImport( "kernel32.dll", SetLastError=true )]
 		public static extern uint WaitForSingleObject( IntPtr hHandle, UInt32 dwMilliseconds );
+		*/
 	}
 }

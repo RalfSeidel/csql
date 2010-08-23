@@ -49,7 +49,7 @@ namespace csql.addin.Commands
 		/// </summary>
 		/// <param name="item">A item of the project solution hierarchy.</param>
 		/// <returns></returns>
-		private bool IsFile( UIHierarchyItem item )
+		private static bool IsFile( UIHierarchyItem item )
 		{
 			string fileName = GetItemFileName( item );
 			return !String.IsNullOrEmpty( fileName );
@@ -60,7 +60,7 @@ namespace csql.addin.Commands
 		/// </summary>
 		/// <param name="item">The project item.</param>
 		/// <returns>The name of the file or <c>null</c> if the item does not represent a single file.</returns>
-		private string GetItemFileName( UIHierarchyItem item )
+		private static string GetItemFileName( UIHierarchyItem item )
 		{
 			if ( !(item.Object is EnvDTE.ProjectItem) )
 				return null;
@@ -249,28 +249,6 @@ namespace csql.addin.Commands
 					}
 					childs.Sort( ChildItemComparer.Instance );
 					return childs;
-				}
-			}
-
-			/// <summary>
-			/// Check that all files in this group exists. If not we will not build 
-			/// the group.
-			/// </summary>
-			private bool FilesExists
-			{
-				get
-				{
-					foreach ( UIHierarchyItem item in this.groupItems ) {
-						ProjectItem prjItem = (ProjectItem)item.Object;
-						if ( prjItem.FileCount != 1 ) {
-							return false;
-						}
-						string fileName = prjItem.get_FileNames( 0 );
-						if ( !File.Exists( fileName ) ) {
-							return false;
-						}
-					}
-					return true;
 				}
 			}
 

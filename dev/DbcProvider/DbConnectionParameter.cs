@@ -12,37 +12,37 @@ namespace Sqt.DbcProvider
 	/// Generic database base connection parameter.
 	/// </summary>
 	[DefaultProperty("DatasourceName")]
+	[CLSCompliant( true )]
 	public class DbConnectionParameter : INotifyPropertyChanged
 	{
 		#region Private fields
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private readonly Authentication authentication = new Authentication();
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private ProviderType provider;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private string datasoureComment;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private string datasourceAddress;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private int datasourcePort;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private string catalog;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		[EditorBrowsable( EditorBrowsableState.Never )]
 		private int timeout;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private string applicationName;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private TraceSwitch traceSwitch;
 
 		#endregion
 
@@ -58,6 +58,7 @@ namespace Sqt.DbcProvider
 			Password = "";
 			IntegratedSecurity = true;
 			Timeout = 2;
+			this.traceSwitch = new TraceSwitch( "Verbosity", "Verbosity", TraceLevel.Warning.ToString() );
 
 			Type thisType = GetType();
 			PropertyDescriptorCollection pdCollection = TypeDescriptor.GetProperties( thisType );
@@ -310,6 +311,34 @@ namespace Sqt.DbcProvider
 			}
 		}
 
+		/// <summary>
+		/// The verbosity level of the traces.
+		/// </summary>
+		[Browsable( false )]
+		[XmlIgnore]
+		public string ApplicationName
+		{
+			get { return this.applicationName; }
+			set { applicationName = value; }
+		}
+
+		/// <summary>
+		/// The verbosity level of the traces.
+		/// </summary>
+		[Browsable(false)]
+		[XmlIgnore]
+		public TraceLevel VerbosityLevel
+		{
+			get { return this.traceSwitch.Level; }
+			set { this.traceSwitch.Level = value; }
+		}
+
+		internal TraceSwitch VerbositySwitch
+		{
+			get { return this.traceSwitch; }
+		}
+
+
 		#endregion
 
 		#region Common Object Overrides
@@ -337,6 +366,9 @@ namespace Sqt.DbcProvider
 
 			if ( !String.IsNullOrEmpty( UserId ) )
 				sb.Append( ", UserId=" ).Append( UserId );
+
+			if ( !String.IsNullOrEmpty( ApplicationName ) )
+				sb.Append( ", ApplicationName=" ).Append( ApplicationName );
 
 			sb.Append( ", Timeout=" ).Append( Timeout );
 

@@ -116,6 +116,7 @@
     <Content Include="Files\sqtpp\input\concate2.h" />
     <Content Include="Files\sqtpp\input\ConditionalTest1.h" />
     <Content Include="Files\sqtpp\input\ConditionalTest2.h" />
+    <Content Include="Files\sqtpp\input\IncludeTest1.h" />
     <Content Include="Files\sqtpp\input\CP1252.txt" />
     <Content Include="Files\sqtpp\input\CP850.txt" />
     <Content Include="Files\sqtpp\input\Define1Test.h" />
@@ -255,6 +256,7 @@
     <Content Include="Files\sqtpp\reference\include1.h" />
     <Content Include="Files\sqtpp\reference\include2.h" />
     <Content Include="Files\sqtpp\reference\include3.h" />
+    <Content Include="Files\sqtpp\reference\IncludeTest1.h" />
     <Content Include="Files\sqtpp\reference\message.h" />
     <Content Include="Files\sqtpp\reference\mixedcp.h" />
     <Content Include="Files\sqtpp\reference\nested.h" />

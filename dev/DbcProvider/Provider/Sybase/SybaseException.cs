@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace csql.Sybase
+namespace Sqt.DbcProvider.Provider.Sybase
 {
 	[Serializable]
 	public class SybaseException : DbException

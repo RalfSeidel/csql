@@ -6,10 +6,10 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using EnvDTE;
 using Sqt.DbcProvider;
+using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Settings
 {
-	internal delegate void SettingsReloadedDelegate( object sender, EventArgs eventArgs );
 
 	/// <summary>
 	/// Global accessor for the most recently used and current connection parameters.
@@ -18,9 +18,7 @@ namespace csql.addin.Settings
 	{
 		#region Private Fields
 
-		private static readonly string mruConnectionsVariableName = typeof( CSqlAddin ).FullName.Replace( '.', '_' ) + "_" + typeof( MruConnections ).Name;
 		private static readonly string dbConnectionVariableName = typeof( CSqlAddin ).FullName.Replace( '.', '_' ) + "_" + typeof( DbConnectionParameter ).Name;
-		private static readonly string csqlParameterVariableName   = typeof( CSqlAddin ).FullName.Replace( '.', '_' ) + "_" + typeof( CSqlParameter ).Name;
 
 		private readonly _DTE application;
 
@@ -50,12 +48,12 @@ namespace csql.addin.Settings
 		}
 
 		/// <summary>
-		/// Event raised whenever the settings have been reladed.
+		/// Event raised whenever the settings were reloaded.
 		/// </summary>
-		public event SettingsReloadedDelegate SettingsReloaded;
+		public event EventHandler SettingsReloaded;
 
 		/// <summary>
-		/// Get the collection of most recently used database connections.
+		/// Get the collection of most recently used database connection parameters.
 		/// </summary>
 		public MruConnections MruDbConnectionParameters
 		{
@@ -74,6 +72,9 @@ namespace csql.addin.Settings
 			}
 		}
 
+		/// <summary>
+		/// Get the currently used database connection parameters.
+		/// </summary>
 		public DbConnectionParameter CurrentDbConnectionParameter
 		{
 			get
@@ -87,6 +88,9 @@ namespace csql.addin.Settings
 			}
 		}
 
+		/// <summary>
+		/// Get the currently used script processing parameter.
+		/// </summary>
 		public CSqlParameter CurrentScriptParameter
 		{
 			get
@@ -120,8 +124,10 @@ namespace csql.addin.Settings
 			return instance;
 		}
 
-
-
+		/// <summary>
+		/// Update the most recently used db connection parameter in the application data folder.
+		/// </summary>
+		/// <param name="dbConnectionParameter">The db connection parameter.</param>
 		internal void SaveDbConnectionParameter( DbConnectionParameter dbConnectionParameter )
 		{
 			MruConnections mruConnections = MruDbConnectionParameters;
@@ -162,57 +168,36 @@ namespace csql.addin.Settings
 			if ( String.IsNullOrEmpty( csqlParameterPath ) )
 				return;
 
+			SaveScriptParameterCore( csqlParameter, csqlParameterPath );
+		}
+
+		private void SaveScriptParameterCore( CSqlParameter csqlParameter, string filePath )
+		{
 			try {
-				using ( Stream stream = new FileStream( csqlParameterPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, FileOptions.SequentialScan ) ) {
+				using ( Stream stream = new FileStream( filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, FileOptions.SequentialScan ) ) {
 					XmlSerializer serializer = new XmlSerializer( csqlParameter.GetType() );
 					serializer.Serialize( stream, csqlParameter );
 					stream.Close();
 				}
 			}
-			catch ( Exception ex ) {
+			catch ( IOException ex ) {
 				string context = MethodInfo.GetCurrentMethod().Name;
 				Debug.WriteLine( String.Format( "{0}: Failed to save parameter because [{1}].", context, ex.Message ) );
 			}
 		}
 
 
-		/// <summary>
-		/// Gets the absolute file path for the given file name in the current solution directory.
-		/// </summary>
-		/// <param name="name">The file name.</param>
-		/// <returns>The absolute path or <c>null</c> if no solution is loaded.</returns>
-		private static string GetSolutionFilePath( _DTE application, string name )
-		{
-			string solutionPath = application.Solution.FileName;
-			if ( !String.IsNullOrEmpty( solutionPath ) ) {
-				string solutionDirectory = Path.GetDirectoryName( solutionPath );
-				string mruConnectionsPath = Path.Combine( solutionDirectory, name );
-				return mruConnectionsPath;
-			}
-			else {
-				return null;
-			}
-		}
-
-		private static string GetGlobalFilePath( string name )
-		{
-			string directory = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-			directory = Path.Combine( directory, @"SqlService\csql\" );
-			string result = Path.Combine( directory, name );
-			return result;
-		}
-
 		private CSqlParameter LoadSolutionScriptParameter()
 		{
 			string csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
 			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameter( csqlParameterPath );
+				CSqlParameter parameter = LoadScriptParameterCore( csqlParameterPath );
 				if ( parameter != null )
 					return parameter;
 			}
 			csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.xml" );
 			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameter( csqlParameterPath );
+				CSqlParameter parameter = LoadScriptParameterCore( csqlParameterPath );
 				if ( parameter != null )
 					return parameter;
 			}
@@ -220,8 +205,7 @@ namespace csql.addin.Settings
 			return null;
 		}
 
-
-		private CSqlParameter LoadScriptParameter( string csqlParameterPath )
+		private static CSqlParameter LoadScriptParameterCore( string csqlParameterPath )
 		{
 			try {
 				using ( Stream stream = new FileStream( csqlParameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
@@ -274,20 +258,47 @@ namespace csql.addin.Settings
 			return null;
 		}
 
+		/// <summary>
+		/// Gets the absolute file path for the given file name in the current solution directory.
+		/// </summary>
+		/// <param name="name">The file name.</param>
+		/// <returns>The absolute path or <c>null</c> if no solution is loaded.</returns>
+		private static string GetSolutionFilePath( _DTE application, string name )
+		{
+			string solutionPath = application.Solution.FileName;
+			if ( !String.IsNullOrEmpty( solutionPath ) ) {
+				string solutionDirectory = Path.GetDirectoryName( solutionPath );
+				string mruConnectionsPath = Path.Combine( solutionDirectory, name );
+				return mruConnectionsPath;
+			}
+			else {
+				return null;
+			}
+		}
+
+		private static string GetGlobalFilePath( string name )
+		{
+			string directory = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
+			directory = Path.Combine( directory, @"SqlService\csql\" );
+			string result = Path.Combine( directory, name );
+			return result;
+		}
+
 
 		private void Solution_Opened()
 		{
 			CSqlParameter csqlParameter = LoadSolutionScriptParameter();
 			if ( csqlParameter != null ) {
 				currentScriptParameter = csqlParameter;
-				OnSettingsReloaded();
+				RaiseSettingsReloaded();
 			}
 		}
 
 		/// <summary>
 		/// Raise the SettingsReloaded event.
 		/// </summary>
-		private void OnSettingsReloaded()
+		[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "The method raises the event." )]
+		private void RaiseSettingsReloaded()
 		{
 			if ( this.SettingsReloaded != null ) {
 				this.SettingsReloaded( this, EventArgs.Empty );

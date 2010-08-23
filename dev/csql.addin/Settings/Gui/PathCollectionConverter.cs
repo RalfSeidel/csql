@@ -98,7 +98,7 @@ namespace csql.addin.Settings.Gui
 		/// <summary>
 		/// Check if the given type is compatible with IEnumerable&lt;string&gt;
 		/// </summary>
-		private bool IsEnumerableStringType( Type type )
+		private static bool IsEnumerableStringType( Type type )
 		{
 			if ( !type.IsGenericType )
 				return false;

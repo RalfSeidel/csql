@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Permissions;
+using Sqt.DbcProvider;
 
 namespace csql
 {
@@ -18,18 +19,40 @@ namespace csql
 		#region Data member
 
 		/// <summary>
-		/// Data member for the <see cref="P:Verbosity"/> property.
-		/// </summary>
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private readonly VerbositySwitch verbosity;
-
-		/// <summary>
 		/// Data member for the <see cref="P:PreprocessorOptions"/> property.
 		/// </summary>
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private SqtppOptions preprocessorOptions;
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private DbConnectionParameter connectionParameter;
+
+		/// <summary>
+		/// Data member for the <see cref="P:Verbosity"/> property.
+		/// </summary>
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private readonly VerbositySwitch verbosity;
+
 		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CsqlOptions"/> class.
+		/// </summary>
+		[SecurityPermission( SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode )]
+		public CSqlOptions()
+		{
+			this.connectionParameter = new DbConnectionParameter();
+			this.preprocessorOptions = new SqtppOptions();
+			AddPreprocessorMacros( preprocessorOptions.MacroDefinitions );
+			this.verbosity = new VerbositySwitch();
+
+			DistributionFile = "";
+			TempFile = "";
+			ScriptFile = "";
+			BreakOnError = true;
+			UsePreprocessor = true;
+
+		}
 
 		/// <summary>
 		/// Gets or sets the path to the main input file.
@@ -69,48 +92,23 @@ namespace csql
 		public bool UsePreprocessor { get; set; }
 
 		/// <summary>
-		/// The id of the target database system.
+		/// Gets or sets the parameter used to establish the database connection.
 		/// </summary>
-		/// <value>The database system.</value>
-		public DbSystem DbSystem { get; set; }
-
-		/// <summary>
-		/// The id of the driver/provider to use for the database connection.
-		/// </summary>
-		/// <value>The db driver.</value>
-		public DbDriver DbDriver { get; set; }
-
-		/// <summary>
-		/// The name of the database server / data source.
-		/// </summary>
-		/// <value>The db server.</value>
-		public string DbServer { get; set; }
-
-		/// <summary>
-		/// The TCP port to use for the database server connection.
-		/// </summary>
-		/// <value>The db server port.</value>
-		public int DbServerPort { get; set; }
-
-		/// <summary>
-		/// The name of the initial database/catalog.
-		/// </summary>
-		/// <value>The db database.</value>
-		public string DbDatabase { get; set; }
-
-		/// <summary>
-		/// The name of the user for the database authentication. If the 
-		/// user name is empty the program will try to use windows 
-		/// integrated security.
-		/// </summary>
-		/// <value>The name of the database login.</value>
-		public string DbUser { get; set; }
-
-		/// <summary>
-		/// The password for the database authentication.
-		/// </summary>
-		/// <value>The db password.</value>
-		public string DbPassword { get; set; }
+		public DbConnectionParameter ConnectionParameter
+		{
+			get
+			{
+				if ( String.IsNullOrEmpty( this.connectionParameter.ApplicationName ) ) {
+					this.connectionParameter.ApplicationName = GlobalSettings.CSqlProductName;
+				}
+				this.connectionParameter.VerbosityLevel = GlobalSettings.Verbosity.Level;
+				return connectionParameter;
+			}
+			set
+			{
+				this.connectionParameter = value;
+			}
+		}
 
 		/// <summary>
 		/// Options for the preprocessor sqtpp.
@@ -127,29 +125,18 @@ namespace csql
 		/// <value>The trace level.</value>
 		public VerbositySwitch Verbosity { get { return this.verbosity; } }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CsqlOptions"/> class.
-		/// </summary>
-		[SecurityPermission( SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode )]
-		public CSqlOptions()
-		{
-			DistributionFile = "";
-			TempFile = "";
-			ScriptFile = "";
-			BreakOnError = true;
-			UsePreprocessor = true;
-			DbSystem = DbSystem.MsSql;
-			DbDriver = DbDriver.Default;
-			DbServer = "";
-			DbDatabase = "";
-			DbUser = "";
-			DbPassword = "";
 
-			this.preprocessorOptions = new SqtppOptions();
-			AddPreprocessorMacros( preprocessorOptions.MacroDefinitions );
-			this.verbosity = new VerbositySwitch();
-			verbosity.Level = System.Diagnostics.TraceLevel.Info;
+
+		/// <summary>
+		/// Flag indicating if a named pipe is used to communicate with the pre processor.
+		/// </summary>
+		/// <value>Flag for the named pipe usage option.</value>
+		internal bool UseNamedPipes
+		{
+			get { return String.IsNullOrEmpty( TempFile ); }
 		}
+
+
 
 		/// <summary>
 		/// Add the preprocessor definitions predefined by csql specifying certain 
@@ -164,16 +151,16 @@ namespace csql
 			var version = String.Format( CultureInfo.InvariantCulture, "{0:d2}.{1:d2}", assemblyVersion.Major, assemblyVersion.Minor );
 
 			// Specify the database system used e.g. _CSQL_SYSTEM_MSSQL
-			macros.Add( "_CSQL_SYSTEM_" + this.DbSystem.ToString().ToUpper(), "" );
+			macros.Add( "_CSQL_SYSTEM_" + ConnectionParameter.Provider.ToString().ToUpper(), "" );
 
-			if ( !String.IsNullOrEmpty( this.DbServer ) ) {
-				macros.Add( "_CSQL_SERVER", this.DbServer );
+			if ( !String.IsNullOrEmpty( ConnectionParameter.DatasourceAddress ) ) {
+				macros.Add( "_CSQL_SERVER", ConnectionParameter.DatasourceAddress );
 			}
-			if ( !String.IsNullOrEmpty( this.DbDatabase ) ) {
-				macros.Add( "_CSQL_DATABASE", this.DbDatabase );
+			if ( !String.IsNullOrEmpty( ConnectionParameter.Catalog ) ) {
+				macros.Add( "_CSQL_DATABASE", ConnectionParameter.Catalog );
 			}
-			if ( !String.IsNullOrEmpty( this.DbUser ) ) {
-				macros.Add( "_CSQL_USER", this.DbUser );
+			if ( !String.IsNullOrEmpty( ConnectionParameter.UserId ) ) {
+				macros.Add( "_CSQL_USER", ConnectionParameter.UserId );
 			}
 			if ( !String.IsNullOrEmpty( version ) ) {
 				macros.Add( "_CSQL_VERSION", version );

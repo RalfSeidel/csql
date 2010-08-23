@@ -66,7 +66,7 @@ namespace Sqt.VisualStudio
 		/// <summary>
 		/// Gets the Visual Studio add in object.
 		/// </summary>
-		public AddIn AddIn
+		public AddIn Addin
 		{
 			get { return this.addin; }
 		}
@@ -306,7 +306,7 @@ namespace Sqt.VisualStudio
 				bool useMsoButtons = vsCommand.IconId == 0;
 				object[] contextGuids = vsCommand.VsContextGuidsObjectArray;
 				ideCommand = ideCommands.AddNamedCommand2(
-					this.AddIn,
+					this.Addin,
 					vsCommand.Name,
 					vsCommand.Title,
 					String.Empty,

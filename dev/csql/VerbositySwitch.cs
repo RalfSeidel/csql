@@ -8,7 +8,7 @@ namespace csql
 	public class VerbositySwitch : System.Diagnostics.TraceSwitch
 	{
 		public VerbositySwitch()
-		: base( "Verbosity", "Trace switch for the \"Verbose\" command line argument.", TraceLevel.Warning.ToString() )
+		: base( "Verbosity", "Trace switch for the \"Verbose\" command line argument.", TraceLevel.Info.ToString() )
 		{
 		}
 	}

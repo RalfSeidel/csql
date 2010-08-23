@@ -5,45 +5,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace csql.MsSql
+namespace Sqt.DbcProvider.Provider.MsSql
 {
 	/// <summary>
 	/// Connection wrapper for native MS SQL Server connections.
 	/// </summary>
-	public class MsSqlConnection : DbConnection
+	internal class MsSqlConnection : DbConnection
 	{
-		public MsSqlConnection( CSqlOptions csqlOptions )
-			: base( csqlOptions )
+		private readonly MsSqlConnectionFactory connectionFactory;
+
+		internal MsSqlConnection( MsSqlConnectionFactory connectionFactory, DbConnectionParameter parameter )
+			: base( parameter )
 		{
+			this.connectionFactory = connectionFactory;
 		}
 
-		protected override IDbConnection CreateAdoConnection( CSqlOptions csqlOptions )
+		protected override IDbConnection CreateAdoConnection( DbConnectionParameter parameter )
 		{
-			StringBuilder sb = new StringBuilder();
-
-			if ( !String.IsNullOrEmpty( csqlOptions.DbServer ) ) {
-				sb.Append( "Server=" ).Append( csqlOptions.DbServer ).Append( ";" );
-			}
-			if ( csqlOptions.DbServerPort != 0 ) {
-				sb.Append( "Server Port=" ).Append( csqlOptions.DbServerPort ).Append( ";" );
-			}
-			if ( !String.IsNullOrEmpty( csqlOptions.DbDatabase ) ) {
-				sb.Append( "Database=" ).Append( csqlOptions.DbDatabase ).Append( ";" );
-			}
-			if ( !String.IsNullOrEmpty( csqlOptions.DbUser ) ) {
-				sb.Append( "User ID=" ).Append( csqlOptions.DbUser ).Append( ";" );
-				sb.Append( "Password=" ).Append( csqlOptions.DbPassword ).Append( ";" );
-			}
-			else {
-				sb.Append( "Integrated Security=SSPI;" );
-			}
-			sb.Append( "Application Name=" ).Append( GlobalSettings.CSqlProductName ).Append( ";" );
-
-
-			string connectionString = sb.ToString();
-			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, "Connecting to MS SQL Server using following connection string:\r\n" + connectionString );
-
-			SqlConnection adoConnection = new SqlConnection( connectionString );
+			SqlConnection adoConnection = MsSqlConnectionFactory.CreateAdoConnection( parameter );
 			adoConnection.InfoMessage += new SqlInfoMessageEventHandler( InfoMessageHandler );
 			adoConnection.Open();
 			return adoConnection;

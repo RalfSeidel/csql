@@ -346,6 +346,7 @@ namespace Sqt.DbcProvider
 
 	[System.CodeDom.Compiler.GeneratedCodeAttribute( "System.Xml", "2.0.50727.4927" )]
 	[System.Xml.Serialization.XmlTypeAttribute( Namespace="http://schemas.sql-service.de/etc/MruConnections.xsd" )]
+	[CLSCompliant( true )]
 	public enum ProviderType
 	{
 

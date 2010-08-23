@@ -1,15 +1,27 @@
 ﻿using System.Data.SqlClient;
 using System;
+using System.Diagnostics;
 
-namespace Sqt.DbcProvider.Provider
+namespace Sqt.DbcProvider.Provider.MsSql
 {
 	/// <summary>
 	/// Connection factory of the Microsoft SQL Server.
 	/// </summary>
-	internal class MsSqlConnectionFactory : IDbcProvider
+	internal class MsSqlConnectionFactory : IDbConnectionFactory
 	{
 		/// <inheritdoc/>
-		public System.Data.IDbConnection CreateConnection( DbConnectionParameter parameter )
+		public DbConnection CreateConnection( DbConnectionParameter parameter )
+		{
+			var connection = new MsSqlConnection( this, parameter );
+			return connection;
+		}
+
+		/// <summary>
+		/// Creates the ADO.NET connection.
+		/// </summary>
+		/// <param name="parameter">The connection parameter.</param>
+		/// <returns>An open ADO connection.</returns>
+		internal static SqlConnection CreateAdoConnection( DbConnectionParameter parameter )
 		{
 			SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder();
 
@@ -31,6 +43,8 @@ namespace Sqt.DbcProvider.Provider
 			}
 
 			string connectionString = connectionStringBuilder.ConnectionString;
+			Trace.WriteLineIf( parameter.VerbositySwitch.TraceVerbose, "Connecting to MS SQL Server using following connection string:\r\n" + connectionString );
+
 			SqlConnection connection = new SqlConnection( connectionString );
 			return connection;
 		}

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
 
-namespace csql.Sybase
+namespace Sqt.DbcProvider.Provider.Sybase
 {
 	[DebuggerDisplay( "{Message}" )]
 	public class SybaseError : DbMessage

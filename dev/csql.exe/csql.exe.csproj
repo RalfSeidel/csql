@@ -55,6 +55,10 @@
       <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
       <Name>csql.lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DbcProvider\DbcProvider.csproj">
+      <Project>{C404D769-C642-461B-A5C1-4295F5B7542C}</Project>
+      <Name>DbcProvider</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">

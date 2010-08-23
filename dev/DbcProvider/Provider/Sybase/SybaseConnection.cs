@@ -1,53 +1,57 @@
 ﻿using System;
 using System.Collections;
-using System.Text;
-using System.Reflection;
-using System.IO;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Reflection;
+using System.Text;
 
-namespace csql.Sybase
+namespace Sqt.DbcProvider.Provider.Sybase
 {
 	/// <summary>
 	/// Specialization of the database connection using the native
 	/// Sybase <see cref="T:Sybase.Data.AseClient.AseConnection"/> object.
 	/// </summary>
-	public class SybaseConnection : DbConnection
+	internal class SybaseConnection : DbConnection
 	{
-		public SybaseConnection( CSqlOptions csqlOptions )
-			: base( csqlOptions )
+		private readonly SybaseConnectionFactory connectionFactory;
+
+		public SybaseConnection( SybaseConnectionFactory connectionFactory, DbConnectionParameter parameter )
+			: base( parameter )
 		{
+			this.connectionFactory = connectionFactory;
 		}
 
-		protected override IDbConnection CreateAdoConnection( CSqlOptions csqlOptions )
+		protected override IDbConnection CreateAdoConnection( DbConnectionParameter parameter )
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if ( !String.IsNullOrEmpty( csqlOptions.DbServer ) ) {
-				sb.Append( "DataSource=" ).Append( csqlOptions.DbServer ).Append( ";" );
+			if ( !String.IsNullOrEmpty( parameter.DatasourceAddress ) ) {
+				sb.Append( "DataSource=" ).Append( parameter.DatasourceAddress ).Append( ";" );
 			}
-			if ( csqlOptions.DbServerPort != 0 ) {
-				sb.Append( "Port=" ).Append( csqlOptions.DbServerPort ).Append( ";" );
+			if ( parameter.DatasourcePort != 0 ) {
+				sb.Append( "Port=" ).Append( parameter.DatasourcePort ).Append( ";" );
 			}
-			if ( !String.IsNullOrEmpty( csqlOptions.DbDatabase ) ) {
-				sb.Append( "Database=" ).Append( csqlOptions.DbDatabase ).Append( ";" );
+			if ( !String.IsNullOrEmpty( parameter.Catalog ) ) {
+				sb.Append( "Database=" ).Append( parameter.Catalog ).Append( ";" );
 			}
-			if ( !String.IsNullOrEmpty( csqlOptions.DbUser ) ) {
-				sb.Append( "User ID=" ).Append( csqlOptions.DbUser ).Append( ";" );
-				sb.Append( "Password=" ).Append( csqlOptions.DbPassword ).Append( ";" );
+			if ( !String.IsNullOrEmpty( parameter.UserId ) ) {
+				sb.Append( "User ID=" ).Append( parameter.UserId ).Append( ";" );
+				sb.Append( "Password=" ).Append( parameter.Password ).Append( ";" );
 			} else {
 				sb.Append( "Integrated Security=SSPI;" );
 			}
-			sb.Append( "Application Name=" ).Append( GlobalSettings.CSqlProductName ).Append( ";" );
+			if ( !String.IsNullOrEmpty( parameter.ApplicationName ) ) {
+				sb.Append( "Application Name=" ).Append( parameter.ApplicationName ).Append( ";" );
+			}
 			// The following property is a work around for the 
 			// error "30182 Invalid amount of parameters Optionen" sometime
 			// raised by the provider if it encounters variable names.
 			sb.Append( "NamedParameters=false;" );
 
 			string connectionString = sb.ToString();
-			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, "Connecting to Sybase ASE Server using following connection string:\r\n" + connectionString );
+			Trace.WriteLineIf( parameter.VerbositySwitch.TraceVerbose, "Connecting to Sybase ASE Server using following connection string:\r\n" + connectionString );
 
 			IDbConnection adoConnection = CreateAseConnection();
 			adoConnection.ConnectionString = connectionString;
@@ -62,7 +66,7 @@ namespace csql.Sybase
 		/// The code checks the 
 		/// </remarks>
 		/// <value>The sybase ADO.NET data provider assembly path.</value>
-		private static string AseAssemblyPath
+		private string AseAssemblyPath
 		{
 			get
 			{
@@ -103,8 +107,9 @@ namespace csql.Sybase
 				if ( File.Exists( path ) )
 					return path;
 
-
-				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceWarning, "Can't find sybase data provider assembly (" + file + ")." );
+				if ( Parameter.VerbositySwitch.TraceWarning ) {
+					Trace.TraceWarning( "Can't find sybase data provider assembly (" + file + ")." );
+				}
 				return null;
 			}
 		}
@@ -113,7 +118,7 @@ namespace csql.Sybase
 		/// Loads the sybase data provider assembly.
 		/// </summary>
 		/// <value>The ase assembly.</value>
-		private static Assembly AseAssembly
+		private Assembly AseAssembly
 		{
 			get
 			{
@@ -130,8 +135,9 @@ namespace csql.Sybase
 					}
 				}
 				catch ( Exception ex ) {
-					Trace.TraceError( "Can't load sybase provider assembly: " + ex.Message );
-					throw new TerminateException( ExitCode.SqlInitializeError );
+					string message = "Can't load sybase provider assembly.";
+					Trace.TraceError(  message + ex.Message );
+					throw new DbException( message, ex );
 				}
 			}
 		}
@@ -166,7 +172,8 @@ namespace csql.Sybase
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		/// 
-		[SuppressMessage( "Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification="Need public access to be able to access the method info via reflection" )]
+		[SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method is jused via reflection code (see CreateAseConnection)." )]
+		[SuppressMessage( "Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Need public access to be able to access the method info via reflection." )]
 		public void OnAseConnectionInfoEvent( object sender, EventArgs e )
 		{
 			Type eType = e.GetType();

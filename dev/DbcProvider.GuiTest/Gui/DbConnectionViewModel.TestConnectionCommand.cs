@@ -60,19 +60,19 @@ namespace Sqt.DbcProvider.Gui
 			public void Execute( object parameter )
 			{
 				DbConnectionParameter connectionParameter = (DbConnectionParameter)parameter;
-				connectionParameter.Timeout = 2;
-				IDbcProvider connectionFactory = DbConnectionProviderFactory.GetFactory( connectionParameter.Provider );
-				IDbConnection dbConnection = connectionFactory.CreateConnection( connectionParameter );
+				IDbConnectionFactory connectionFactory = DbConnectionFactoryProvider.GetFactory( connectionParameter.Provider );
+				DbConnection dbConnection = null;
 				bool succeeded = false;
 				try {
-					dbConnection.Open();
-					dbConnection.Close();
+					dbConnection = connectionFactory.CreateConnection( connectionParameter );
 					succeeded = true;
 				}
 				catch ( DbException ) {
 				}
 				finally {
-					dbConnection.Dispose();
+					if ( dbConnection != null ) {
+						dbConnection.Dispose();
+					}
 				}
 
 				if ( succeeded ) {

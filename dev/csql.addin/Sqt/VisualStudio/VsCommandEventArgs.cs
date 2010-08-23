@@ -16,7 +16,7 @@ namespace Sqt.VisualStudio
 		private readonly DTE2 dte;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private readonly AddIn addIn;
+		private readonly AddIn addin;
 
 		#endregion
 
@@ -25,10 +25,10 @@ namespace Sqt.VisualStudio
 		/// </summary>
 		/// <param name="dte">The Visual Studio application object.</param>
 		/// <param name="addIn">The Visual Studio add in object.</param>
-		public VsCommandEventArgs( DTE2 application, AddIn addIn )
+		public VsCommandEventArgs( DTE2 application, AddIn addin )
 		{
 			this.dte = application;
-			this.addIn = addIn;
+			this.addin = addin;
 		}
 
 		/// <summary>
@@ -42,9 +42,9 @@ namespace Sqt.VisualStudio
 		/// <summary>
 		/// Gets the Visual Studio add in object.
 		/// </summary>
-		public AddIn AddIn
+		public AddIn Addin
 		{
-			get { return this.addIn; }
+			get { return this.addin; }
 		}
 
 	}

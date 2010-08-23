@@ -11,3 +11,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 [module: SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "lib" )]
+
+
+[module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sqt.DbcProvider.Provider.IbmDb2", Justification = "Namespace is used to separted provider type depenend code." )]
+[module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sqt.DbcProvider.Provider.MsSql", Justification = "Namespace is used to separted provider type depenend code." )]
+[module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sqt.DbcProvider.Provider.Oracle", Justification = "Namespace is used to separted provider type depenend code." )]
+[module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sqt.DbcProvider.Provider.Sybase", Justification = "Namespace is used to separted provider type depenend code." )]

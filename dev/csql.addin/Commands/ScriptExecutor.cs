@@ -25,7 +25,7 @@ namespace csql.addin.Commands
 
 			Processor processor = null;
 			try {
-				processor = BatchProcessorFactory.CreateProcessor( csqlOptions );
+				processor = new Processor( csqlOptions );
 				processor.SignIn();
 
 				processor.Process();

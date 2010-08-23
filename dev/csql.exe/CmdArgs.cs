@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Text;
 using CommandLine;
-using System.Security.Permissions;
+using Sqt.DbcProvider;
 
 // Disable the not initialized and not used warning because the field
 // values are managed by the command line parser.
@@ -44,11 +44,7 @@ namespace csql.exe
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
 		[Argument( ArgumentType.AtMostOnce, HelpText = "The database system.", ShortName = "ds" )]
-		public DbSystem System;
-
-		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[Argument( ArgumentType.AtMostOnce, HelpText = "The driver to use for the server connections.", ShortName = "dr" )]
-		public DbDriver Driver;
+		public ProviderType System;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
 		[Argument( ArgumentType.Required | ArgumentType.AtMostOnce, HelpText="The server/datasource name.", ShortName="S" )]
@@ -114,18 +110,19 @@ namespace csql.exe
 		[SecurityPermission( SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode )]
 		public CSqlOptions CreateCsqlOptions()
 		{
-			CSqlOptions csqlOptions = new CSqlOptions();
+			DbConnectionParameter connectionParameter = new DbConnectionParameter();
+			connectionParameter.Provider = this.System;
+			connectionParameter.DatasourceAddress = this.Server;
+			connectionParameter.DatasourcePort = this.ServerPort;
+			connectionParameter.Catalog = this.Database;
+			connectionParameter.UserId = this.User;
+			connectionParameter.Password = this.Password;
 
+			CSqlOptions csqlOptions = new CSqlOptions();
+			csqlOptions.ConnectionParameter = connectionParameter;
 			csqlOptions.ScriptFile = this.ScriptFile;
 			csqlOptions.TempFile = this.TempFile;
 			csqlOptions.DistributionFile = this.DistFile;
-			csqlOptions.DbSystem = this.System;
-			csqlOptions.DbDriver = this.Driver;
-			csqlOptions.DbServer = this.Server;
-			csqlOptions.DbServerPort = this.ServerPort;
-			csqlOptions.DbDatabase = this.Database;
-			csqlOptions.DbUser = this.User;
-			csqlOptions.DbPassword = this.Password;
 			csqlOptions.UsePreprocessor = this.UsePreprocessor;
 			csqlOptions.BreakOnError = this.BreakOnError;
 			csqlOptions.NoLogo = this.NoLogo;

@@ -31,7 +31,7 @@ namespace csql.addin.Settings.Gui
 		{
 			this.application = application;
 			SettingsManager settingsManager = SettingsManager.GetInstance( application );
-			settingsManager.SettingsReloaded += new SettingsReloadedDelegate( SettingsManager_SettingsReloaded );
+			settingsManager.SettingsReloaded += new EventHandler( SettingsManager_SettingsReloaded );
 			ReloadSettings();
 		}
 
@@ -341,7 +341,7 @@ namespace csql.addin.Settings.Gui
 			return false;
 		}
 
-		private IList<SelectedObjectComboBoxItem> CreateComboItems( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter )
+		private static IList<SelectedObjectComboBoxItem> CreateComboItems( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter )
 		{
 			var result = new List<SelectedObjectComboBoxItem>();
 

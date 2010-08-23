@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace csql.Sybase
+namespace Sqt.DbcProvider.Provider.Sybase
 {
 	/// <summary>
 	/// Specialization of a message returned by a server for sybase ase server.

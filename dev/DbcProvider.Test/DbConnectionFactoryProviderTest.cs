@@ -1,5 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sqt.DbcProvider.Provider;
+using Sqt.DbcProvider.Provider.MsSql;
+using Sqt.DbcProvider.Provider.Sybase;
+using Sqt.DbcProvider.Provider.IbmDb2;
+using Sqt.DbcProvider.Provider.Oracle;
 
 namespace Sqt.DbcProvider
 {
@@ -12,28 +16,28 @@ namespace Sqt.DbcProvider
 		[TestMethod]
 		public void GetMsSqlFactoryTest()
 		{
-			IDbcProvider factory = DbConnectionProviderFactory.GetFactory( ProviderType.MsSql );
-			Assert.IsInstanceOfType( factory, typeof(MsSqlConnectionFactory) );
+			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( ProviderType.MsSql );
+			Assert.IsInstanceOfType( factory, typeof( MsSqlConnectionFactory) );
 		}
 
 		[TestMethod]
 		public void GetSybaseFactoryTest()
 		{
-			IDbcProvider factory = DbConnectionProviderFactory.GetFactory( ProviderType.Sybase );
+			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( ProviderType.Sybase );
 			Assert.IsInstanceOfType( factory, typeof( SybaseConnectionFactory ) );
 		}
 
 		[TestMethod]
 		public void GetOracleFactoryTest()
 		{
-			IDbcProvider factory = DbConnectionProviderFactory.GetFactory( ProviderType.Oracle );
+			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( ProviderType.Oracle );
 			Assert.IsInstanceOfType( factory, typeof( OracleConnectionFactory ) );
 		}
 
 		[TestMethod]
 		public void GetIbmDb2FactoryTest()
 		{
-			IDbcProvider factory = DbConnectionProviderFactory.GetFactory( ProviderType.IbmDb2 );
+			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( ProviderType.IbmDb2 );
 			Assert.IsInstanceOfType( factory, typeof( IbmDb2ConnectionFactory ) );
 		}
 	}

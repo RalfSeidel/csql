@@ -7,6 +7,7 @@ namespace Sqt.DbcProvider
 	/// <summary>
 	/// Argument for the event raised when the standard values for a field are retrieved.
 	/// </summary>
+	[CLSCompliant( true )]
 	public class StringLookupGetValuesEventArgs : EventArgs
 	{
 		private readonly ITypeDescriptorContext context;

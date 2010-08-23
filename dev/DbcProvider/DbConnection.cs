@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace csql
+namespace Sqt.DbcProvider
 {
 	/// <summary>
 	/// A IDbConnection wrapper.
@@ -16,13 +16,12 @@ namespace csql
 		/// <summary>
 		/// The command line arguments.
 		/// </summary>
-        private readonly CSqlOptions csqlOptions;
+        private readonly DbConnectionParameter parameter;
 
 		/// <summary>
 		/// The inner exception that is used for the database communication.
 		/// </summary>
 		private IDbConnection m_adoConnection;
-
 
 		/// <summary>
 		/// Occurs when a info message is recieved while executing sql scripts.
@@ -34,9 +33,9 @@ namespace csql
 		/// Initializes a new instance of the <see cref="DbConnection"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The object holding the command line arguments of the program instance.</param>
-        protected DbConnection(CSqlOptions csqlOptions)
+		internal DbConnection( DbConnectionParameter parameter )
 		{
-            this.csqlOptions = csqlOptions;
+            this.parameter = parameter;
 		}
 
 		/// <summary>
@@ -48,10 +47,18 @@ namespace csql
 			get 
 			{
 				if ( m_adoConnection == null ) {
-                    m_adoConnection = CreateAdoConnection(csqlOptions);
+                    m_adoConnection = CreateAdoConnection(parameter);
 				}
 				return m_adoConnection; 
 			}
+		}
+
+		/// <summary>
+		/// Gets the parameter used to establish the connection.
+		/// </summary>
+		internal protected DbConnectionParameter Parameter
+		{
+			get { return this.parameter; }
 		}
 
 		/// <summary>
@@ -94,7 +101,7 @@ namespace csql
 		/// </remarks>
 		/// <param name="cmdArgs">The command line arguments.</param>
 		/// <returns>The method has to return an open database connection object.</returns>
-        protected abstract IDbConnection CreateAdoConnection(CSqlOptions csqlOptions);
+		protected abstract IDbConnection CreateAdoConnection( DbConnectionParameter csqlOptions );
 
 		/// <summary>
 		/// Create a statement batch that will just echo the given messages texts.
@@ -130,96 +137,5 @@ namespace csql
 		}
 
 		#endregion
-	}
-	
-
-	/// <summary>
-	/// Connection wrapper for native OLEDB datasource connections.
-	/// </summary>
-	public class OleDbConnection : DbConnection
-	{
-		public OleDbConnection( CSqlOptions csqlOptions )
-            : base(csqlOptions)
-		{
-			System.Data.OleDb.OleDbConnection connection = (System.Data.OleDb.OleDbConnection)AdoConnection;
-			connection.InfoMessage += new System.Data.OleDb.OleDbInfoMessageEventHandler( InfoMessageEventHandler );
-		}
-
-        protected override IDbConnection CreateAdoConnection(CSqlOptions csqlOptions)
-		{
-			throw new NotImplementedException( "TODO" );
-		}
-
-		public override string GetPrintStatements( IEnumerable<string> messages )
-		{
-            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, "Not implemented: OleDbConnection.GetPrintStatements");
-			return null;
-		}
-
-		void InfoMessageEventHandler( object sender, System.Data.OleDb.OleDbInfoMessageEventArgs e )
-		{
-			System.Data.OleDb.OleDbErrorCollection errors = e.Errors;
-			if ( errors == null || errors.Count == 0 ) {
-				DbMessageEventArgs eventArgs = new DbMessageEventArgs( e.Message );
-				OnDbMessage( eventArgs );
-			} else {
-				foreach ( System.Data.OleDb.OleDbError error in errors ) {
-					string server = null;
-					string catalog = null;
-					string procedure = null;
-					int lineNumber = 0;
-					string message = error.Message;
-					DbMessageEventArgs eventArgs = new DbMessageEventArgs( TraceLevel.Info, server, catalog, procedure, lineNumber, message );
-					OnDbMessage( eventArgs );
-				}
-			}
-		}
-
-	}
-
-	/// <summary>
-	/// Connection wrapper for ODBC database connections.
-	/// </summary>
-	public class OdbcConnection : DbConnection
-	{
-        public OdbcConnection(CSqlOptions csqlOptions)
-			: base( csqlOptions )
-		{
-			System.Data.Odbc.OdbcConnection connection = (System.Data.Odbc.OdbcConnection)AdoConnection;
-			connection.InfoMessage += new System.Data.Odbc.OdbcInfoMessageEventHandler( InfoMessageEventHandler );
-		}
-
-        protected override IDbConnection CreateAdoConnection(CSqlOptions csqlOptions)
-		{
-			throw new NotImplementedException( "TODO" );
-			//connection.InfoMessage += new System.Data.Odbc.OdbcInfoMessageEventHandler( InfoMessageEventHandler );
-		}
-
-		public override string GetPrintStatements( IEnumerable<string> messages )
-		{
-            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceWarning, "Not implemented: OleDbConnection.GetPrintStatements");
-			return null;
-		}
-
-
-		void InfoMessageEventHandler( object sender, System.Data.Odbc.OdbcInfoMessageEventArgs e )
-		{
-			System.Data.Odbc.OdbcErrorCollection errors = e.Errors;
-			if ( errors == null || errors.Count == 0 ) {
-				DbMessageEventArgs eventArgs = new DbMessageEventArgs( e.Message );
-				OnDbMessage( eventArgs );
-			} else {
-				foreach ( System.Data.Odbc.OdbcError error in errors ) {
-					TraceLevel severity = TraceLevel.Info;
-					string server = null;
-					string catalog = null;
-					string procedure = null;
-					int lineNumber = 0;
-					string message = error.Message;
-					DbMessageEventArgs eventArgs = new DbMessageEventArgs( severity, server, catalog, procedure, lineNumber, message );
-					OnDbMessage( eventArgs );
-				}
-			}
-		}
 	}
 }

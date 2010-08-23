@@ -40,7 +40,7 @@ namespace csql.addin.Commands
 			try {
 				object programmableObject = null;
 				DTE2 application = e.Application;
-				AddIn addInInstance = e.AddIn;
+				AddIn addInInstance = e.Addin;
 				Windows2 windows2 = (Windows2)application.Windows;
 				Type userCtrlType = typeof( SettingsControl );
 				Assembly userCtrlAssembly = userCtrlType.Assembly;

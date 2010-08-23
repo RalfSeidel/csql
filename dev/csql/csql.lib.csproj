@@ -68,34 +68,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchContext.cs" />
-    <Compile Include="ConnectionFactory.cs" />
     <Compile Include="CSqlOptions.cs" />
+    <Compile Include="PreProcessor.cs" />
+    <Compile Include="Processor.cs" />
+    <Compile Include="ProcessorContext.cs" />
     <Compile Include="ResultTrace\ColumnFormat.cs" />
     <Compile Include="ResultTrace\ColumnInfo.cs" />
     <Compile Include="ResultTrace\DataReaderTracer.cs" />
-    <Compile Include="DbConnection.cs" />
-    <Compile Include="DbException.cs" />
-    <Compile Include="DbMessage.cs" />
-    <Compile Include="DbMessageEventArgs.cs" />
     <Compile Include="DistributionProcessor.cs" />
-    <Compile Include="DbDriver.cs" />
     <Compile Include="ExecutionProcessor.cs" />
     <Compile Include="ExitCode.cs" />
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IBatchProcessor.cs" />
-    <Compile Include="MsSql\MsSqlConnection.cs" />
     <Compile Include="NamedPipe.cs" />
     <Compile Include="NativeMethods.cs" />
-    <Compile Include="Processor.cs" />
     <Compile Include="BatchProcessorFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DbSystem.cs" />
     <Compile Include="SqtppOptions.cs" />
-    <Compile Include="Sybase\SybaseConnection.cs" />
-    <Compile Include="Sybase\SybaseError.cs" />
-    <Compile Include="Sybase\SybaseException.cs" />
-    <Compile Include="Sybase\SybaseMessageEventArgs.cs" />
     <Compile Include="TerminateException.cs" />
     <Compile Include="VerbositySwitch.cs" />
   </ItemGroup>
@@ -132,6 +122,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\csql.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DbcProvider\DbcProvider.csproj">
+      <Project>{C404D769-C642-461B-A5C1-4295F5B7542C}</Project>
+      <Name>DbcProvider</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

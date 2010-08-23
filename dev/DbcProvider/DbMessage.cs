@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-namespace csql
+namespace Sqt.DbcProvider
 {
 	/// <summary>
 	/// Class for info or error messages send by the servers.

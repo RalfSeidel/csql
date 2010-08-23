@@ -7,7 +7,7 @@ namespace csql
     /// <summary>
     /// An abstract declaration of a processor of SQL command batches.
     /// </summary>
-    interface IBatchProcessor
+    internal interface IBatchProcessor : IDisposable
     {
 		/// <summary>
 		/// This method is called before the first batch is executed.
@@ -17,8 +17,13 @@ namespace csql
         /// </remarks>
         void SignIn();
 
+		/// <summary>
+		/// Processes progress informations.
+		/// </summary>
+		/// <param name="progressInfo">Some informal text about the progress of script processing.</param>
+		void ProcessProgress( ProcessorContext context, string progressInfo );
 
-        /// <summary>
+		/// <summary>
         /// The batch execution service. 
         /// </summary>
         /// <remarks>
@@ -27,7 +32,7 @@ namespace csql
         /// <param name="batch">
         /// The current sql command batch.
         /// </param>
-        void ProcessBatch( string batch );
+		void ProcessBatch( ProcessorContext context, string batch );
 
 
 		/// <summary>

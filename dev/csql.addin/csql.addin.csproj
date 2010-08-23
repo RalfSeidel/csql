@@ -91,7 +91,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="Settings\CSqlSettings.cs" />
     <Compile Include="Settings\Gui\PreprocessorDefinitionCollectionConverter.cs" />
     <Compile Include="Settings\Gui\OutputFileEditor.cs" />
     <Compile Include="Settings\Gui\PathCollectionConverter.cs" />
@@ -108,11 +107,8 @@
     <Compile Include="Settings\Gui\SettingsControl.Designer.cs">
       <DependentUpon>SettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\ISettingsPersistensProvider.cs" />
     <Compile Include="Settings\PreprocessorDefinition.cs" />
-    <Compile Include="Settings\SettingsCollection.cs" />
     <Compile Include="Settings\CSqlParameter.cs" />
-    <Compile Include="Settings\SettingsFilePersistensProvider.cs" />
     <Compile Include="Sqt\VisualStudio\Util\ImageConverter.cs" />
     <Compile Include="Sqt\VisualStudio\Util\ImageHelper.cs" />
     <Compile Include="Sqt\VisualStudio\Util\VsApplicationExtensions.cs" />

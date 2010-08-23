@@ -14,3 +14,11 @@ using System.Diagnostics.CodeAnalysis;
 [module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sqt.VisualStudio", Justification = "The namespace contains classes imported from another project." )]
 [module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Sqt.VisualStudio.Util", Justification = "The namespace contains classes imported from another project." )]
 [module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "csql.addin.Commands", Justification = "Namespace is used to group all commands." )]
+[module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "csql.addin.Settings.Gui", Justification = "Enough type members to justify a separate namespace." )]
+[module: SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "addin", Justification="Historical name." )]
+[module: SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "csql.addin.Commands", MessageId = "addin", Justification = "Historical name." )]
+[module: SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "csql.addin.Settings", MessageId = "addin", Justification = "Historical name." )]
+[module: SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "csql.addin.Settings.Gui", MessageId = "addin", Justification = "Historical name." )]
+[module: SuppressMessage( "Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Scope = "type", Target = "csql.addin.CSqlAddin", MessageId = "CSql", Justification = "Historical name." )]
+[module: SuppressMessage( "Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Scope = "type", Target = "csql.addin.Settings.CSqlParameter", MessageId = "CSql", Justification = "Historical name." )]
+

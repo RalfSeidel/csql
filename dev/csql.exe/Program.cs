@@ -57,7 +57,7 @@ namespace csql.exe
 				Processor processor = null;
 				try {
 					CSqlOptions csqlOptions = cmdArgs.CreateCsqlOptions();
-					processor = BatchProcessorFactory.CreateProcessor( csqlOptions );
+					processor = new Processor( csqlOptions );
 
 					processor.SignIn();
 

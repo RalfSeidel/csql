@@ -9,23 +9,23 @@ namespace csql
     /// a distribution file or executes the sql commands by creating
     /// the appropriate batch processsor.
     /// </summary>
-	public static class BatchProcessorFactory
+	internal static class BatchProcessorFactory
 	{
 		/// <summary>
 		/// Creates the processor for the script.
 		/// </summary>
 		/// <param name="cmdArgs">The command line arguments.</param>
 		/// <returns>The script processor</returns>
-		public static Processor CreateProcessor(CSqlOptions csqlOptions )
+		internal static IBatchProcessor CreateProcessor( CSqlOptions csqlOptions )
 		{
             //Setting the Global Trace Level
             GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;
 
 			if ( !String.IsNullOrEmpty( csqlOptions.DistributionFile ) ) {
-                Processor processor = new DistributionProcessor(csqlOptions);
+				DistributionProcessor processor = new DistributionProcessor( csqlOptions );
 				return processor;
 			} else {
-                Processor processor = new ExecutionProcessor(csqlOptions);
+				ExecutionProcessor processor = new ExecutionProcessor( csqlOptions );
 				return processor;
 			}
 		}

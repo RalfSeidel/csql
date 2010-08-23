@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using csql.addin.Settings.Gui;
+using System.Diagnostics.CodeAnalysis;
+using System.Xml.Serialization;
 
 namespace csql.addin.Settings
 {
@@ -13,6 +15,7 @@ namespace csql.addin.Settings
 	/// </summary>
 	[DefaultProperty("Name")]
 	[Serializable]
+	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification="The letter C is not a prefix but part of the product name." )]
 	public class CSqlParameter : INotifyPropertyChanged
 	{
 		#region Data fields
@@ -150,7 +153,9 @@ namespace csql.addin.Settings
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		[Editor( @"System.Windows.Forms.Design.StringCollectionEditor,  System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof( System.Drawing.Design.UITypeEditor ) )]
 		[TypeConverter(typeof(PathCollectionConverter))]
-		public ICollection<string> IncludeDirectories 
+		[SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
+		[SuppressMessage( "Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
+		public List<string> IncludeDirectories 
 		{ 
 			get { return includeDirectories; }
 			set 
@@ -171,7 +176,9 @@ namespace csql.addin.Settings
 		[DisplayName( "Preprocess Definitions" )]
 		[Editor( typeof( PreprocessorDefinitionEditor ), typeof( UITypeEditor ) )]
 		[TypeConverter( typeof( PreprocessorDefinitionCollectionConverter ) )]
-		public ICollection<PreprocessorDefinition> PreprocessorDefinitions
+		[SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
+		[SuppressMessage( "Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
+		public List<PreprocessorDefinition> PreprocessorDefinitions
 		{
 			get 
 			{ 

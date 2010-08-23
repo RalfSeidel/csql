@@ -12,78 +12,81 @@ namespace csql
 	/// Processor for the creation of a distribution file i.e. a script
 	/// that contains the ouput of the preprosessor.
 	/// </summary>
-	public class DistributionProcessor : Processor ////, IBatchProcessor
+	internal class DistributionProcessor : IBatchProcessor
 	{
+		private readonly CSqlOptions m_options;
 		private readonly TextWriter m_outputFileWriter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DistributionProcessor"/> class.
 		/// </summary>
-		/// <param name="cmdArgs">The CMD args.</param>
-        public DistributionProcessor(CSqlOptions csqlOptions)
-            : base(csqlOptions)
+		/// <param name="csqlOptions">The script processor parameter.</param>
+		public DistributionProcessor( CSqlOptions csqlOptions )
 		{
-            string outputFilePath = csqlOptions.DistributionFile;
+			m_options = csqlOptions;
+			string outputFilePath = csqlOptions.DistributionFile;
 			Stream stream = new FileStream( outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
 			m_outputFileWriter = new StreamWriter( stream, Encoding.Unicode );
 		}
 
+		~DistributionProcessor()
+		{
+			Dispose( false );
+		}
 
-        /// <summary>
-        /// Emits an entry message.
-        /// </summary>
-        public override void SignIn()
-        {
-            // Emit console informations as defined in the base class.
-            base.SignIn();
-
-            string scriptFile = Options.ScriptFile;
-            
-            
-            scriptFile = Path.GetFullPath( scriptFile );
-
-            string distFile = Options.DistributionFile;
-            distFile = Path.GetFullPath( distFile );
-
-            // Create the dstribution file header
-            StringBuilder headerBuilder = new StringBuilder();
-
-            headerBuilder.AppendLine( "/* ****************************************************************************" );
-            headerBuilder.AppendLine( "**" );
-            headerBuilder.Append( "** Source script    : " ).AppendLine( scriptFile );
-            headerBuilder.Append( "** Distribution file: " ).AppendLine( distFile );
-            headerBuilder.Append( "** Created          : " ).AppendLine( DateTime.Now.ToString( CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern, CultureInfo.InvariantCulture ) );
-            headerBuilder.Append( "** Preprocessed with: " ).Append( PreprocessorPath ).Append( ' ' ).AppendLine( PreprocessorArguments );
-	        headerBuilder.AppendLine( "**");
-	        headerBuilder.AppendLine( "**************************************************************************** */" );
-
-            m_outputFileWriter.Write( headerBuilder.ToString() );
-        }
-
-        /// <summary>
-        /// Emits the an exit/finished message.
-        /// </summary>
-        public override void SignOut()
-        {
-            StringBuilder footerBuilder = new StringBuilder();
-            footerBuilder.AppendLine( "/* ****************************************************************************" );
-            footerBuilder.AppendLine( "**" );
-            footerBuilder.AppendLine( "** end of script" );
-            footerBuilder.AppendLine( "**" );
-            footerBuilder.AppendLine( "**************************************************************************** */" );
-            m_outputFileWriter.Write( footerBuilder.ToString() );
-
-            string distFile = Options.DistributionFile;
-            distFile = Path.GetFullPath( distFile );
-            Trace.WriteLineIf(GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created.");
-        }
+		/// <summary>
+		/// Emits an entry message.
+		/// </summary>
+		public void SignIn()
+		{
+			string scriptFile = m_options.ScriptFile;
+			PreProcessor preProcessor = new PreProcessor( m_options );
 
 
+			scriptFile = Path.GetFullPath( scriptFile );
 
-		protected override void ProcessProgress( string progressInfo )
+			string distFile = m_options.DistributionFile;
+			distFile = Path.GetFullPath( distFile );
+
+			// Create the dstribution file header
+			StringBuilder headerBuilder = new StringBuilder();
+
+			headerBuilder.AppendLine( "/* ****************************************************************************" );
+			headerBuilder.AppendLine( "**" );
+			headerBuilder.Append( "** Source script    : " ).AppendLine( scriptFile );
+			headerBuilder.Append( "** Distribution file: " ).AppendLine( distFile );
+			headerBuilder.Append( "** Created          : " ).AppendLine( DateTime.Now.ToString( CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern, CultureInfo.InvariantCulture ) );
+			headerBuilder.Append( "** Preprocessed with: " ).Append( PreProcessor.Command ).Append( ' ' ).AppendLine( preProcessor.Arguments );
+			headerBuilder.AppendLine( "**" );
+			headerBuilder.AppendLine( "**************************************************************************** */" );
+
+			m_outputFileWriter.Write( headerBuilder.ToString() );
+		}
+
+		/// <summary>
+		/// Emits the an exit/finished message.
+		/// </summary>
+		public void SignOut()
+		{
+			StringBuilder footerBuilder = new StringBuilder();
+			footerBuilder.AppendLine( "/* ****************************************************************************" );
+			footerBuilder.AppendLine( "**" );
+			footerBuilder.AppendLine( "** end of script" );
+			footerBuilder.AppendLine( "**" );
+			footerBuilder.AppendLine( "**************************************************************************** */" );
+			m_outputFileWriter.Write( footerBuilder.ToString() );
+
+			string distFile = m_options.DistributionFile;
+			distFile = Path.GetFullPath( distFile );
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created." );
+		}
+
+
+
+		public void ProcessProgress( ProcessorContext processorContext, string progressInfo )
 		{
 			string statement = "print '" + progressInfo.Replace( "'", "''" ) + "'\r\n";
-			ProcessBatch( statement );
+			ProcessBatch( processorContext, statement );
 		}
 
 		/// <summary>
@@ -94,47 +97,55 @@ namespace csql
 		/// a "go" statement.
 		/// </remarks>
 		/// <param name="batch">The batch.</param>
-		protected override void ProcessBatch( string batch )
+		public void ProcessBatch( ProcessorContext processorContext, string batch )
 		{
-            StringBuilder outputBuilder = new StringBuilder();
-            StringBuilder lineBuilder = new StringBuilder();
-            string line;
+			StringBuilder outputBuilder = new StringBuilder();
+			StringBuilder lineBuilder = new StringBuilder();
+			string line;
 
-            foreach ( char c in batch ) {
-                if ( c == '\r' || c == '\n' ) {
-                    line = lineBuilder.ToString().TrimEnd();
-                    if ( line.Length != 0 ) {
-                        outputBuilder.AppendLine( line );
-                    }
-                    lineBuilder = new StringBuilder();
-                } else {
-                    lineBuilder.Append( c );
-                }
-            }
-            line = lineBuilder.ToString().TrimEnd();
-            if ( line.Length != 0 ) {
-                outputBuilder.AppendLine( line );
-            }
+			foreach ( char c in batch ) {
+				if ( c == '\r' || c == '\n' ) {
+					line = lineBuilder.ToString().TrimEnd();
+					if ( line.Length != 0 ) {
+						outputBuilder.AppendLine( line );
+					}
+					lineBuilder = new StringBuilder();
+				}
+				else {
+					lineBuilder.Append( c );
+				}
+			}
+			line = lineBuilder.ToString().TrimEnd();
+			if ( line.Length != 0 ) {
+				outputBuilder.AppendLine( line );
+			}
 
-            string output = outputBuilder.ToString();
-            if ( output.Length != 0 ) {
-                m_outputFileWriter.Write( output );
-                m_outputFileWriter.WriteLine( "go" );
-            }
+			string output = outputBuilder.ToString();
+			if ( output.Length != 0 ) {
+				m_outputFileWriter.Write( output );
+				m_outputFileWriter.WriteLine( "go" );
+			}
 		}
 
 
-		
+
 		/// <summary>
 		/// Cleanup implementation.
 		/// </summary>
-		protected override void Dispose( bool isDisposing )
+		public void Dispose( bool isDisposing )
 		{
-			base.Dispose( isDisposing );
 			if ( isDisposing ) {
 				m_outputFileWriter.Dispose();
 			}
 		}
 
+		/// <summary>
+		/// Default dispose implementation
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose( true );
+			GC.SuppressFinalize( this );
+		}
 	}
 }
