@@ -125,11 +125,12 @@ namespace csql.addin.Commands
 			csqlOptions.UsePreprocessor = csqlParameter.IsPreprocessorEnabled;
 			csqlOptions.ConnectionParameter = dbConnectionParameter;
 			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( csqlParameter );
-			csqlOptions.AddPreprocessorMacros( csqlOptions.PreprocessorOptions.MacroDefinitions );
+			csqlOptions.AddPreprocessorMacros();
 
 			csqlOptions.Verbosity.Level = csqlParameter.Verbosity;
 
 			csqlOptions.NoLogo = false;
+			csqlOptions.MaxResultColumnWidth = csqlParameter.MaxResultColumnWidth;
 
 			return csqlOptions;
 		}

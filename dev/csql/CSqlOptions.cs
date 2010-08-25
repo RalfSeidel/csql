@@ -43,15 +43,15 @@ namespace csql
 		{
 			this.connectionParameter = new DbConnectionParameter();
 			this.preprocessorOptions = new SqtppOptions();
-			AddPreprocessorMacros( preprocessorOptions.MacroDefinitions );
+			AddPreprocessorMacros();
 			this.verbosity = new VerbositySwitch();
 
-			DistributionFile = "";
-			TempFile = "";
-			ScriptFile = "";
+			DistributionFile = String.Empty;
+			TempFile = String.Empty;
+			ScriptFile = String.Empty;
 			BreakOnError = true;
 			UsePreprocessor = true;
-
+			MaxResultColumnWidth = 40;
 		}
 
 		/// <summary>
@@ -90,6 +90,12 @@ namespace csql
 		/// </summary>
 		/// <value><c>true</c> if pre processor is run before execution of the script batches (default); <c>false</c> otherwise.</value>
 		public bool UsePreprocessor { get; set; }
+
+
+		/// <summary>
+		/// Gets or sets the maximal width of a single result column when traceing query results.
+		/// </summary>
+		public int MaxResultColumnWidth { get; set; }
 
 		/// <summary>
 		/// Gets or sets the parameter used to establish the database connection.
@@ -142,9 +148,9 @@ namespace csql
 		/// Add the preprocessor definitions predefined by csql specifying certain 
 		/// runtime options.
 		/// </summary>
-		/// <param name="macros"></param>
-		public void AddPreprocessorMacros( IDictionary<string, string> macros )
+		public void AddPreprocessorMacros()
 		{
+			var macros = this.PreprocessorOptions.MacroDefinitions;
 			var assembly = Assembly.GetExecutingAssembly();
 			var assemblyName = assembly.GetName();
 			var assemblyVersion = assemblyName.Version;

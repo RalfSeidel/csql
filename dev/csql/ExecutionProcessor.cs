@@ -151,18 +151,18 @@ namespace csql
 		}
 
 
-
-
 		/// <summary>
 		/// Traces the result of a database query.
 		/// </summary>
 		/// <param name="dataReader">The data reader returned by the execute call.</param>
-		private static void TraceResult( IDataReader dataReader )
+		private void TraceResult( IDataReader dataReader )
 		{
 			if ( !GlobalSettings.Verbosity.TraceInfo )
 				return;
 
-			DataReaderTracer tracer = new DataReaderTracer( dataReader );
+			DataReaderTraceOptions options = new DataReaderTraceOptions();
+			options.MaxResultColumnWidth = this.m_options.MaxResultColumnWidth;
+			DataReaderTracer tracer = new DataReaderTracer( dataReader, options );
 			tracer.TraceAll();
 		}
 	}

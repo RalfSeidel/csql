@@ -12,7 +12,7 @@ namespace csql.ResultTrace
 	/// <summary>
 	/// Helper class to trace the rows of a data reader.
 	/// </summary>
-	public class DataReaderTracer
+	internal class DataReaderTracer
 	{
 		/// <summary>
 		/// The data reader for whos data is to be traced.
@@ -24,7 +24,7 @@ namespace csql.ResultTrace
 		/// </summary>
 		private readonly IList<ColumnInfo> columnInfos;
 
-		public DataReaderTracer( IDataReader dataReader )
+		public DataReaderTracer( IDataReader dataReader, DataReaderTraceOptions options )
 		{
 			Debug.Assert( dataReader != null && !dataReader.IsClosed );
 			this.dataReader = dataReader;
@@ -32,7 +32,7 @@ namespace csql.ResultTrace
 			for ( int i = 0; i < dataReader.FieldCount; ++i ) {
 				string name = dataReader.GetName( i );
 				Type type = dataReader.GetFieldType( i );
-				ColumnInfo columnInfo = new ColumnInfo( i, name, type );
+				ColumnInfo columnInfo = new ColumnInfo( i, name, type, options.MaxResultColumnWidth );
 				columnInfos.Add( columnInfo );
 			}
 

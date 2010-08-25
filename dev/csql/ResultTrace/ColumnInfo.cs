@@ -12,13 +12,13 @@ namespace csql.ResultTrace
 		private readonly ColumnFormat columnFormat;
 		private readonly int maxWidth;
 
-		public ColumnInfo( int index, string name, Type type )
+		public ColumnInfo( int index, string name, Type type, int maxWidth )
 		{
 			this.index = index;
 			this.name = name;
 			this.type = type;
 
-			columnFormat = GetColumnFormat( type );
+			columnFormat = GetColumnFormat( type, maxWidth );
 
 			if ( columnFormat.MaxWidth <= name.Length ) {
 				this.maxWidth = name.Length;
@@ -33,7 +33,7 @@ namespace csql.ResultTrace
 
 		public int MaxWidth { get { return maxWidth; } }
 
-		private static ColumnFormat GetColumnFormat( Type type )
+		private static ColumnFormat GetColumnFormat( Type type, int maxWidth )
 		{
 			TypeCode typeCode = Type.GetTypeCode( type );
 			switch ( typeCode ) {
@@ -60,7 +60,7 @@ namespace csql.ResultTrace
 				case TypeCode.Single:
 					return new ColumnFormat( 16, "{0}" );
 				case TypeCode.String:
-					return new ColumnFormat( 40, "{0}" );
+					return new ColumnFormat( maxWidth, "{0}" );
 				case TypeCode.UInt16:
 					return new ColumnFormat( 16, "{0}" );
 				case TypeCode.UInt32:
@@ -73,7 +73,7 @@ namespace csql.ResultTrace
 					} else if ( type == typeof( Guid ) ) {
 						return new ColumnFormat( 38, "{0:B}" );
 					} else {
-						return new ColumnFormat( 40, "{0}" );
+						return new ColumnFormat( maxWidth, "{0}" );
 					}
 				case TypeCode.Empty:
 				case TypeCode.DBNull:

@@ -35,6 +35,9 @@ namespace csql.addin.Settings
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private string temporaryFile;
 
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private int maxResultColumnWidth;
+
 		#endregion
 
 		/// <summary>
@@ -44,43 +47,45 @@ namespace csql.addin.Settings
 		{
 			this.name = "New";
 			this.Verbosity = TraceLevel.Info;
-			this.AdvancedPreprocessorParameter = "";
+			this.AdvancedPreprocessorParameter = String.Empty;
 
-			this.outputFile = "";
+			this.outputFile = String.Empty;
+			this.maxResultColumnWidth = 40;
 			IsOutputFileEnabled = false;
 			IsPreprocessorEnabled = true;
 			IsBreakOnErrorEnabled = true;
-			TemporaryFile = "";
+			TemporaryFile = String.Empty;
 			IsTemporaryFileEnabled = false;
 		}
 
 		/// <summary>
 		/// Copy Construktor
 		/// </summary>
-		/// <param name="settingsObject">The settings object to copy.</param>
-		public CSqlParameter( CSqlParameter settingsObject )
+		/// <param name="that">The parameter to copy.</param>
+		public CSqlParameter( CSqlParameter that )
 			: this()
 		{
-			this.Name = settingsObject.Name + " (Copy)";
-			this.Verbosity = Verbosity;
+			this.Name = that.Name + " (Copy)";
+			this.Verbosity = that.Verbosity;
+			this.maxResultColumnWidth = that.maxResultColumnWidth;
 
 			this.IncludeDirectories.Clear();
-			foreach ( string item in settingsObject.IncludeDirectories )
+			foreach ( string item in that.IncludeDirectories )
 				this.IncludeDirectories.Add( item );
 
 			this.preprocessorDefinitions.Clear();
-			foreach ( PreprocessorDefinition def in settingsObject.PreprocessorDefinitions ) {
+			foreach ( PreprocessorDefinition def in that.PreprocessorDefinitions ) {
 				PreprocessorDefinition defCopy = new PreprocessorDefinition( def );
 				this.preprocessorDefinitions.Add( defCopy );
 			}
 
-			this.AdvancedPreprocessorParameter = settingsObject.AdvancedPreprocessorParameter;
-			this.OutputFile = settingsObject.OutputFile;
-			this.IsOutputFileEnabled = settingsObject.IsOutputFileEnabled;
-			this.IsPreprocessorEnabled = settingsObject.IsPreprocessorEnabled;
-			this.IsBreakOnErrorEnabled = settingsObject.IsBreakOnErrorEnabled;
-			this.TemporaryFile = settingsObject.TemporaryFile;
-			this.IsTemporaryFileEnabled = settingsObject.IsTemporaryFileEnabled;
+			this.AdvancedPreprocessorParameter = that.AdvancedPreprocessorParameter;
+			this.OutputFile = that.OutputFile;
+			this.IsOutputFileEnabled = that.IsOutputFileEnabled;
+			this.IsPreprocessorEnabled = that.IsPreprocessorEnabled;
+			this.IsBreakOnErrorEnabled = that.IsBreakOnErrorEnabled;
+			this.TemporaryFile = that.TemporaryFile;
+			this.IsTemporaryFileEnabled = that.IsTemporaryFileEnabled;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -116,14 +121,11 @@ namespace csql.addin.Settings
 		[Editor( typeof( OutputFileEditor ), typeof( UITypeEditor ) )]
 		public string OutputFile 
 		{ 
-			get
-			{
-				return this.outputFile;
-			}
+			get { return this.outputFile; }
 			set
 			{
 				if ( value == null )
-					value = "";
+					value = String.Empty;
 
 				if ( String.Equals( this.outputFile, value ) )
 					return;
@@ -142,6 +144,27 @@ namespace csql.addin.Settings
 		[DefaultValue( TraceLevel.Info )]
 		[DisplayName("Verbosity")]
 		public TraceLevel Verbosity { get; set; }
+
+		[Category( "CSql" )]
+		[DisplayName( "Max Result Column Width" )]
+		[Description( "The maximal width of a single result column when traceing query results." )]
+		[DefaultValue(40)]
+		public int MaxResultColumnWidth
+		{
+			get { return this.maxResultColumnWidth; }
+			set
+			{
+				if ( value == this.maxResultColumnWidth )
+					return;
+
+				if ( value <= 0 ) {
+					throw new ArgumentOutOfRangeException( "value", "The maximal length of a result column has to be positive" );
+				}
+
+				this.maxResultColumnWidth = value;
+				OnPropertyChanged( "MaxResultColumnWidth" );
+			}
+		}
 
 		[Category( "Preprocessor" )]
 		[DefaultValue( true )]
@@ -209,10 +232,7 @@ namespace csql.addin.Settings
 		[Editor( typeof( OutputFileEditor ), typeof( UITypeEditor ) )]
 		public string TemporaryFile
 		{
-			get
-			{
-				return this.temporaryFile;
-			}
+			get { return this.temporaryFile; }
 			set
 			{
 				if ( value == null )
@@ -225,6 +245,7 @@ namespace csql.addin.Settings
 				OnPropertyChanged( "TemporaryFile" );
 			}
 		}
+
 		[Category( "Preprocessor" )]
 		[DisplayName( "Advanced Preprocess Parameter" )]
 		[DefaultValue( "" )]
