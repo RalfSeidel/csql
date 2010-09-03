@@ -129,6 +129,9 @@ namespace csql.exe
 			csqlOptions.Verbosity.Level = (TraceLevel)Verbose;
 			csqlOptions.PreprocessorOptions.AdvancedArguments = this.PreprocessorArgs;
 
+
+			csqlOptions.AddPreprocessorMacros();
+
 			return csqlOptions;
 		}
 

@@ -43,7 +43,6 @@ namespace csql
 		{
 			this.connectionParameter = new DbConnectionParameter();
 			this.preprocessorOptions = new SqtppOptions();
-			AddPreprocessorMacros();
 			this.verbosity = new VerbositySwitch();
 
 			DistributionFile = String.Empty;
