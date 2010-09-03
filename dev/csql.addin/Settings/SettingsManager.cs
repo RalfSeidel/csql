@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using EnvDTE;
 using Sqt.DbcProvider;
-using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Settings
 {
@@ -14,7 +14,7 @@ namespace csql.addin.Settings
 	/// <summary>
 	/// Global accessor for the most recently used and current connection parameters.
 	/// </summary>
-	internal class SettingsManager
+	internal sealed class SettingsManager
 	{
 		#region Private Fields
 
@@ -171,7 +171,7 @@ namespace csql.addin.Settings
 			SaveScriptParameterCore( csqlParameter, csqlParameterPath );
 		}
 
-		private void SaveScriptParameterCore( CSqlParameter csqlParameter, string filePath )
+		private static void SaveScriptParameterCore( CSqlParameter csqlParameter, string filePath )
 		{
 			try {
 				using ( Stream stream = new FileStream( filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, FileOptions.SequentialScan ) ) {

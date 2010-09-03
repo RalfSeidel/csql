@@ -59,6 +59,10 @@
   <ItemGroup>
     <Compile Include="BatchContextTest.cs" />
     <Compile Include="ProcessorContextTest.cs" />
+    <Compile Include="ResultTrace\BooleanColumnFormatTest.cs" />
+    <Compile Include="ResultTrace\BinaryColumnFormatTest.cs" />
+    <Compile Include="ResultTrace\DateTimeColumnFormatTest.cs" />
+    <Compile Include="ResultTrace\StringColumnFormatTest.cs" />
     <Compile Include="TerminateExceptionTest.cs" />
   </ItemGroup>
   <ItemGroup>

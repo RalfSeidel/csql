@@ -16,8 +16,10 @@ namespace csql
 	{
 		private readonly CSqlOptions m_options;
 		private readonly IBatchProcessor m_processor;
+		private readonly PreProcessorTraceQueue m_ppTraces;
 		private int m_errorCount;
 		private Process m_ppProcess;
+
 
 		/// <summary>
 		/// Classification of the current line just read.
@@ -46,6 +48,7 @@ namespace csql
 		{
 			this.m_options = csqlOptions;
 			this.m_processor = BatchProcessorFactory.CreateProcessor( csqlOptions );
+			this.m_ppTraces = new PreProcessorTraceQueue();
 		}
 
 
@@ -108,6 +111,7 @@ namespace csql
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, message );
 			}
 
+			m_ppTraces.Flush();
 			m_processor.SignOut();
 			Trace.Flush();
 		}
@@ -122,6 +126,7 @@ namespace csql
 			try {
 				using ( Stream stream = OpenInputFile() )
 				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
+					m_ppTraces.Flush();
 					while ( !reader.EndOfStream && !PreprocessorExitedWithError ) {
 						string line = reader.ReadLine();
 						LineType type = GetLineType( line );
@@ -144,12 +149,15 @@ namespace csql
 							default:
 								throw new NotSupportedException( "Unexepected line type: " + type );
 						}
+						m_ppTraces.Flush();
 					}
 				}
-				string lastBatch = processorContext.CurrentBatch;
-				if ( !IsWhiteSpaceOnly( lastBatch ) ) {
-					ProcessBatch( processorContext, lastBatch );
-					processorContext.IncrementBatchNumber();
+				if ( !PreprocessorExitedWithError ) {
+					string lastBatch = processorContext.CurrentBatch;
+					if ( !IsWhiteSpaceOnly( lastBatch ) ) {
+						ProcessBatch( processorContext, lastBatch );
+						processorContext.IncrementBatchNumber();
+					}
 				}
 			}
 			catch ( TerminateException ) {
@@ -457,9 +465,7 @@ namespace csql
 		/// <param name="e">The event data.</param>
 		private void PreProcessor_OutputDataReceived( object sender, DataReceivedEventArgs e )
 		{
-			if ( e.Data != null ) {
-				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, e.Data );
-			}
+			m_ppTraces.AddInfoMessage( e.Data );
 		}
 
 		/// <summary>
@@ -469,9 +475,7 @@ namespace csql
 		/// <param name="e">The event data.</param>
 		private void PreProcessor_ErrorDataReceived( object sender, DataReceivedEventArgs e )
 		{
-			if ( e.Data != null ) {
-				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceWarning, e.Data );
-			}
+			m_ppTraces.AddErrorMessage( e.Data );
 		}
 
 

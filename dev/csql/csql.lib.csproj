@@ -70,10 +70,15 @@
     <Compile Include="BatchContext.cs" />
     <Compile Include="CSqlOptions.cs" />
     <Compile Include="PreProcessor.cs" />
+    <Compile Include="PreProcessorTraceQueue.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="ProcessorContext.cs" />
+    <Compile Include="ResultTrace\BinaryColumnFormat.cs" />
+    <Compile Include="ResultTrace\BooleanColumnFormat.cs" />
     <Compile Include="ResultTrace\ColumnFormat.cs" />
-    <Compile Include="ResultTrace\ColumnInfo.cs" />
+    <Compile Include="ResultTrace\ColumnDescriptor.cs" />
+    <Compile Include="ResultTrace\DateTimeColumnFormat.cs" />
+    <Compile Include="ResultTrace\StringColumnFormat.cs" />
     <Compile Include="ResultTrace\DataReaderTracer.cs" />
     <Compile Include="DistributionProcessor.cs" />
     <Compile Include="ExecutionProcessor.cs" />
@@ -86,6 +91,9 @@
     <Compile Include="BatchProcessorFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultTrace\DataReaderTraceOptions.cs" />
+    <Compile Include="ResultTrace\FixedColumnFormat.cs" />
+    <Compile Include="ResultTrace\RowDescriptor.cs" />
+    <Compile Include="ResultTrace\Row.cs" />
     <Compile Include="SqtppOptions.cs" />
     <Compile Include="TerminateException.cs" />
     <Compile Include="VerbositySwitch.cs" />

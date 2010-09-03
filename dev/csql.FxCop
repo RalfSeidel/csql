@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FxCopProject Version="1.36" Name="csql">
+<FxCopProject Version="10.0" Name="csql">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
   <Stylesheet Apply="False">c:\program files (x86)\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
@@ -43,22 +43,13 @@
   <Groups />
   <Settings />
  </Rules>
- <FxCopReport Version="1.36">
+ <FxCopReport Version="10.0">
   <Namespaces>
    <Namespace Name="csql.addin.Settings">
     <Messages>
      <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-07-24 18:33:07Z">
       <Issue>
        <Item>csql.addin.Settings</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
-   <Namespace Name="csql.ResultTrace">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-08-22 12:47:29Z">
-      <Issue>
-       <Item>csql.ResultTrace</Item>
       </Issue>
      </Message>
     </Messages>
@@ -73,15 +64,6 @@
         <Types>
          <Type Name="SettingsManager">
           <Members>
-           <Member Name="#csqlParameterVariableName">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'SettingsManager.csqlParameterVariableName'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#dbConnectionVariableName">
             <Messages>
              <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-07-24 18:33:07Z">
@@ -111,36 +93,12 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#mruConnectionsVariableName">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-07-24 18:33:07Z">
-              <Issue>
-               <Item>'SettingsManager.mruConnectionsVariableName'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#SaveDbConnectionParameter(Sqt.DbcProvider.DbConnectionParameter)">
             <Messages>
              <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-07-24 18:33:07Z">
               <Issue>
                <Item>'SettingsManager.SaveDbConnectionParameter(DbConnectionParameter)'</Item>
                <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#SaveScriptParameterCore(csql.addin.Settings.CSqlParameter,System.String)">
-            <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-08-22 12:47:29Z">
-              <Issue>
-               <Item>'SettingsManager.SaveScriptParameterCore(CSqlParameter, string)'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-08-22 12:47:29Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'SettingsManager.SaveScriptParameterCore(CSqlParameter, string)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -171,75 +129,10 @@
      </Module>
     </Modules>
    </Target>
-   <Target Name="$(ProjectDir)/Debug/csql.lib.dll">
-    <Modules>
-     <Module Name="csql.lib.dll">
-      <Namespaces>
-       <Namespace Name="csql.ResultTrace">
-        <Types>
-         <Type Name="ColumnInfo">
-          <Members>
-           <Member Name="#index">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-08-22 12:47:29Z">
-              <Issue>
-               <Item>'ColumnInfo.index'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#type">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-08-22 12:47:29Z">
-              <Issue>
-               <Item>'ColumnInfo.type'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="ColumnInfo+BinaryFormat">
-          <Members>
-           <Member Name="#.ctor(System.Int32)">
-            <Messages>
-             <Message Id="maxWidth" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-08-22 12:47:29Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'maxWidth'</Item>
-               <Item>'ColumnInfo.BinaryFormat.BinaryFormat(int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
-     </Module>
-    </Modules>
-   </Target>
    <Target Name="$(ProjectDir)/Debug/Sqt.DbcProvider.dll">
     <Modules>
      <Module Name="sqt.dbcprovider.dll">
       <Namespaces>
-       <Namespace Name="Sqt.DbcProvider">
-        <Types>
-         <Type Name="DbConnectionFactoryProvider">
-          <Members>
-           <Member Name="#.cctor()">
-            <Messages>
-             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2010-08-22 12:47:29Z">
-              <Issue>
-               <Item>'DbConnectionFactoryProvider'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
        <Namespace Name="Sqt.DbcProvider.Provider.MsSql">
         <Types>
          <Type Name="MsSqlConnection">
@@ -305,12 +198,6 @@
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
     <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
-   </Rule>
-   <Rule TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810">
-    <Resolution Name="Default">Initialize all static fields in {0} when those fields are declared and remove the explicit static constructor.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
-    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
    </Rule>
    <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
     <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>

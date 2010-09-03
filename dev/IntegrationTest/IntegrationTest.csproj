@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Files\csql\DbMacros.h" />
+    <None Include="Files\csql\Input\AllColumnTypesSelect.sql" />
     <Content Include="Files\csql\Input\Include\Print1.h" />
     <Content Include="Files\csql\mssql.cfg.txt" />
     <Content Include="Files\csql\sybase.cfg.txt">

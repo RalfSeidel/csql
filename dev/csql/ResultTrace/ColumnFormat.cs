@@ -4,25 +4,50 @@ using System.Text;
 
 namespace csql.ResultTrace
 {
-	internal class ColumnFormat
+	internal abstract class ColumnFormat
 	{
-		private readonly int maxWidth;
-		private readonly string format;
+		/// <summary>
+		/// The text traced for null values.
+		/// </summary>
+		public const string NullText = "[null]";
 
-		public ColumnFormat( int maxWidth, string format )
+		private int minWidth;
+		private int maxWidth;
+		private string format;
+
+		protected ColumnFormat( int defaultMinWidth, int defaultMaxWidth, string defaultFormat )
 		{
-			this.maxWidth = maxWidth;
-			this.format = format;
+			this.minWidth = defaultMinWidth;
+			this.maxWidth = defaultMaxWidth;
+			this.format = defaultFormat;
 		}
 
-		public int MaxWidth { get { return maxWidth; } }
+		public int MinWidth 
+		{ 
+			get { return minWidth; } 
+			protected set { this.minWidth = value; }
+		}
+
+		public int MaxWidth 
+		{ 
+			get { return maxWidth; } 
+			set { this.maxWidth = value; }
+		}
+
+		public string FormatString
+		{
+			get { return this.format; }
+			set { this.format = value; }
+		}
+
+		public abstract void AutoFormat( IEnumerable<object> prefetchValues, bool fetchedAll );
 
 		public virtual string Format( object columnValue )
 		{
 			if ( DBNull.Value.Equals( columnValue ) ) {
-				return "[null]";
+				return ColumnFormat.NullText;
 			} else {
-				string result = String.Format( format, columnValue );
+				string result = String.Format( FormatString, columnValue );
 				return result;
 			}
 		}
