@@ -14,15 +14,15 @@ namespace csql.ResultTrace
 		{
 		}
 
-		public override string Format( object columnValue )
+		public override bool LimitWidthByUserOptions
 		{
-			if ( DBNull.Value.Equals( columnValue ) ) {
-				return base.Format( columnValue );
-			}
-			bool boolValue = (bool)columnValue;
-			return boolValue ? "1" : "0";
+			get { return false; }
 		}
 
+		public override bool LimitLengthByUserOptions
+		{
+			get { return false; }
+		}
 
 		/// <summary>
 		/// Does nothing because the boolean format and with is fixed.
@@ -37,6 +37,12 @@ namespace csql.ResultTrace
 				}
 			}
 			MaxWidth = newMaxWidth;
+		}
+
+		protected override string FormatCore( object columnValue )
+		{
+			bool boolValue = (bool)columnValue;
+			return boolValue ? "1" : "0";
 		}
 	}
 }

@@ -31,7 +31,15 @@ namespace csql.ResultTrace
 		{
 			DateTimeColumnFormat format = new DateTimeColumnFormat();
 			var result = format.Format( new DateTime( 1900, 1, 1, 0, 0, 0, 0 ) );
-			Assert.AreEqual( "1900-01-01 00:00:00.000", result );
+			Assert.AreEqual( "1900-01-01", result );
+		}
+
+		[TestMethod]
+		public void DefaultFormatTest3()
+		{
+			DateTimeColumnFormat format = new DateTimeColumnFormat();
+			var result = format.Format( new DateTime( 2000, 5, 1, 9, 30, 10, 0 ) );
+			Assert.AreEqual( "2000-05-01 09:30:10", result );
 		}
 
 		[TestMethod]

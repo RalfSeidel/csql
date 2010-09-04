@@ -30,7 +30,7 @@ namespace csql.ResultTrace
 		{
 			BooleanColumnFormat format = new BooleanColumnFormat();
 			var result = format.Format( DBNull.Value );
-			Assert.AreEqual( "-", result );
+			Assert.AreEqual( ColumnFormat.NullText, result );
 		}
 	}
 }

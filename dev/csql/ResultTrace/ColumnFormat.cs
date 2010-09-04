@@ -22,6 +22,16 @@ namespace csql.ResultTrace
 			this.format = defaultFormat;
 		}
 
+		public abstract bool LimitWidthByUserOptions
+		{
+			get;
+		}
+
+		public abstract bool LimitLengthByUserOptions
+		{
+			get;
+		}
+
 		public int MinWidth 
 		{ 
 			get { return minWidth; } 
@@ -42,14 +52,20 @@ namespace csql.ResultTrace
 
 		public abstract void AutoFormat( IEnumerable<object> prefetchValues, bool fetchedAll );
 
-		public virtual string Format( object columnValue )
+		public string Format( object columnValue )
 		{
 			if ( DBNull.Value.Equals( columnValue ) ) {
 				return ColumnFormat.NullText;
-			} else {
-				string result = String.Format( FormatString, columnValue );
-				return result;
 			}
+			else {
+				return FormatCore( columnValue );
+			}
+		}
+
+		protected virtual string FormatCore( object columnValue )
+		{
+			string result = String.Format( FormatString, columnValue );
+			return result;
 		}
 	}
 }

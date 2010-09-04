@@ -4,11 +4,21 @@ using System.Text;
 
 namespace csql.ResultTrace
 {
-	internal class BinaryColumnFormat : ColumnFormat
+	internal sealed class BinaryColumnFormat : ColumnFormat
 	{
 		public BinaryColumnFormat( int maxWidth )
 			: base( ColumnFormat.NullText.Length, maxWidth, String.Empty )
 		{
+		}
+
+		public override bool LimitWidthByUserOptions
+		{
+			get { return true; }
+		}
+
+		public override bool LimitLengthByUserOptions
+		{
+			get { return true; }
 		}
 
 		public override void AutoFormat( IEnumerable<object> prefetchValues, bool fetchedAll )
@@ -33,20 +43,16 @@ namespace csql.ResultTrace
 		}
 
 
-		public override string Format( object columnValue )
+		protected override string FormatCore( object columnValue )
 		{
-			if ( DBNull.Value.Equals( columnValue ) ) {
-				return base.Format( columnValue );
-			} else {
-				byte[] binaryValue = (byte[])columnValue;
-				StringBuilder sb = new StringBuilder( 2 * binaryValue.Length + 2 );
-				sb.Append( "0x" );
-				foreach ( byte b in binaryValue ) {
-					sb.AppendFormat( "{0:X2}", b );
-				}
-				string result = sb.ToString();
-				return result;
+			byte[] binaryValue = (byte[])columnValue;
+			StringBuilder sb = new StringBuilder( 2 * binaryValue.Length + 2 );
+			sb.Append( "0x" );
+			foreach ( byte b in binaryValue ) {
+				sb.AppendFormat( "{0:X2}", b );
 			}
+			string result = sb.ToString();
+			return result;
 		}
 	}
 }

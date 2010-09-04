@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Globalization;
 using System.Text;
-using System.Collections;
 
 namespace csql.ResultTrace
 {
@@ -25,10 +23,18 @@ namespace csql.ResultTrace
 		/// </summary>
 		private readonly IList<ColumnDescriptor> columnDescriptors;
 
+		/// <summary>
+		/// Some options specified by the user.
+		/// </summary>
+		private readonly DataReaderTraceOptions options;
+
 		public DataReaderTracer( IDataReader dataReader, DataReaderTraceOptions options )
 		{
 			Debug.Assert( dataReader != null && !dataReader.IsClosed );
+			Debug.Assert( options != null );
+
 			this.dataReader = dataReader;
+			this.options = options;
 			List<ColumnDescriptor> columnInfos = new List<ColumnDescriptor>();
 			for ( int i = 0; i < dataReader.FieldCount; ++i ) {
 				string name = dataReader.GetName( i );
@@ -72,7 +78,9 @@ namespace csql.ResultTrace
 			}
 			AutoFormatAllColumns( prefetchRows, prefetchedAll );
 
-			TraceHeader( output );
+			if ( !AreAllColumnNamesEmpty( this.columnDescriptors ) ) {
+				TraceHeader( output );
+			}
 
 			foreach ( Row row in prefetchRows ) {
 				TraceRow( output, row );
@@ -89,35 +97,39 @@ namespace csql.ResultTrace
 
 		private void TraceHeader( TextWriter output )
 		{
+			StringBuilder rowBuffer = new StringBuilder();
 			for ( int i = 0; i < ColumnCount; ++i ) {
 				var columnInfo = columnDescriptors[i];
 				var columnFormat = columnInfo.Format;
 				var columnName = columnInfo.Name;
-				output.Write( columnName );
+				rowBuffer.Append( columnName );
 				if ( i == ColumnCount - 1 ) {
-					output.Write( ' ' );
+					rowBuffer.Append( ' ' );
 				} else {
 					int fillCount = columnFormat.MaxWidth - columnName.Length + 1;
 					if ( fillCount > 0 ) {
-						output.Write( new string( ' ', fillCount ) );
+						rowBuffer.Append( new string( ' ', fillCount ) );
 					}
 				} 
 			}
-			output.WriteLine();
+			output.WriteLine( rowBuffer.ToString() );
+			rowBuffer.Length = 0;
+
 			for ( int i = 0; i < ColumnCount; ++i ) {
 				var columnInfo = columnDescriptors[i];
 				var columnFormat = columnInfo.Format;
 				var columnWidth  = columnFormat.MaxWidth;
-				output.Write( new string( '-', columnWidth ) );
-				output.Write( ' ' );
+				rowBuffer.Append( new string( '-', columnWidth ) );
+				rowBuffer.Append( ' ' );
 			}
-			output.WriteLine();
+			output.WriteLine( rowBuffer.ToString() );
 		}
 
 		public void TraceRow( TextWriter output, Row row )
 		{
 			int columnCount = row.Count;
 			int maxLineCount = 0;
+			int totalWidth = 0;
 
 			// Split each column into several lines.
 			List<string>[] allColumnLines = new List<string>[columnDescriptors.Count];
@@ -132,9 +144,11 @@ namespace csql.ResultTrace
 					maxLineCount = columnLineCount;
 				}
 				allColumnLines[i] = columnLines;
+				totalWidth += columnFormat.MaxWidth + 1;
 			}
 
 			for ( int lineIndex = 0; lineIndex < maxLineCount; ++lineIndex ) {
+				StringBuilder rowBuffer = new StringBuilder( totalWidth );
 				for ( int i = 0; i < ColumnCount; ++i ) {
 					var columnInfo = columnDescriptors[i];
 					var columnFormat = columnInfo.Format;
@@ -142,23 +156,23 @@ namespace csql.ResultTrace
 					bool isLastColumn = IsLastNonEmptyColumn( allColumnLines, lineIndex, i );
 					if ( lineIndex < columnLines.Count ) {
 						string lineText = columnLines[lineIndex];
-						output.Write( lineText );
+						rowBuffer.Append( lineText );
 						// Fill with blanks upon the beginning of the next column
 						if ( isLastColumn ) {
-							output.Write( ' ' );
+							rowBuffer.Append( ' ' );
 						} else {
-							output.Write( new string( ' ', columnFormat.MaxWidth - lineText.Length + 1 ) );
+							rowBuffer.Append( new string( ' ', columnFormat.MaxWidth - lineText.Length + 1 ) );
 						}
 					} else {
 						// Fill with blanks upon the beginning of the next column
 						if ( isLastColumn ) {
-							output.Write( ' ' );
+							rowBuffer.Append( ' ' );
 						} else {
-							output.Write( new string( ' ', columnFormat.MaxWidth + 1 ) );
+							rowBuffer.Append( new string( ' ', columnFormat.MaxWidth + 1 ) );
 						}
 					}
 				}
-				output.WriteLine();
+				output.WriteLine( rowBuffer.ToString() );
 			}
 		}
 
@@ -192,6 +206,56 @@ namespace csql.ResultTrace
 			return result;
 		}
 
+
+		private bool AreAllColumnNamesEmpty( IEnumerable<ColumnDescriptor> columnDescriptors )
+		{
+			foreach ( ColumnDescriptor columnDescriptor in columnDescriptors ) {
+				string name = columnDescriptor.Name;
+				if ( !String.IsNullOrEmpty( name ) )
+					return false;
+			}
+			return true;
+		}
+
+		private bool AreAllColumnValuesNull( IEnumerable columnValues )
+		{
+			foreach ( object value in columnValues ) {
+				if ( !DBNull.Value.Equals( value ) )
+					return false;
+			}
+			return true;
+		}
+
+		private void AutoFormatAllColumns( List<Row> prefetchRows, bool prefetchedAll )
+		{
+			int columnCount = columnDescriptors.Count;
+
+			for ( int i = 0; i < columnCount; ++i ) {
+				List<object> columnValues = new List<object>( prefetchRows.Count );
+				foreach ( Row row in prefetchRows ) {
+					object columnValue = row[i];
+					columnValues.Add( columnValue );
+				}
+				ColumnDescriptor columnDescriptor = this.columnDescriptors[i];
+				ColumnFormat columnFormat = columnDescriptor.Format;
+
+				if ( prefetchedAll && AreAllColumnValuesNull( columnValues ) ) {
+					columnFormat.MaxWidth = ColumnFormat.NullText.Length;
+				}
+				else {
+					columnFormat.AutoFormat( columnValues, prefetchedAll );
+				}
+
+				if ( columnFormat.LimitWidthByUserOptions && columnFormat.MaxWidth > this.options.MaxResultColumnWidth ) {
+					columnFormat.MaxWidth = this.options.MaxResultColumnWidth;
+				}
+
+				if ( columnFormat.MaxWidth < columnDescriptor.Name.Length ) {
+					columnFormat.MaxWidth = columnDescriptor.Name.Length;
+				}
+			}
+		}
+
 		private class TraceWriter : TextWriter
 		{
 			public TraceWriter()
@@ -211,41 +275,6 @@ namespace csql.ResultTrace
 			{
 				Trace.Write( value );
 			}
-		}
-
-
-		private void AutoFormatAllColumns( List<Row> prefetchRows, bool prefetchedAll )
-		{
-			int columnCount = columnDescriptors.Count;
-
-			for ( int i = 0; i < columnCount; ++i ) {
-				List<object> columnValues = new List<object>( prefetchRows.Count );
-				foreach ( Row row in prefetchRows ) {
-					object columnValue = row[i];
-					columnValues.Add( columnValue );
-				}
-				ColumnDescriptor columnDescriptor = this.columnDescriptors[i];
-				ColumnFormat columnFormat = columnDescriptor.Format;
-
-				if ( prefetchedAll && IsAllNull( columnValues ) ) {
-					columnFormat.MaxWidth = ColumnFormat.NullText.Length;
-				} else {
-					columnFormat.AutoFormat( columnValues, prefetchedAll );
-				}
-
-				if ( columnFormat.MaxWidth < columnDescriptor.Name.Length ) {
-					columnFormat.MaxWidth = columnDescriptor.Name.Length;
-				}
-			}
-		}
-
-		private bool IsAllNull( IEnumerable columnValues )
-		{
-			foreach ( object value in columnValues ) {
-				if ( !DBNull.Value.Equals( value ) )
-					return false;
-			}
-			return true;
 		}
 
 

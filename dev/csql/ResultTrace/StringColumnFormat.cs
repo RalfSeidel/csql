@@ -19,6 +19,17 @@ namespace csql.ResultTrace
 		{
 		}
 
+		public override bool LimitWidthByUserOptions
+		{
+			get { return true; }
+		}
+
+		public override bool LimitLengthByUserOptions
+		{
+			get { return true; }
+		}
+
+
 		/// <summary>
 		/// This implementation does nothing because the fixed column format 
 		/// does not support variable formats.

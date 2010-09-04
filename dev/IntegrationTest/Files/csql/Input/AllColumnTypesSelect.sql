@@ -42,6 +42,9 @@ go
 grant select, insert, update, delete on test.ColumnTypes to public
 go
 
+declare @guid uniqueidentifier
+set @guid = cast( '{9b7f1c49-7b08-4f78-bbb2-aeeb3d640fd1}' as uniqueidentifier )
+
 insert into test.ColumnTypes ( c_bit ) values ( 0 )
 insert into test.ColumnTypes ( c_bit ) values ( 1 )
 
@@ -85,7 +88,10 @@ insert into test.ColumnTypes ( c_datetime ) values ( '20000101' )
 insert into test.ColumnTypes ( c_datetime ) values ( '18991231' )
 insert into test.ColumnTypes ( c_datetime ) values ( '19000101' )
 insert into test.ColumnTypes ( c_datetime ) values ( '20000615' )
-insert into test.ColumnTypes ( c_datetime ) values ( getdate() )
+insert into test.ColumnTypes ( c_datetime ) values ( '20100601 06:00:00.000' )
+insert into test.ColumnTypes ( c_datetime ) values ( '20100702 06:05:00.000' )
+insert into test.ColumnTypes ( c_datetime ) values ( '20110803 12:15:44.000' )
+insert into test.ColumnTypes ( c_datetime ) values ( '20120905 23:30:59.006' )
 
 insert into test.ColumnTypes ( c_varchar ) values ( '' )
 insert into test.ColumnTypes ( c_varchar ) values ( 'a' )
@@ -101,8 +107,7 @@ insert into test.ColumnTypes ( c_text ) values ( 'ZZZZZ' )
 insert into test.ColumnTypes ( c_text ) values ( '0123456789_abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ' )
 
 insert into test.ColumnTypes ( c_guid ) values ( '{00000000-0000-0000-0000-000000000000}' )
-insert into test.ColumnTypes ( c_guid ) values ( '{9B7F1C49-7B08-4f78-BBB2-AEEB3D640FD1}' )
-insert into test.ColumnTypes ( c_guid ) values ( newid() )
+insert into test.ColumnTypes ( c_guid ) values ( @guid )
 
 insert into test.ColumnTypes ( c_varbinary ) values( 0x00 )
 insert into test.ColumnTypes ( c_varbinary ) values( 0x0102030405060708090A0B0C0E0F10 )
@@ -113,7 +118,7 @@ insert into test.ColumnTypes ( c_variant ) values( 'a' )
 insert into test.ColumnTypes ( c_variant ) values( 'b' )
 insert into test.ColumnTypes ( c_variant ) values( 0x00 )
 insert into test.ColumnTypes ( c_variant ) values( 0x01 )
-insert into test.ColumnTypes ( c_variant ) values( newid() )
+insert into test.ColumnTypes ( c_variant ) values( @guid )
 go
 
 select * from test.ColumnTypes where c_guid is not null
