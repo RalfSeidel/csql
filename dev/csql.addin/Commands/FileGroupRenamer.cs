@@ -1,5 +1,6 @@
 using System.IO;
 using EnvDTE;
+using csql.addin.Settings;
 
 namespace csql.addin.Commands
 {
@@ -20,7 +21,10 @@ namespace csql.addin.Commands
 			if ( isRenaming )
 				return;
 
-			if ( !FileClassification.IsSqlScript( oldName ) )
+			SettingsManager settingsManager = SettingsManager.GetInstance( projectItem.DTE );
+			CSqlParameter scriptParameter = settingsManager.CurrentScriptParameter;
+
+			if ( !FileClassification.IsSqlScript( scriptParameter, oldName ) )
 				return;
 
 			if ( projectItem.ProjectItems == null || projectItem.ProjectItems.Count == 0 )

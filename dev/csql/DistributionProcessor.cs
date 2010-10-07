@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
-using System.Reflection;
 using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace csql
 {
@@ -81,8 +79,6 @@ namespace csql
 			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created." );
 		}
 
-
-
 		public void ProcessProgress( ProcessorContext processorContext, string progressInfo )
 		{
 			string statement = "print '" + progressInfo.Replace( "'", "''" ) + "'\r\n";
@@ -127,7 +123,16 @@ namespace csql
 			}
 		}
 
-
+		/// <summary>
+		/// Cancels the execution of the current batch.
+		/// </summary>
+		/// <remarks>
+		/// The method does nothing because it is assumed that this processor execute fast enough
+		/// to check the cancel condition in the outer processor only.
+		/// </remarks>
+		public void Cancel()
+		{ 
+		}
 
 		/// <summary>
 		/// Cleanup implementation.

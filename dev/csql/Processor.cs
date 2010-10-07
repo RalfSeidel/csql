@@ -19,6 +19,12 @@ namespace csql
 		private readonly PreProcessorTraceQueue m_ppTraces;
 		private int m_errorCount;
 		private Process m_ppProcess;
+		private bool m_isCanceled;
+
+		/// <summary>
+		/// Indicates if Dispose has already been called
+		/// </summary>
+		private bool m_isDisposed;
 
 
 		/// <summary>
@@ -51,6 +57,14 @@ namespace csql
 			this.m_ppTraces = new PreProcessorTraceQueue();
 		}
 
+
+		/// <summary>
+		/// Finalizer
+		/// </summary>
+		~Processor()
+		{
+			Dispose( false );
+		}
 
 		/// <summary>
 		/// Check if the preprocessor encountered an error.
@@ -127,7 +141,7 @@ namespace csql
 				using ( Stream stream = OpenInputFile() )
 				using ( StreamReader reader = new StreamReader( stream, Encoding.Default, true ) ) {
 					m_ppTraces.Flush();
-					while ( !reader.EndOfStream && !PreprocessorExitedWithError ) {
+					while ( !reader.EndOfStream && !PreprocessorExitedWithError && !m_isCanceled ) {
 						string line = reader.ReadLine();
 						LineType type = GetLineType( line );
 						switch ( type ) {
@@ -177,20 +191,16 @@ namespace csql
 			}
 		}
 
-
-
 		/// <summary>
-		/// Indicates if Dispose has already been called
+		/// Cancel the execution of the current script.
 		/// </summary>
-		private bool isDisposed;
-
-		/// <summary>
-		/// Finalizer
-		/// </summary>
-		~Processor()
+		public void Cancel()
 		{
-			Dispose( false );
+			this.m_isCanceled = true;
+			if ( m_processor != null )
+				m_processor.Cancel();
 		}
+
 
 		/// <summary>
 		/// Dispose
@@ -206,7 +216,7 @@ namespace csql
 		/// </summary>
 		private void Dispose( bool isDisposing )
 		{
-			if ( !isDisposed ) {
+			if ( !m_isDisposed ) {
 				if ( isDisposing ) {
 					if ( m_processor != null )
 						m_processor.Dispose();
@@ -215,7 +225,7 @@ namespace csql
 						m_ppProcess.Dispose();
 				}
 				// TODO: cleanup unmanaged objects.
-				isDisposed = true;
+				m_isDisposed = true;
 			}
 		}
 
@@ -435,6 +445,7 @@ namespace csql
 				return stream;
 			}
 			catch ( TerminateException ) {
+				this.m_isCanceled = true;
 				if ( m_ppProcess != null ) {
 					m_ppProcess.Dispose();
 					m_ppProcess = null;
@@ -452,10 +463,20 @@ namespace csql
 					m_ppProcess.Dispose();
 					m_ppProcess = null;
 				}
-				string message = ppCommand + " " + ppArguments + ":\r\n" + ex.Message;
-				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
+				if ( !IsCanceledOrTerminated ) {
+					string message = ppCommand + " " + ppArguments + ":\r\n" + ex.Message;
+					Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );
+				}
 				throw new TerminateException( ExitCode.ArgumentsError );
 			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this processing is canceled. 
+		/// </summary>
+		private bool IsCanceledOrTerminated
+		{
+			get { return this.m_isCanceled; }
 		}
 
 		/// <summary>
@@ -465,7 +486,9 @@ namespace csql
 		/// <param name="e">The event data.</param>
 		private void PreProcessor_OutputDataReceived( object sender, DataReceivedEventArgs e )
 		{
-			m_ppTraces.AddInfoMessage( e.Data );
+			if ( !IsCanceledOrTerminated ) {
+				m_ppTraces.AddInfoMessage( e.Data );
+			}
 		}
 
 		/// <summary>
@@ -475,7 +498,9 @@ namespace csql
 		/// <param name="e">The event data.</param>
 		private void PreProcessor_ErrorDataReceived( object sender, DataReceivedEventArgs e )
 		{
-			m_ppTraces.AddErrorMessage( e.Data );
+			if ( !IsCanceledOrTerminated ) {
+				m_ppTraces.AddErrorMessage( e.Data );
+			}
 		}
 
 

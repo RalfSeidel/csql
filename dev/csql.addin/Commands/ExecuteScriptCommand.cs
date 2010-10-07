@@ -31,8 +31,11 @@ namespace csql.addin.Commands
 				return false;
 			}
 
+			SettingsManager settingsManager = SettingsManager.GetInstance( application );
+			CSqlParameter scriptParameter = settingsManager.CurrentScriptParameter;
+
 			string fileName = activeDocument.FullName;
-			bool isSqlScript = FileClassification.IsSqlScript( fileName );
+			bool isSqlScript = FileClassification.IsSqlScript( scriptParameter, fileName );
 			return isSqlScript;
 		}
 

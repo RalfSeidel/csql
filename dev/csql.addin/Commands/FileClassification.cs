@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using csql.addin.Settings;
 
 namespace csql.addin.Commands
 {
@@ -15,11 +16,26 @@ namespace csql.addin.Commands
 		/// <returns>
 		/// <c>true</c> if the specified file name ends with a sql script extension; otherwise, <c>false</c>.
 		/// </returns>
-		internal static bool IsSqlScript( string fileName )
+		public static bool IsSqlScript( CSqlParameter currentPararmeter, string fileName )
 		{
-			fileName = fileName.ToLowerInvariant();
-			bool isSqlScript = fileName.EndsWith( ".csql" ) || fileName.EndsWith( ".sql" );
-			return isSqlScript;
+			IEnumerable<string> extensions = currentPararmeter.ScriptExtensions;
+			if ( extensions == null || !extensions.GetEnumerator().MoveNext() ) {
+				extensions = DefaultScriptExtensions;
+			}
+			foreach ( string extension in extensions ) {
+				if ( fileName.EndsWith( extension, StringComparison.InvariantCultureIgnoreCase ) )
+					return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Gets the default file extensions which are considered to be sql scripts.
+		/// </summary>
+		/// <value>The default script extensions.</value>
+		private static IEnumerable<string> DefaultScriptExtensions
+		{
+			get { return new string[] { ".csql", ".sql", ".ins" }; }
 		}
 	}
 }

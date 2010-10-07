@@ -20,6 +20,7 @@ namespace csql
 		/// <summary>
 		/// Processes progress informations.
 		/// </summary>
+		/// <param name="context">Some information about the location in the current script.</param>
 		/// <param name="progressInfo">Some informal text about the progress of script processing.</param>
 		void ProcessProgress( ProcessorContext context, string progressInfo );
 
@@ -42,5 +43,10 @@ namespace csql
         /// The implementation may for example emit an exit message.
         /// </remarks>
         void SignOut();
+
+		/// <summary>
+		/// Cancels the execution of the current batch.
+		/// </summary>
+		void Cancel();
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection;
+using System.Text;
 using csql.ResultTrace;
 using Sqt.DbcProvider;
-using System.Text;
-using System.Reflection;
 
 namespace csql
 {
@@ -16,6 +16,7 @@ namespace csql
 		private readonly CSqlOptions m_options;
 		private readonly DbConnection m_connection;
 		private ProcessorContext m_context;
+		private IDbCommand m_currentCommand;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionProcessor"/> class.
@@ -89,6 +90,7 @@ namespace csql
 			try {
 				using ( IDbCommand command = m_connection.CreateCommand( batch ) )
 				using ( IDataReader dataReader = m_connection.Execute( command ) ) {
+					m_currentCommand = command;
 					while ( dataReader != null && !dataReader.IsClosed ) {
 						if ( dataReader.FieldCount != 0 ) {
 							TraceResult( dataReader );
@@ -105,6 +107,23 @@ namespace csql
 					throw mappedException;
 				else
 					throw;
+			}
+			finally {
+				lock ( this ) {
+					m_currentCommand = null;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Cancels the execution of the current batch.
+		/// </summary>
+		public void Cancel()
+		{
+			lock ( this ) {
+				if ( m_currentCommand != null ) {
+					m_currentCommand.Cancel();
+				}
 			}
 		}
 

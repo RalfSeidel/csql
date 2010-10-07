@@ -1172,8 +1172,80 @@ public:
 		processor.processStream( input );
 		outputText = output.str();
 		Assert::IsTrue( outputText == L"DEF" );
-
 	}
+
+	[TestMethod]
+	void rangeWithMultipleLines()
+	{
+		Options       options;
+		Processor     processor( options );
+		wstringstream input;
+		wstringstream output;
+		wstring       outputText;
+
+		options.emitLine( false );
+		options.eliminateEmptyLines( true );
+
+		input << L"A" << endl
+		      << L"B" << endl
+			  << L"C" << ends;
+		processor.setOutStream( output );
+
+		options.setOutputRange( Range(0,1) );
+		output.str( wstring() );
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"A" );
+
+		options.setOutputRange( Range(2,3) );
+		output.str( wstring() );
+		input.clear();
+		input.seekg(0);
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"B" );
+
+		options.setOutputRange( Range(4,5) );
+		output.str( wstring() );
+		input.clear();
+		input.seekg(0);
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"C" );
+	}
+
+	[TestMethod]
+	void rangeWithMacroTest1()
+	{
+		Options       options;
+		Processor     processor( options );
+		wstringstream input;
+		wstringstream output;
+		wstring       outputText;
+
+		options.emitLine( false );
+		options.eliminateEmptyLines( true );
+
+		input << L"#define A" << endl
+		      << L"B" << endl 
+			  << L"C" << ends;
+		processor.setOutStream( output );
+
+		options.setOutputRange( Range(10,11) );
+		output.str( wstring() );
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"B" );
+
+		options.setOutputRange( Range(12,13) );
+		output.str( wstring() );
+		input.clear();
+		input.seekg(0);
+		processor.processStream( input );
+		outputText = output.str();
+		Assert::IsTrue( outputText == L"C" );
+	}
+
 
 }; // class
 
