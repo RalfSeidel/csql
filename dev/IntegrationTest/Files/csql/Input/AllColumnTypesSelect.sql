@@ -7,7 +7,7 @@ if not exists ( select 1 from sysusers where name = 'test' )
 go
 
 
-if exists ( select 1 from sysobjects where name = 'ColumnTypes' and type = 'U' and uid = user_id( 'test' ) )
+if exists ( select 1 from sysobjects where id = object_id('test.ColumnTypes')  )
 	drop table test.ColumnTypes
 go
 

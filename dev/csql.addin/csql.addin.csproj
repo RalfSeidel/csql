@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CancelScriptCommand.cs" />
     <Compile Include="Commands\FileGroupRenamer.cs" />
     <Compile Include="Commands\FileClassification.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -161,6 +162,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="csql.addin" />
+    <None Include="Resources\Images\Commands\CancelScript.bmp" />
+    <Content Include="Resources\Images\ExecuteScript.png" />
     <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -183,8 +186,6 @@
     <Resource Include="Resources\Icon.ico" />
     <Resource Include="Resources\Images\Cancel.png" />
     <Resource Include="Resources\Images\CreateCopy.png" />
-    <Resource Include="Resources\Images\ExecutePage.png" />
-    <Resource Include="Resources\Images\ExecuteSelection.png" />
     <Resource Include="Resources\Images\Delete.png" />
     <Resource Include="Resources\Images\CreateNew.png" />
     <Resource Include="Resources\Images\Save.png" />

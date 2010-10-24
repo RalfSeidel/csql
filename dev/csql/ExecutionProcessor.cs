@@ -13,10 +13,11 @@ namespace csql
 	/// </summary>
 	internal class ExecutionProcessor : IBatchProcessor
 	{
-		private readonly CSqlOptions m_options;
-		private readonly DbConnection m_connection;
+		private readonly CSqlOptions options;
+		private readonly DbConnection connection;
 		private ProcessorContext m_context;
-		private IDbCommand m_currentCommand;
+		private IDbCommand currentCommand;
+		private bool isCanceled;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionProcessor"/> class.
@@ -24,10 +25,10 @@ namespace csql
 		/// <param name="cmdArgs">The CMD args.</param>
 		public ExecutionProcessor( CSqlOptions csqlOptions )
 		{
-			m_options = csqlOptions;
+			this.options = csqlOptions;
 			DbConnectionParameter connectionParameter = csqlOptions.ConnectionParameter;
-			m_connection = DbConnectionFactoryProvider.CreateConnection( connectionParameter );
-			m_connection.InfoMessage += new EventHandler<DbMessageEventArgs>( InfoMessageEventHandler );
+			this.connection = DbConnectionFactoryProvider.CreateConnection( connectionParameter );
+			this.connection.InfoMessage += new EventHandler<DbMessageEventArgs>( InfoMessageEventHandler );
 
 		}
 
@@ -42,7 +43,7 @@ namespace csql
 		/// </summary>
 		public virtual void SignIn()
 		{
-			if ( GlobalSettings.Verbosity.TraceInfo && !m_options.NoLogo ) {
+			if ( GlobalSettings.Verbosity.TraceInfo && !this.options.NoLogo ) {
 				StringBuilder sb = new StringBuilder();
 				Assembly assembly = Assembly.GetExecutingAssembly();
 				Version version = assembly.GetName().Version;
@@ -56,7 +57,7 @@ namespace csql
 					sb.Append( version.ToString( 2 ) );
 				}
 				sb.Append( " (c) SQL Service GmbH" );
-				sb.Append( " - Processing " ).Append( m_options.ScriptFile );
+				sb.Append( " - Processing " ).Append( this.options.ScriptFile );
 
 				string message = sb.ToString();
 				Trace.WriteLine( message );
@@ -88,10 +89,10 @@ namespace csql
 		{
 			m_context = context;
 			try {
-				using ( IDbCommand command = m_connection.CreateCommand( batch ) )
-				using ( IDataReader dataReader = m_connection.Execute( command ) ) {
-					m_currentCommand = command;
-					while ( dataReader != null && !dataReader.IsClosed ) {
+				using ( IDbCommand command = this.connection.CreateCommand( batch ) )
+				using ( IDataReader dataReader = this.connection.Execute( command ) ) {
+					this.currentCommand = command;
+					while ( dataReader != null && !dataReader.IsClosed && !isCanceled ) {
 						if ( dataReader.FieldCount != 0 ) {
 							TraceResult( dataReader );
 						}
@@ -102,7 +103,7 @@ namespace csql
 				}
 			}
 			catch ( Exception ex ) {
-				Exception mappedException = m_connection.GetMappedException( ex );
+				Exception mappedException = this.connection.GetMappedException( ex );
 				if ( mappedException != null )
 					throw mappedException;
 				else
@@ -110,7 +111,7 @@ namespace csql
 			}
 			finally {
 				lock ( this ) {
-					m_currentCommand = null;
+					this.currentCommand = null;
 				}
 			}
 		}
@@ -121,8 +122,9 @@ namespace csql
 		public void Cancel()
 		{
 			lock ( this ) {
-				if ( m_currentCommand != null ) {
-					m_currentCommand.Cancel();
+				this.isCanceled = true;
+				if ( currentCommand != null ) {
+					currentCommand.Cancel();
 				}
 			}
 		}
@@ -134,7 +136,7 @@ namespace csql
 		public void Dispose( bool isDisposing )
 		{
 			if ( isDisposing ) {
-				m_connection.Dispose();
+				this.connection.Dispose();
 			}
 		}
 
@@ -180,7 +182,7 @@ namespace csql
 				return;
 
 			DataReaderTraceOptions options = new DataReaderTraceOptions();
-			options.MaxResultColumnWidth = this.m_options.MaxResultColumnWidth;
+			options.MaxResultColumnWidth = this.options.MaxResultColumnWidth;
 			DataReaderTracer tracer = new DataReaderTracer( dataReader, options );
 			tracer.TraceAll();
 		}

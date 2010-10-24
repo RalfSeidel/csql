@@ -11,10 +11,12 @@ namespace csql.addin.Commands
 	internal class ScriptExecutor
 	{
 		private readonly CSqlOptions csqlOptions;
+		private readonly Processor processor;
 
 		public ScriptExecutor( CSqlOptions csqlOptions )
 		{
 			this.csqlOptions = csqlOptions;
+			this.processor = new Processor( csqlOptions );
 		}
 
 
@@ -23,14 +25,12 @@ namespace csql.addin.Commands
 		{
 			GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;
 
-			Processor processor = null;
 			try {
-				processor = new Processor( csqlOptions );
-				processor.SignIn();
+				this.processor.SignIn();
 
-				processor.Process();
+				this.processor.Process();
 
-				processor.SignOut();
+				this.processor.SignOut();
 			}
 			catch ( FileNotFoundException ex ) {
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, ex.FileName + ": " + ex.Message );
@@ -41,19 +41,23 @@ namespace csql.addin.Commands
 			catch ( TerminateException ) {
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceVerbose, "Caught TerminateException" );
 
-				if ( processor != null ) {
-					processor.SignOut();
-				}
+				this.processor.SignOut();
 			}
 			catch ( Exception ex ) {
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, "Unexpected error: " + ex );
 			}
 			finally {
 				Trace.Flush();
-				if ( processor != null ) {
-					processor.Dispose();
-				}
+				processor.Dispose();
 			}
+		}
+
+		/// <summary>
+		/// Cancels the script execution.
+		/// </summary>
+		internal void Cancel()
+		{
+			processor.Cancel();
 		}
 	}
 }

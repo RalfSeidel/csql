@@ -124,6 +124,9 @@
   <data name="20" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\images\commands\executescript.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="21" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\images\commands\cancelscript.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="30" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\images\commands\groupfiles.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

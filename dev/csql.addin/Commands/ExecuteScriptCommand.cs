@@ -8,21 +8,51 @@ using Sqt.VisualStudio;
 
 namespace csql.addin.Commands
 {
+	/// <summary>
+	/// Command to execute the (c)sql script in the current editor window.
+	/// </summary>
 	internal class ExecuteScriptCommand : VsCommand
 	{
-		private bool isExecuting;
+		private static ExecuteScriptCommand instance;
+		private ScriptExecutor currentExecutor;
 
 		internal ExecuteScriptCommand()
 			: base( "Execute" )
 		{
+			ExecuteScriptCommand.instance = this;
 			Guid textEditorGuid = new Guid( ContextGuids.vsContextGuidTextEditor );
 			this.VsContextGuids = new Guid[] { textEditorGuid };
+		}
+
+		/// <summary>
+		/// Gets the current instance of this command.
+		/// </summary>
+		internal static ExecuteScriptCommand Instance
+		{
+			get { return ExecuteScriptCommand.instance; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether a script is currently executed.
+		/// </summary>
+		internal bool IsExecuting
+		{
+			get { return this.currentExecutor != null; }
+		}
+
+		internal void CancelExecution()
+		{
+			ScriptExecutor executor = currentExecutor;
+			if ( executor == null )
+				return;
+
+			executor.Cancel();
 		}
 
 
 		public override bool CanExecute( VsCommandEventArgs e )
 		{
-			if ( isExecuting )
+			if ( IsExecuting )
 				return false;
 
 			DTE2 application = e.Application;
@@ -145,7 +175,6 @@ namespace csql.addin.Commands
 			CSqlOptions settings = parameter.CSqlOptions;
 			OutputPaneTraceListener traceListener = null;
 
-			this.isExecuting = true;
 			try {
 				var outputPane = Gui.Output.GetAndActivateOutputPane( application );
 				if ( outputPane != null ) {
@@ -156,25 +185,25 @@ namespace csql.addin.Commands
 				if ( traceListener != null ) {
 					Trace.Listeners.Add( traceListener );
 				}
-				ScriptExecutor executionHelper = new ScriptExecutor( settings );
-				executionHelper.Execute();
+				this.currentExecutor = new ScriptExecutor( settings );
+				this.currentExecutor.Execute();
 
 				if ( !String.IsNullOrEmpty( settings.DistributionFile ) ) {
 					application.ItemOperations.OpenFile( settings.DistributionFile, Constants.vsViewKindCode );
 				}
-				this.isExecuting = false;
-				Commands2 commands = application.Commands as Commands2;
-				if ( commands != null ) {
-					commands.UpdateCommandUI( false );
-				}
+				currentExecutor = null;
 			}
 			finally {
-				this.isExecuting = false;
+				currentExecutor = null;
 				if ( traceListener != null ) {
 					Trace.Listeners.Remove( traceListener );
 					traceListener.Close();
 					traceListener.Dispose();
 				}
+			}
+			Commands2 commands = application.Commands as Commands2;
+			if ( commands != null ) {
+				commands.UpdateCommandUI( false );
 			}
 		}
 
