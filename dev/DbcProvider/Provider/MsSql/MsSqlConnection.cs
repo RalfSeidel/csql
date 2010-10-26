@@ -22,7 +22,7 @@ namespace Sqt.DbcProvider.Provider.MsSql
 
 		protected override IDbConnection CreateAdoConnection( DbConnectionParameter parameter )
 		{
-			SqlConnection adoConnection = MsSqlConnectionFactory.CreateAdoConnection( parameter );
+			SqlConnection adoConnection = connectionFactory.CreateAdoConnection( parameter );
 			adoConnection.InfoMessage += new SqlInfoMessageEventHandler( InfoMessageHandler );
 			adoConnection.Open();
 			return adoConnection;

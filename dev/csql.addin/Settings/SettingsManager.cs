@@ -7,18 +7,16 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using EnvDTE;
 using Sqt.DbcProvider;
+using Sqt.DbcProvider.Provider;
 
 namespace csql.addin.Settings
 {
-
 	/// <summary>
 	/// Global accessor for the most recently used and current connection parameters.
 	/// </summary>
 	internal sealed class SettingsManager
 	{
 		#region Private Fields
-
-		private static readonly string dbConnectionVariableName = typeof( CSqlAddin ).FullName.Replace( '.', '_' ) + "_" + typeof( DbConnectionParameter ).Name;
 
 		private readonly _DTE application;
 
@@ -34,9 +32,7 @@ namespace csql.addin.Settings
 		private static SettingsManager instance;
 
 		private MruConnections mruDbConnectionParameters;
-		private DbConnectionParameter dbConnectionParameter;
 		private CSqlParameter currentScriptParameter;
-
 
 		#endregion
 
@@ -51,42 +47,6 @@ namespace csql.addin.Settings
 		/// Event raised whenever the settings were reloaded.
 		/// </summary>
 		public event EventHandler SettingsReloaded;
-
-		/// <summary>
-		/// Get the collection of most recently used database connection parameters.
-		/// </summary>
-		public MruConnections MruDbConnectionParameters
-		{
-			get
-			{
-				if ( mruDbConnectionParameters != null )
-					return mruDbConnectionParameters;
-
-				this.mruDbConnectionParameters = LoadMruConnectionParameters();
-
-				if ( mruDbConnectionParameters == null ) {
-					mruDbConnectionParameters = new MruConnections();
-				}
-
-				return mruDbConnectionParameters;
-			}
-		}
-
-		/// <summary>
-		/// Get the currently used database connection parameters.
-		/// </summary>
-		public DbConnectionParameter CurrentDbConnectionParameter
-		{
-			get
-			{
-				if ( dbConnectionParameter != null )
-					return dbConnectionParameter;
-
-				MruConnections mruConnections = MruDbConnectionParameters;
-				dbConnectionParameter = MruDbConnectionParameterAdapter.GetMruDbConnectionParameter( mruConnections );
-				return dbConnectionParameter;
-			}
-		}
 
 		/// <summary>
 		/// Get the currently used script processing parameter.
@@ -105,6 +65,47 @@ namespace csql.addin.Settings
 					currentScriptParameter = new CSqlParameter();
 				}
 				return currentScriptParameter;
+			}
+		}
+
+		/// <summary>
+		/// Get the currently used database connection parameters.
+		/// </summary>
+		public DbConnectionParameter CurrentDbConnectionParameter
+		{
+			get
+			{
+				CSqlParameter scriptParameter = CurrentScriptParameter;
+				DbConnectionParameter dbConnectionParameter = scriptParameter.DbConnection;
+				
+
+				if ( dbConnectionParameter != null )
+					return dbConnectionParameter;
+
+				MruConnections mruConnections = MruDbConnectionParameters;
+				dbConnectionParameter = MruDbConnectionParameterAdapter.GetMruDbConnectionParameter( mruConnections );
+				scriptParameter.DbConnection = dbConnectionParameter;
+				return dbConnectionParameter;
+			}
+		}
+
+		/// <summary>
+		/// Get the collection of most recently used database connection parameters.
+		/// </summary>
+		public MruConnections MruDbConnectionParameters
+		{
+			get
+			{
+				if ( mruDbConnectionParameters != null )
+					return mruDbConnectionParameters;
+
+				this.mruDbConnectionParameters = LoadMruConnectionParameters();
+
+				if ( mruDbConnectionParameters == null ) {
+					mruDbConnectionParameters = new MruConnections();
+				}
+
+				return mruDbConnectionParameters;
 			}
 		}
 
@@ -128,7 +129,7 @@ namespace csql.addin.Settings
 		/// Update the most recently used db connection parameter in the application data folder.
 		/// </summary>
 		/// <param name="dbConnectionParameter">The db connection parameter.</param>
-		internal void SaveDbConnectionParameter( DbConnectionParameter dbConnectionParameter )
+		internal void SaveDbConnectionParameterInMruHistory( DbConnectionParameter dbConnectionParameter )
 		{
 			MruConnections mruConnections = MruDbConnectionParameters;
 			if ( mruConnections == null )
@@ -159,7 +160,28 @@ namespace csql.addin.Settings
 			}
 		}
 
-		internal void SaveScriptParameter( CSqlParameter csqlParameter )
+		/// <summary>
+		/// Stores the current database connection parameter in the global variables of the visual studio
+		/// environment.
+		/// </summary>
+		/// <param name="dbConnectionParameter">The db connection parameter.</param>
+		internal void SaveDbConnectionParameterInGlobals( DbConnectionParameter dbConnectionParameter )
+		{
+			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( dbConnectionParameter.Provider );
+			string providerName = factory.ProviderName;
+			string connectionString = factory.GetConnectionString( dbConnectionParameter );
+
+			Globals globals = application.Globals;
+			string variableName = CSqlConnectionFactory.CSqlConnectionProviderVariableName;
+			globals[variableName] = providerName;
+			globals.set_VariablePersists( variableName, true );
+
+			variableName = CSqlConnectionFactory.CSqlConnectionStringVariableName;
+			globals[variableName] = connectionString;
+			globals.set_VariablePersists( variableName, true );
+		}
+
+		internal void SaveScriptParameterInSolutionSettings( CSqlParameter csqlParameter )
 		{
 			if ( csqlParameter == null )
 				return;
@@ -187,17 +209,30 @@ namespace csql.addin.Settings
 		}
 
 
+		/// <summary>
+		/// Loads the parameter located in the current solution directory.
+		/// </summary>
 		private CSqlParameter LoadSolutionScriptParameter()
+		{
+			CSqlParameter parameter = LoadSolutionScriptParameterCore();
+			if ( parameter != null && parameter.DbConnection != null ) {
+				SaveDbConnectionParameterInGlobals( parameter.DbConnection );
+			}
+
+			return parameter;
+		}
+
+		private CSqlParameter LoadSolutionScriptParameterCore()
 		{
 			string csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
 			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameterCore( csqlParameterPath );
+				CSqlParameter parameter = LoadScriptParameterFromFile( csqlParameterPath );
 				if ( parameter != null )
 					return parameter;
 			}
 			csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.xml" );
 			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameterCore( csqlParameterPath );
+				CSqlParameter parameter = LoadScriptParameterFromFile( csqlParameterPath );
 				if ( parameter != null )
 					return parameter;
 			}
@@ -205,7 +240,7 @@ namespace csql.addin.Settings
 			return null;
 		}
 
-		private static CSqlParameter LoadScriptParameterCore( string csqlParameterPath )
+		private static CSqlParameter LoadScriptParameterFromFile( string csqlParameterPath )
 		{
 			try {
 				using ( Stream stream = new FileStream( csqlParameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
@@ -222,6 +257,9 @@ namespace csql.addin.Settings
 			return null;
 		}
 
+		/// <summary>
+		/// Loads the history of most recently used database connection parameters.
+		/// </summary>
 		private MruConnections LoadMruConnectionParameters()
 		{
 			string mruConnectionsName = "CSqlConnection.xml";

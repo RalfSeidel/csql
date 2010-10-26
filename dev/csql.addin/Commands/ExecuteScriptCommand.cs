@@ -111,7 +111,7 @@ namespace csql.addin.Commands
 			thread.Start( parameter );
 
 			if ( !csqGuiParameter.IsOutputFileEnabled ) {
-				settingsManager.SaveDbConnectionParameter( dbConnectionParameter );
+				settingsManager.SaveDbConnectionParameterInMruHistory( dbConnectionParameter );
 			}
 
 		}

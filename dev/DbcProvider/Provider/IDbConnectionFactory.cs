@@ -8,6 +8,16 @@ namespace Sqt.DbcProvider.Provider
 	public interface IDbConnectionFactory
 	{
 		/// <summary>
+		/// Gets the name of the provider as used by the ADO provider/factory model.
+		/// </summary>
+		string ProviderName { get; }
+
+		/// <summary>
+		/// Gets the connection string used to open the connection.
+		/// </summary>
+		string GetConnectionString( DbConnectionParameter parameter );
+
+		/// <summary>
 		/// Creates an connection for the specified connection parameter.
 		/// </summary>
 		/// <param name="parameter">The connection parameter parameter.</param>

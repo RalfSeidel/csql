@@ -91,6 +91,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Settings\CSqlConnectionFactory.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Gui\PreprocessorDefinitionCollectionConverter.cs" />
     <Compile Include="Settings\Gui\OutputFileEditor.cs" />

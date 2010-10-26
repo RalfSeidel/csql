@@ -674,7 +674,7 @@ print '*** Context: ' + @@servername + '.' + db_name() + ' ***'
 /// Macro to add source location and version informations at the
 /// beginning of a SQL programm object (stored procedure, view, etc).
 /// </summary>
-#define CSQL_OBJECT_INFO File: __FILE__ / SCRIPT_REVISION / __TIMESTAMP__
+#define CSQL_OBJECT_INFO File: __FILE__ / __TIMESTAMP__
 
 
 /// @ingroup Action

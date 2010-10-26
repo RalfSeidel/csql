@@ -283,7 +283,7 @@ namespace csql.addin.Settings.Gui
 			}
 
 
-			this.saveChangesTimer.Interval = 1000;
+			this.saveChangesTimer.Interval = 500;
 			this.saveChangesTimer.Tick += new EventHandler( SaveChangesTimer_Tick );
 			this.saveChangesTimer.Start();
 		}
@@ -296,9 +296,9 @@ namespace csql.addin.Settings.Gui
 				this.saveChangesTimer = null;
 			}
 			if ( dbConnectionParameterChanged ) {
-				if ( false && this.application != null ) {
+				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
-					settingsManager.SaveDbConnectionParameter( dbConnectionParameter );
+					settingsManager.SaveDbConnectionParameterInGlobals( dbConnectionParameter );
 				}
 				dbConnectionParameterChanged = false;
 			}
@@ -306,7 +306,7 @@ namespace csql.addin.Settings.Gui
 			if ( this.csqlParameterChanged ) {
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
-					settingsManager.SaveScriptParameter( csqlParameter );
+					settingsManager.SaveScriptParameterInSolutionSettings( csqlParameter );
 				}
 				csqlParameterChanged = false;
 			}

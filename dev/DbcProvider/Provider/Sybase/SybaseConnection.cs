@@ -25,32 +25,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 
 		protected override IDbConnection CreateAdoConnection( DbConnectionParameter parameter )
 		{
-			StringBuilder sb = new StringBuilder();
-
-			if ( !String.IsNullOrEmpty( parameter.DatasourceAddress ) ) {
-				sb.Append( "DataSource=" ).Append( parameter.DatasourceAddress ).Append( ";" );
-			}
-			if ( parameter.DatasourcePort != 0 ) {
-				sb.Append( "Port=" ).Append( parameter.DatasourcePort ).Append( ";" );
-			}
-			if ( !String.IsNullOrEmpty( parameter.Catalog ) ) {
-				sb.Append( "Database=" ).Append( parameter.Catalog ).Append( ";" );
-			}
-			if ( !String.IsNullOrEmpty( parameter.UserId ) ) {
-				sb.Append( "User ID=" ).Append( parameter.UserId ).Append( ";" );
-				sb.Append( "Password=" ).Append( parameter.Password ).Append( ";" );
-			} else {
-				sb.Append( "Integrated Security=SSPI;" );
-			}
-			if ( !String.IsNullOrEmpty( parameter.ApplicationName ) ) {
-				sb.Append( "Application Name=" ).Append( parameter.ApplicationName ).Append( ";" );
-			}
-			// The following property is a work around for the 
-			// error "30182 Invalid amount of parameters Optionen" sometime
-			// raised by the provider if it encounters variable names.
-			sb.Append( "NamedParameters=false;" );
-
-			string connectionString = sb.ToString();
+			string connectionString = connectionFactory.GetConnectionString( parameter );
 			Trace.WriteLineIf( parameter.VerbositySwitch.TraceVerbose, "Connecting to Sybase ASE Server using following connection string:\r\n" + connectionString );
 
 			IDbConnection adoConnection = CreateAseConnection();

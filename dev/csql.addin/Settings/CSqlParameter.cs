@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using csql.addin.Settings.Gui;
+using Sqt.DbcProvider;
 
 namespace csql.addin.Settings
 {
@@ -42,6 +43,9 @@ namespace csql.addin.Settings
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private int maxResultColumnWidth;
+
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		private DbConnectionParameter dbConnectionParameter;
 
 		#endregion
 
@@ -92,6 +96,9 @@ namespace csql.addin.Settings
 			this.IsTemporaryFileEnabled = that.IsTemporaryFileEnabled;
 		}
 
+		/// <summary>
+		/// Occurs when a property value changes.
+		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -100,10 +107,7 @@ namespace csql.addin.Settings
 		[DisplayName( "Configuration Name" )]
 		public string Name 
 		{
-			get
-			{
-				return this.name;
-			}
+			get { return this.name; }
 			set
 			{
 				if ( String.Equals( this.name, value ) )
@@ -141,11 +145,12 @@ namespace csql.addin.Settings
 
 		[Category( "CSql" )]
 		[DisplayName( "Script Extensions" )]
-		[Description( "The file extensions which are considered to be sql scripts. The execute script command is only enabled for such files." )]
+		[Description( "The file extensions which are considered to be csql scripts. The execute script command is only enabled for such files." )]
 		[Editor( StringCollectionEditorTypeReferences, typeof( System.Drawing.Design.UITypeEditor ) )]
 		[TypeConverter( typeof( PathCollectionConverter ) )]
 		[SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
 		[SuppressMessage( "Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
+		[DefaultValue(".csql;.sql;.ins")]
 		public List<string> ScriptExtensions
 		{
 			get { return this.scriptExtensions; }
@@ -275,6 +280,13 @@ namespace csql.addin.Settings
 		[DisplayName( "Advanced Preprocess Parameter" )]
 		[DefaultValue( "" )]
 		public string AdvancedPreprocessorParameter { get; set; }
+
+		[Browsable(false)]
+		public DbConnectionParameter DbConnection
+		{
+			get { return this.dbConnectionParameter; }
+			set { this.dbConnectionParameter = value; }
+		}
 
 		#region INotifyPropertyChanged Members
 

@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System;
 using System.Diagnostics;
+using System.Data;
 
 namespace Sqt.DbcProvider.Provider.MsSql
 {
@@ -9,19 +10,12 @@ namespace Sqt.DbcProvider.Provider.MsSql
 	/// </summary>
 	internal class MsSqlConnectionFactory : IDbConnectionFactory
 	{
-		/// <inheritdoc/>
-		public DbConnection CreateConnection( DbConnectionParameter parameter )
+		public string ProviderName
 		{
-			var connection = new MsSqlConnection( this, parameter );
-			return connection;
+			get { return "System.Data.SqlClient"; }
 		}
 
-		/// <summary>
-		/// Creates the ADO.NET connection.
-		/// </summary>
-		/// <param name="parameter">The connection parameter.</param>
-		/// <returns>An open ADO connection.</returns>
-		internal static SqlConnection CreateAdoConnection( DbConnectionParameter parameter )
+		public string GetConnectionString( DbConnectionParameter parameter )
 		{
 			SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder();
 
@@ -42,7 +36,24 @@ namespace Sqt.DbcProvider.Provider.MsSql
 				connectionStringBuilder.ConnectTimeout = parameter.Timeout;
 			}
 
-			string connectionString = connectionStringBuilder.ConnectionString;
+			return connectionStringBuilder.ConnectionString;
+		}
+
+		/// <inheritdoc/>
+		public DbConnection CreateConnection( DbConnectionParameter parameter )
+		{
+			var connection = new MsSqlConnection( this, parameter );
+			return connection;
+		}
+
+		/// <summary>
+		/// Creates the ADO.NET connection.
+		/// </summary>
+		/// <param name="parameter">The connection parameter.</param>
+		/// <returns>An open ADO connection.</returns>
+		internal SqlConnection CreateAdoConnection( DbConnectionParameter parameter )
+		{
+			string connectionString = GetConnectionString( parameter );
 			Trace.WriteLineIf( parameter.VerbositySwitch.TraceVerbose, "Connecting to MS SQL Server using following connection string:\r\n" + connectionString );
 
 			SqlConnection connection = new SqlConnection( connectionString );

@@ -7,6 +7,16 @@ namespace Sqt.DbcProvider.Provider.Oracle
 	/// </summary>
 	internal class OracleConnectionFactory : IDbConnectionFactory
 	{
+		public string ProviderName
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public string GetConnectionString( DbConnectionParameter parameter )
+		{
+			throw new NotImplementedException();
+		}
+
 		public DbConnection CreateConnection( DbConnectionParameter parameter )
 		{
 			throw new NotImplementedException();
