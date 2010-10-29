@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using EnvDTE;
 using Sqt.DbcProvider;
 using Sqt.DbcProvider.Provider;
+using csql.addin.Gui;
 
 namespace csql.addin.Settings
 {
@@ -156,7 +157,10 @@ namespace csql.addin.Settings
 			}
 			catch ( Exception ex ) {
 				string context = MethodInfo.GetCurrentMethod().Name;
-				Debug.WriteLine( String.Format( "{0}: Failed to save connections because [{1}].", context, ex.Message ) );
+				string message = String.Format( "{0}: Failed to save connection settings because [{1}].", context, ex.Message );
+				var outputPane = Output.GetAndActivateOutputPane( (EnvDTE80.DTE2)application );
+				outputPane.OutputString( message );
+				Debug.WriteLine( message );
 			}
 		}
 
@@ -186,7 +190,13 @@ namespace csql.addin.Settings
 			if ( csqlParameter == null )
 				return;
 
-			string csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
+			string csqlParameterName = "CSqlParameter.xml";
+			string csqlParameterPath = GetSolutionFilePath( application, csqlParameterName );
+			if ( !IsFileWritable( csqlParameterPath ) ) {
+				csqlParameterName = "CSqlParameter.user.xml";
+				csqlParameterPath = GetSolutionFilePath( application, csqlParameterName );
+			}
+
 			if ( String.IsNullOrEmpty( csqlParameterPath ) )
 				return;
 
@@ -330,6 +340,29 @@ namespace csql.addin.Settings
 				currentScriptParameter = csqlParameter;
 				RaiseSettingsReloaded();
 			}
+		}
+
+		private static bool IsFileWritable( string filePath )
+		{
+			if ( !File.Exists( filePath ) )
+				return true;
+
+			FileAttributes attributes = File.GetAttributes( filePath );
+			if ( (attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly )
+				return false;
+
+			try {
+				using ( var stream = File.OpenWrite( filePath ) ) {
+				}
+			}
+			catch ( System.UnauthorizedAccessException ) {
+				return false;
+			}
+			catch ( IOException ) {
+				return false;
+			}
+
+			return true;
 		}
 
 		/// <summary>

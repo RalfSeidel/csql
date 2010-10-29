@@ -105,14 +105,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A9C37244791E4D22816A028AE37AA0EB"
-        "OwnerKey" = "8:_C43CAC21935E4412B604434835243FAE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C43CAC21935E4412B604434835243FAE"
-        "OwnerKey" = "8:_654B04899F5B4BDDA249AD0A1F34CBE3"
+        "MsmKey" = "8:_A794C685F9F64C70A5FD997635B57819"
+        "OwnerKey" = "8:_E06B81979C5742C1A7E1BC666E0FDCF7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -137,6 +131,12 @@
         {
         "MsmKey" = "8:_CEBB5A74EAEE1924AFD110562529B5EC"
         "OwnerKey" = "8:_FB96855D4CAFF9486DCFFB7C4188ADBD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E06B81979C5742C1A7E1BC666E0FDCF7"
+        "OwnerKey" = "8:_654B04899F5B4BDDA249AD0A1F34CBE3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -518,7 +518,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:csql.lib, Version=0.9.3951.11671, Culture=neutral, PublicKeyToken=3b71d3c4424edfcf, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:csql.lib, Version=0.9.3951.16946, Culture=neutral, PublicKeyToken=3b71d3c4424edfcf, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_9C0743D5ABEDA948064CA6A699722C17"
@@ -747,12 +747,12 @@
         "ProductName" = "8:csql"
         "ProductCode" = "8:{A1A91A0A-B3BE-40A4-B8E0-03973F2D020B}"
         "PackageCode" = "8:{06E4CD4A-FE42-4291-B428-1BCAF8AE51BA}"
-        "UpgradeCode" = "8:{D55DCB8D-E00F-426C-A081-38F72D633C03}"
+        "UpgradeCode" = "8:{95AAEDF8-A7B8-49E7-9CED-73CEDD9E7E43}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.9.4"
+        "ProductVersion" = "8:0.9.5"
         "Manufacturer" = "8:SQL Service"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://sqtpp.codeplex.com"
@@ -1285,7 +1285,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_A9C37244791E4D22816A028AE37AA0EB"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_A794C685F9F64C70A5FD997635B57819"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1299,7 +1299,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C43CAC21935E4412B604434835243FAE"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E06B81979C5742C1A7E1BC666E0FDCF7"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"

@@ -30,8 +30,12 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager( typeof( SettingsControl ) );
 			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
 			this.editorObjects = new System.Windows.Forms.ComboBox();
+			this.commandBar = new System.Windows.Forms.ToolStrip();
+			this.saveChangesButton = new System.Windows.Forms.ToolStripButton();
+			this.commandBar.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// propertyGrid
@@ -60,19 +64,51 @@
 			this.editorObjects.TabIndex = 0;
 			this.editorObjects.SelectionChangeCommitted += new System.EventHandler( this.EditorObjects_SelectionChangeCommitted );
 			// 
+			// commandBar
+			// 
+			this.commandBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.commandBar.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.commandBar.Dock = System.Windows.Forms.DockStyle.None;
+			this.commandBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.commandBar.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
+            this.saveChangesButton} );
+			this.commandBar.Location = new System.Drawing.Point( 240, 3 );
+			this.commandBar.Name = "commandBar";
+			this.commandBar.Size = new System.Drawing.Size( 57, 25 );
+			this.commandBar.TabIndex = 2;
+			// 
+			// saveChangesButton
+			// 
+			this.saveChangesButton.BackColor = System.Drawing.SystemColors.Control;
+			this.saveChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.saveChangesButton.Image = ((System.Drawing.Image)(resources.GetObject( "saveChangesButton.Image" )));
+			this.saveChangesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.saveChangesButton.Name = "saveChangesButton";
+			this.saveChangesButton.Size = new System.Drawing.Size( 23, 22 );
+			this.saveChangesButton.Text = "Save Changes";
+			this.saveChangesButton.Click += new System.EventHandler( this.SaveChanges_Click );
+			// 
 			// SettingsControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 13F );
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add( this.commandBar );
 			this.Controls.Add( this.editorObjects );
 			this.Controls.Add( this.propertyGrid );
 			this.Name = "SettingsControl";
 			this.Size = new System.Drawing.Size( 332, 418 );
 			this.VisibleChanged += new System.EventHandler( this.SettingsControl_VisibleChanged );
+			this.commandBar.ResumeLayout( false );
+			this.commandBar.PerformLayout();
 			this.ResumeLayout( false );
+			this.PerformLayout();
 
 		}
 
 		#endregion
+
+		private System.Windows.Forms.ToolStrip commandBar;
+		private System.Windows.Forms.ToolStripButton saveChangesButton;
+
 	}
 }

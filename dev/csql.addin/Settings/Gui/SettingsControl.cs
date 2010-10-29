@@ -25,7 +25,30 @@ namespace csql.addin.Settings.Gui
 		public SettingsControl()
 		{
 			InitializeComponent();
+			this.saveChangesButton.Image = Resources.Save;
+			UpdateCommandState();
 		}
+
+		private bool DbConnectionParameterChanged
+		{
+			get { return this.dbConnectionParameterChanged; }
+			set 
+			{ 
+				this.dbConnectionParameterChanged = value;
+				UpdateCommandState();
+			}
+		}
+
+		private bool CSqlParameterChanged
+		{
+			get { return this.csqlParameterChanged; }
+			set 
+			{ 
+				this.csqlParameterChanged = value;
+				UpdateCommandState();
+			}
+		}
+
 
 		internal void SetApplication( _DTE application )
 		{
@@ -276,10 +299,10 @@ namespace csql.addin.Settings.Gui
 			}
 
 			if ( this.propertyGrid.SelectedObject == this.dbConnectionParameter ) {
-				dbConnectionParameterChanged = true;
+				this.DbConnectionParameterChanged = true;
 			}
 			if ( this.propertyGrid.SelectedObject == this.csqlParameter ) {
-				csqlParameterChanged = true;
+				this.CSqlParameterChanged = true;
 			}
 
 
@@ -288,6 +311,9 @@ namespace csql.addin.Settings.Gui
 			this.saveChangesTimer.Start();
 		}
 
+		/// <summary>
+		/// Save changes automaticly after any setting has changes.
+		/// </summary>
 		private void SaveChangesTimer_Tick( object sender, System.EventArgs e )
 		{
 			if ( this.saveChangesTimer != null ) {
@@ -295,24 +321,51 @@ namespace csql.addin.Settings.Gui
 				this.saveChangesTimer.Dispose();
 				this.saveChangesTimer = null;
 			}
-			if ( dbConnectionParameterChanged ) {
+
+			SaveChangesAutomaticly();
+		}
+
+		/// <summary>
+		/// Save changes explicitly when the user pressed the save button.
+		/// </summary>
+		private void SaveChanges_Click( object sender, EventArgs e )
+		{
+			SaveChangesAutomaticly();
+
+			if ( DbConnectionParameterChanged ) {
+				if ( this.application != null ) {
+					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
+					settingsManager.SaveDbConnectionParameterInMruHistory( dbConnectionParameter );
+				}
+				this.DbConnectionParameterChanged = false;
+			}
+		}
+
+		private void SaveChangesAutomaticly()
+		{
+			if ( DbConnectionParameterChanged ) {
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
 					settingsManager.SaveDbConnectionParameterInGlobals( dbConnectionParameter );
 				}
-				dbConnectionParameterChanged = false;
 			}
 
-			if ( this.csqlParameterChanged ) {
+			if ( this.CSqlParameterChanged ) {
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
 					settingsManager.SaveScriptParameterInSolutionSettings( csqlParameter );
 				}
-				csqlParameterChanged = false;
+				CSqlParameterChanged = false;
 			}
 		}
 
+
 		#endregion
+
+		private void UpdateCommandState()
+		{
+			this.saveChangesButton.Enabled = this.CSqlParameterChanged || this.DbConnectionParameterChanged;
+		}
 
 		private void InitObjectSelectionComboBox()
 		{
@@ -373,5 +426,6 @@ namespace csql.addin.Settings.Gui
 				return Name;
 			}
 		}
+
 	}
 }
