@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchContextTest.cs" />
+    <Compile Include="Commands\VariableSubstitutorTest.cs" />
     <Compile Include="ProcessorContextTest.cs" />
     <Compile Include="ResultTrace\BooleanColumnFormatTest.cs" />
     <Compile Include="ResultTrace\BinaryColumnFormatTest.cs" />

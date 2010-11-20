@@ -83,7 +83,7 @@ namespace csql.addin.Commands
 			SettingsManager settingsManager = SettingsManager.GetInstance( application );
 			DbConnectionParameter dbConnectionParameter = settingsManager.CurrentDbConnectionParameter;
 			var csqGuiParameter = settingsManager.CurrentScriptParameter;
-			var csqlOptions = CreateCSqlOptions( dbConnectionParameter, csqGuiParameter, documentPath );
+			var csqlOptions = CreateCSqlOptions( dbConnectionParameter, csqGuiParameter, activeDocument );
 
 			TextSelection selection = activeDocument.Selection as TextSelection;
 			int fromChar = -1;
@@ -113,22 +113,23 @@ namespace csql.addin.Commands
 			if ( !csqGuiParameter.IsOutputFileEnabled ) {
 				settingsManager.SaveDbConnectionParameterInMruHistory( dbConnectionParameter );
 			}
-
 		}
 
-		private static SqtppOptions CreatePreprocessorArguments( CSqlParameter csqlParameter )
+		private static SqtppOptions CreatePreprocessorArguments( VariableSubstitutor substitutor, CSqlParameter csqlParameter )
 		{
 			SqtppOptions result = new SqtppOptions();
 
 			foreach ( var pd in csqlParameter.PreprocessorDefinitions ) {
 				if ( pd.IsEnabled && !String.IsNullOrEmpty( pd.Name ) ) {
-					result.MacroDefinitions.Add( pd.Name, pd.Value );
+					string value = substitutor.Substitute( pd.Value );
+					result.MacroDefinitions.Add( pd.Name, value );
 				}
 			}
 
 			foreach ( var directory in csqlParameter.IncludeDirectories ) {
 				if ( !String.IsNullOrEmpty( directory ) ) {
-					result.IncludeDirectories.Add( directory );
+					var path = substitutor.Substitute( directory );
+					result.IncludeDirectories.Add( path );
 				}
 			}
 
@@ -139,25 +140,34 @@ namespace csql.addin.Commands
 			return result;
 		}
 
-		private static CSqlOptions CreateCSqlOptions( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter, string scriptfile )
+		private static CSqlOptions CreateCSqlOptions( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter, Document activeDocument )
 		{
 			CSqlOptions csqlOptions = new CSqlOptions();
 
-			csqlOptions.ScriptFile = scriptfile;
-			if ( csqlParameter.IsOutputFileEnabled )
-				csqlOptions.DistributionFile = csqlParameter.OutputFile;
-			else
-				csqlOptions.DistributionFile = null;
+			DocumentEnvironment environment = new DocumentEnvironment( activeDocument );
+			VariableSubstitutor substitutor = new VariableSubstitutor( environment );
 
-			if ( csqlParameter.IsTemporaryFileEnabled )
-				csqlOptions.TempFile = csqlParameter.TemporaryFile;
-			else
+			csqlOptions.ScriptFile = activeDocument.FullName;
+			if ( csqlParameter.IsOutputFileEnabled ) {
+				string file = substitutor.Substitute( csqlParameter.OutputFile );
+				csqlOptions.DistributionFile = file;
+			}
+			else {
+				csqlOptions.DistributionFile = null;
+			}
+
+			if ( csqlParameter.IsTemporaryFileEnabled ) {
+				string file = substitutor.Substitute( csqlParameter.TemporaryFile );
+				csqlOptions.TempFile = file;
+			}
+			else {
 				csqlOptions.TempFile = null;
+			}
 
 			csqlOptions.BreakOnError = csqlParameter.IsBreakOnErrorEnabled;
 			csqlOptions.UsePreprocessor = csqlParameter.IsPreprocessorEnabled;
 			csqlOptions.ConnectionParameter = dbConnectionParameter;
-			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( csqlParameter );
+			csqlOptions.PreprocessorOptions = CreatePreprocessorArguments( substitutor, csqlParameter );
 			csqlOptions.AddPreprocessorMacros();
 
 			csqlOptions.Verbosity.Level = csqlParameter.Verbosity;

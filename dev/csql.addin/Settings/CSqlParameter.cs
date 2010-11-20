@@ -68,7 +68,7 @@ namespace csql.addin.Settings
 		}
 
 		/// <summary>
-		/// Copy Construktor
+		/// Copy constructor
 		/// </summary>
 		/// <param name="that">The parameter to copy.</param>
 		public CSqlParameter( CSqlParameter that )
@@ -176,6 +176,7 @@ namespace csql.addin.Settings
 		[Category( "CSql" )]
 		[DefaultValue( TraceLevel.Info )]
 		[DisplayName("Verbosity")]
+		[Description( "The verbosity of the trace output of this addin." )]
 		public TraceLevel Verbosity { get; set; }
 
 		[Category( "CSql" )]
@@ -281,15 +282,15 @@ namespace csql.addin.Settings
 		[DefaultValue( "" )]
 		public string AdvancedPreprocessorParameter { get; set; }
 
+		/// <summary>
+		/// The database connection parameter associated with the current parameter set.
+		/// </summary>
 		[Browsable(false)]
 		public DbConnectionParameter DbConnection
 		{
 			get { return this.dbConnectionParameter; }
 			set { this.dbConnectionParameter = value; }
 		}
-
-		#region INotifyPropertyChanged Members
-
 		/// <summary>
 		/// Raises the property changed event.
 		/// </summary>
@@ -300,7 +301,5 @@ namespace csql.addin.Settings
 				PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 			}
 		}
-
-		#endregion
 	}
 }

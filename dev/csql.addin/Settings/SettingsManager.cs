@@ -168,7 +168,7 @@ namespace csql.addin.Settings
 		/// Stores the current database connection parameter in the global variables of the visual studio
 		/// environment.
 		/// </summary>
-		/// <param name="dbConnectionParameter">The db connection parameter.</param>
+		/// <param name="dbConnectionParameter">The database connection parameter.</param>
 		internal void SaveDbConnectionParameterInGlobals( DbConnectionParameter dbConnectionParameter )
 		{
 			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( dbConnectionParameter.Provider );

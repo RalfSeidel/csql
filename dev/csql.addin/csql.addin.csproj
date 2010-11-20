@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
     <IncrementalBuild>false</IncrementalBuild>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -64,8 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CancelScriptCommand.cs" />
+    <Compile Include="Commands\DocumentEnvironment.cs" />
     <Compile Include="Commands\FileGroupRenamer.cs" />
     <Compile Include="Commands\FileClassification.cs" />
+    <Compile Include="Commands\VariableSubstitutor.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OutputPaneTraceListener.cs" />
     <Compile Include="Gui\Output.cs" />
