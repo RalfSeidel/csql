@@ -14,35 +14,39 @@ namespace sqtpp {
 
 FileFinder::FileFinder( const std::vector<wstring>& includeDirectories )
 : includeDirectories( includeDirectories )
+, bFindInCurrentDirectory( false )
+{
+}
+
+FileFinder::FileFinder( const std::vector<wstring>& includeDirectories, const std::wstring& currentFilePath )
+: includeDirectories( includeDirectories )
+, currentFileDirectory( File::getDirectory( currentFilePath ) )
+, bFindInCurrentDirectory( true )
 {
 }
 
 std::wstring FileFinder::findFile( const wstring& filePath )
 {
-	wstring sFullPath;
-	if ( bUseCurrentDirectory ) {
+	if ( bFindInCurrentDirectory ) {
+		// Lookup relative to the directory of the current file.
+		if ( !currentFileDirectory.empty()  ) {
+			wstring sFullPath = File::getFullPath( currentFileDirectory, filePath );
+			if ( File::isFile( sFullPath ) ){
+				return sFullPath;
+			}
+		}
+
 		// Lookup relative to the current working directory.
 		if ( File::isFile( filePath ) ) {
-			sFullPath = File::getFullPath( filePath );
+			wstring sFullPath = File::getFullPath( filePath );
 			return sFullPath;
 		}
+	} 
 
-		// Lookup relative to the path of the including file
-		/*
-		wstring sThisDirectory = File::getDirectory( this->getPath() );
-		wstring sCheckPath     = sThisDirectory + filePath;
-		if ( File::isFile( sCheckPath ) ) {
-			sFullPath = sCheckPath;
-			return sFullPath;
-		}
-		*/
-
-	}
 	for ( vector<wstring>::const_iterator it = includeDirectories.begin(); it != includeDirectories.end(); ++it ) {
 		const wstring& sDirectory = *it; 
-		const wstring  sCheckPath = File::getFullPath( sDirectory, filePath );
-		if ( File::isFile( sCheckPath ) ){
-			sFullPath = sCheckPath;
+		const wstring  sFullPath = File::getFullPath( sDirectory, filePath );
+		if ( File::isFile( sFullPath ) ){
 			return sFullPath;
 		}
 	}

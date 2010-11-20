@@ -48,43 +48,6 @@ public:
 		Assert::IsTrue( File::isFile( filePath.c_str() ) );
 	}
 
-	[TestMethod]
-	void findFileInCurrentDirectoryTest()
-	{
-		vector<wstring> includeDirectories;
-		File            file;
-		wstring         path;
-
-		wstring directory = TestFileDirectory;
-		wstring filePath  = directory + L"include1.h";
-		file.open( filePath.c_str() );
-
-		// Check that include is not resolved if current directory is not searched.
-		path = file.findFile( L"include2.h", includeDirectories, false );
-		Assert::IsTrue( path.empty() );
-		
-		// Check that include is resolved if current directory is not searched.
-		path = file.findFile( L"include2.h", includeDirectories, true );
-		Assert::IsTrue( !path.empty() );
-	}
-
-	/**
-	** @brief Check that include is resolved if current directory is not searched but 
-	** specified in the include directory collection.
-	*/
-	[TestMethod]
-	void findFileInIncludedDirectoriesTest()
-	{
-		vector<wstring> includeDirectories;
-		File            file;
-		wstring         path;
-
-		wstring directory = TestFileDirectory;
-		includeDirectories.push_back( directory );
-		path = file.findFile( L"include2.h", includeDirectories, false );
-		Assert::IsTrue( !path.empty() );
-	}
-
 }; // class
 
 

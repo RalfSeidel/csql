@@ -571,44 +571,6 @@ const wstring File::checkFile( const wstring& filePath ) /* throw( Error ) */
 
 
 /**
-** @brief Find the file in one of the given directories.
-** 
-** @param   filePath The relative file path as mentioned in a \#include directive.
-** @param   includeDirectories The directories to search the file for.
-** @param   bSearchCwd Set to true if the current directory should be checked to.
-**          If set the methode will lookup in the directory of this file and 
-**          in the process working directory first.
-** @returns True if the file exists. False if not.
-*/
-std::wstring File::findFile( const wstring& filePath, const vector<wstring>& includeDirectories, bool bSearchCwd ) const
-{
-	wstring sFullPath;
-	if ( bSearchCwd ) {
-		// Lookup inside this file directory.
-		wstring sThisDirectory = File::getDirectory( this->getPath() );
-		wstring sCheckPath     = sThisDirectory + filePath;
-		if ( isFile( sCheckPath ) ) {
-			sFullPath = sCheckPath;
-			return sFullPath;
-		}
-
-		if ( isFile( filePath ) ) {
-			sFullPath = getFullPath( filePath );
-			return sFullPath;
-		}
-	}
-	for ( vector<wstring>::const_iterator it = includeDirectories.begin(); it != includeDirectories.end(); ++it ) {
-		const wstring& sDirectory = *it; 
-		const wstring  sCheckPath = File::getFullPath( sDirectory, filePath );
-		if ( isFile( sCheckPath ) ){
-			sFullPath = sCheckPath;
-			return sFullPath;
-		}
-	}
-
-	return wstring();
-}
-
 /**
 ** @brief Get the file content stream.
 ** 

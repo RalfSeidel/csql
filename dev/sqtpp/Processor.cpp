@@ -8,6 +8,7 @@
 #include "Options.h"
 #include "Directive.h"
 #include "File.h"
+#include "FileFinder.h"
 #include "Output.h"
 #include "Exceptions.h"
 #include "Expression.h"
@@ -1789,7 +1790,7 @@ void Processor::processUndefallDirective()
 void Processor::processIncludeDirective()
 {
 	wstring sFilePath;
-	bool    bSearchCwd = true;
+	bool    bIsSysInclude = false;
 
 	assert( m_pTokenStream == m_pScanner );
 	m_pScanner->pushContext( CTX_INCLUDE_DIRECTIVE );
@@ -1816,13 +1817,13 @@ void Processor::processIncludeDirective()
 					break;
 				case TOK_STRING:
 					sFilePath  = m_tokenExpression.getText();
-					bSearchCwd = true;
+					bIsSysInclude = false;
 					bContinue  = false;
 					break;
 
 				case TOK_SYS_INCLUDE:
 					sFilePath  = m_tokenExpression.getText();
-					bSearchCwd = false;
+					bIsSysInclude = true;
 					bContinue  = false;
 					break;
 				case TOK_END_OF_FILE:
@@ -1846,18 +1847,23 @@ void Processor::processIncludeDirective()
 		throw;
 	}
 
-	bool    bDoInclude  = true;
-	File&   currentFile = getCurrentFile();
-	wstring sFullPath   = currentFile.findFile( sFilePath, m_options.getIncludeDirectories(), bSearchCwd );
+	const StringArray&  includeDirectories = m_options.getIncludeDirectories();
+	wstring sFullPath;
+	if ( bIsSysInclude ) {
+		FileFinder filefinder( includeDirectories );
+		sFullPath = filefinder.findFile( sFilePath );
+	} else {
+		File&   currentFile = getCurrentFile();
+		FileFinder filefinder( includeDirectories, currentFile.getPath() );
+		sFullPath = filefinder.findFile( sFilePath );
+	}
 
 	if ( sFullPath.empty() ) {
 		// Cannot open file: '{1}': No such file or directory.
 		throw error::C1083( sFilePath );
 	}
 
-	if ( bDoInclude ) {
-		bDoInclude  = m_includeOnceFiles.count( sFullPath ) == 0;
-	}
+	bool bDoInclude  = m_includeOnceFiles.count( sFullPath ) == 0;
 
 	int   includedCt  = 0;
 	const FileStack::container_type& c = m_fileStack.container();
@@ -2212,9 +2218,10 @@ void Processor::processAdSalesNGDirective()
 			// Missing file path for \#include directive. Found {1}.
 			throw error::C2006( m_tokenExpression.getText() );
 		}
-		wstring sFilePath   = m_tokenExpression.getText() + L".syb";
-		File&   currentFile = getCurrentFile();
-		wstring sFullPath   = currentFile.findFile( sFilePath, m_options.getIncludeDirectories(), true );
+		wstring sFilePath = m_tokenExpression.getText() + L".syb";
+		File& currentFile = getCurrentFile();
+		FileFinder fileFinder( m_options.getIncludeDirectories(), currentFile.getPath() );
+		wstring sFullPath = fileFinder.findFile( sFilePath );
 
 		if ( sFullPath.empty() ) {
 			// Cannot open file: '{1}': No such file or directory.

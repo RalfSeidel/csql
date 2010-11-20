@@ -42,6 +42,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\csql.addin\csql.addin.csproj">
@@ -64,6 +65,7 @@
     <Compile Include="ResultTrace\BinaryColumnFormatTest.cs" />
     <Compile Include="ResultTrace\DateTimeColumnFormatTest.cs" />
     <Compile Include="ResultTrace\StringColumnFormatTest.cs" />
+    <Compile Include="Settings\CSqlParameterTest.cs" />
     <Compile Include="TerminateExceptionTest.cs" />
   </ItemGroup>
   <ItemGroup>

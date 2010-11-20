@@ -65,9 +65,6 @@ public:
 	// Check if file exists and is readable - throw error if not.
 	static const wstring checkFile( const wstring& filePath ) /* throw( Error ) */;
 
-	// Lookup the file.
-	std::wstring findFile( const wstring& filePath, const vector<wstring>& includeDirectories, bool bSearchCwd ) const;
-
 	// Open the file.
 	std::wistream& open( const std::wstring& fileName, const CodePageId defaultCodePageId );
 

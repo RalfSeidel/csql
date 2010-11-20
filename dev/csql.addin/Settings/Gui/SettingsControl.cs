@@ -180,6 +180,7 @@ namespace csql.addin.Settings.Gui
 			if ( datasources == null )
 				return;
 
+			args.Values.Clear();
 			foreach ( var ds in datasources.Datasource ) {
 				args.Values.Add( ds.Comment );
 			}
@@ -192,6 +193,7 @@ namespace csql.addin.Settings.Gui
 			if ( datasources == null )
 				return;
 
+			args.Values.Clear();
 			foreach ( var ds in datasources.Datasource ) {
 				args.Values.Add( ds.Address );
 			}
@@ -203,6 +205,7 @@ namespace csql.addin.Settings.Gui
 			if ( datasource == null )
 				return;
 
+			args.Values.Clear();
 			foreach ( var catalog in datasource.Catalogs ) {
 				args.Values.Add( catalog );
 			}
@@ -214,6 +217,7 @@ namespace csql.addin.Settings.Gui
 			if ( datasource == null )
 				return;
 
+			args.Values.Clear();
 			foreach ( var authentication in datasource.Authentications ) {
 				args.Values.Add( authentication.UserId ?? "" );
 			}
@@ -336,6 +340,7 @@ namespace csql.addin.Settings.Gui
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
 					settingsManager.SaveDbConnectionParameterInMruHistory( dbConnectionParameter );
+					settingsManager.SaveDbConnectionParameterInGlobals( dbConnectionParameter );
 				}
 				this.DbConnectionParameterChanged = false;
 			}

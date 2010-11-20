@@ -214,7 +214,7 @@ namespace csql.addin.Settings
 		[SuppressMessage( "Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
 		public List<string> IncludeDirectories 
 		{ 
-			get { return includeDirectories; }
+			get { return this.includeDirectories; }
 			set 
 			{ 
 				if ( Object.Equals( this.includeDirectories, value ) )

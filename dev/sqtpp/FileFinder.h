@@ -16,12 +16,15 @@ namespace sqtpp {
 class FileFinder
 {
 private:
+	/// The directory of the current file.
+	const std::wstring currentFileDirectory;
+
 	/// The include directories.
 	const std::vector<std::wstring>& includeDirectories;
 
 	/// Option flag to search files in the current directory
 	/// or in the include directories only.
-	bool bUseCurrentDirectory;
+	bool bFindInCurrentDirectory;
 
 private:
 	/// Not implemented copy constructor.
@@ -30,14 +33,7 @@ private:
 	FileFinder& operator= ( const FileFinder& );
 public:
 	FileFinder( const std::vector<std::wstring>& includeDirectories );
-
-
-	/// Set the option to find files specified
-	/// in a location relative to the current working directory.
-	void useCurrentDirectory( bool bUseCurrentDirectory )
-	{
-		this->bUseCurrentDirectory = bUseCurrentDirectory;
-	}
+	FileFinder( const std::vector<std::wstring>& includeDirectories, const std::wstring& currentFilePath );
 
 	// Find the specified file and return it's full path.
 	std::wstring findFile( const std::wstring& filePath );
