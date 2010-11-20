@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Forms;
-using Sqt.DbcProvider;
-using EnvDTE;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
+using EnvDTE;
+using Sqt.DbcProvider;
 
 namespace csql.addin.Settings.Gui
 {
@@ -293,6 +292,7 @@ namespace csql.addin.Settings.Gui
 		/// <summary>
 		/// Starts a timer that will save the changes a short while after the user made the modification.
 		/// </summary>
+		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification="Timer is stoped when it ellapsed for the first time." )]
 		private void PropertyGrid_PropertyValueChanged( object s, PropertyValueChangedEventArgs e )
 		{
 			if ( this.saveChangesTimer != null ) {

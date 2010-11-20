@@ -64,6 +64,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\csql\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Commands\CancelScriptCommand.cs" />
     <Compile Include="Commands\DocumentEnvironment.cs" />
     <Compile Include="Commands\FileGroupRenamer.cs" />
@@ -165,6 +168,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </Resource>
     <Content Include="csql.addin" />
     <None Include="Resources\Images\Commands\CancelScript.bmp" />
     <Content Include="Resources\Images\ExecuteScript.png" />

@@ -116,8 +116,6 @@ namespace csql.addin.Commands
 				if ( string.IsNullOrEmpty( projectPath ) )
 					return SolutionDirectory;
 
-				DTE2 application = (DTE2)document.DTE;
-
 				string directory = GetRootedDirectory( projectPath );
 				return directory;
 			}
@@ -189,7 +187,7 @@ namespace csql.addin.Commands
 		}
 
 
-		private string GetRootedDirectory( string path )
+		private static string GetRootedDirectory( string path )
 		{
 			string pathRoot = Path.GetPathRoot( path );
 			string directory = Path.GetDirectoryName( path );

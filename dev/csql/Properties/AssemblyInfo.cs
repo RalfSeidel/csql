@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Reflection;
-using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle( "csql" )]
+[assembly: AssemblyTitle( "csql library" )]
 [assembly: AssemblyDescription( "Sql command processor with preprocessor support." )]
-[assembly: AssemblyCompany( "SQL Service GmbH" )]
-[assembly: AssemblyProduct( "csql" )]
-[assembly: AssemblyCopyright( "Copyright © 2009 SQL Service GmbH" )]
-[assembly: AssemblyCulture( "" )]
-[assembly: NeutralResourcesLanguageAttribute( "en-US" )]
-
-[assembly: AssemblyVersion( "0.9.*" )]
-
+[assembly: CLSCompliant( true )]
 [assembly: ComVisible( false )]
-[assembly: CLSCompliantAttribute( true )]
+
 // Because of the strong signing the InternalsVisibleTo attributes must specify a public key.
 // To get the public key from the strong name run the following commands:
 //    sn -p csql.snk csql.pub

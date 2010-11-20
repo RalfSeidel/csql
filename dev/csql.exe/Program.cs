@@ -3,6 +3,10 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
+using System.Reflection;
+using CommandLine;
+using System.Collections.Generic;
 
 namespace csql.exe
 {
@@ -13,9 +17,22 @@ namespace csql.exe
 	/// <returns><see cref="ExitCode.Success"/> if the program ran without an error. 
 	/// Another <see cref="ExitCode" /> otherwise.
 	/// </returns>
-	[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Main has to catch everything." )]
+	[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Main has to catch everything." )]
 	class Program
 	{
+		/// <summary>
+		/// Gets the program title.
+		/// </summary>
+		private static string ProgramTitle
+		{
+			get
+			{
+				Assembly currentAssembly = Assembly.GetExecutingAssembly();
+				AssemblyName assemblyName = currentAssembly.GetName();
+				return assemblyName.Name;
+			}
+		}
+
 		/// <summary>
 		/// The program entry point.
 		/// </summary>
@@ -23,9 +40,20 @@ namespace csql.exe
 		/// <returns><see cref="ExitCode.Success"/> if the program ran without an error. 
 		/// Another <see cref="ExitCode" /> otherwise.
 		/// </returns>
-		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Main has to catch everything." )]
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Main has to catch everything." )]
 		public static int Main( string[] args )
 		{
+			// If run without any argument show dialog with parameter usage.
+			// Prefer dialog over command line to make windows client software 
+			// logo toolkit happy.
+			if ( args.Length == 0 ) {
+				string usage = CommandLine.Parser.ArgumentsUsage( typeof(CmdArgs) );
+				var usageDialogItems = GetUsageDialogData();
+				UsageDialog dialog = new UsageDialog( usageDialogItems );
+				dialog.ShowDialog();
+				return (int)ExitCode.Success;
+			}
+
 			// Set output encoding to ansi because otherwise the output pane 
 			// of visual studio will display wrong characters.
 			// TODO: Make this behaviour configurable.
@@ -45,7 +73,8 @@ namespace csql.exe
 				if ( verbosity.TraceWarning ) {
 					TraceCommandLine( args );
 					didTraceCommandLine = true;
-					CommandLine.Parser.ArgumentsUsage( cmdArgs.GetType() );
+					string usage = CommandLine.Parser.ArgumentsUsage( cmdArgs.GetType() );
+					Console.Write( usage );
 				}
 				exitCode = ExitCode.ArgumentsError;
 			} else {
@@ -129,6 +158,29 @@ namespace csql.exe
 			}
 			string traceMessage = sb.ToString();
 			Trace.WriteLine( traceMessage );
+		}
+
+
+		private static IEnumerable<UsageDialogDataItem> GetUsageDialogData()
+		{
+			Parser parser = new Parser( typeof( CmdArgs ), null );
+			List<UsageDialogDataItem> items = new List<UsageDialogDataItem>();
+
+			foreach ( Parser.Argument arg in parser.Arguments ) {
+				UsageDialogDataItem item = new UsageDialogDataItem();
+				item.Option = arg.LongName;
+				item.Description = arg.FullHelpText;
+				item.Default = arg.DefaultValue == null ? string.Empty : arg.DefaultValue.ToString();
+				items.Add( item );
+			}
+			return items;
+		}
+
+		private class UsageDialogDataItem
+		{
+			public string Option { get; set; }
+			public string Description { get; set; }
+			public string Default { get; set; }
 		}
 	}
 }

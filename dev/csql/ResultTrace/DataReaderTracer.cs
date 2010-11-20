@@ -177,7 +177,7 @@ namespace csql.ResultTrace
 		}
 
 
-		private bool IsLastNonEmptyColumn( IList<IList<string>> allColumnLines, int lineIndex, int columnIndex )
+		private static bool IsLastNonEmptyColumn( IList<IList<string>> allColumnLines, int lineIndex, int columnIndex )
 		{
 			for ( int i = columnIndex + 1; i < allColumnLines.Count; ++i ) {
 				IList<string> columnLines = allColumnLines[i];
@@ -207,7 +207,7 @@ namespace csql.ResultTrace
 		}
 
 
-		private bool AreAllColumnNamesEmpty( IEnumerable<ColumnDescriptor> columnDescriptors )
+		private static bool AreAllColumnNamesEmpty( IEnumerable<ColumnDescriptor> columnDescriptors )
 		{
 			foreach ( ColumnDescriptor columnDescriptor in columnDescriptors ) {
 				string name = columnDescriptor.Name;
@@ -217,7 +217,7 @@ namespace csql.ResultTrace
 			return true;
 		}
 
-		private bool AreAllColumnValuesNull( IEnumerable columnValues )
+		private static bool AreAllColumnValuesNull( IEnumerable columnValues )
 		{
 			foreach ( object value in columnValues ) {
 				if ( !DBNull.Value.Equals( value ) )

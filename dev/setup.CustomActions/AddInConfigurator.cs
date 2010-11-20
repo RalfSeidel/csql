@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
+using Microsoft.Win32;
+using System;
+using System.IO;
 
 namespace Setup.CustomActions
 {
@@ -10,7 +13,6 @@ namespace Setup.CustomActions
     [RunInstaller(true)]
     public class AddInConfigurator : Installer
     {
-
 		/// <summary>
 		/// Perform the installation.
 		/// </summary>
@@ -26,9 +28,26 @@ namespace Setup.CustomActions
         public override void Install(IDictionary stateSaver)
         {
             base.Install(stateSaver);
+	
+			// Save target directory and product id to be able to set the install location
+			// Not that you have to add the following line to the "CustomActionData" property
+			// in the install event of your primary output:
+			//	/DP_TargetDir="[TARGETDIR]\" /DP_ProductID="[ProductCode]"
+			object productId = Context.Parameters["DP_ProductID"];
+			object targetDir = Context.Parameters["DP_TargetDir"];
+			if ( productId == null ) {
+				throw new NotSupportedException( "The product id is not defined." );
+			}
+			if ( targetDir == null ) {
+				throw new NotSupportedException( "The targetDirectory is not defined." );
+			}
 
-			var xmlFile = Context.Parameters["addinxmlfile"];
-			var dllFile = Context.Parameters["addinassembly"];
+			stateSaver.Add( "ProductID", productId.ToString() );
+			stateSaver.Add( "TargetDir", targetDir.ToString() );
+
+			var directory = targetDir.ToString() + Path.DirectorySeparatorChar;
+			var xmlFile = directory + "csql.addin";
+			var dllFile = directory + "csql.addin.dll";
 			AddInFilePreparer.Prepare( xmlFile, dllFile, this.Context );
             new AddInLink(this.Context).CreateAddInLinks( xmlFile );
         }
@@ -67,6 +86,17 @@ namespace Setup.CustomActions
         public override void Commit(IDictionary savedState)
         {
             base.Commit(savedState);
+
+			// Determine install location and update product registry with the information.
+			string productId = savedState["ProductID"].ToString();
+			string installerKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" + productId;
+			RegistryKey installerKey = Registry.LocalMachine.OpenSubKey( installerKeyPath, true );
+
+			if ( installerKey != null ) {
+				string installLocation = savedState["TargetDir"].ToString();
+				installerKey.SetValue( "InstallLocation", installLocation );
+				installerKey.Close();
+			}
         }
 
 		/// <summary>

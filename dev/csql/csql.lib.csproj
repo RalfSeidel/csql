@@ -94,6 +94,7 @@
     <Compile Include="ResultTrace\FixedColumnFormat.cs" />
     <Compile Include="ResultTrace\RowDescriptor.cs" />
     <Compile Include="ResultTrace\Row.cs" />
+    <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="SqtppOptions.cs" />
     <Compile Include="TerminateException.cs" />
     <Compile Include="VerbositySwitch.cs" />

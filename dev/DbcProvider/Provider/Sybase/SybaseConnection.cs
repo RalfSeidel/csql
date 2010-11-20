@@ -103,7 +103,8 @@ namespace Sqt.DbcProvider.Provider.Sybase
 					if ( assemblyPath != null ) {
 						Assembly assembly = Assembly.LoadFile( assemblyPath );
 						return assembly;
-					} else {
+					}
+					else {
 						// Try to load from GAC
 						Assembly assembly = Assembly.Load( "Sybase.Data.AseClient" );
 						return assembly;
@@ -111,7 +112,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 				}
 				catch ( Exception ex ) {
 					string message = "Can't load sybase provider assembly.";
-					Trace.TraceError(  message + ex.Message );
+					Trace.TraceError( message + ex.Message );
 					throw new DbException( message, ex );
 				}
 			}
@@ -126,7 +127,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 		private IDbConnection CreateAseConnection()
 		{
 			Assembly assembly = AseAssembly;
-			Object connection = assembly.CreateInstance( "Sybase.Data.AseClient.AseConnection" );
+			object connection = assembly.CreateInstance( "Sybase.Data.AseClient.AseConnection" );
 
 			Type connectionType   = connection.GetType();
 			EventInfo eventInfo        = connectionType.GetEvent( "InfoMessage" );
@@ -147,8 +148,8 @@ namespace Sqt.DbcProvider.Provider.Sybase
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		/// 
-		[SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method is jused via reflection code (see CreateAseConnection)." )]
-		[SuppressMessage( "Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Need public access to be able to access the method info via reflection." )]
+		[SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification="Method is jused via reflection code (see CreateAseConnection)." )]
+		[SuppressMessage( "Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification="Need public access to be able to access the method info via reflection." )]
 		public void OnAseConnectionInfoEvent( object sender, EventArgs e )
 		{
 			Type eType = e.GetType();

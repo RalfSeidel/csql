@@ -21,4 +21,4 @@ using System.Diagnostics.CodeAnalysis;
 [module: SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "csql.addin.Settings.Gui", MessageId = "addin", Justification = "Historical name." )]
 [module: SuppressMessage( "Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Scope = "type", Target = "csql.addin.CSqlAddin", MessageId = "CSql", Justification = "Historical name." )]
 [module: SuppressMessage( "Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Scope = "type", Target = "csql.addin.Settings.CSqlParameter", MessageId = "CSql", Justification = "Historical name." )]
-
+[module: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope="namespace", Target="csql.addin.Settings", Justification="Root of namespace containing more types." )]

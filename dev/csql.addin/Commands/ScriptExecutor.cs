@@ -8,6 +8,7 @@ namespace csql.addin.Commands
 	/// <summary>
 	/// Wrapper to call the preprocessor and csql script processing engine.
 	/// </summary>
+	[SuppressMessage( "Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification="The field processor is disposed internaly. The reference as a field is just hold to allow cancelation while the processor is running." )]
 	internal class ScriptExecutor
 	{
 		private readonly CSqlOptions csqlOptions;

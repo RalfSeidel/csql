@@ -12,6 +12,7 @@
 			<Word>sqtpp</Word>
 			<Word>addin</Word>
 			<Word>Util</Word>
+			<Word>Globals</Word>
 			<!-- Sequel Tools Namespace -->
 			<Word>Sqt</Word>
 			<!-- Db Connection -->

@@ -13,11 +13,13 @@ namespace Sqt.DbcProvider
 	/// </summary>
 	[DefaultProperty("DatasourceName")]
 	[CLSCompliant( true )]
+	[Serializable]
 	public class DbConnectionParameter : INotifyPropertyChanged
 	{
 		#region Private fields
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		[NonSerialized]
 		private readonly Authentication authentication = new Authentication();
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
@@ -42,6 +44,7 @@ namespace Sqt.DbcProvider
 		private string applicationName;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
+		[NonSerialized]
 		private TraceSwitch traceSwitch;
 
 		#endregion

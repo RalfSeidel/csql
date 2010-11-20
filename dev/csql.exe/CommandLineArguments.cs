@@ -450,6 +450,12 @@ namespace CommandLine
 		/// </summary>
 		private Parser() { }
 
+
+		public ArrayList Arguments
+		{
+			get { return this.arguments; }
+		}
+
 		/// <summary>
 		/// Parses Command Line Arguments. Displays usage message to Console.Out
 		/// if /?, /help or invalid arguments are encounterd.
@@ -1020,7 +1026,7 @@ namespace CommandLine
 		}
 
 		[System.Diagnostics.DebuggerDisplay( "Name = {LongName}" )]
-		private class Argument
+		public class Argument
 		{
 			public Argument( ArgumentAttribute attribute, FieldInfo field, ErrorReporter reporter )
 			{

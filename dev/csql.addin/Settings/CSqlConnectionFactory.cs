@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data;
 using System.Diagnostics;
 using EnvDTE;
+using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Settings
 {
@@ -12,6 +13,7 @@ namespace csql.addin.Settings
 	/// Sample to create a database connection based on the connection parameters
 	/// configured in the csql addin.
 	/// </summary>
+	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification="Derived from product name."  )]
 	public static class CSqlConnectionFactory
 	{
 		private const string defaultProviderName = "System.Data.SqlClient";
