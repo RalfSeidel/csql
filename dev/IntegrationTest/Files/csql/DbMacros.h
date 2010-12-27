@@ -56,6 +56,21 @@
 /// @example DropCreate.csql
 
 
+/// @def CSQL_DROP_DATABASES
+/// @ingroup Control
+/// <summary>
+/// Use this defintion to include/excluded sections in your script
+/// that are dropping databases.
+/// </summary>
+
+/// @def CSQL_CREATE_DATABASES
+/// @ingroup Control
+/// <summary>
+/// Use this defintion to include/excluded sections in your script
+/// that are creating databases.
+/// </summary>
+
+
 /// @def CSQL_DROP_SCHEMAS
 /// @ingroup Control
 /// <summary>
@@ -340,6 +355,7 @@
 #undef CSQL_DBMACROS_INCLUDED
 
 #undef CSQL_DROP_ALL
+#undef CSQL_DROP_DATABASES
 #undef CSQL_DROP_SCHEMAS
 #undef CSQL_DROP_DEFAULTS
 #undef CSQL_DROP_RULES
@@ -357,6 +373,7 @@
 #undef CSQL_DROP_SYNONYMS
 
 #undef CSQL_CREATE_ALL
+#undef CSQL_CREATE_DATABASES
 #undef CSQL_CREATE_SCHEMAS
 #undef CSQL_CREATE_DEFAULTS
 #undef CSQL_CREATE_RULES
@@ -397,7 +414,7 @@
 */
 
 #if !( defined( CSQL_CREATE_ALL )             || defined( CSQL_CREATE_ALL_BUT_TABLES ) \
-    || defined( CSQL_CREATE_SCHEMAS ) \
+    || defined( CSQL_CREATE_DATABASES )       || defined( CSQL_CREATE_SCHEMAS ) \
     || defined( CSQL_CREATE_DEFAULTS  )       || defined( CSQL_CREATE_RULES  ) \
     || defined( CSQL_CREATE_TYPES )           || defined( CSQL_CREATE_TABLES ) \
     || defined( CSQL_CREATE_PRIMARY_KEYS )    || defined( CSQL_CREATE_FOREIGN_KEYS )  \
@@ -412,7 +429,7 @@
     || defined( CSQL_DELETE_DICTIONARY_DATA ) || defined( CSQL_INSERT_DICTIONARY_DATA ) \
     || defined( CSQL_EXECUTE_TESTS ) \
     || defined( CSQL_DROP_ALL ) \
-    || defined( CSQL_DROP_SCHEMAS ) \
+    || defined( CSQL_DROP_DATABASES )         || defined( CSQL_DROP_SCHEMAS ) \
     || defined( CSQL_DROP_DEFAULTS )          || defined( CSQL_DROP_RULES ) \
     || defined( CSQL_DROP_TYPES )             || defined( CSQL_DROP_TABLES ) \
     || defined( CSQL_DROP_PRIMARY_KEYS )      || defined( CSQL_DROP_FOREIGN_KEYS )  \
@@ -437,6 +454,7 @@
 */
 
 #if defined( CSQL_CREATE_ALL ) || defined( CSQL_CREATE_ALL_BUT_TABLES )
+#undef CSQL_CREATE_DATABASES
 #undef CSQL_CREATE_SCHEMAS
 #undef CSQL_CREATE_DEFAULTS
 #undef CSQL_CREATE_RULES
@@ -467,6 +485,7 @@
 #define CSQL_CREATE_FUNCTIONS    CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_SYNONYMS     CSQL_CREATE_ALL_BUT_TABLES
 #else
+#define CSQL_CREATE_DATABASES    CSQL_CREATE_ALL
 #define CSQL_CREATE_SCHEMAS      CSQL_CREATE_ALL
 #define CSQL_CREATE_DEFAULTS     CSQL_CREATE_ALL
 #define CSQL_CREATE_RULES        CSQL_CREATE_ALL
@@ -484,6 +503,7 @@
 #endif // CSQL_CREATE_ALL
 
 #if defined( CSQL_DROP_ALL ) || defined( CSQL_DROP_CREATE )
+#undef CSQL_DROP_DATABASES
 #undef CSQL_DROP_SCHEMAS
 #undef CSQL_DROP_DEFAULTS
 #undef CSQL_DROP_RULES
@@ -504,6 +524,9 @@
 
 #if defined( CSQL_DROP_CREATE )
 
+#ifdef CSQL_CREATE_DATABASES
+#define CSQL_DROP_DATABASES    CSQL_CREATE_DATABASES
+#endif
 #ifdef CSQL_CREATE_SCHEMAS
 #define CSQL_DROP_SCHEMAS      CSQL_CREATE_SCHEMAS
 #endif
@@ -547,6 +570,7 @@
 
 #elif defined( CSQL_DROP_ALL ) || defined( CSQL_DROP_ALL_BUT_TABLES )
 
+#define CSQL_DROP_DATABASES    CSQL_DROP_ALL
 #define CSQL_DROP_SCHEMAS      CSQL_DROP_ALL
 #define CSQL_DROP_DEFAULTS     CSQL_DROP_ALL
 #define CSQL_DROP_RULES        CSQL_DROP_ALL
@@ -631,6 +655,7 @@
 #undef CSQL_DROP_UNIQUE_CONSTRAINT
 #undef CSQL_DROP_UQ_CONSTRAINT
 #undef CSQL_DROP_INDEX
+#undef CSQL_DROP_FULLTEXT_INDEX
 #undef CSQL_DROP_FUNCTION
 #undef CSQL_CREATE_DEFAULT
 #undef CSQL_CREATE_TYPE
@@ -675,6 +700,54 @@ print '*** Context: ' + @@servername + '.' + db_name() + ' ***'
 /// beginning of a SQL programm object (stored procedure, view, etc).
 /// </summary>
 #define CSQL_OBJECT_INFO File: __FILE__ / __TIMESTAMP__
+
+/// @ingroup Action
+/// <summary>
+/// Macro to drop a database.
+/// </summary>
+/// <remarks>
+/// The database is only drop if it exists.
+/// </remarks>
+/// <param name="DbName">
+/// The name of the database.
+/// </param>
+/// @example CreateDatabase.csql
+#ifdef CSQL_DROP_DATABASES
+#define CSQL_DROP_DATABASE( DbName ) \
+if exists ( select 1 from sys.databases where name = #@DbName ) \
+begin \
+	declare @SqlStmt nvarchar( max ) \
+	set @SqlStmt = 'drop database ' + #@DbName \
+	print @SqlStmt \
+	exec( @SqlStmt ) \
+end
+#else  // !CSQL_DROP_DATABASES
+#define CSQL_DROP_DATABASE( DbName )
+#endif // CSQL_DROP_DATABASES
+
+/// @ingroup Action
+/// <summary>
+/// Macro to create a database.
+/// </summary>
+/// <remarks>
+/// The database is only created if it doesn't exist.
+/// </remarks>
+/// <param name="DbName">
+/// The name of the database.
+/// </param>
+/// @example CreateDatabase.csql
+#ifdef CSQL_CREATE_DATABASES
+#define CSQL_CREATE_DATABASE( DbName ) \
+if not exists ( select 1 from sys.databases where name = #@DbName ) \
+begin \
+	declare @SqlStmt nvarchar( max ) \
+	set @SqlStmt = 'create database ' + #@DbName \
+	print @SqlStmt \
+	exec( @SqlStmt ) \
+end
+#else  // !CSQL_CREATE_DATABASES
+#define CSQL_CREATE_DATABASE( DbName )
+#endif // CSQL_CREATE_DATABASES
 
 
 /// @ingroup Action
@@ -722,8 +795,6 @@ end
 #else  // !CSQL_DROP_SCHEMAS
 #define CSQL_DROP_SCHEMA( X )
 #endif // CSQL_DROP_SCHEMAS
-
-
 
 
 
@@ -1469,7 +1540,7 @@ deallocate c
 
 /// @ingroup Action
 /// <summary>
-/// Macro to drop an index spefied by the table and index name.
+/// Macro to drop an index specified by the table and index name.
 /// </summary>
 /// <param name="TblName">
 /// The (schema qualified) name of the table for which the index is defined.
@@ -1493,22 +1564,44 @@ end
 
 /// @ingroup Action
 /// <summary>
+/// Macro to drop an an full text index from the specified table.
+/// </summary>
+/// <param name="TblName">
+/// The (schema qualified) name of the table for which the index is defined.
+/// </param>
+#ifdef CSQL_DROP_INDEXES
+#define CSQL_DROP_FULLTEXT_INDEX( TblName ) \
+if exists (select 1 from sys.fulltext_indexes where object_id = object_id( #TblName ) ) \
+begin \
+	declare @MsgText varchar(255) \
+	set @MsgText = 'drop fulltext index on ' + #TblName \
+	print @MsgText \
+	drop fulltext index on TblName \
+end
+#else // !CSQL_DROP_INDEXES
+#define CSQL_DROP_FULLTEXT_INDEX( TblName )
+#endif // CSQL_DROP_INDEXES
+
+
+
+/// @ingroup Action
+/// <summary>
 /// Drop all indexes defined for the specified table and which 
 /// are not enforcing a unique or primary key contraint.
 /// </summary>
-/// <param name="X">
+/// <param name="TblName">
 /// The (schema qualified) name of the table for which to drop the indexes.
 /// </param>
 /// @example DropAllIndexes.csql
 #ifdef CSQL_DROP_INDEXES
-#define CSQL_DROP_ALL_INDEXES( X ) \
+#define CSQL_DROP_ALL_INDEXES( TblName ) \
+declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
 declare c cursor local forward_only for \
-	select 'drop index ' + #X + '.' + i.name as SqlStmt \
+	select 'drop index ' + #TblName + '.' + i.name as SqlStmt \
 	 from sys.indexes as i \
-	 where i.object_id = object_id( #X ) \
+	 where i.object_id = object_id( #TblName ) \
 	   and i.is_unique_constraint = 0 \
 	   and i.is_primary_key = 0 \
-declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
 open c \
 fetch c into @SqlStmt \
 while @@fetch_status = 0 \
@@ -1518,11 +1611,24 @@ begin \
 	fetch c into @SqlStmt \
 end \
 close c \
-deallocate c 
+deallocate c \
+declare cft cursor local forward_only for \
+	select 'drop fulltext index on ' + #TblName as SqlStmt \
+	 from sys.fulltext_indexes as i \
+	 where i.object_id = object_id( #TblName ) \
+open cft \
+fetch cft into @SqlStmt \
+while @@fetch_status = 0 \
+begin \
+	print @SqlStmt \
+	exec( @SqlStmt ) \
+	fetch cft into @SqlStmt \
+end \
+close cft \
+deallocate cft
 #else // !CSQL_DROP_INDEXES
-#define CSQL_DROP_ALL_INDEXES( X )
+#define CSQL_DROP_ALL_INDEXES( TblName )
 #endif // CSQL_DROP_INDEXES
-
 
 
 

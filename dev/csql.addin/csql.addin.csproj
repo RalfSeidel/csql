@@ -19,34 +19,18 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>..\debug\</OutputPath>
-    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <IncrementalBuild>false</IncrementalBuild>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DebugType>full</DebugType>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <Optimize>true</Optimize>
-    <OutputPath>..\release\</OutputPath>
-    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <IncrementalBuild>false</IncrementalBuild>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -56,12 +40,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsFormsIntegration">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\csql\Properties\SharedAssemblyInfo.cs">
@@ -73,6 +51,12 @@
     <Compile Include="Commands\FileClassification.cs" />
     <Compile Include="Commands\VariableSubstitutor.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Gui\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="OutputPaneTraceListener.cs" />
     <Compile Include="Gui\Output.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -89,15 +73,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\ScriptExecutor.cs" />
-    <Compile Include="Gui\Views\AboutDialog.xaml.cs">
-      <DependentUpon>AboutDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings\CSqlConnectionFactory.cs" />
+    <Compile Include="Settings\ScriptParameterCollection.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Gui\PreprocessorDefinitionCollectionConverter.cs" />
     <Compile Include="Settings\Gui\OutputFileEditor.cs" />
@@ -116,7 +98,7 @@
       <DependentUpon>SettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\PreprocessorDefinition.cs" />
-    <Compile Include="Settings\CSqlParameter.cs" />
+    <Compile Include="Settings\ScriptParameter.cs" />
     <Compile Include="Sqt\VisualStudio\Util\ImageConverter.cs" />
     <Compile Include="Sqt\VisualStudio\Util\ImageHelper.cs" />
     <Compile Include="Sqt\VisualStudio\Util\VsApplicationExtensions.cs" />
@@ -174,6 +156,9 @@
     <Content Include="csql.addin" />
     <None Include="Resources\Images\Commands\CancelScript.bmp" />
     <Content Include="Resources\Images\ExecuteScript.png" />
+    <EmbeddedResource Include="Gui\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -210,12 +195,6 @@
       <Project>{C404D769-C642-461B-A5C1-4295F5B7542C}</Project>
       <Name>DbcProvider</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Gui\Views\AboutDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

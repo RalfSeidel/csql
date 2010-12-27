@@ -570,7 +570,8 @@ void Processor::applyOptions()
 	m_pTokenStream = m_pScanner;
 
 	if ( m_pOutput == NULL ) {
-		m_pOutput = Output::createOutput( m_options );
+		const File& mainInputFile = getRootFile();
+		m_pOutput = Output::createOutput( m_options, mainInputFile.getPath() );
 		m_bExternalOutput = false;
 	}
 

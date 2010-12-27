@@ -22,7 +22,7 @@ namespace csql.addin.Commands
 				return;
 
 			SettingsManager settingsManager = SettingsManager.GetInstance( projectItem.DTE );
-			CSqlParameter scriptParameter = settingsManager.CurrentScriptParameter;
+			ScriptParameter scriptParameter = settingsManager.CurrentScriptParameter;
 
 			if ( !FileClassification.IsSqlScript( scriptParameter, oldName ) )
 				return;

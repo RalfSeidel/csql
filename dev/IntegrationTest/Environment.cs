@@ -42,7 +42,7 @@ namespace IntegrationTest
 		{
 			get
 			{
-				string pathToSqtpp = Environment.ProjectRootDirectory + @"..\Debug\sqtpp.exe";
+				string pathToSqtpp = Environment.ProjectRootDirectory + @"..\bin\Debug\sqtpp.exe";
 				return pathToSqtpp;
 			}
 		}

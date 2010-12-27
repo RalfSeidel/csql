@@ -8,7 +8,7 @@ namespace Sqt.DbcProvider.Provider.MsSql
 	/// <summary>
 	/// Connection factory of the Microsoft SQL Server.
 	/// </summary>
-	internal class MsSqlConnectionFactory : IDbConnectionFactory
+	internal class MsSqlConnectionFactory : IWrappedDbConnectionFactory
 	{
 		public string ProviderName
 		{
@@ -40,9 +40,9 @@ namespace Sqt.DbcProvider.Provider.MsSql
 		}
 
 		/// <inheritdoc/>
-		public DbConnection CreateConnection( DbConnectionParameter parameter )
+		public WrappedDbConnection CreateConnection( DbConnectionParameter parameter )
 		{
-			var connection = new MsSqlConnection( this, parameter );
+			var connection = new MsSqlWrappedConnection( this, parameter );
 			return connection;
 		}
 

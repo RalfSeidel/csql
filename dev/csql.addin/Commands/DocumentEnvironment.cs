@@ -189,6 +189,9 @@ namespace csql.addin.Commands
 
 		private static string GetRootedDirectory( string path )
 		{
+			if ( string.IsNullOrEmpty( path ) )
+				return string.Empty;
+
 			string pathRoot = Path.GetPathRoot( path );
 			string directory = Path.GetDirectoryName( path );
 			if ( string.IsNullOrEmpty( pathRoot ) )

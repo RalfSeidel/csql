@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Text;
 using System.Diagnostics;
-using System.Reflection;
-using System.Xml.Serialization;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace Sqt.DbcProvider
 {
@@ -55,10 +54,10 @@ namespace Sqt.DbcProvider
 		public DbConnectionParameter()
 		{
 			Provider = ProviderType.MsSql;
-			DatasourceAddress = "";
-			Catalog = "";
-			UserId = "";
-			Password = "";
+			DatasourceAddress = string.Empty;
+			Catalog = string.Empty;
+			UserId = string.Empty;
+			Password = string.Empty;
 			IntegratedSecurity = true;
 			Timeout = 2;
 			this.traceSwitch = new TraceSwitch( "Verbosity", "Verbosity", TraceLevel.Warning.ToString() );
@@ -86,6 +85,25 @@ namespace Sqt.DbcProvider
 			userIDLookupConverter.GetLookupValues += new EventHandler<StringLookupGetValuesEventArgs>( UserId_GetLookupValues );
 		}
 
+		/// <summary>
+		/// Copy constructor.
+		/// </summary>
+		/// <param name="that">The parameters to copy.</param>
+		public DbConnectionParameter( DbConnectionParameter that )
+		{
+			Provider = that.Provider;
+			DatasourceAddress = that.DatasourceAddress;
+			DatasourcePort = that.DatasourcePort;
+			DatasourceComment = that.DatasourceComment;
+			Catalog = that.Catalog;
+			UserId = that.UserId;
+			Password = that.Password;
+			IntegratedSecurity = that.IntegratedSecurity;
+			Timeout = that.Timeout;
+			ApplicationName = that.ApplicationName;
+			this.traceSwitch = that.traceSwitch;
+		}
+
 		#region Events
 
 		public event EventHandler<StringLookupGetValuesEventArgs> GetDatasourceNameValues;
@@ -110,10 +128,7 @@ namespace Sqt.DbcProvider
 		[DefaultValue( ProviderType.MsSql )]
 		public ProviderType Provider 
 		{ 
-			get
-			{
-				return this.provider;
-			}
+			get { return this.provider; }
 			set
 			{
 				if ( value == this.provider )
@@ -133,10 +148,7 @@ namespace Sqt.DbcProvider
 		[TypeConverter( typeof( StringLookupConverter ) )]
 		public string DatasourceComment
 		{
-			get
-			{
-				return datasoureComment;
-			}
+			get { return datasoureComment; }
 			set
 			{
 				if ( !Object.Equals( datasoureComment, value ) ) {
@@ -155,14 +167,11 @@ namespace Sqt.DbcProvider
 		[TypeConverter( typeof( StringLookupConverter ) )]
 		public string DatasourceAddress
 		{ 
-			get
-			{
-				return this.datasourceAddress;
-			}
+			get { return this.datasourceAddress; }
 			set
 			{
 				if ( value == null )
-					value = "";
+					value = string.Empty;
 
 				if ( String.Equals( this.datasourceAddress, value ) )
 					return;
@@ -184,15 +193,12 @@ namespace Sqt.DbcProvider
 		[DefaultValue( 0 )]
 		public int DatasourcePort
 		{
-			get
-			{
-				return datasourcePort;
-			}
+			get { return this.datasourcePort; }
 			set
 			{
-				if ( datasourcePort == value  ) 
+				if ( this.datasourcePort == value  ) 
 					return;
-				datasourcePort = value;
+				this.datasourcePort = value;
 				RaisePropertyChanged( "DatasourcePort" );
 			}
 		}
@@ -205,14 +211,11 @@ namespace Sqt.DbcProvider
 		[TypeConverter(typeof( StringLookupConverter ))]
 		public string Catalog
 		{ 
-			get
-			{
-				return this.catalog;
-			}
+			get { return this.catalog; }
 			set
 			{
 				if ( value == null )
-					value = "";
+					value = string.Empty;
 
 				if ( String.Equals( this.catalog, value ) )
 					return;
@@ -229,10 +232,7 @@ namespace Sqt.DbcProvider
 		[DefaultValue( true )]
 		public bool IntegratedSecurity
 		{
-			get
-			{
-				return this.authentication.Integrated;
-			}
+			get { return this.authentication.Integrated; }
 			set
 			{
 				if ( value == authentication.Integrated )
@@ -252,14 +252,11 @@ namespace Sqt.DbcProvider
 		[TypeConverter( typeof( StringLookupConverter ) )]
 		public string UserId 
 		{
-			get
-			{
-				return this.authentication.UserId;
-			}
+			get { return this.authentication.UserId; }
 			set
 			{
 				if ( value == null )
-					value = "";
+					value = string.Empty;
 
 				if ( string.Equals( this.authentication.UserId, value ) )
 					return;
@@ -276,14 +273,11 @@ namespace Sqt.DbcProvider
 		[XmlIgnore]
 		public string Password
 		{
-			get
-			{
-				return this.authentication.Password;
-			}
+			get { return this.authentication.Password; }
 			set
 			{
 				if ( value == null )
-					value = "";
+					value = string.Empty;
 
 				if ( string.Equals( this.authentication.Password, value ) )
 					return;
@@ -301,15 +295,12 @@ namespace Sqt.DbcProvider
 		[DefaultValue( 2 )]
 		public int Timeout
 		{
-			get
-			{
-				return timeout;
-			}
+			get { return this.timeout; }
 			set
 			{
-				if ( timeout == value )
+				if ( this.timeout == value )
 					return;
-				timeout = value;
+				this.timeout = value;
 				RaisePropertyChanged( "Timeout" );
 			}
 		}
@@ -322,7 +313,7 @@ namespace Sqt.DbcProvider
 		public string ApplicationName
 		{
 			get { return this.applicationName; }
-			set { applicationName = value; }
+			set { this.applicationName = value; }
 		}
 
 		/// <summary>
@@ -484,6 +475,5 @@ namespace Sqt.DbcProvider
 		}
 
 		#endregion
-
 	}
 }

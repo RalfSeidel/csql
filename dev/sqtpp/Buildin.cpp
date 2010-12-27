@@ -474,7 +474,7 @@ public:
 	virtual void expand( const Macro& macro, const Processor& processor, const MacroArgumentValues& argumentValues, TokenExpressions& result )
 	{
 		assert( macro.getIdentifier() == L"__QUOTE" );
-		assert( argumentValues.size() == 1 );
+		//assert( argumentValues.size() == 1 );
 
 		base::expand( macro, processor, argumentValues, result );
 

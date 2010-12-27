@@ -86,6 +86,9 @@ public:
 	/// Get the code page informations of the given identifier.
 	static const CodePageInfo& getCodePageInfo( CodePageId cp ) throw();
 
+	/// Get the default code page id.
+	static CodePageId getDefaultCodePageId() throw() { return CPID_WINDOWS_1252; }
+
 	/// Get the code page id.
 	CodePageId getCodePageId() const throw() { return m_codePageId; }
 

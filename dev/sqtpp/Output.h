@@ -11,9 +11,9 @@
 #pragma once
 #endif
 
-
 namespace sqtpp {
 	class Options;
+	enum CodePageId;
 }
 
 namespace sqtpp {
@@ -61,8 +61,11 @@ private:
 	Output& operator=( const Output& output );
 
 public:
-	static Output* createOutput( const Options& options );
+	static Output* createOutput( const Options& options, const wstring& mainInputFile );
 	static Output* createOutput( std::wostream& stream );
+
+private:
+	static CodePageId getOutputCodePage( const Options& options, const wstring& mainInputFile );
 };
 
 } // namespace

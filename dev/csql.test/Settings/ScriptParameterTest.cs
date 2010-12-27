@@ -12,15 +12,15 @@ namespace csql.addin.Settings
 	/// Unit tests for <see cref="T:CSqlParameter"/>
 	/// </summary>
 	[TestClass]
-	public class CSqlParameterTest
+	public class ScriptParameterTest
 	{
 		[TestMethod]
 		public void SerializeIncludeDirectoriesTest()
 		{
-			CSqlParameter parameterIn = new CSqlParameter();
+			ScriptParameter parameterIn = new ScriptParameter();
 
 			parameterIn.IncludeDirectories = new List<string>() { "A", "B" };
-			CSqlParameter parameterOut = CloneParameterBySerialization( parameterIn );
+			ScriptParameter parameterOut = CloneParameterBySerialization( parameterIn );
 
 			Assert.AreEqual( 2, parameterOut.IncludeDirectories.Count );
 			Assert.AreEqual( "A", parameterOut.IncludeDirectories[0] );
@@ -28,14 +28,14 @@ namespace csql.addin.Settings
 		}
 
 
-		private CSqlParameter CloneParameterBySerialization( CSqlParameter parameter )
+		private ScriptParameter CloneParameterBySerialization( ScriptParameter parameter )
 		{
 			XmlSerializer serializer = new XmlSerializer( parameter.GetType() );
 			using ( Stream stream = new MemoryStream() ) {
 				serializer.Serialize( stream, parameter );
 				stream.Seek( 0, SeekOrigin.Begin );
 				object clone = serializer.Deserialize( stream );
-				return (CSqlParameter)clone;
+				return (ScriptParameter)clone;
 			}
 		}
 	}

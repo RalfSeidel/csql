@@ -19,22 +19,15 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -49,9 +42,17 @@
       <Project>{37A22F40-1137-46F7-9260-B68CCFB1EA6E}</Project>
       <Name>csql.addin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\csql.exe\csql.exe.csproj">
+      <Project>{15B41BEB-03B7-4B88-A6FA-A97F65202B43}</Project>
+      <Name>csql.exe</Name>
+    </ProjectReference>
     <ProjectReference Include="..\csql\csql.lib.csproj">
       <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
       <Name>csql.lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbcProvider\DbcProvider.csproj">
+      <Project>{C404D769-C642-461B-A5C1-4295F5B7542C}</Project>
+      <Name>DbcProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -62,13 +63,15 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BatchContextTest.cs" />
+    <Compile Include="CmdArgsTest.cs" />
     <Compile Include="Commands\VariableSubstitutorTest.cs" />
     <Compile Include="ProcessorContextTest.cs" />
     <Compile Include="ResultTrace\BooleanColumnFormatTest.cs" />
     <Compile Include="ResultTrace\BinaryColumnFormatTest.cs" />
     <Compile Include="ResultTrace\DateTimeColumnFormatTest.cs" />
     <Compile Include="ResultTrace\StringColumnFormatTest.cs" />
-    <Compile Include="Settings\CSqlParameterTest.cs" />
+    <Compile Include="Settings\ScriptParameterCollectionTest.cs" />
+    <Compile Include="Settings\ScriptParameterTest.cs" />
     <Compile Include="TerminateExceptionTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

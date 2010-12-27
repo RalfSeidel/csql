@@ -6,6 +6,7 @@
 #include <strstream>
 #include "CodePage.h"
 #include "CodePageConverter.h"
+#include "CodePageDetection.h"
 #include "Streams.h"
 #include "Exceptions.h"
 #include "Error.h"
@@ -574,12 +575,10 @@ const wstring File::checkFile( const wstring& filePath ) /* throw( Error ) */
 /**
 ** @brief Get the file content stream.
 ** 
-** @todo Code page detection.
-** 
 ** @param fileName The file path.
 ** @param defaultCodePageId The default code page for files having no bom at their beginning.
 */
-std::wistream& File::open( const std::wstring& fileName, const CodePageId defaultCodePageId )
+std::wistream& File::open( const std::wstring& fileName )
 {
 	if ( m_pData->m_pExternalStream ) {
 		throw LogicError( "File already open" );
@@ -588,11 +587,8 @@ std::wistream& File::open( const std::wstring& fileName, const CodePageId defaul
 	// Check if the exists and is accessable.
 	wstring sFullPath = checkFile( fileName );
 
-	const CodePageInfo* const pDefaultCodePage = CodePageInfo::findCodePageInfo( defaultCodePageId );
-	if ( pDefaultCodePage == NULL ) {
-		throw error::C1205( defaultCodePageId );
-	}
-	const CodePageInfo* const pCodePage = detectCodePage( fileName, pDefaultCodePage );
+	const CodePageId defaultCodePageId = CodePageInfo::getDefaultCodePageId();
+	const CodePageInfo* const pCodePage = CodePageDetection::detectCodePage( fileName, defaultCodePageId );
 	const CodePageId codePageId = pCodePage->getCodePageId();
 
 	if ( codePageId == CPID_UTF32 || codePageId == CPID_UTF32BE ) {
@@ -630,15 +626,6 @@ std::wistream& File::open( const std::wstring& fileName, const CodePageId defaul
 /**
 ** @brief Get the file content stream.
 */
-std::wistream& File::open( const std::wstring& fileName )
-{
-	return open( fileName, CPID_WINDOWS_1252 );
-}
-
-
-/**
-** @brief Get the file content stream.
-*/
 std::wistream& File::getStream()
 {
 	if ( m_pData->m_pExternalStream == NULL ) {
@@ -646,60 +633,6 @@ std::wistream& File::getStream()
 	}
 	return *m_pData->m_pExternalStream;
 }
-
-
-/**
-** @brief Auto detect the character set of the file.
-**
-** @param fileName The path of the file to open.
-**
-** @todo Determine code page of non unicode files.
-*/
-const CodePageInfo* File::detectCodePage( const std::wstring& fileName, const CodePageInfo* pDefaultCodePage  )
-{
-	std::ifstream ifs;
-
-	ifs.open( fileName.c_str(), ios::in | ios::binary  );
-	const CodePageInfo* pCodePageInfo = detectCodePageByBom( ifs );
-	ifs.close();
-
-	if ( pCodePageInfo == NULL && pDefaultCodePage == NULL ) {
-		// TODO: detect code page of non unicode files.
-	}
-
-	return pCodePageInfo == NULL ? pDefaultCodePage : pCodePageInfo ;
-}
-
-/**
-** @brief Read the first bytes of a file and try to determine it's encoding
-** by examinig the first bytes of the file.
-*/
-const CodePageInfo* File::detectCodePageByBom( std::ifstream& fileStream )
-{
-	const CodePageInfo** codePageInfos = CodePageInfo::getCodePages();
-	char  fileStart[512];
-
-	fileStream.seekg( ios_base::beg );
-	fileStream.read( fileStart, sizeof( fileStart ) );
-	size_t bytesRead = fileStream.gcount();
-	if ( bytesRead < sizeof(fileStart) ) {
-		fileStart[bytesRead] = '\0';
-	} else {
-		fileStart[bytesRead-1] = '\0';
-	}
-
-	for ( const CodePageInfo* const* ppCodePageInfo = codePageInfos; *ppCodePageInfo != NULL; ppCodePageInfo++ ) {
-		const CodePageInfo& cpInfo = **ppCodePageInfo;
-		const char* cpBom = cpInfo.getFileBom();
-		if ( cpBom == NULL )
-			continue;
-		size_t length = strlen( cpBom );
-		if ( strncmp( cpBom, fileStart, min( length, bytesRead ) ) == 0 )
-			return *ppCodePageInfo;
-	}
-	return NULL;
-}
-
 
 
 

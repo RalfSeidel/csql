@@ -11,7 +11,7 @@ namespace Sqt.DbcProvider
 	/// <summary>
 	/// A IDbConnection wrapper.
 	/// </summary>
-	public abstract class DbConnection : IDisposable
+	public abstract class WrappedDbConnection : IDisposable
 	{
 		/// <summary>
 		/// The command line arguments.
@@ -21,7 +21,7 @@ namespace Sqt.DbcProvider
 		/// <summary>
 		/// The inner exception that is used for the database communication.
 		/// </summary>
-		private IDbConnection m_adoConnection;
+		private IDbConnection adoConnection;
 
 		/// <summary>
 		/// Occurs when a info message is recieved while executing sql scripts.
@@ -33,7 +33,7 @@ namespace Sqt.DbcProvider
 		/// Initializes a new instance of the <see cref="DbConnection"/> class.
 		/// </summary>
 		/// <param name="cmdArgs">The object holding the command line arguments of the program instance.</param>
-		internal DbConnection( DbConnectionParameter parameter )
+		internal WrappedDbConnection( DbConnectionParameter parameter )
 		{
             this.parameter = parameter;
 		}
@@ -46,10 +46,10 @@ namespace Sqt.DbcProvider
 		{
 			get 
 			{
-				if ( m_adoConnection == null ) {
-                    m_adoConnection = CreateAdoConnection(parameter);
+				if ( this.adoConnection == null ) {
+                    this.adoConnection = CreateAdoConnection(parameter);
 				}
-				return m_adoConnection; 
+				return this.adoConnection; 
 			}
 		}
 
@@ -104,16 +104,6 @@ namespace Sqt.DbcProvider
 		protected abstract IDbConnection CreateAdoConnection( DbConnectionParameter csqlOptions );
 
 		/// <summary>
-		/// Create a statement batch that will just echo the given messages texts.
-		/// </summary>
-		/// <param name="messages">The message texts.</param>
-		/// <returns>
-		/// Statement that will print the messages when executed.
-		/// </returns>
-		public abstract string GetPrintStatements( IEnumerable<string> messages );
-
-
-		/// <summary>
 		/// Raises the <see cref="E:DbMessage"/> event.
 		/// </summary>
 		/// <param name="args">The <see cref="csql.DbMessageEventArgs"/> instance containing the event data.</param>
@@ -129,9 +119,9 @@ namespace Sqt.DbcProvider
 		[SuppressMessage( "Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification="No need for coding overhead" )]
 		public void Dispose()
 		{
-			if ( m_adoConnection != null ) {
-				m_adoConnection.Dispose();
-				m_adoConnection = null;
+			if ( this.adoConnection != null ) {
+				this.adoConnection.Dispose();
+				this.adoConnection = null;
 			}
 			GC.SuppressFinalize( this );
 		}

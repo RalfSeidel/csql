@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using csql.addin.Settings;
+using System.Windows.Forms;
 using csql.addin.Settings.Gui;
 using EnvDTE;
 using EnvDTE80;
-using Sqt.DbcProvider;
 using Sqt.VisualStudio;
-using System.Diagnostics.CodeAnalysis;
 
 namespace csql.addin.Commands
 {
@@ -61,7 +60,7 @@ namespace csql.addin.Commands
 				toolWindow.Visible = true;
 			}
 			catch ( Exception ex ) {
-				System.Windows.MessageBox.Show( ex.Message, "csql addin error" );
+				MessageBox.Show( ex.Message, "csql addin error" );
 			}
 		}
 	}

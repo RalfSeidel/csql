@@ -656,7 +656,7 @@ std::codecvt_base::result Utf16BeConverter::do_in( mbstate_t& state
 		*pToNext = wchar_t( hiByte << 8 | loByte );
 	}
 
-	return pFromNext == pFromMax ? ok : partial;;
+	return pFromNext == pFromMax ? ok : partial;
 }
 
 /**
@@ -669,12 +669,12 @@ std::codecvt_base::result Utf16BeConverter::do_out( mbstate_t& state
 	for ( pFromNext = pFrom, pToNext = pTo; pFromNext < pFromMax && pToNext + 1 < pToMax; ++pFromNext, pToNext+= 2 ) {
 		wchar_t c = *pFrom;
 		unsigned char loByte = unsigned char(c & 0x00FF);
-		unsigned char hiByte = unsigned char(c & 0xFF00 >> 8);
+		unsigned char hiByte = unsigned char((c & 0xFF00) >> 8);
 		pToNext[0] = hiByte;
 		pToNext[1] = loByte;
 	}
 
-	return pFromNext == pFromMax ? ok : partial;;
+	return pFromNext == pFromMax ? ok : partial;
 }
 
 /**

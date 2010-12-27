@@ -14,7 +14,7 @@ namespace csql
 	internal class ExecutionProcessor : IBatchProcessor
 	{
 		private readonly CSqlOptions options;
-		private readonly DbConnection connection;
+		private readonly WrappedDbConnection connection;
 		private ProcessorContext m_context;
 		private IDbCommand currentCommand;
 		private bool isCanceled;
@@ -35,6 +35,13 @@ namespace csql
 		~ExecutionProcessor()
 		{
 			Dispose( false );
+		}
+
+		/// <summary>
+		/// Validates the database connection.
+		/// </summary>
+		public void Validate()
+		{
 		}
 
 

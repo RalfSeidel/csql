@@ -62,7 +62,7 @@ namespace csql.addin.Commands
 			}
 
 			SettingsManager settingsManager = SettingsManager.GetInstance( application );
-			CSqlParameter scriptParameter = settingsManager.CurrentScriptParameter;
+			ScriptParameter scriptParameter = settingsManager.CurrentScriptParameter;
 
 			string fileName = activeDocument.FullName;
 			bool isSqlScript = FileClassification.IsSqlScript( scriptParameter, fileName );
@@ -79,9 +79,8 @@ namespace csql.addin.Commands
 				activeDocument.Save( documentPath );
 			}
 
-
-			SettingsManager settingsManager = SettingsManager.GetInstance( application );
-			DbConnectionParameter dbConnectionParameter = settingsManager.CurrentDbConnectionParameter;
+			var settingsManager = SettingsManager.GetInstance( application );
+			var dbConnectionParameter = CreateDbConnectionParameter( settingsManager.CurrentDbConnectionParameter, activeDocument );
 			var csqGuiParameter = settingsManager.CurrentScriptParameter;
 			var csqlOptions = CreateCSqlOptions( dbConnectionParameter, csqGuiParameter, activeDocument );
 
@@ -115,7 +114,7 @@ namespace csql.addin.Commands
 			}
 		}
 
-		private static SqtppOptions CreatePreprocessorArguments( VariableSubstitutor substitutor, CSqlParameter csqlParameter )
+		private static SqtppOptions CreatePreprocessorArguments( VariableSubstitutor substitutor, ScriptParameter csqlParameter )
 		{
 			SqtppOptions result = new SqtppOptions();
 
@@ -140,7 +139,18 @@ namespace csql.addin.Commands
 			return result;
 		}
 
-		private static CSqlOptions CreateCSqlOptions( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter, Document activeDocument )
+		private static DbConnectionParameter CreateDbConnectionParameter( DbConnectionParameter dbConnectionParameter, Document activeDocument )
+		{
+			DocumentEnvironment environment = new DocumentEnvironment( activeDocument );
+			VariableSubstitutor substitutor = new VariableSubstitutor( environment );
+
+			DbConnectionParameter dbConnectionParameterCopy = new DbConnectionParameter( dbConnectionParameter );
+			dbConnectionParameterCopy.DatasourceAddress = substitutor.Substitute( dbConnectionParameter.DatasourceAddress );
+			dbConnectionParameterCopy.Catalog = substitutor.Substitute( dbConnectionParameter.Catalog );
+			return dbConnectionParameterCopy;
+		}
+
+		private static CSqlOptions CreateCSqlOptions( DbConnectionParameter dbConnectionParameter, ScriptParameter csqlParameter, Document activeDocument )
 		{
 			CSqlOptions csqlOptions = new CSqlOptions();
 

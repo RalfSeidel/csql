@@ -60,14 +60,14 @@ namespace Sqt.DbcProvider.Gui
 			public void Execute( object parameter )
 			{
 				DbConnectionParameter connectionParameter = (DbConnectionParameter)parameter;
-				IDbConnectionFactory connectionFactory = DbConnectionFactoryProvider.GetFactory( connectionParameter.Provider );
-				DbConnection dbConnection = null;
+				IWrappedDbConnectionFactory connectionFactory = DbConnectionFactoryProvider.GetFactory( connectionParameter.Provider );
+				WrappedDbConnection dbConnection = null;
 				bool succeeded = false;
 				try {
 					dbConnection = connectionFactory.CreateConnection( connectionParameter );
 					succeeded = true;
 				}
-				catch ( DbException ) {
+				catch ( WrappedDbException ) {
 				}
 				finally {
 					if ( dbConnection != null ) {

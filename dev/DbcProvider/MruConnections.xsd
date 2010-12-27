@@ -103,6 +103,13 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
+			<xs:enumeration value="SqlCe">
+				<xs:annotation>
+					<xs:documentation>
+						Microsoft SQL Compact Edition.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="Sybase">
 				<xs:annotation>
 					<xs:documentation>

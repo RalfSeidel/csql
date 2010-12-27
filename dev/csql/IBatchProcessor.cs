@@ -10,6 +10,13 @@ namespace csql
     internal interface IBatchProcessor : IDisposable
     {
 		/// <summary>
+		/// Called immedialty after the creation of the processor. 
+		/// Used to validate options, settings, environment and so on. If the validation
+		/// fails the implementation should throw a <see cref="T:TerminateException"/>.
+		/// </summary>
+		void Validate();
+
+		/// <summary>
 		/// This method is called before the first batch is executed.
 		/// </summary>
         /// <remarks>
@@ -35,7 +42,6 @@ namespace csql
         /// </param>
 		void ProcessBatch( ProcessorContext context, string batch );
 
-
 		/// <summary>
 		/// The method called after the last batch has been processed.
 		/// </summary>
@@ -48,5 +54,6 @@ namespace csql
 		/// Cancels the execution of the current batch.
 		/// </summary>
 		void Cancel();
-    }
+
+	}
 }

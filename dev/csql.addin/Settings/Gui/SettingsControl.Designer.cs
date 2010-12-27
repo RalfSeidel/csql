@@ -35,6 +35,8 @@
 			this.editorObjects = new System.Windows.Forms.ComboBox();
 			this.commandBar = new System.Windows.Forms.ToolStrip();
 			this.saveChangesButton = new System.Windows.Forms.ToolStripButton();
+			this.copyScriptParameterButton = new System.Windows.Forms.ToolStripButton();
+			this.deleteScriptParameterButton = new System.Windows.Forms.ToolStripButton();
 			this.commandBar.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -60,7 +62,7 @@
 			this.editorObjects.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.editorObjects.Location = new System.Drawing.Point( 3, 3 );
 			this.editorObjects.Name = "editorObjects";
-			this.editorObjects.Size = new System.Drawing.Size( 257, 21 );
+			this.editorObjects.Size = new System.Drawing.Size( 254, 21 );
 			this.editorObjects.TabIndex = 0;
 			this.editorObjects.SelectionChangeCommitted += new System.EventHandler( this.EditorObjects_SelectionChangeCommitted );
 			// 
@@ -71,10 +73,12 @@
 			this.commandBar.Dock = System.Windows.Forms.DockStyle.None;
 			this.commandBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.commandBar.Items.AddRange( new System.Windows.Forms.ToolStripItem[] {
-            this.saveChangesButton} );
-			this.commandBar.Location = new System.Drawing.Point( 240, 3 );
+            this.saveChangesButton,
+            this.copyScriptParameterButton,
+            this.deleteScriptParameterButton} );
+			this.commandBar.Location = new System.Drawing.Point( 229, 3 );
 			this.commandBar.Name = "commandBar";
-			this.commandBar.Size = new System.Drawing.Size( 57, 25 );
+			this.commandBar.Size = new System.Drawing.Size( 103, 25 );
 			this.commandBar.TabIndex = 2;
 			// 
 			// saveChangesButton
@@ -87,6 +91,26 @@
 			this.saveChangesButton.Size = new System.Drawing.Size( 23, 22 );
 			this.saveChangesButton.Text = "Save Changes";
 			this.saveChangesButton.Click += new System.EventHandler( this.SaveChanges_Click );
+			// 
+			// copyScriptParameterButton
+			// 
+			this.copyScriptParameterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.copyScriptParameterButton.Image = ((System.Drawing.Image)(resources.GetObject( "copyScriptParameterButton.Image" )));
+			this.copyScriptParameterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.copyScriptParameterButton.Name = "copyScriptParameterButton";
+			this.copyScriptParameterButton.Size = new System.Drawing.Size( 23, 22 );
+			this.copyScriptParameterButton.Text = "Clone current script parameter set";
+			this.copyScriptParameterButton.Click += new System.EventHandler( this.CopyScriptParameter_Click );
+			// 
+			// deleteScriptParameterButton
+			// 
+			this.deleteScriptParameterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.deleteScriptParameterButton.Image = ((System.Drawing.Image)(resources.GetObject( "deleteScriptParameterButton.Image" )));
+			this.deleteScriptParameterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.deleteScriptParameterButton.Name = "deleteScriptParameterButton";
+			this.deleteScriptParameterButton.Size = new System.Drawing.Size( 23, 22 );
+			this.deleteScriptParameterButton.Text = "Delete current script parameter set";
+			this.deleteScriptParameterButton.Click += new System.EventHandler( this.DeleteScriptParameter_Click );
 			// 
 			// SettingsControl
 			// 
@@ -109,6 +133,8 @@
 
 		private System.Windows.Forms.ToolStrip commandBar;
 		private System.Windows.Forms.ToolStripButton saveChangesButton;
+		private System.Windows.Forms.ToolStripButton copyScriptParameterButton;
+		private System.Windows.Forms.ToolStripButton deleteScriptParameterButton;
 
 	}
 }

@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using EnvDTE;
 using Sqt.DbcProvider;
+using System.Globalization;
 
 namespace csql.addin.Settings.Gui
 {
@@ -12,10 +13,12 @@ namespace csql.addin.Settings.Gui
 	{
 		private _DTE application;
 		private MruConnections mruConnections;
+		private BindingList<SelectedObjectComboBoxItem> editorObjectComboItems;
+		private ScriptParameterCollection scriptParameters;
 		private DbConnectionParameter dbConnectionParameter;
-		private CSqlParameter csqlParameter;
-		private bool dbConnectionParameterChanged;
-		private bool csqlParameterChanged;
+		//private ScriptParameter currentScriptParameter;
+		private bool hasConnectionParameterChanged;
+		private bool hasScriptParameterChanged;
 		private bool reloadSettings;
 		private Timer saveChangesTimer;
 		private Timer dbConnectionParameterChangedTimer;
@@ -25,25 +28,33 @@ namespace csql.addin.Settings.Gui
 		{
 			InitializeComponent();
 			this.saveChangesButton.Image = Resources.Save;
+			this.copyScriptParameterButton.Image = Resources.CreateCopy;
+			this.deleteScriptParameterButton.Image = Resources.Delete;
 			UpdateCommandState();
 		}
 
-		private bool DbConnectionParameterChanged
+		/// <summary>
+		/// Gets or sets a value indicating whether the database connection parameter where changed.
+		/// </summary>
+		private bool HasConnectionParameterChanged
 		{
-			get { return this.dbConnectionParameterChanged; }
-			set 
-			{ 
-				this.dbConnectionParameterChanged = value;
+			get { return this.hasConnectionParameterChanged; }
+			set
+			{
+				this.hasConnectionParameterChanged = value;
 				UpdateCommandState();
 			}
 		}
 
-		private bool CSqlParameterChanged
+		/// <summary>
+		/// Gets or sets a value indicating whether the script parameter where changed.
+		/// </summary>
+		private bool HasScriptParameterChanged
 		{
-			get { return this.csqlParameterChanged; }
-			set 
-			{ 
-				this.csqlParameterChanged = value;
+			get { return this.hasScriptParameterChanged; }
+			set
+			{
+				this.hasScriptParameterChanged = value;
 				UpdateCommandState();
 			}
 		}
@@ -78,14 +89,16 @@ namespace csql.addin.Settings.Gui
 			if ( mruConnection == null )
 				return;
 
-			var datasource = mruConnection.FindDatasourceByComment( parameter.Provider, parameter.DatasourceComment );
+			var provider = parameter.Provider;
+			var datasource = mruConnection.FindDatasourceByComment( ref provider, parameter.DatasourceComment );
 			if ( datasource == null )
 				return;
 
+			parameter.Provider = provider;
+			parameter.DatasourceComment = datasource.Comment;
 			parameter.DatasourceAddress = datasource.Address;
 			parameter.DatasourcePort = datasource.Port;
 			SelectMruDatasourceParameter( parameter, datasource );
-
 		}
 
 		private static void SelectMruDatasourceParameterByAddress( DbConnectionParameter parameter, MruConnections mruConnection )
@@ -93,10 +106,12 @@ namespace csql.addin.Settings.Gui
 			if ( mruConnection == null )
 				return;
 
-			var datasource = mruConnection.FindDatasourceByAddress( parameter.Provider, parameter.DatasourceAddress, parameter.DatasourcePort );
+			var provider = parameter.Provider;
+			var datasource = mruConnection.FindDatasourceByAddress( provider, parameter.DatasourceAddress, parameter.DatasourcePort );
 			if ( datasource == null )
 				return;
 
+			parameter.Provider = provider;
 			parameter.DatasourceComment = datasource.Comment;
 			parameter.DatasourceAddress = datasource.Address;
 			parameter.DatasourcePort = datasource.Port;
@@ -142,7 +157,7 @@ namespace csql.addin.Settings.Gui
 			SettingsManager settingsManager = SettingsManager.GetInstance( application );
 			this.mruConnections = settingsManager.MruDbConnectionParameters;
 			this.dbConnectionParameter = settingsManager.CurrentDbConnectionParameter;
-			this.csqlParameter = settingsManager.CurrentScriptParameter;
+			this.scriptParameters = settingsManager.ScriptParameters;
 			InitObjectSelectionComboBox();
 			this.reloadSettings = false;
 
@@ -162,8 +177,7 @@ namespace csql.addin.Settings.Gui
 		{
 			if ( this.Visible ) {
 				ReloadSettings();
-			}
-			else {
+			} else {
 				this.editorObjects.DataSource = null;
 				this.propertyGrid.SelectedObject = null;
 				this.reloadSettings = true;
@@ -225,7 +239,7 @@ namespace csql.addin.Settings.Gui
 		/// <summary>
 		/// Start a time that will defer the updates a bit deferred.
 		/// </summary>
-		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer is stoped after it eplapsed for the first time." )]
+		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification="The timer is stoped after it eplapsed for the first time." )]
 		private void DbConnectionParameter_PropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			if ( this.ignoreParameterPropertyChanges )
@@ -233,8 +247,7 @@ namespace csql.addin.Settings.Gui
 
 			if ( this.dbConnectionParameterChangedTimer == null ) {
 				dbConnectionParameterChangedTimer = new Timer();
-			}
-			else {
+			} else {
 				dbConnectionParameterChangedTimer.Stop();
 			}
 			dbConnectionParameterChangedTimer.Interval = 100;
@@ -250,7 +263,6 @@ namespace csql.addin.Settings.Gui
 			timer.Stop();
 
 			this.ignoreParameterPropertyChanges = true;
-
 			try {
 				DbConnectionParameter parameter = this.dbConnectionParameter;
 				switch ( propertyName ) {
@@ -287,7 +299,39 @@ namespace csql.addin.Settings.Gui
 			var combo = (ComboBox)sender;
 			var selection = (SelectedObjectComboBoxItem)combo.SelectedItem;
 			this.propertyGrid.SelectedObject = selection.EditorObject;
+
+			var scriptParameter = selection.EditorObject as ScriptParameter;
+			if ( scriptParameter != null ) {
+				if ( scriptParameter != this.scriptParameters.Current ) {
+					this.scriptParameters.Current = scriptParameter;
+					HasScriptParameterChanged = true;
+				}
+			}
+
+			UpdateCurrentScriptParameterFlag();
+			UpdateCommandState();
 		}
+
+		private void UpdateCurrentScriptParameterFlag()
+		{
+			// Buffer the items to update in a new collection. If modified in the first loop you
+			// would get a "collection changed" exception.
+			var updateItems = new List<SelectedScriptParameterComboBoxItem>();
+			foreach ( var item in this.editorObjects.Items ) {
+				SelectedScriptParameterComboBoxItem parameterItem = item as SelectedScriptParameterComboBoxItem;
+				if ( parameterItem != null ) {
+					bool isCurrent = parameterItem.EditorObject.Equals( this.scriptParameters.Current );
+					if ( isCurrent != parameterItem.IsCurrent ) {
+						updateItems.Add( parameterItem );
+					}
+				}
+			}
+			foreach ( var parameterItem in updateItems ) {
+				bool isCurrent = parameterItem.EditorObject.Equals( this.scriptParameters.Current );
+				parameterItem.IsCurrent = isCurrent;
+			}
+		}
+
 
 		/// <summary>
 		/// Starts a timer that will save the changes a short while after the user made the modification.
@@ -297,18 +341,16 @@ namespace csql.addin.Settings.Gui
 		{
 			if ( this.saveChangesTimer != null ) {
 				this.saveChangesTimer.Stop();
-			}
-			else {
+			} else {
 				this.saveChangesTimer = new Timer();
 			}
 
 			if ( this.propertyGrid.SelectedObject == this.dbConnectionParameter ) {
-				this.DbConnectionParameterChanged = true;
+				this.HasConnectionParameterChanged = true;
 			}
-			if ( this.propertyGrid.SelectedObject == this.csqlParameter ) {
-				this.CSqlParameterChanged = true;
+			if ( this.propertyGrid.SelectedObject == this.scriptParameters.Current ) {
+				this.HasScriptParameterChanged = true;
 			}
-
 
 			this.saveChangesTimer.Interval = 500;
 			this.saveChangesTimer.Tick += new EventHandler( SaveChangesTimer_Tick );
@@ -336,57 +378,111 @@ namespace csql.addin.Settings.Gui
 		{
 			SaveChangesAutomaticly();
 
-			if ( DbConnectionParameterChanged ) {
+			if ( HasConnectionParameterChanged ) {
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
 					settingsManager.SaveDbConnectionParameterInMruHistory( dbConnectionParameter );
 					settingsManager.SaveDbConnectionParameterInGlobals( dbConnectionParameter );
 				}
-				this.DbConnectionParameterChanged = false;
+				this.HasConnectionParameterChanged = false;
 			}
 		}
 
 		private void SaveChangesAutomaticly()
 		{
-			if ( DbConnectionParameterChanged ) {
+			if ( HasConnectionParameterChanged ) {
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
 					settingsManager.SaveDbConnectionParameterInGlobals( dbConnectionParameter );
 				}
 			}
 
-			if ( this.CSqlParameterChanged ) {
+			if ( this.HasScriptParameterChanged ) {
 				if ( this.application != null ) {
 					SettingsManager settingsManager = SettingsManager.GetInstance( this.application );
-					settingsManager.SaveScriptParameterInSolutionSettings( csqlParameter );
+					settingsManager.SaveScriptParameterInSolutionSettings( this.scriptParameters );
+
 				}
-				CSqlParameterChanged = false;
+				HasScriptParameterChanged = false;
 			}
 		}
 
+		private void CopyScriptParameter_Click( object sender, EventArgs e )
+		{
+			var selection = (SelectedObjectComboBoxItem)this.editorObjects.SelectedItem;
+			var currentScriptParameter = selection.EditorObject as ScriptParameter;
+			if ( currentScriptParameter == null )
+				return;
+
+			var copiedScriptParameter = new ScriptParameter( currentScriptParameter );
+			copiedScriptParameter.Name = GetScriptParameterName( currentScriptParameter );
+			this.scriptParameters.Add( copiedScriptParameter );
+			this.scriptParameters.Current = copiedScriptParameter;
+			
+			var comboBoxItem = new SelectedScriptParameterComboBoxItem( copiedScriptParameter );
+			this.editorObjectComboItems.Add( comboBoxItem );
+			this.editorObjects.SelectedItem = comboBoxItem;
+			this.propertyGrid.SelectedObject = copiedScriptParameter;
+			this.HasScriptParameterChanged = true;
+			UpdateCurrentScriptParameterFlag();
+			UpdateCommandState();
+		}
+
+		private void DeleteScriptParameter_Click( object sender, EventArgs e )
+		{
+			var selection = (SelectedObjectComboBoxItem)this.editorObjects.SelectedItem;
+			var currentScriptParameter = selection.EditorObject as ScriptParameter;
+			if ( currentScriptParameter == null )
+				return;
+
+			this.scriptParameters.Remove( currentScriptParameter );
+			this.editorObjectComboItems.Remove( selection );
+
+			var newSelection = (SelectedObjectComboBoxItem)this.editorObjects.SelectedItem;
+			var newEditorObject = newSelection.EditorObject;
+			this.propertyGrid.SelectedObject = newEditorObject;
+
+			currentScriptParameter = newEditorObject as ScriptParameter;
+			if ( currentScriptParameter != null )
+				this.scriptParameters.Current = currentScriptParameter;
+
+			this.HasScriptParameterChanged = true;
+			UpdateCurrentScriptParameterFlag();
+			UpdateCommandState();
+		}
 
 		#endregion
 
 		private void UpdateCommandState()
 		{
-			this.saveChangesButton.Enabled = this.CSqlParameterChanged || this.DbConnectionParameterChanged;
+			this.saveChangesButton.Enabled = this.HasScriptParameterChanged || this.HasConnectionParameterChanged;
+
+			if ( this.editorObjects.SelectedIndex < 0 ) {
+				this.deleteScriptParameterButton.Enabled = false;
+				this.copyScriptParameterButton.Enabled = false;
+				return;
+			}
+			var selection = (SelectedObjectComboBoxItem)this.editorObjects.SelectedItem;
+			var scriptParameter = selection.EditorObject as ScriptParameter;
+			this.copyScriptParameterButton.Enabled = scriptParameter != null;
+			this.deleteScriptParameterButton.Enabled = scriptParameter != null && this.scriptParameters.Count > 1;
 		}
 
 		private void InitObjectSelectionComboBox()
 		{
-			var comboItems = CreateComboItems( dbConnectionParameter, csqlParameter );
-			this.editorObjects.DataSource = comboItems;
+			this.editorObjectComboItems = CreateComboItems( dbConnectionParameter, scriptParameters );
+			this.editorObjects.DataSource = editorObjectComboItems;
+			this.editorObjects.DisplayMember = "Name";
 
-			if ( IsPropertyGridObjectValid( comboItems ) )
+			if ( IsPropertyGridObjectValid( editorObjectComboItems ) )
 				return;
 
-			if ( comboItems.Count > 0 ) {
+			if ( editorObjectComboItems.Count > 0 ) {
 				this.editorObjects.SelectedIndex = 0;
-				this.propertyGrid.SelectedObject = comboItems[0].EditorObject;
-			}
-			else {
+				this.propertyGrid.SelectedObject = editorObjectComboItems[0].EditorObject;
+			} else {
+				this.editorObjects.SelectedIndex = -1;
 				this.propertyGrid.SelectedObject = null;
-				this.editorObjects.SelectedIndex = 1;
 			}
 		}
 
@@ -399,36 +495,138 @@ namespace csql.addin.Settings.Gui
 			return false;
 		}
 
-		private static IList<SelectedObjectComboBoxItem> CreateComboItems( DbConnectionParameter dbConnectionParameter, CSqlParameter csqlParameter )
+		private string GetScriptParameterName( ScriptParameter parameterCopied )
 		{
-			var result = new List<SelectedObjectComboBoxItem>();
+			string baseName = parameterCopied.Name;
+			string copyTextBase = " - Copy";
+			int copyTextIndex = baseName.IndexOf( copyTextBase, StringComparison.CurrentCultureIgnoreCase );
+			if ( copyTextIndex > 0 ) {
+				baseName = baseName.Substring( 0, copyTextIndex );
+			}
+			string name = baseName + copyTextBase;
+			if ( !ScriptParameterNameExists( name ) )
+				return name;
+
+			for ( int i = 2; i < 100; ++i ) {
+				name = baseName + copyTextBase + " " + i.ToString( CultureInfo.InvariantCulture );
+				if ( !ScriptParameterNameExists( name ) )
+					return name;
+			}
+			return name;
+		}
+
+		private bool ScriptParameterNameExists( string name )
+		{
+			foreach ( var parameter in this.scriptParameters ) {
+				if ( string.Compare( parameter.Name, name, StringComparison.CurrentCultureIgnoreCase ) == 0 )
+					return true;
+			}
+			return false;
+		}
+
+
+		private static BindingList<SelectedObjectComboBoxItem> CreateComboItems( DbConnectionParameter dbConnectionParameter, ScriptParameterCollection scriptParameters )
+		{
+			var result = new BindingList<SelectedObjectComboBoxItem>();
 
 			if ( dbConnectionParameter != null ) {
-				SelectedObjectComboBoxItem connectionItem = new SelectedObjectComboBoxItem( "Database Parameter", dbConnectionParameter );
+				var connectionItem = new DbConnectionComboBoxItem( dbConnectionParameter );
 				result.Add( connectionItem );
 			}
-			if ( csqlParameter != null ) {
-				SelectedObjectComboBoxItem parameterItem = new SelectedObjectComboBoxItem( "Script Parameter " + csqlParameter.Name, csqlParameter );
-				result.Add( parameterItem );
+			if ( scriptParameters != null ) {
+				foreach ( var scriptParameter in scriptParameters ) {
+					var parameterItem = new SelectedScriptParameterComboBoxItem( scriptParameter );
+					parameterItem.IsCurrent = scriptParameter.Equals( scriptParameters.Current );
+					result.Add( parameterItem );
+				}
 			}
 
 			return result;
 		}
 
-		internal class SelectedObjectComboBoxItem
+		internal abstract class SelectedObjectComboBoxItem : INotifyPropertyChanged
 		{
-			public SelectedObjectComboBoxItem( string name, object editorObject )
+			protected SelectedObjectComboBoxItem( object editorObject )
 			{
-				this.Name = name;
 				this.EditorObject = editorObject;
 			}
 
-			public string Name { get; private set; }
+			public event PropertyChangedEventHandler PropertyChanged;
+
+			public abstract string Name { get; }
+
 			public object EditorObject { get; private set; }
 
 			public override string ToString()
 			{
 				return Name;
+			}
+
+			/// <summary>
+			/// Raises the property changed event.
+			/// </summary>
+			[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification="The method is a wrapper to raise the event." )]
+			protected void RaisePropertyChanged( string propertyName )
+			{
+				if ( PropertyChanged != null ) {
+					PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
+				}
+			}
+		}
+
+		internal class DbConnectionComboBoxItem : SelectedObjectComboBoxItem
+		{
+			internal DbConnectionComboBoxItem( DbConnectionParameter connectionParameter )
+				: base( connectionParameter )
+			{
+			}
+
+			public override string Name
+			{
+				get { return "Database Parameter"; }
+			}
+		}
+
+		internal class SelectedScriptParameterComboBoxItem : SelectedObjectComboBoxItem
+		{
+			private bool isCurrent;
+
+			internal SelectedScriptParameterComboBoxItem( ScriptParameter scriptParameter )
+				: base( scriptParameter )
+			{
+				scriptParameter.PropertyChanged+=ScriptParameter_PropertyChanged;
+			}
+
+			public override string Name
+			{
+				get 
+				{
+					ScriptParameter parameter = (ScriptParameter)EditorObject;
+					return "Script Parameter " + parameter.Name + (this.isCurrent ? " *" : string.Empty); 
+				}
+			}
+
+			internal bool IsCurrent 
+			{
+				get { return this.isCurrent; }
+				set
+				{
+					if ( value == this.isCurrent )
+						return;
+
+					this.isCurrent = value;
+					RaisePropertyChanged( "IsCurrent" );
+					RaisePropertyChanged( "Name" );
+				}
+			}
+
+
+
+			private void ScriptParameter_PropertyChanged( object sender, PropertyChangedEventArgs e )
+			{
+				if ( e.PropertyName == "Name" ) {
+					RaisePropertyChanged( "Name" );
+				}
 			}
 		}
 

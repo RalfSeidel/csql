@@ -54,8 +54,8 @@ namespace csql.exe
 		[Argument( ArgumentType.AtMostOnce, HelpText = "The server IP port.", ShortName = "R" )]
 		public int ServerPort;
 
-		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[Argument( ArgumentType.AtMostOnce, HelpText = "The initial server database/catalog.", ShortName = "D" )]
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification="Command line parser does not support properties." )]
+		[Argument( ArgumentType.AtMostOnce, HelpText="The initial server database/catalog.", ShortName="D" )]
 		public string Database;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
@@ -117,6 +117,7 @@ namespace csql.exe
 			connectionParameter.Catalog = this.Database;
 			connectionParameter.UserId = this.User;
 			connectionParameter.Password = this.Password;
+			connectionParameter.IntegratedSecurity = string.IsNullOrEmpty( this.User );
 
 			CSqlOptions csqlOptions = new CSqlOptions();
 			csqlOptions.ConnectionParameter = connectionParameter;

@@ -66,9 +66,6 @@ public:
 	static const wstring checkFile( const wstring& filePath ) /* throw( Error ) */;
 
 	// Open the file.
-	std::wistream& open( const std::wstring& fileName, const CodePageId defaultCodePageId );
-
-	// Open the file.
 	std::wistream& open( const std::wstring& fileName );
 
 	// Attach to the given wistream
@@ -140,12 +137,6 @@ public:
 	// Check if the first, second and last (non white space) token found is a #ifndef, #define / #endif pair.
 	bool isAutoIncludedOnce();
 
-private:
-	// Auto detect the character set of the file.
-	static const CodePageInfo* detectCodePage( const std::wstring& fileName, const CodePageInfo* pDefaultCodePage );
-
-	// Auto detect the character set of the file.
-	static const CodePageInfo* detectCodePageByBom( std::ifstream& fileStream );
 };
 
 /**

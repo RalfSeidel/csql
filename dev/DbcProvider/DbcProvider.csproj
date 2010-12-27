@@ -25,47 +25,24 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Release\</OutputPath>
     <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Authentic|AnyCPU' ">
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -76,7 +53,7 @@
     <Compile Include="Provider\Sybase\SybaseConnectionFactory.cs" />
     <Compile Include="DbConnectionFactoryProvider.cs" />
     <Compile Include="Provider\MsSql\MsSqlConnectionFactory.cs" />
-    <Compile Include="Provider\IDbConnectionFactory.cs" />
+    <Compile Include="Provider\IWrappedDbConnectionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -96,6 +73,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MruConnections.xsd">
       <Generator>Xsd2CodeCustomTool</Generator>
+      <LastGenOutput>MruConnections1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="..\csql.snk">
       <Link>csql.snk</Link>
@@ -111,19 +89,27 @@
     <Compile Include="MruConnections\MruConnections.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbConnection.cs" />
-    <Compile Include="DbException.cs" />
+    <Compile Include="Provider\SqlCe\SqlCeMessage.cs" />
+    <Compile Include="Provider\SqlCe\SqlCeWrappedException.cs" />
+    <Compile Include="WrappedDbConnection.cs" />
+    <Compile Include="WrappedDbException.cs" />
     <Compile Include="DbMessage.cs" />
     <Compile Include="DbMessageEventArgs.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MruConnections.Designer.cs" />
     <Compile Include="MruConnections\Authentication.cs" />
     <Compile Include="MruDbConnectionParameterAdapter.cs" />
-    <Compile Include="Provider\MsSql\MsSqlConnection.cs" />
+    <Compile Include="Provider\MsSql\MsSqlWrappedConnection.cs" />
+    <Compile Include="Provider\SqlCe\SqlCeWrappedConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Provider\SqlCe\SqlCeConnectionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Provider\Sybase\SybaseConnection.cs">
     </Compile>
-    <Compile Include="Provider\Sybase\SybaseError.cs" />
-    <Compile Include="Provider\Sybase\SybaseException.cs" />
+    <Compile Include="Provider\Sybase\SybaseMessage.cs" />
+    <Compile Include="Provider\Sybase\SybaseWrappedException.cs" />
     <Compile Include="Provider\Sybase\SybaseMessageEventArgs.cs" />
     <Compile Include="StringDomainConverter.cs" />
   </ItemGroup>

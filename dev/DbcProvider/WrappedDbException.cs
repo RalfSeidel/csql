@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Security.Permissions;
+using System.Data.Common;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace Sqt.DbcProvider
 {
@@ -10,41 +9,41 @@ namespace Sqt.DbcProvider
 	/// An wrapper for exceptions raised by the different providers.
 	/// </summary>
 	[Serializable]
-	public class DbException : System.Data.Common.DbException
+	public class WrappedDbException : DbException
 	{
 		/// <summary>
 		/// The message encapsulated by this exception type.
 		/// </summary>
 		private readonly DbMessage message;
 
-		public DbException()
+		public WrappedDbException()
 		{
 		}
 
-		public DbException( string message )
+		public WrappedDbException( string message )
 			: base( message )
 		{
 			this.message = new DbMessage( message );
 		}
 
-		public DbException( string message, Exception innerException )
+		public WrappedDbException( string message, Exception innerException )
 			: base( message, innerException )
 		{
 			this.message = new DbMessage( message );
 		}
 
-		protected DbException( System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context )
+		protected WrappedDbException( System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context )
 			: base( info, context ) 
 		{ 
 		}
 
-		public DbException( DbMessage message )
+		public WrappedDbException( DbMessage message )
 			: base( message.Message )
 		{
 			this.message = message;
 		}
 
-		public DbException( DbMessage message, Exception innerException )
+		public WrappedDbException( DbMessage message, Exception innerException )
 			: base( message.Message, innerException )
 		{
 			this.message = message;
@@ -58,6 +57,9 @@ namespace Sqt.DbcProvider
 			get { return this.message.Server; }
 		}
 
+		/// <summary>
+		/// Gets the name of the database/catalog where the error occurred.
+		/// </summary>
 		public string Catalog
 		{
 			get { return this.message.Catalog; }

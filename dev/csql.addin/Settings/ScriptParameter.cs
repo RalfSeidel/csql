@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using csql.addin.Settings.Gui;
 using Sqt.DbcProvider;
+using System.Xml.Serialization;
 
 namespace csql.addin.Settings
 {
@@ -16,9 +17,12 @@ namespace csql.addin.Settings
 	[DefaultProperty("Name")]
 	[Serializable]
 	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification="The letter C is not a prefix but part of the product name." )]
-	public class CSqlParameter : INotifyPropertyChanged
+	[XmlRoot("CSqlParameter")]
+	public class ScriptParameter : INotifyPropertyChanged
 	{
 		#region Data fields
+
+		private const int DefaultResultColumnWidth = 80;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private const string StringCollectionEditorTypeReferences = @"System.Windows.Forms.Design.StringCollectionEditor,  System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
@@ -44,22 +48,19 @@ namespace csql.addin.Settings
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private int maxResultColumnWidth;
 
-		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private DbConnectionParameter dbConnectionParameter;
-
 		#endregion
 
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public CSqlParameter()
+		public ScriptParameter()
 		{
 			this.name = "New";
 			this.Verbosity = TraceLevel.Info;
 			this.AdvancedPreprocessorParameter = String.Empty;
 
 			this.outputFile = String.Empty;
-			this.maxResultColumnWidth = 40;
+			this.maxResultColumnWidth = DefaultResultColumnWidth;
 			IsOutputFileEnabled = false;
 			IsPreprocessorEnabled = true;
 			IsBreakOnErrorEnabled = true;
@@ -71,10 +72,10 @@ namespace csql.addin.Settings
 		/// Copy constructor
 		/// </summary>
 		/// <param name="that">The parameter to copy.</param>
-		public CSqlParameter( CSqlParameter that )
+		public ScriptParameter( ScriptParameter that )
 			: this()
 		{
-			this.Name = that.Name + " (Copy)";
+			this.Name = that.Name;
 			this.Verbosity = that.Verbosity;
 			this.maxResultColumnWidth = that.maxResultColumnWidth;
 
@@ -103,8 +104,9 @@ namespace csql.addin.Settings
 
 
 		[Category( "CSql" )]
-		[DefaultValue( "New" )]
+		[DefaultValue( "Default" )]
 		[DisplayName( "Configuration Name" )]
+		[Description( "The name of the script parameter configuration") ]
 		public string Name 
 		{
 			get { return this.name; }
@@ -121,6 +123,7 @@ namespace csql.addin.Settings
 		[Category( "CSql" )]
 		[DefaultValue( false )]
 		[DisplayName( "Distribution File Enabled" )]
+		[Description( "Enabled or disables the creating of a single SQL script instead of executing the statements directly." )]
 		public bool IsOutputFileEnabled { get; set; }
 
 		[Category( "CSql" )]
@@ -171,6 +174,7 @@ namespace csql.addin.Settings
 		[Category( "CSql" )]
 		[DefaultValue( true )]
 		[DisplayName("Stop on First Error")]
+		[Description( "Option to stop when the script execution encountered an error. If false the execution will continue until the script has finished." )]
 		public bool IsBreakOnErrorEnabled { get; set; }
 
 		[Category( "CSql" )]
@@ -182,7 +186,7 @@ namespace csql.addin.Settings
 		[Category( "CSql" )]
 		[DisplayName( "Max Result Column Width" )]
 		[Description( "The maximal width of a single result column when traceing query results." )]
-		[DefaultValue(40)]
+		[DefaultValue( DefaultResultColumnWidth )]
 		public int MaxResultColumnWidth
 		{
 			get { return this.maxResultColumnWidth; }
@@ -282,15 +286,6 @@ namespace csql.addin.Settings
 		[DefaultValue( "" )]
 		public string AdvancedPreprocessorParameter { get; set; }
 
-		/// <summary>
-		/// The database connection parameter associated with the current parameter set.
-		/// </summary>
-		[Browsable(false)]
-		public DbConnectionParameter DbConnection
-		{
-			get { return this.dbConnectionParameter; }
-			set { this.dbConnectionParameter = value; }
-		}
 		/// <summary>
 		/// Raises the property changed event.
 		/// </summary>

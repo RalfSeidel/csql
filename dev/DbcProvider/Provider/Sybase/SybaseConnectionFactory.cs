@@ -6,7 +6,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 	/// <summary>
 	/// Connection factory of the Sybase ASE SQL Server.
 	/// </summary>
-	internal class SybaseConnectionFactory : IDbConnectionFactory
+	internal class SybaseConnectionFactory : IWrappedDbConnectionFactory
 	{
 		public string ProviderName
 		{
@@ -45,9 +45,9 @@ namespace Sqt.DbcProvider.Provider.Sybase
 			return connectionString;
 		}
 
-		public DbConnection CreateConnection( DbConnectionParameter parameter )
+		public WrappedDbConnection CreateConnection( DbConnectionParameter parameter )
 		{
-			DbConnection connection = new SybaseConnection( this, parameter );
+			WrappedDbConnection connection = new SybaseConnection( this, parameter );
 			return connection;
 		}
 

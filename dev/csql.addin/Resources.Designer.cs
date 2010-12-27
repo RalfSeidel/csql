@@ -102,9 +102,30 @@ namespace csql.addin {
             }
         }
         
+        internal static System.Drawing.Bitmap CreateCopy {
+            get {
+                object obj = ResourceManager.GetObject("CreateCopy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Delete {
+            get {
+                object obj = ResourceManager.GetObject("Delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Save {
             get {
                 object obj = ResourceManager.GetObject("Save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap SqlServiceLogo {
+            get {
+                object obj = ResourceManager.GetObject("SqlServiceLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Options.h"
 #include "CodePage.h"
+#include "CodePageDetection.h"
 #include "Error.h"
 #include "Output.h"
 namespace sqtpp {
@@ -104,12 +105,11 @@ Output::~Output()
 /**
 ** @brief Factory method to create the output stream according to the program options.
 */
-Output* Output::createOutput( const Options& options )
+Output* Output::createOutput( const Options& options, const wstring& mainInputFile )
 {
 	Output* pOutput = NULL;
 	const wstring& sOutputFile  = options.getOutputFile();
-	const int nOutputCodePage   = options.getOutputCodePage();
-	const CodePageId codePageId = CodePageId( nOutputCodePage  );
+	const CodePageId codePageId = getOutputCodePage( options, mainInputFile );
 	const CodePageInfo& codePageInfo = CodePageInfo::getCodePageInfo( codePageId );
 	const locale& codePageLocale( codePageInfo.getLocale() );
 
@@ -148,6 +148,29 @@ Output* Output::createOutput( std::wostream& stream )
 {
 	Output* pOutput = new TestOutput( &stream );
 	return pOutput;
+}
+
+
+/**
+** @brief Gets the output code page either from the option or - if not specified - 
+** by determining the code page of the main input file.
+*/
+CodePageId Output::getOutputCodePage( const Options& options, const wstring& mainInputFile )
+{
+	const int nOutputCodePage = options.getOutputCodePage();
+	CodePageId codePageId = CodePageId( nOutputCodePage  );
+	if ( codePageId != CPID_UNDEFINED )
+		return codePageId;
+
+	const int nInputCodePage = options.getInputCodePage();
+	codePageId = CodePageId( nInputCodePage  );
+	if ( codePageId != CPID_UNDEFINED )
+		return codePageId;
+
+	const CodePageInfo* pCodePage = CodePageDetection::detectCodePage( mainInputFile, CodePageInfo::getDefaultCodePageId() );
+	assert( pCodePage != NULL );
+	codePageId = pCodePage->getCodePageId();
+	return codePageId;
 }
 
 

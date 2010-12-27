@@ -1,0 +1,23 @@
+/// ---------------------------------------------------------------------
+/// <summary>
+/// Test and exmaple for the CSQL_DROP_TABLE
+/// macros.
+/// </summary>
+/// ---------------------------------------------------------------------
+#include "DbMacros.h"
+
+
+create table csql_crt_test (
+	id int not null primary key,
+	data nvarchar(100)
+);
+go
+
+
+CSQL_DROP_SCHEMA( csql_crt_test )
+go
+
+
+if exists ( select 1 from information_schema.tables where name = 'csql_crt_test' )
+	raiserror 50000 'Table was not droped'
+go

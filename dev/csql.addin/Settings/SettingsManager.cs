@@ -5,10 +5,10 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using csql.addin.Gui;
 using EnvDTE;
 using Sqt.DbcProvider;
 using Sqt.DbcProvider.Provider;
-using csql.addin.Gui;
 
 namespace csql.addin.Settings
 {
@@ -33,7 +33,7 @@ namespace csql.addin.Settings
 		private static SettingsManager instance;
 
 		private MruConnections mruDbConnectionParameters;
-		private CSqlParameter currentScriptParameter;
+		private ScriptParameterCollection scriptParameters;
 
 		#endregion
 
@@ -49,24 +49,28 @@ namespace csql.addin.Settings
 		/// </summary>
 		public event EventHandler SettingsReloaded;
 
-		/// <summary>
-		/// Get the currently used script processing parameter.
-		/// </summary>
-		public CSqlParameter CurrentScriptParameter
+		public ScriptParameterCollection ScriptParameters
 		{
 			get
 			{
-				if ( currentScriptParameter != null ) {
-					return currentScriptParameter;
+				if ( this.scriptParameters == null ) {
+					this.scriptParameters = LoadSolutionScriptParameter();
 				}
-
-				this.currentScriptParameter = LoadSolutionScriptParameter();
-
-				if ( currentScriptParameter == null ) {
-					currentScriptParameter = new CSqlParameter();
+				if ( this.scriptParameters == null ) {
+					this.scriptParameters = new ScriptParameterCollection();
+					var defaultParameter = new ScriptParameter() { Name = "Default" };
+					this.scriptParameters.Add( defaultParameter );
 				}
-				return currentScriptParameter;
+				return this.scriptParameters; ;
 			}
+		}
+
+		/// <summary>
+		/// Get the currently used script processing parameter.
+		/// </summary>
+		public ScriptParameter CurrentScriptParameter
+		{
+			get { return ScriptParameters.Current;  }
 		}
 
 		/// <summary>
@@ -76,16 +80,15 @@ namespace csql.addin.Settings
 		{
 			get
 			{
-				CSqlParameter scriptParameter = CurrentScriptParameter;
-				DbConnectionParameter dbConnectionParameter = scriptParameter.DbConnection;
-				
+				ScriptParameterCollection scriptParameters = ScriptParameters;
+				DbConnectionParameter dbConnectionParameter = scriptParameters.DbConnection;
 
 				if ( dbConnectionParameter != null )
 					return dbConnectionParameter;
 
 				MruConnections mruConnections = MruDbConnectionParameters;
 				dbConnectionParameter = MruDbConnectionParameterAdapter.GetMruDbConnectionParameter( mruConnections );
-				scriptParameter.DbConnection = dbConnectionParameter;
+				scriptParameters.DbConnection = dbConnectionParameter;
 				return dbConnectionParameter;
 			}
 		}
@@ -165,13 +168,13 @@ namespace csql.addin.Settings
 		}
 
 		/// <summary>
-		/// Stores the current database connection parameter in the global variables of the visual studio
-		/// environment.
+		/// Stores the current database connection parameter in the global variables 
+		/// of the visual studio environment.
 		/// </summary>
 		/// <param name="dbConnectionParameter">The database connection parameter.</param>
 		internal void SaveDbConnectionParameterInGlobals( DbConnectionParameter dbConnectionParameter )
 		{
-			IDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( dbConnectionParameter.Provider );
+			IWrappedDbConnectionFactory factory = DbConnectionFactoryProvider.GetFactory( dbConnectionParameter.Provider );
 			string providerName = factory.ProviderName;
 			string connectionString = factory.GetConnectionString( dbConnectionParameter );
 
@@ -185,30 +188,40 @@ namespace csql.addin.Settings
 			globals.set_VariablePersists( variableName, true );
 		}
 
-		internal void SaveScriptParameterInSolutionSettings( CSqlParameter csqlParameter )
+		/// <summary>
+		/// Saves the current script parameter in the solution settings files.
+		/// </summary>
+		/// <param name="csqlParameter">The current script parameter.</param>
+		internal void SaveScriptParameterInSolutionSettings( ScriptParameterCollection scriptParameters )
 		{
-			if ( csqlParameter == null )
+			if ( scriptParameters == null )
 				return;
 
+			string solutionDirectory = GetSolutionDirectory( application );
 			string csqlParameterName = "CSqlParameter.xml";
-			string csqlParameterPath = GetSolutionFilePath( application, csqlParameterName );
-			if ( !IsFileWritable( csqlParameterPath ) ) {
-				csqlParameterName = "CSqlParameter.user.xml";
+			string csqlParameterPath;
+			if ( string.IsNullOrEmpty( solutionDirectory ) ) {
+				csqlParameterPath = GetGlobalFilePath( csqlParameterName );
+			} else {
 				csqlParameterPath = GetSolutionFilePath( application, csqlParameterName );
+				if ( !IsFileWritable( csqlParameterPath ) ) {
+					csqlParameterName = "CSqlParameter.user.xml";
+					csqlParameterPath = GetSolutionFilePath( application, csqlParameterName );
+				}
 			}
 
 			if ( String.IsNullOrEmpty( csqlParameterPath ) )
 				return;
 
-			SaveScriptParameterCore( csqlParameter, csqlParameterPath );
+			SaveScriptParameterCore( scriptParameters, csqlParameterPath );
 		}
 
-		private static void SaveScriptParameterCore( CSqlParameter csqlParameter, string filePath )
+		private static void SaveScriptParameterCore( ScriptParameterCollection scriptParameters, string filePath )
 		{
 			try {
 				using ( Stream stream = new FileStream( filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, FileOptions.SequentialScan ) ) {
-					XmlSerializer serializer = new XmlSerializer( csqlParameter.GetType() );
-					serializer.Serialize( stream, csqlParameter );
+					XmlSerializer serializer = new XmlSerializer( scriptParameters.GetType() );
+					serializer.Serialize( stream, scriptParameters );
 					stream.Close();
 				}
 			}
@@ -220,44 +233,78 @@ namespace csql.addin.Settings
 
 
 		/// <summary>
-		/// Loads the parameter located in the current solution directory.
+		/// Loads the parameter located in the current solution directory
+		/// and updates the global current settings variable with the script
+		/// parameters loaded.
 		/// </summary>
-		private CSqlParameter LoadSolutionScriptParameter()
+		private ScriptParameterCollection LoadSolutionScriptParameter()
 		{
-			CSqlParameter parameter = LoadSolutionScriptParameterCore();
-			if ( parameter != null && parameter.DbConnection != null ) {
-				SaveDbConnectionParameterInGlobals( parameter.DbConnection );
+			ScriptParameterCollection parameters = LoadSolutionScriptParameterCore();
+			if ( parameters != null && parameters.DbConnection != null ) {
+				SaveDbConnectionParameterInGlobals( parameters.DbConnection );
 			}
 
-			return parameter;
+			return parameters;
 		}
 
-		private CSqlParameter LoadSolutionScriptParameterCore()
+		private ScriptParameterCollection LoadSolutionScriptParameterCore()
 		{
-			string csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
-			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameterFromFile( csqlParameterPath );
-				if ( parameter != null )
-					return parameter;
-			}
-			csqlParameterPath = GetSolutionFilePath( application, "CSqlParameter.xml" );
-			if ( !String.IsNullOrEmpty( csqlParameterPath ) && File.Exists( csqlParameterPath ) ) {
-				CSqlParameter parameter = LoadScriptParameterFromFile( csqlParameterPath );
-				if ( parameter != null )
-					return parameter;
-			}
+			string solutionPath = application.Solution.FileName;
+			string parametersPath;
 
+			if ( string.IsNullOrEmpty( solutionPath ) ) {
+				// If no solution is open use the global file.
+				parametersPath = GetGlobalFilePath( "CSqlParameter.xml" );
+				if ( !String.IsNullOrEmpty( parametersPath ) && File.Exists( parametersPath ) ) {
+					ScriptParameterCollection parameters = LoadScriptParameterFromFile( parametersPath );
+					if ( parameters != null )
+						return parameters;
+				}
+			} else {
+				parametersPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
+				if ( !String.IsNullOrEmpty( parametersPath ) && File.Exists( parametersPath ) ) {
+					ScriptParameterCollection parameters = LoadScriptParameterFromFile( parametersPath );
+					if ( parameters != null )
+						return parameters;
+				}
+				parametersPath = GetSolutionFilePath( application, "CSqlParameter.xml" );
+				if ( !String.IsNullOrEmpty( parametersPath ) && File.Exists( parametersPath ) ) {
+					ScriptParameterCollection parameters = LoadScriptParameterFromFile( parametersPath );
+					if ( parameters != null )
+						return parameters;
+				}
+			}
+			
 			return null;
 		}
 
-		private static CSqlParameter LoadScriptParameterFromFile( string csqlParameterPath )
+		/// <summary>
+		/// Try to load the collection of pramters. If that fails try to load a single parameter set (backward compatibility:
+		/// </summary>
+		/// <param name="csqlParameterPath">The parameter file path.</param>
+		/// <returns></returns>
+		private static ScriptParameterCollection LoadScriptParameterFromFile( string parameterPath )
 		{
 			try {
-				using ( Stream stream = new FileStream( csqlParameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
-					XmlSerializer serializer = new XmlSerializer( typeof( CSqlParameter ) );
-					CSqlParameter parameter = (CSqlParameter)serializer.Deserialize( stream );
+				using ( Stream stream = new FileStream( parameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
+					XmlSerializer serializer = new XmlSerializer( typeof( ScriptParameterCollection ) );
+					ScriptParameterCollection parameters = (ScriptParameterCollection)serializer.Deserialize( stream );
 					stream.Close();
-					return parameter;
+					return parameters;
+				}
+			}
+			catch ( Exception ex ) {
+				string context = MethodInfo.GetCurrentMethod().Name;
+				Debug.WriteLine( String.Format( "{0}: Failed to load parameter because [{1}].", context, ex.Message ) );
+			}
+			try {
+				using ( Stream stream = new FileStream( parameterPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) {
+					XmlSerializer serializer = new XmlSerializer( typeof( ScriptParameter ) );
+					ScriptParameter parameter = (ScriptParameter)serializer.Deserialize( stream );
+					stream.Close();
+					ScriptParameterCollection parameters = new ScriptParameterCollection();
+					parameters.Add( parameter );
+					return parameters;
 				}
 			}
 			catch ( Exception ex ) {
@@ -275,14 +322,14 @@ namespace csql.addin.Settings
 			string mruConnectionsName = "CSqlConnection.xml";
 			string mruConnectionsPath = GetGlobalFilePath( mruConnectionsName );
 			if ( !String.IsNullOrEmpty( mruConnectionsPath ) && File.Exists( mruConnectionsPath ) ) {
-				MruConnections mruConnections = LoadMruConnectionParameters( mruConnectionsPath );
+				MruConnections mruConnections = LoadMruConnectionParametersFromFile( mruConnectionsPath );
 				if ( mruConnections != null ) {
 					return mruConnections;
 				}
 			}
 			mruConnectionsPath = GetSolutionFilePath( this.application, mruConnectionsName );
 			if ( !String.IsNullOrEmpty( mruConnectionsPath ) && File.Exists( mruConnectionsPath ) ) {
-				MruConnections mruConnections = LoadMruConnectionParameters( mruConnectionsPath );
+				MruConnections mruConnections = LoadMruConnectionParametersFromFile( mruConnectionsPath );
 				if ( mruConnections != null ) {
 					return mruConnections;
 				}
@@ -291,7 +338,7 @@ namespace csql.addin.Settings
 			return null;
 		}
 
-		private static MruConnections LoadMruConnectionParameters( string mruConnectionsPath )
+		private static MruConnections LoadMruConnectionParametersFromFile( string mruConnectionsPath )
 		{
 			if ( !String.IsNullOrEmpty( mruConnectionsPath ) && File.Exists( mruConnectionsPath ) ) {
 				try {
@@ -313,15 +360,24 @@ namespace csql.addin.Settings
 		/// <returns>The absolute path or <c>null</c> if no solution is loaded.</returns>
 		private static string GetSolutionFilePath( _DTE application, string name )
 		{
-			string solutionPath = application.Solution.FileName;
-			if ( !String.IsNullOrEmpty( solutionPath ) ) {
-				string solutionDirectory = Path.GetDirectoryName( solutionPath );
+			string solutionDirectory = GetSolutionDirectory( application );
+			if ( !String.IsNullOrEmpty( solutionDirectory ) ) {
 				string mruConnectionsPath = Path.Combine( solutionDirectory, name );
 				return mruConnectionsPath;
 			}
 			else {
 				return null;
 			}
+		}
+
+		private static string GetSolutionDirectory( _DTE application )
+		{
+			string solutionPath = application.Solution.FileName;
+			if ( string.IsNullOrEmpty( solutionPath ) ) 
+				return null;
+
+			string solutionDirectory = Path.GetDirectoryName( solutionPath );
+			return solutionDirectory;
 		}
 
 		private static string GetGlobalFilePath( string name )
@@ -335,9 +391,9 @@ namespace csql.addin.Settings
 
 		private void Solution_Opened()
 		{
-			CSqlParameter csqlParameter = LoadSolutionScriptParameter();
-			if ( csqlParameter != null ) {
-				currentScriptParameter = csqlParameter;
+			ScriptParameterCollection scriptParameters = LoadSolutionScriptParameter();
+			if ( scriptParameters != null ) {
+				this.scriptParameters = scriptParameters;
 				RaiseSettingsReloaded();
 			}
 		}

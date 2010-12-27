@@ -5,7 +5,7 @@ namespace Sqt.DbcProvider.Provider.Oracle
 	/// <summary>
 	/// Connection factory of the Oracle Database Server.
 	/// </summary>
-	internal class OracleConnectionFactory : IDbConnectionFactory
+	internal class OracleConnectionFactory : IWrappedDbConnectionFactory
 	{
 		public string ProviderName
 		{
@@ -17,7 +17,7 @@ namespace Sqt.DbcProvider.Provider.Oracle
 			throw new NotImplementedException();
 		}
 
-		public DbConnection CreateConnection( DbConnectionParameter parameter )
+		public WrappedDbConnection CreateConnection( DbConnectionParameter parameter )
 		{
 			throw new NotImplementedException();
 		}

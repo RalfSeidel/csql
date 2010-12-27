@@ -11,8 +11,8 @@ namespace csql.addin.Commands
 
 		public override void Execute( VsCommandEventArgs e )
 		{
-			var view = new Gui.Views.AboutDialog();
-			view.ShowDialog();
+			var dialog = new Gui.AboutDialog();
+			dialog.ShowDialog();
 		}
 	}
 }

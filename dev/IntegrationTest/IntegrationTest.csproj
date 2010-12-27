@@ -17,22 +17,15 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -103,11 +96,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Files\csql\DbMacros.h" />
+    <None Include="Files\csql\CreateTable.csql" />
+    <None Include="Files\csql\CreateDatabase.csql" />
+    <None Include="Files\csql\DropAllIndexes2.csql" />
     <None Include="Files\csql\Input\AllColumnTypesSelect.sql" />
+    <Content Include="Files\csql\sqlce.cfg.txt" />
     <Content Include="Files\csql\Input\Include\Print1.h" />
     <Content Include="Files\csql\mssql.cfg.txt" />
     <Content Include="Files\csql\sybase.cfg.txt">
       <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Files\csql\testdb1.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\sqtpp\input\ansiabc.txt" />
     <Content Include="Files\sqtpp\input\buildin.h" />

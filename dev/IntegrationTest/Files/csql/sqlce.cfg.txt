@@ -1,0 +1,18 @@
+﻿; -----------------------------------------------------------------------------------------
+; CSQL test configuration file.
+; ----------------------------------------------------------------------------------------
+
+; -------------------------------------
+; Database Settings
+; -------------------------------------
+System=SQLCE
+Server=D:\src\CodePlex\sqtpp\IntegrationTest\Files\csql
+Database=testdb1.sdf
+
+NoLogo=true
+BreakOnError=false
+PreprocessorArgs=/E /Co1200
+
+;Tempfile=c:\temp\csqltmp.sql
+;Distfile=c:\temp\csqlout.sql
+

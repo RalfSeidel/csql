@@ -15,14 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_067640EF006949ABB9FBEAA22B2FC5AF"
-        "OwnerKey" = "8:_654B04899F5B4BDDA249AD0A1F34CBE3"
+        "MsmKey" = "8:_15FF1FEE5427472E92EEDCA92A26EDCA"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_15FF1FEE5427472E92EEDCA92A26EDCA"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_18BC606EAC914577A406446BEB148995"
+        "OwnerKey" = "8:_654B04899F5B4BDDA249AD0A1F34CBE3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -51,32 +51,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_24B3B1D35F894BA49391E8744EC8D053"
-        "OwnerKey" = "8:_067640EF006949ABB9FBEAA22B2FC5AF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_354902B44D0A4DA087698FD2659EF8BF"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5C26BEB2BD16EAAB00C7A4B885535A97"
-        "OwnerKey" = "8:_7B6BE0D10D421EE97FD069078133A3A8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5C26BEB2BD16EAAB00C7A4B885535A97"
-        "OwnerKey" = "8:_21557D6F05D947959E0007D88E88BFA8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5C26BEB2BD16EAAB00C7A4B885535A97"
-        "OwnerKey" = "8:_1DBBBDD4A5654CEFABFED2C27588585D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -105,14 +81,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7B6BE0D10D421EE97FD069078133A3A8"
-        "OwnerKey" = "8:_1DBBBDD4A5654CEFABFED2C27588585D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7B6BE0D10D421EE97FD069078133A3A8"
-        "OwnerKey" = "8:_21557D6F05D947959E0007D88E88BFA8"
+        "MsmKey" = "8:_7E4ECE6616A742568E4F3DD9072A7545"
+        "OwnerKey" = "8:_18BC606EAC914577A406446BEB148995"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -166,12 +136,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7B6BE0D10D421EE97FD069078133A3A8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_FB96855D4CAFF9486DCFFB7C4188ADBD"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -205,12 +169,6 @@
         "OwnerKey" = "8:_1DBBBDD4A5654CEFABFED2C27588585D"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5C26BEB2BD16EAAB00C7A4B885535A97"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -219,11 +177,48 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:..\\Debug\\csqlsetup.msi"
+        "OutputFilename" = "8:..\\bin\\Debug\\csqlsetup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
         "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5.SP1"
+                    {
+                    "Name" = "8:.NET Framework 3.5 SP1"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5.SP1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
+        "Deploy"
+        {
+        "DisplayName" = "8:Deploy"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:..\\bin\\Deploy\\csqlsetup.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:3"
         "SignOutput" = "11:FALSE"
         "CertificateFile" = "8:"
         "PrivateKeyFile" = "8:"
@@ -256,7 +251,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:..\\Release\\csqlsetup.msi"
+        "OutputFilename" = "8:..\\bin\\Release\\csqlsetup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -432,37 +427,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5C26BEB2BD16EAAB00C7A4B885535A97"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Sqt.DbcProvider, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3b71d3c4424edfcf, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_5C26BEB2BD16EAAB00C7A4B885535A97"
-                    {
-                    "Name" = "8:Sqt.DbcProvider.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Sqt.DbcProvider.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5F0A3C6E79A4232C37803B5C28E5D872"
             {
             "AssemblyRegister" = "3:1"
@@ -512,37 +476,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7B6BE0D10D421EE97FD069078133A3A8"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:csql.lib, Version=1.0.3976.32194, Culture=neutral, PublicKeyToken=3b71d3c4424edfcf, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_7B6BE0D10D421EE97FD069078133A3A8"
-                    {
-                    "Name" = "8:csql.lib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:csql.lib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CC4DABB478BD7618A0E0019885F7B6BE"
@@ -745,8 +678,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:csql"
-        "ProductCode" = "8:{D4BD8AE2-D749-4835-8F87-1DC954DB621D}"
-        "PackageCode" = "8:{C5C3E527-EE17-4BFA-902E-622BFD044AB9}"
+        "ProductCode" = "8:{C298D88B-598A-4B29-A56F-1EB480CF138F}"
+        "PackageCode" = "8:{CA802F55-12A5-493D-99CC-DD301411EF8F}"
         "UpgradeCode" = "8:{95AAEDF8-A7B8-49E7-9CED-73CEDD9E7E43}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -1285,7 +1218,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_067640EF006949ABB9FBEAA22B2FC5AF"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_18BC606EAC914577A406446BEB148995"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1299,7 +1232,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_24B3B1D35F894BA49391E8744EC8D053"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_7E4ECE6616A742568E4F3DD9072A7545"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1318,7 +1251,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_1DBBBDD4A5654CEFABFED2C27588585D"
             {
-            "SourcePath" = "8:..\\csql.addin\\obj\\Release\\csql.addin.dll"
+            "SourcePath" = "8:..\\obj\\Deploy\\csql.addin\\csql.addin.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
@@ -1346,7 +1279,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_21557D6F05D947959E0007D88E88BFA8"
             {
-            "SourcePath" = "8:..\\csql.exe\\obj\\Release\\csql.exe"
+            "SourcePath" = "8:..\\obj\\Deploy\\csql.exe\\csql.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
@@ -1374,7 +1307,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_354902B44D0A4DA087698FD2659EF8BF"
             {
-            "SourcePath" = "8:..\\setup.CustomActions\\obj\\Release\\CSql.Setup.CustomActions.dll"
+            "SourcePath" = "8:..\\obj\\Deploy\\Setup.CustomActions\\CSql.Setup.CustomActions.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"
@@ -1402,7 +1335,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_654B04899F5B4BDDA249AD0A1F34CBE3"
             {
-            "SourcePath" = "8:..\\Release\\sqtpp.exe"
+            "SourcePath" = "8:..\\Deploy\\sqtpp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BC26DBC3CD714CF48DB1740109540E66"

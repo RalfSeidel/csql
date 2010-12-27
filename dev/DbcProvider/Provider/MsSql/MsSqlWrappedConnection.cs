@@ -10,11 +10,11 @@ namespace Sqt.DbcProvider.Provider.MsSql
 	/// <summary>
 	/// Connection wrapper for native MS SQL Server connections.
 	/// </summary>
-	internal class MsSqlConnection : DbConnection
+	internal class MsSqlWrappedConnection : WrappedDbConnection
 	{
 		private readonly MsSqlConnectionFactory connectionFactory;
 
-		internal MsSqlConnection( MsSqlConnectionFactory connectionFactory, DbConnectionParameter parameter )
+		internal MsSqlWrappedConnection( MsSqlConnectionFactory connectionFactory, DbConnectionParameter parameter )
 			: base( parameter )
 		{
 			this.connectionFactory = connectionFactory;
@@ -54,23 +54,6 @@ namespace Sqt.DbcProvider.Provider.MsSql
 					OnDbMessage( eventArgs );
 				}
 			}
-		}
-
-		/// <summary>
-		/// Create a statement batch that will just echo the given messages texts.
-		/// </summary>
-		/// <param name="messages">The message texts.</param>
-		/// <returns>
-		/// Batch with some print messages.
-		/// </returns>
-		public override string GetPrintStatements( IEnumerable<string> messages )
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach ( string message in messages ) {
-				sb.Append( "print '" ).Append( message.Replace( "'", "''" ) ).AppendLine( "';" );
-			}
-			string statement = sb.ToString();
-			return statement;
 		}
 
 		/// <summary>

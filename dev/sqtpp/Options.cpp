@@ -52,8 +52,8 @@ Options::Options()
 	m_bWriteErrorsToOutput     = false;
 	m_bSupportAdSalesNG        = true;
 
-	m_nInputCodePage           = 1252;
-	m_nOutputCodePage          = 1252;
+	m_nInputCodePage           = 0;
+	m_nOutputCodePage          = 0;
 
 	setLanguageDefaults();
 }

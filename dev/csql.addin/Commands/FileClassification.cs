@@ -16,7 +16,7 @@ namespace csql.addin.Commands
 		/// <returns>
 		/// <c>true</c> if the specified file name ends with a sql script extension; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsSqlScript( CSqlParameter currentPararmeter, string fileName )
+		public static bool IsSqlScript( ScriptParameter currentPararmeter, string fileName )
 		{
 			IEnumerable<string> extensions = currentPararmeter.ScriptExtensions;
 			if ( extensions == null || !extensions.GetEnumerator().MoveNext() ) {

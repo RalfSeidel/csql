@@ -49,8 +49,9 @@ int wmain(int argc, const wchar_t* const argv[])
 			return 3;
 		}
 		const StringArray& files = cmdargs.getFiles();
+		const wstring& firstFile = *files.begin();
 
-		pOutput = Output::createOutput( options );
+		pOutput = Output::createOutput( options, firstFile );
 		pErrStream = &pOutput->getErrStream();
 
 		cpp.setOutput( pOutput );

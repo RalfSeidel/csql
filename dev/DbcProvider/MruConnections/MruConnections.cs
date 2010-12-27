@@ -92,7 +92,7 @@ namespace Sqt.DbcProvider
 		}
 
 		/// <summary>
-		/// Finds the datasource.
+		/// Find the datasource with the specified address (i.e. server name).
 		/// </summary>
 		/// <param name="provider">The id of the provider.</param>
 		/// <param name="datasourceAddress">The name of the datasource.</param>
@@ -103,11 +103,11 @@ namespace Sqt.DbcProvider
 		/// </returns>
 		public Datasource FindDatasourceByAddress( ProviderType provider, string datasourceAddress, int datasourcePort )
 		{
-			Datasources datasources = FindDatasources( provider );
-			if ( datasources == null )
+			Datasources datasourcesOfProvider = FindDatasources( provider );
+			if ( datasourcesOfProvider == null )
 				return null;
 
-			Datasource datasource = datasources.FindDatasourceByAddress( datasourceAddress, datasourcePort );
+			Datasource datasource = datasourcesOfProvider.FindDatasourceByAddress( datasourceAddress, datasourcePort );
 			return datasource;
 		}
 
@@ -121,14 +121,27 @@ namespace Sqt.DbcProvider
 		/// The datasource for the specified provider and comment or <c>null</c>
 		/// if the history does not contain any record for it.
 		/// </returns>
-		public Datasource FindDatasourceByComment( ProviderType provider, string datasourceComment )
+		public Datasource FindDatasourceByComment( ref ProviderType provider, string datasourceComment )
 		{
-			Datasources datasources = FindDatasources( provider );
-			if ( datasources == null )
+			// First lookup the datasource for the current provider.
+			Datasources datasourcesOfProvider = FindDatasources( provider );
+			if ( datasourcesOfProvider == null )
 				return null;
 
-			Datasource datasource = datasources.FindDatasourceByComment( datasourceComment );
-			return datasource;
+			Datasource datasource = datasourcesOfProvider.FindDatasourceByComment( datasourceComment );
+			if ( datasource != null )
+				return datasource;
+
+			// If the datasource was not found seek all datasources and return the first matching entry.
+			foreach ( var datasources in this.Datasources ) {
+				datasource = datasources.FindDatasourceByComment( datasourceComment );
+				if ( datasource != null ) {
+					provider = datasources.Provider;
+					return datasource;
+				}
+			}
+
+			return null;
 		}
 	}
 }

@@ -14,12 +14,12 @@ namespace Sqt.DbcProvider.Provider.Sybase
 		{
 		}
 
-		public SybaseMessageEventArgs( SybaseError message )
-			: base( GetSeverity( message ), message.Server, "", message.Procedure, message.LineNumber, message.Message )
+		public SybaseMessageEventArgs( SybaseMessage message )
+			: base( GetSeverity( message ), message.Server, message.Catalog, message.Procedure, message.LineNumber, message.Message )
 		{
 		}
 
-		private static TraceLevel GetSeverity( SybaseError message )
+		private static TraceLevel GetSeverity( SybaseMessage message )
 		{
 			return TraceLevel.Info;
 		}

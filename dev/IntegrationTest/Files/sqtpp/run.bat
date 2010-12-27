@@ -13,7 +13,7 @@ setlocal
 set failCount=0
 set computername=sqtpp_test_host
 set username=sqtpp_test_user
-set sqtpp=..\..\..\Debug\sqtpp.exe
+set sqtpp=..\..\..\bin\Debug\sqtpp.exe
 
 
 if not exist failed\nul mkdir failed

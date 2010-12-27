@@ -358,6 +358,9 @@ namespace Sqt.DbcProvider
 		MsSql,
 
 		/// <remarks/>
+		SqlCe,
+
+		/// <remarks/>
 		Sybase,
 
 		/// <remarks/>

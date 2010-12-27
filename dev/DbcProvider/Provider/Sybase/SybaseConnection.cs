@@ -13,7 +13,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 	/// Specialization of the database connection using the native
 	/// Sybase <see cref="T:Sybase.Data.AseClient.AseConnection"/> object.
 	/// </summary>
-	internal class SybaseConnection : DbConnection
+	internal class SybaseConnection : WrappedDbConnection
 	{
 		private readonly SybaseConnectionFactory connectionFactory;
 
@@ -113,7 +113,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 				catch ( Exception ex ) {
 					string message = "Can't load sybase provider assembly.";
 					Trace.TraceError( message + ex.Message );
-					throw new DbException( message, ex );
+					throw new WrappedDbException( message, ex );
 				}
 			}
 		}
@@ -166,7 +166,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 				OnDbMessage( eventArgs );
 			} else {
 				// Sybase sometimes repeats the same message several time.
-				// To avoid message spamming we only emit each equal message one time.
+				// To avoid message spamming we emit each equal message one time.
 				object prevError = null;
 				string prevMessage = null;
 				foreach ( object error in errors ) {
@@ -178,55 +178,39 @@ namespace Sqt.DbcProvider.Provider.Sybase
 					prevError = error;
 
 
-					SybaseError infoMessage = new SybaseError( error );
+					SybaseMessage infoMessage = new SybaseMessage( error );
 					if ( Object.Equals( prevMessage, infoMessage.Message ) )
 						continue;
 					prevMessage = infoMessage.Message;
 
 					SybaseMessageEventArgs eventArgs = new SybaseMessageEventArgs( infoMessage );
 					OnDbMessage( eventArgs );
-
 				}
 			}
 		}
 
-
-		/// <summary>
-		/// Create a statement batch that will just echo the given messages texts.
-		/// </summary>
-		/// <param name="messages">The message texts.</param>
-		/// <returns>
-		/// Batch with some print messages.
-		/// </returns>
-		public override string GetPrintStatements( System.Collections.Generic.IEnumerable<string> messages )
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach ( string message in messages ) {
-				sb.Append( "print '" ).Append( message.Replace( "'", "''" ) ).AppendLine( "'" );
-			}
-			string statement = sb.ToString();
-			return statement;
-		}
 
 		public override Exception GetMappedException( Exception ex )
 		{
 			Type type = ex.GetType();
-			if ( type.FullName == "Sybase.Data.AseClient.AseException" ) {
-				PropertyInfo property = type.GetProperty( "Errors" );
-				object value = property.GetValue( ex, null );
-				if ( value != null ) {
-					IEnumerable errors = (IEnumerable)value;
-					IEnumerator enumerator = errors.GetEnumerator();
-					if ( enumerator.MoveNext() ) {
-						object error = enumerator.Current;
-						SybaseError sybaseError = new SybaseError( error );
-						SybaseException sybaseException = new SybaseException( sybaseError, ex );
-						return sybaseException;
-					}
-				}
-			}
-			return ex;
-		}
+			if ( type.FullName != "Sybase.Data.AseClient.AseException" ) 
+				return base.GetMappedException( ex );
 
+			PropertyInfo property = type.GetProperty( "Errors" );
+			object value = property.GetValue( ex, null );
+			if ( value == null ) 
+				return base.GetMappedException( ex );
+
+			IEnumerable errors = (IEnumerable)value;
+			IEnumerator enumerator = errors.GetEnumerator();
+
+			if ( !enumerator.MoveNext() ) 
+				return base.GetMappedException( ex );
+
+			object error = enumerator.Current;
+			SybaseMessage sybaseError = new SybaseMessage( error );
+			SybaseWrappedException sybaseException = new SybaseWrappedException( sybaseError, ex );
+			return sybaseException;
+		}
 	}
 }

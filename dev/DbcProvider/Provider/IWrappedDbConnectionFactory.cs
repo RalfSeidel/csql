@@ -5,7 +5,7 @@ namespace Sqt.DbcProvider.Provider
 	/// <summary>
 	/// Interface for a factory of database connection.
 	/// </summary>
-	public interface IDbConnectionFactory
+	public interface IWrappedDbConnectionFactory
 	{
 		/// <summary>
 		/// Gets the name of the provider as used by the ADO provider/factory model.
@@ -21,6 +21,6 @@ namespace Sqt.DbcProvider.Provider
 		/// Creates an connection for the specified connection parameter.
 		/// </summary>
 		/// <param name="parameter">The connection parameter parameter.</param>
-		DbConnection CreateConnection( DbConnectionParameter parameter );
+		WrappedDbConnection CreateConnection( DbConnectionParameter parameter );
 	}
 }

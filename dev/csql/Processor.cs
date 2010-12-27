@@ -71,9 +71,21 @@ namespace csql
 		/// </summary>
 		private bool PreprocessorExitedWithError
 		{
-			get
-			{
-				return m_ppProcess != null && m_ppProcess.HasExited && m_ppProcess.ExitCode != 0;
+			get { return m_ppProcess != null && m_ppProcess.HasExited && m_ppProcess.ExitCode != 0; }
+		}
+
+
+		/// <summary>
+		/// Check conditions that may cause the processing to fails.
+		/// </summary>
+		public void Validate()
+		{
+			try {
+				this.m_processor.Validate();
+			}
+			catch {
+				this.m_errorCount++;
+				throw;
 			}
 		}
 
@@ -187,6 +199,7 @@ namespace csql
 					Trace.WriteLine( lastBatch );
 					Trace.Unindent();
 				}
+				++m_errorCount;
 				throw new TerminateException( ExitCode.SqlCommandError );
 			}
 		}
@@ -300,7 +313,7 @@ namespace csql
 			try {
 				m_processor.ProcessBatch( processorContext, batch );
 			}
-			catch ( Sqt.DbcProvider.DbException ex ) {
+			catch ( Sqt.DbcProvider.WrappedDbException ex ) {
 				++m_errorCount;
 				string message = FormatError( processorContext, TraceLevel.Error, ex.Message, ex.LineNumber );
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, message );

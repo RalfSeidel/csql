@@ -27,6 +27,8 @@ namespace csql.addin.Commands
 			GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;
 
 			try {
+				this.processor.Validate();
+
 				this.processor.SignIn();
 
 				this.processor.Process();

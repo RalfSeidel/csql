@@ -12,19 +12,20 @@ namespace csql
 	/// </summary>
 	internal class DistributionProcessor : IBatchProcessor
 	{
-		private readonly CSqlOptions m_options;
-		private readonly TextWriter m_outputFileWriter;
+		private readonly CSqlOptions options;
+		private Stream outputStream;
+		private TextWriter outputFileWriter;
+		private bool isCanceled;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DistributionProcessor"/> class.
 		/// </summary>
 		/// <param name="csqlOptions">The script processor parameter.</param>
-		public DistributionProcessor( CSqlOptions csqlOptions )
+		public DistributionProcessor( CSqlOptions options )
 		{
-			m_options = csqlOptions;
-			string outputFilePath = csqlOptions.DistributionFile;
-			Stream stream = new FileStream( outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
-			m_outputFileWriter = new StreamWriter( stream, Encoding.Unicode );
+			this.options = options;
+			string outputFilePath = Path.GetFullPath( options.DistributionFile );
+
 		}
 
 		~DistributionProcessor()
@@ -33,32 +34,50 @@ namespace csql
 		}
 
 		/// <summary>
+		/// Validate the options.
+		/// </summary>
+		public void Validate()
+		{
+			string inputFilePath = Path.GetFullPath( this.options.ScriptFile );
+			string outputFilePath = Path.GetFullPath( options.DistributionFile );
+
+			if ( string.Equals( inputFilePath, outputFilePath, StringComparison.OrdinalIgnoreCase ) ) {
+				this.isCanceled = true;
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, "Error: The input and output file are the same." );
+				throw new TerminateException( ExitCode.ArgumentsError );
+			}
+		}
+
+		/// <summary>
 		/// Emits an entry message.
 		/// </summary>
 		public void SignIn()
 		{
-			string scriptFile = m_options.ScriptFile;
-			PreProcessor preProcessor = new PreProcessor( m_options );
+			PreProcessor preProcessor = new PreProcessor( this.options );
+			string inputFilePath = this.options.ScriptFile;
+			inputFilePath = Path.GetFullPath( inputFilePath );
 
+			string outputFilePath = this.options.DistributionFile;
+			outputFilePath = Path.GetFullPath( outputFilePath );
 
-			scriptFile = Path.GetFullPath( scriptFile );
+			this.outputStream = new FileStream( outputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
+			this.outputFileWriter = new StreamWriter( outputStream, Encoding.Unicode );
 
-			string distFile = m_options.DistributionFile;
-			distFile = Path.GetFullPath( distFile );
+			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, "Creating distribution file " + outputFilePath + " from " + inputFilePath + "." );
 
 			// Create the dstribution file header
 			StringBuilder headerBuilder = new StringBuilder();
 
 			headerBuilder.AppendLine( "/* ****************************************************************************" );
 			headerBuilder.AppendLine( "**" );
-			headerBuilder.Append( "** Source script    : " ).AppendLine( scriptFile );
-			headerBuilder.Append( "** Distribution file: " ).AppendLine( distFile );
+			headerBuilder.Append( "** Source script    : " ).AppendLine( inputFilePath );
+			headerBuilder.Append( "** Distribution file: " ).AppendLine( outputFilePath );
 			headerBuilder.Append( "** Created          : " ).AppendLine( DateTime.Now.ToString( CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern, CultureInfo.InvariantCulture ) );
 			headerBuilder.Append( "** Preprocessed with: " ).Append( PreProcessor.Command ).Append( ' ' ).AppendLine( preProcessor.Arguments );
 			headerBuilder.AppendLine( "**" );
 			headerBuilder.AppendLine( "**************************************************************************** */" );
 
-			m_outputFileWriter.Write( headerBuilder.ToString() );
+			this.outputFileWriter.Write( headerBuilder.ToString() );
 		}
 
 		/// <summary>
@@ -66,17 +85,25 @@ namespace csql
 		/// </summary>
 		public void SignOut()
 		{
+			if ( isCanceled ) {
+				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, "Script processing was canceled." );
+				return;
+			}
+
 			StringBuilder footerBuilder = new StringBuilder();
 			footerBuilder.AppendLine( "/* ****************************************************************************" );
 			footerBuilder.AppendLine( "**" );
 			footerBuilder.AppendLine( "** end of script" );
 			footerBuilder.AppendLine( "**" );
 			footerBuilder.AppendLine( "**************************************************************************** */" );
-			m_outputFileWriter.Write( footerBuilder.ToString() );
+			this.outputFileWriter.Write( footerBuilder.ToString() );
 
-			string distFile = m_options.DistributionFile;
+			string distFile = this.options.DistributionFile;
 			distFile = Path.GetFullPath( distFile );
 			Trace.WriteLineIf( GlobalSettings.Verbosity.TraceInfo, distFile + "(1): file created." );
+
+			this.outputFileWriter.Close();
+			this.outputStream.Close();
 		}
 
 		public void ProcessProgress( ProcessorContext processorContext, string progressInfo )
@@ -118,8 +145,8 @@ namespace csql
 
 			string output = outputBuilder.ToString();
 			if ( output.Length != 0 ) {
-				m_outputFileWriter.Write( output );
-				m_outputFileWriter.WriteLine( "go" );
+				this.outputFileWriter.Write( output );
+				this.outputFileWriter.WriteLine( "go" );
 			}
 		}
 
@@ -131,7 +158,8 @@ namespace csql
 		/// to check the cancel condition in the outer processor only.
 		/// </remarks>
 		public void Cancel()
-		{ 
+		{
+			this.isCanceled = true;
 		}
 
 		/// <summary>
@@ -140,7 +168,10 @@ namespace csql
 		public void Dispose( bool isDisposing )
 		{
 			if ( isDisposing ) {
-				m_outputFileWriter.Dispose();
+				if ( this.outputFileWriter != null )
+					this.outputFileWriter.Dispose();
+				if ( this.outputStream	 != null )
+					this.outputStream.Dispose();
 			}
 		}
 

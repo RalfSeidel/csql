@@ -15,6 +15,11 @@ namespace Sqt.DbcProvider
 			this.message = new DbMessage( message );
 		}
 
+		public DbMessageEventArgs( DbMessage message )
+		{
+			this.message = message;
+		}
+
 		public DbMessageEventArgs( TraceLevel severity, string server, string catalog, string procedure, int lineNo, string message )
 		{
 			this.message = new DbMessage( severity, server, catalog, procedure, lineNo, message );

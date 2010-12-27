@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Reflection;
 using System.Diagnostics;
-using System.Text;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Text;
 
 namespace Sqt.DbcProvider.Provider.Sybase
 {
 	[DebuggerDisplay( "{Message}" )]
-	public class SybaseError : DbMessage
+	public class SybaseMessage : DbMessage
 	{
-		private readonly int    m_errorNumber;
-
+		/// <summary>
+		/// The native sybase error number.
+		/// </summary>
+		private readonly int errorNumber;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SybaseInfoMessage"/> class.
@@ -18,18 +20,38 @@ namespace Sqt.DbcProvider.Provider.Sybase
 		/// <param name="aseError">
 		/// The unknown error/info message.
 		/// </param>
-		public SybaseError( object aseError )
+		public SybaseMessage( object aseError )
 			: base( TraceLevel.Error, GetServer( aseError ), GetCatalog( aseError ), GetProcedure( aseError ), GetLineNumber( aseError ), GetMessage( aseError ) )
 		{
 			if ( aseError == null )
 				throw new ArgumentNullException( "aseError" );
 
 			Type infoMessageType = aseError.GetType();
-			PropertyInfo property;
-
-			property = infoMessageType.GetProperty( "MessageNumber", typeof( int ) );
-			m_errorNumber = (int)property.GetValue( aseError, null );
+			PropertyInfo property = infoMessageType.GetProperty( "MessageNumber", typeof( int ) );
+			this.errorNumber = (int)property.GetValue( aseError, null );
 		}
+
+		/// <summary>
+		/// Gets the sybase error number of the message.
+		/// </summary>
+		/// <value>The error number.</value>
+		public int ErrorNumber { get { return this.errorNumber; } }
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append( Message );
+			string result = sb.ToString();
+			return result;
+		}
+
+		#region ASE exception property extraction.
 
 		private static string GetServer( object aseError )
 		{
@@ -39,11 +61,10 @@ namespace Sqt.DbcProvider.Provider.Sybase
 			return server;
 		}
 
-
 		[SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "aseError", Justification="Parameter reserved for later use." )]
 		private static string GetCatalog( object aseError )
 		{
-			return "";
+			return string.Empty;
 		}
 
 		private static string GetProcedure( object aseError )
@@ -69,28 +90,7 @@ namespace Sqt.DbcProvider.Provider.Sybase
 			string message = (string)property.GetValue( aseError, null );
 			return message;
 		}
-		
 
-
-
-		/// <summary>
-		/// Gets the sybase error number of the message.
-		/// </summary>
-		/// <value>The error number.</value>
-		public int ErrorNumber { get { return m_errorNumber; } }
-
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
-		public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.Append( Message );
-			string result = sb.ToString();
-			return result;
-		}
+		#endregion
 	}
 }
