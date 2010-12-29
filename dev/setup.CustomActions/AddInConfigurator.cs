@@ -4,6 +4,7 @@ using System.Configuration.Install;
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace Setup.CustomActions
 {
@@ -16,7 +17,10 @@ namespace Setup.CustomActions
 		/// <summary>
 		/// Perform the installation.
 		/// </summary>
-		/// <param name="stateSaver">An <see cref="T:System.Collections.IDictionary"/> used to save information needed to perform a commit, rollback, or uninstall operation.</param>
+		/// <param name="stateSaver">
+		/// An <see cref="T:System.Collections.IDictionary"/> used to save information needed
+		/// to perform a commit, rollback, or uninstall operation.
+		/// </param>
 		/// <exception cref="T:System.ArgumentException">
 		/// The <paramref name="stateSaver"/> parameter is null.
 		/// </exception>
@@ -30,9 +34,11 @@ namespace Setup.CustomActions
             base.Install(stateSaver);
 	
 			// Save target directory and product id to be able to set the install location
-			// Not that you have to add the following line to the "CustomActionData" property
+			// Note that you have to add the following line to the "CustomActionData" property
 			// in the install event of your primary output:
 			//	/DP_TargetDir="[TARGETDIR]\" /DP_ProductID="[ProductCode]"
+			// To do so select the setup project in the solution and click the icon "Custom Actions Editor"
+			// at the top of the solution explorer.
 			object productId = Context.Parameters["DP_ProductID"];
 			object targetDir = Context.Parameters["DP_TargetDir"];
 			if ( productId == null ) {
@@ -74,18 +80,25 @@ namespace Setup.CustomActions
 		/// <summary>
 		/// Completes the install transaction.
 		/// </summary>
-		/// <param name="savedState">An <see cref="T:System.Collections.IDictionary"/> that contains the state of the computer after all the installers in the collection have run.</param>
+		/// <param name="savedState">
+		/// An <see cref="T:System.Collections.IDictionary"/> 
+		/// that contains the state of the computer after all the installers in the collection have run.
+		/// </param>
 		/// <exception cref="T:System.ArgumentException">
 		/// The <paramref name="savedState"/> parameter is null.
 		/// -or-
 		/// The saved-state <see cref="T:System.Collections.IDictionary"/> might have been corrupted.
 		/// </exception>
 		/// <exception cref="T:System.Configuration.Install.InstallException">
-		/// An exception occurred during the <see cref="M:System.Configuration.Install.Installer.Commit(System.Collections.IDictionary)"/> phase of the installation. This exception is ignored and the installation continues. However, the application might not function correctly after the installation is complete.
+		/// An exception occurred during the <see cref="M:System.Configuration.Install.Installer.Commit(System.Collections.IDictionary)"/>
+		/// phase of the installation. This exception is ignored and the installation continues.
+		/// However, the application might not function correctly after the installation is complete.
 		/// </exception>
         public override void Commit(IDictionary savedState)
         {
-            base.Commit(savedState);
+			Debugger.Break();
+
+			base.Commit( savedState );
 
 			// Determine install location and update product registry with the information.
 			string productId = savedState["ProductID"].ToString();

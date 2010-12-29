@@ -26,7 +26,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Common.vsprops"
 			CharacterSet="1"
@@ -96,7 +96,7 @@
 		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj\$(ConfigurationName)$(PlatformName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Common.vsprops"
 			CharacterSet="1"
@@ -167,7 +167,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Common.vsprops"
 			CharacterSet="1"
@@ -240,7 +240,7 @@
 		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj\$(ConfigurationName)$(PlatformName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Common.vsprops"
 			CharacterSet="1"
@@ -314,7 +314,7 @@
 		<Configuration
 			Name="Deploy|Win32"
 			OutputDirectory="$(SolutionDir)bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Common.vsprops"
 			CharacterSet="1"
@@ -387,7 +387,7 @@
 		<Configuration
 			Name="Deploy|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj\$(ConfigurationName)$(PlatformName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Common.vsprops"
 			CharacterSet="1"
