@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using EnvDTE80;
 using Sqt.VisualStudio;
-using EnvDTE80;
 
 namespace csql.addin.Commands
 {

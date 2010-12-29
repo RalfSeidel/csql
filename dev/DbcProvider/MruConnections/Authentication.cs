@@ -64,12 +64,14 @@ namespace Sqt.DbcProvider
 		/// <inheritdoc/>
 		public override int GetHashCode()
 		{
-			int hashCode = this.Integrated ? 1 : 0;
-			if ( UserId != null ) 
-				hashCode = hashCode * 31 + this.UserId.ToLower( CultureInfo.CurrentCulture ).GetHashCode();
-			if ( Password != null )
-				hashCode = hashCode * 31 + this.Password.GetHashCode();
-			return hashCode;
+			unchecked {
+				int hashCode = this.Integrated ? 1 : 0;
+				if ( UserId != null )
+					hashCode = hashCode * 31 + this.UserId.ToLower( CultureInfo.CurrentCulture ).GetHashCode();
+				if ( Password != null )
+					hashCode = hashCode * 31 + this.Password.GetHashCode();
+				return hashCode;
+			}
 		}
 
 		#endregion

@@ -68,6 +68,5 @@ namespace Sqt.VisualStudio.Util
 			Debug.WriteLine( "VsApplicationExtensions.GetMenuBar - Menu bar not found: " + menuBarName );
 			return null;
 		}
-
 	}
 }

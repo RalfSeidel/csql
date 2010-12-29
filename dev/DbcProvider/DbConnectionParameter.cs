@@ -405,14 +405,16 @@ namespace Sqt.DbcProvider
 		/// <inheritdoc />
 		public override int GetHashCode()
 		{
-			int hashCode = Provider.GetHashCode();
-			hashCode = hashCode * 31 + (DatasourceAddress == null ? 0 : DatasourceAddress.GetHashCode());
-			hashCode = hashCode * 31 + DatasourcePort;
-			hashCode = hashCode * 31 + (DatasourceComment == null ? 0 : DatasourceComment.GetHashCode());
-			hashCode = hashCode * 31 + (Catalog == null ? 0 : Catalog.GetHashCode());
-			hashCode = hashCode * 31 + (authentication == null ? 0 : authentication.GetHashCode());
-			hashCode = hashCode * 31 + Timeout;
-			return hashCode;
+			unchecked {
+				int hashCode = Provider.GetHashCode();
+				hashCode = hashCode * 31 + (DatasourceAddress == null ? 0 : DatasourceAddress.GetHashCode());
+				hashCode = hashCode * 31 + DatasourcePort;
+				hashCode = hashCode * 31 + (DatasourceComment == null ? 0 : DatasourceComment.GetHashCode());
+				hashCode = hashCode * 31 + (Catalog == null ? 0 : Catalog.GetHashCode());
+				hashCode = hashCode * 31 + (authentication == null ? 0 : authentication.GetHashCode());
+				hashCode = hashCode * 31 + Timeout;
+				return hashCode;
+			}
 		}
 
 
