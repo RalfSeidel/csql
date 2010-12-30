@@ -1,0 +1,298 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IntegrationTest</RootNamespace>
+    <AssemblyName>IntegrationTest</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\assembly\GAC\stdole\7.0.3300.0__b03f5f7f11d50a3a\stdole.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComparerResult.cs" />
+    <Compile Include="Environment.cs" />
+    <Compile Include="SpecialSqtppTest.cs" />
+    <Compile Include="FileComparer.cs" />
+    <Compile Include="IComparer.cs" />
+    <Compile Include="DefaultSqtppTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqtppComparer.cs" />
+    <Compile Include="SqtppComparerOptions.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Files\csql\DropAllTriggers.csql" />
+    <None Include="Files\csql\CreateSchema.csql" />
+    <None Include="Files\csql\CreateDefault.csql" />
+    <None Include="Files\csql\CreateInlineFunction.csql" />
+    <None Include="Files\csql\CreateRule.csql" />
+    <None Include="Files\csql\CreateType.csql" />
+    <None Include="Files\csql\DbMacrosDoc.cfg" />
+    <None Include="Files\csql\DbMarcosDoc.bat" />
+    <None Include="Files\csql\DropAllForeignKeys.csql" />
+    <None Include="Files\csql\DropAllIndexes.csql" />
+    <None Include="Files\csql\DropCreate.csql" />
+    <None Include="Files\csql\DropForeignKey.csql" />
+    <None Include="Files\csql\Input\NotExistingIncludeTest.sql" />
+    <None Include="Files\csql\Input\DependencyWarning.sql" />
+    <None Include="Files\csql\Input\DistributionTest.sql" />
+    <None Include="Files\csql\Input\ErrorAfterInclude.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_1.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_2.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_3.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_4.sql" />
+    <None Include="Files\csql\Input\ErrorLineTest_5.sql" />
+    <None Include="Files\csql\Input\Include\ErrorLineTest_4.1.sql" />
+    <None Include="Files\csql\Input\PrintFromProcedure.sql" />
+    <None Include="Files\csql\Input\SelectTest.sql" />
+    <None Include="Files\csql\ObjectInfo.csql" />
+    <None Include="Files\csql\print1252.sql" />
+    <None Include="Files\csql\printutf16.sql" />
+    <None Include="Files\csql\printutf16be.sql" />
+    <None Include="Files\csql\printutf8.sql" />
+    <None Include="Files\csql\Reference\DependencyWarning.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_1.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_2.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_3.mssql.log" />
+    <None Include="Files\csql\Reference\ErrorLineTest_4.mssql.log" />
+    <None Include="Files\csql\Reference\PrintFromProcedure.mssql.log" />
+    <None Include="Files\csql\Reference\SelectTest.mssql.log" />
+    <None Include="Files\csql\run.bat" />
+    <None Include="Files\sqtpp\input\multiline.sql" />
+    <Content Include="Files\sqtpp\input\ErrC1083.h" />
+    <None Include="Files\sqtpp\input\temptable.sql" />
+    <None Include="Files\sqtpp\reference\multiline.sql" />
+    <None Include="Files\sqtpp\reference\temptable.sql" />
+    <None Include="Files\sqtpp\run.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Files\csql\DbMacros.h" />
+    <None Include="Files\csql\CreateTable.csql" />
+    <None Include="Files\csql\CreateDatabase.csql" />
+    <None Include="Files\csql\DropAllIndexes2.csql" />
+    <None Include="Files\csql\Input\AllColumnTypesSelect.sql" />
+    <Content Include="Files\csql\sqlce.cfg.txt" />
+    <Content Include="Files\csql\Input\Include\Print1.h" />
+    <Content Include="Files\csql\mssql.cfg.txt" />
+    <Content Include="Files\csql\sybase.cfg.txt">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Files\csql\testdb1.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\sqtpp\input\ansiabc.txt" />
+    <Content Include="Files\sqtpp\input\buildin.h" />
+    <Content Include="Files\sqtpp\input\BuildinEval.h" />
+    <Content Include="Files\sqtpp\input\charize.h" />
+    <Content Include="Files\sqtpp\input\concate.h" />
+    <Content Include="Files\sqtpp\input\concate2.h" />
+    <Content Include="Files\sqtpp\input\ConditionalTest1.h" />
+    <Content Include="Files\sqtpp\input\ConditionalTest2.h" />
+    <Content Include="Files\sqtpp\input\IncludeTest1.h" />
+    <Content Include="Files\sqtpp\input\CP1252.txt" />
+    <Content Include="Files\sqtpp\input\CP850.txt" />
+    <Content Include="Files\sqtpp\input\Define1Test.h" />
+    <Content Include="Files\sqtpp\input\Define2Test.h" />
+    <Content Include="Files\sqtpp\input\Define3Test.h" />
+    <Content Include="Files\sqtpp\input\Define4Test.h" />
+    <Content Include="Files\sqtpp\input\Define5Test.h" />
+    <Content Include="Files\sqtpp\input\Define6Test.h" />
+    <Content Include="Files\sqtpp\input\Define7Test.h" />
+    <Content Include="Files\sqtpp\input\ErrC1004-2.h" />
+    <Content Include="Files\sqtpp\input\ErrC1012-1.h" />
+    <Content Include="Files\sqtpp\input\ErrC1012-2.h" />
+    <Content Include="Files\sqtpp\input\ErrC1014.h" />
+    <Content Include="Files\sqtpp\input\ErrC1017B.h" />
+    <Content Include="Files\sqtpp\input\ErrC1017C.h" />
+    <Content Include="Files\sqtpp\input\ErrC1018.h" />
+    <Content Include="Files\sqtpp\input\ErrC1019.h" />
+    <Content Include="Files\sqtpp\input\ErrC1020.h" />
+    <Content Include="Files\sqtpp\input\ErrC1021.h" />
+    <Content Include="Files\sqtpp\input\ErrC1070.h" />
+    <Content Include="Files\sqtpp\input\ErrC1071.h" />
+    <Content Include="Files\sqtpp\input\ErrC1082.h" />
+    <Content Include="Files\sqtpp\input\ErrC2006.h" />
+    <Content Include="Files\sqtpp\input\ErrC2007.h" />
+    <Content Include="Files\sqtpp\input\ErrC2008.h" />
+    <Content Include="Files\sqtpp\input\ErrC2010-1.h" />
+    <Content Include="Files\sqtpp\input\ErrC2010-2.h" />
+    <Content Include="Files\sqtpp\input\ErrC2010-3.h" />
+    <Content Include="Files\sqtpp\input\ErrC2010-4.h" />
+    <Content Include="Files\sqtpp\input\ErrC2010-5.h" />
+    <Content Include="Files\sqtpp\input\ErrC2015.h" />
+    <Content Include="Files\sqtpp\input\ErrC2124.h" />
+    <Content Include="Files\sqtpp\input\ErrC2160.h" />
+    <Content Include="Files\sqtpp\input\ErrC2161.h" />
+    <Content Include="Files\sqtpp\input\ErrC4002.h" />
+    <Content Include="Files\sqtpp\input\ErrC4006.h" />
+    <Content Include="Files\sqtpp\input\ErrC4067.h" />
+    <Content Include="Files\sqtpp\input\ErrC4067B.h" />
+    <Content Include="Files\sqtpp\input\ErrC4117.h" />
+    <Content Include="Files\sqtpp\input\error.h" />
+    <Content Include="Files\sqtpp\input\If1Test.h" />
+    <Content Include="Files\sqtpp\input\If2Test.h" />
+    <Content Include="Files\sqtpp\input\Ifdef1Test.h" />
+    <Content Include="Files\sqtpp\input\Ifndef1Test.h" />
+    <Content Include="Files\sqtpp\input\include1.h" />
+    <Content Include="Files\sqtpp\input\include2.h" />
+    <Content Include="Files\sqtpp\input\include3.h" />
+    <Content Include="Files\sqtpp\input\include\mixedcp_1252.h" />
+    <Content Include="Files\sqtpp\input\include\mixedcp_utf16.h" />
+    <Content Include="Files\sqtpp\input\include\mixedcp_utf16be.h" />
+    <Content Include="Files\sqtpp\input\include\mixedcp_utf8.h" />
+    <Content Include="Files\sqtpp\input\include\ninclude1.h" />
+    <Content Include="Files\sqtpp\input\include\ninclude2.h" />
+    <Content Include="Files\sqtpp\input\include\once_explicite.h" />
+    <Content Include="Files\sqtpp\input\include\once_implicite.h" />
+    <Content Include="Files\sqtpp\input\include\rinclude1.h" />
+    <Content Include="Files\sqtpp\input\include\rinclude2.h" />
+    <Content Include="Files\sqtpp\input\include\rinclude3.h" />
+    <Content Include="Files\sqtpp\input\message.h" />
+    <Content Include="Files\sqtpp\input\mixedcp.h" />
+    <Content Include="Files\sqtpp\input\nested.h" />
+    <Content Include="Files\sqtpp\input\ninclude.h" />
+    <Content Include="Files\sqtpp\input\once.h" />
+    <Content Include="Files\sqtpp\input\quote.h" />
+    <Content Include="Files\sqtpp\input\special\emitline1.h" />
+    <Content Include="Files\sqtpp\input\special\emitline2.h" />
+    <Content Include="Files\sqtpp\input\special\findfile.h" />
+    <Content Include="Files\sqtpp\input\special\include\emitline2_1.h" />
+    <Content Include="Files\sqtpp\input\special\include\emitline2_2.h" />
+    <Content Include="Files\sqtpp\input\special\include\findfile_include.h" />
+    <Content Include="Files\sqtpp\input\stringize.h" />
+    <Content Include="Files\sqtpp\input\test.h" />
+    <Content Include="Files\sqtpp\input\unicode.txt" />
+    <Content Include="Files\sqtpp\input\UTF16.txt" />
+    <Content Include="Files\sqtpp\input\UTF16BE.txt" />
+    <Content Include="Files\sqtpp\input\utf8.txt" />
+    <Content Include="Files\sqtpp\input\utf8abc.txt" />
+    <Content Include="Files\sqtpp\input\utfabc.txt" />
+    <Content Include="Files\sqtpp\input\utfbeabc.txt" />
+    <Content Include="Files\sqtpp\input\Россия.txt" />
+    <Content Include="Files\sqtpp\reference\ansiabc.txt" />
+    <Content Include="Files\sqtpp\reference\buildin.h" />
+    <Content Include="Files\sqtpp\reference\BuildinEval.h" />
+    <Content Include="Files\sqtpp\reference\charize.h" />
+    <Content Include="Files\sqtpp\reference\Co1200_ansiabc.txt" />
+    <Content Include="Files\sqtpp\reference\Co1200_unicode.txt" />
+    <Content Include="Files\sqtpp\reference\Co1200_utf8abc.txt" />
+    <Content Include="Files\sqtpp\reference\concate.h" />
+    <Content Include="Files\sqtpp\reference\concate2.h" />
+    <Content Include="Files\sqtpp\reference\ConditionalTest1.h" />
+    <Content Include="Files\sqtpp\reference\ConditionalTest2.h" />
+    <Content Include="Files\sqtpp\reference\CP1252.txt" />
+    <Content Include="Files\sqtpp\reference\CP850.txt" />
+    <Content Include="Files\sqtpp\reference\Define1Test.h" />
+    <Content Include="Files\sqtpp\reference\Define2Test.h" />
+    <Content Include="Files\sqtpp\reference\Define3Test.h" />
+    <Content Include="Files\sqtpp\reference\Define4Test.h" />
+    <Content Include="Files\sqtpp\reference\Define5Test.h" />
+    <Content Include="Files\sqtpp\reference\Define6Test.h" />
+    <Content Include="Files\sqtpp\reference\Define7Test.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1004-2.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1012-1.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1012-2.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1014.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1017B.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1017C.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1018.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1019.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1020.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1021.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1070.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1071.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1082.h" />
+    <Content Include="Files\sqtpp\reference\ErrC1083.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2006.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2007.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2008.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2010-1.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2010-2.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2010-3.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2010-4.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2010-5.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2015.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2124.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2160.h" />
+    <Content Include="Files\sqtpp\reference\ErrC2161.h" />
+    <Content Include="Files\sqtpp\reference\ErrC4002.h" />
+    <Content Include="Files\sqtpp\reference\ErrC4006.h" />
+    <Content Include="Files\sqtpp\reference\ErrC4067.h" />
+    <Content Include="Files\sqtpp\reference\ErrC4067B.h" />
+    <Content Include="Files\sqtpp\reference\ErrC4117.h" />
+    <Content Include="Files\sqtpp\reference\error.h" />
+    <Content Include="Files\sqtpp\reference\If1Test.h" />
+    <Content Include="Files\sqtpp\reference\If2Test.h" />
+    <Content Include="Files\sqtpp\reference\Ifdef1Test.h" />
+    <Content Include="Files\sqtpp\reference\Ifndef1Test.h" />
+    <Content Include="Files\sqtpp\reference\include1.h" />
+    <Content Include="Files\sqtpp\reference\include2.h" />
+    <Content Include="Files\sqtpp\reference\include3.h" />
+    <Content Include="Files\sqtpp\reference\IncludeTest1.h" />
+    <Content Include="Files\sqtpp\reference\message.h" />
+    <Content Include="Files\sqtpp\reference\mixedcp.h" />
+    <Content Include="Files\sqtpp\reference\nested.h" />
+    <Content Include="Files\sqtpp\reference\ninclude.h" />
+    <Content Include="Files\sqtpp\reference\once.h" />
+    <Content Include="Files\sqtpp\reference\quote.h" />
+    <Content Include="Files\sqtpp\reference\special_emitline1.h" />
+    <Content Include="Files\sqtpp\reference\special_emitline2.h" />
+    <Content Include="Files\sqtpp\reference\special_findfile.h" />
+    <Content Include="Files\sqtpp\reference\stringize.h" />
+    <Content Include="Files\sqtpp\reference\test.h" />
+    <Content Include="Files\sqtpp\reference\unicode.txt" />
+    <Content Include="Files\sqtpp\reference\UTF16.txt" />
+    <Content Include="Files\sqtpp\reference\UTF16BE.txt" />
+    <Content Include="Files\sqtpp\reference\utf8.txt" />
+    <Content Include="Files\sqtpp\reference\utf8abc.txt" />
+    <Content Include="Files\sqtpp\reference\utfabc.txt" />
+    <Content Include="Files\sqtpp\reference\utfbeabc.txt" />
+    <Content Include="Files\sqtpp\reference\Россия.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\csql\csql.lib.csproj">
+      <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
+      <Name>csql.lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

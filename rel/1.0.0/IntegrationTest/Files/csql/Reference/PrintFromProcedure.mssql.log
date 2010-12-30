@@ -1,0 +1,9 @@
+Executing batch 1
+Changed database context to 'tempdb'.
+Executing batch 2
+Executing batch 3
+Executing batch 4
+Hello world from procedure pPrintTest
+Hello World!
+Executing batch 5
+** Finished

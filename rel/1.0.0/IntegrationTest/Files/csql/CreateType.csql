@@ -1,0 +1,60 @@
+/// ---------------------------------------------------------------------
+/// @file
+/// <summary>
+/// Test and example for the CSQL_CREATE_TYPE and CSQL_DROP_TYPE macros.
+/// </summary>
+/// ---------------------------------------------------------------------
+#include "DbMacros.h"
+
+CSQL_SET_CATALOG( tempdb )
+go
+
+CSQL_DROP_TABLE( test )
+go
+
+-- Create an int alias type and bind a constraint
+-- that restricts the values to single bits.
+CSQL_CREATE_TYPE( dbo.BitId, int not null )
+go
+
+CSQL_CREATE_RULE( dbo.cIsBitId, (@v & (@v - 1)) = 0 )
+go
+
+exec sp_bindrule 'dbo.cIsBitId', 'dbo.BitId'
+go
+
+
+create table test( id BitId )
+go
+
+insert into test ( id )
+values (1)
+insert into test ( id )
+values (2)
+insert into test ( id )
+values (32)
+go
+
+declare @CaughtError bit
+set @CaughtError = 0
+begin try 
+	insert into Test ( id ) values ( 3 )
+end try
+begin catch
+	set @CaughtError = 1
+end catch
+if @CaughtError != 1
+	raiserror 50000 'Rule did not prevent the insert. Has it been created and bound?'
+go
+
+
+
+CSQL_DROP_TABLE( test )
+go
+
+CSQL_DROP_TYPE( dbo.BitId )
+go
+
+CSQL_DROP_RULE( dbo.cIsBitId )
+go
+

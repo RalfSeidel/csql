@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+-->
+<xs:schema id="MruConnections"
+	elementFormDefault="qualified"
+    targetNamespace="http://schemas.sql-service.de/etc/MruConnections.xsd"
+    xmlns="http://schemas.sql-service.de/etc/MruConnections.xsd"
+    xmlns:mstns="http://schemas.sql-service.de/etc/MruConnections.xsd"
+	xmlns:code="http://schemas.sql-service.de/etc/XsdCodeGenerator.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+	<!-- 
+		This schema defines the format used to store the database connections
+		most recently used (Mru) by the user.
+	-->
+	<xs:element name="MruConnections" type="MruConnections">
+	</xs:element>
+
+	<xs:complexType name="MruConnections">
+		<xs:sequence>
+			<xs:element name="Datasources" type="Datasources" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Datasources">
+		<xs:sequence>
+			<xs:element name="Datasource" type="Datasource" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="Provider" type="ProviderType" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="Datasource">
+		<xs:sequence>
+			<xs:element name="Authentications" type="Authentications" minOccurs="0" maxOccurs="1" />
+			<xs:element name="Catalogs" type="Catalogs" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="Address" type="xs:string" use="required" />
+		<xs:attribute name="Port" type="xs:int" default="0" />
+		<xs:attribute name="Comment" type="xs:string" use="optional" default="" />
+	</xs:complexType>
+
+	<xs:complexType name="Authentications">
+		<xs:sequence>
+			<xs:element name="Authentication" type="Authentication" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Authentication">
+		<xs:attribute name="Integrated" type="xs:boolean" use="optional" default="true" >
+			<xs:annotation>
+				<xs:documentation>
+					Option to use integrated security/windows authentication.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="UserId" type="xs:string" use="optional" default="">
+			<xs:annotation>
+				<xs:documentation>
+					The user id to use if login is done using the server authentication.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Password" type="xs:string" use="optional" default="">
+			<xs:annotation>
+				<xs:documentation>
+					The password to use if login is done using the server authentication.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="Catalogs">
+		<xs:sequence>
+			<xs:element name="Catalog" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="ProviderType">
+		<xs:annotation>
+			<xs:documentation>
+				Enumeration of supported database connection providers.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Undefined">
+				<xs:annotation>
+					<xs:documentation>
+						Undefined, initial value for the enumeration.
+					</xs:documentation>
+					<!--
+					<xs:appinfo>
+						<attribute value="Browsable(false)"></attribute>
+					</xs:appinfo>
+					-->
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MsSql">
+				<xs:annotation>
+					<xs:documentation>
+						Microsoft SQL Server.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SqlCe">
+				<xs:annotation>
+					<xs:documentation>
+						Microsoft SQL Compact Edition.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Sybase">
+				<xs:annotation>
+					<xs:documentation>
+						Sybase ASE SQL Server.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Oracle">
+				<xs:annotation>
+					<xs:documentation>
+						Oracle
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="IbmDb2">
+				<xs:annotation>
+					<xs:documentation>
+						IBM DB/2
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

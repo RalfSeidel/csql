@@ -1,0 +1,12 @@
+; -----------------------------------------------------------------------------------------
+; CSQL test configuration file.
+; ----------------------------------------------------------------------------------------
+System=MSSQL
+Server=capella
+Database=tempdb
+
+BreakOnError=true
+PreprocessorArgs=/E
+;Tempfile=c:\temp\bsqltmp.txt
+;Distfile=c:\temp\bsqlout.sql
+

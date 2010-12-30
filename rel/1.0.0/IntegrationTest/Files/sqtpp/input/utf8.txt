@@ -1,0 +1,32 @@
+﻿/**
+** @file
+**
+** @brief This file contains some characters which are not included in the ISO-8859-1 codepage 1200.
+** sqtpp should be able to process them.
+**
+** @note If you can't see all characters you have to install international character sets.
+*/
+#define EURO €
+#define FILENAME utf8.txt
+
+// German Umlaute:
+#define GERMAN_UMLAUTE äöüÄÖÜ
+
+// Non ISO-8859-1 Codes
+#define ALLAHU_AKBAR الله أكبر
+#define BIN_LADEN أسامة بن محمد بن عوض بن لادن
+#define ISRAEL מדינת ישראל 
+#define NIHON 日本
+#define RUSSIA Россия
+
+FILENAME
+GERMAN_UMLAUTE 
+
+EURO
+ALLAHU_AKBAR
+BIN_LADEN
+ISRAEL
+NIHON
+RUSSIA
+
+#define Россия RUSSIA

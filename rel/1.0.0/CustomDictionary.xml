@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+	<Words>
+		<Deprecated>
+			<!-- Words that should be flagged as obsolete. -->
+		</Deprecated>
+		<Recognized>
+			<!-- Words that should not cause a violation. -->
+			<Word>exe</Word>
+			<Word>csql</Word>
+			<Word>CSql</Word>
+			<Word>sqtpp</Word>
+			<Word>addin</Word>
+			<Word>Util</Word>
+			<Word>Globals</Word>
+			<!-- Sequel Tools Namespace -->
+			<Word>Sqt</Word>
+			<!-- Db Connection -->
+			<Word>Dbc</Word>
+			<!-- That is misspelled and should be DataSource, but to much effort to correct it. -->
+			<Word>Datasource</Word>
+			<Word>Datasources</Word>
+		</Recognized>
+		<Unrecognized>
+			<!-- Words that should cause a violation. -->
+		</Unrecognized>
+		<Inappropriate>
+			<!-- Words that should cause a violation. -->
+		</Inappropriate>
+	</Words>
+	<Acronyms>
+		<CasingExceptions>
+			<Acronym>sqtpp</Acronym>
+			<Acronym>csql</Acronym>
+			<Acronym>CSql</Acronym>
+			<Acronym>exe</Acronym>
+			<Acronym>Dbc</Acronym>
+			<Acronym>Db</Acronym>
+			<Acronym>Ms</Acronym>
+			<Acronym>Vs</Acronym>
+			<!-- Most Recently Used -->
+			<Acronym>Mru</Acronym>
+			<!-- Most Recently Used -->
+			<Acronym>MruDb</Acronym>
+		</CasingExceptions>
+	</Acronyms>
+</Dictionary>

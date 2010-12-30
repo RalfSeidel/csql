@@ -1,0 +1,20 @@
+﻿; -----------------------------------------------------------------------------------------
+; CSQL test configuration file.
+; ----------------------------------------------------------------------------------------
+
+; -------------------------------------
+; Database Settings
+; -------------------------------------
+System=sybase
+Server=146.220.74.208:4200
+Database=tempdb
+user=s4mdbo
+password=s4mdbo
+
+NoLogo=true
+BreakOnError=false
+PreprocessorArgs=/E /Co1200
+
+;Tempfile=c:\temp\csqltmp.sql
+;Distfile=c:\temp\csqlout.sql
+

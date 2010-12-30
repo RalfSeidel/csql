@@ -1,0 +1,18 @@
+﻿<Window x:Class="Sqt.DbcProvider.DbConnectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Sqt.DbcProvider"
+    Title="Test" Height="300" Width="300">
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<local:DbConnectionControl x:Name="LoginControl" Grid.Row="1" />
+		<StackPanel Orientation="Horizontal" Grid.Row="2">
+		<Button Height="23" Name="LoadButton" VerticalAlignment="Bottom" Click="LoadButton_Click" Width="75" Margin="12,0,0,0" HorizontalAlignment="Left">Load</Button>
+		<Button Height="23" Name="SaveButton" VerticalAlignment="Bottom" Click="SaveButton_Click" Width="75" Margin="93,0,110,0">Save</Button>
+		</StackPanel>
+	</Grid>
+</Window>

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C404D769-C642-461B-A5C1-4295F5B7542C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sqt.DbcProvider</RootNamespace>
+    <AssemblyName>Sqt.DbcProvider</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <StartupObject>
+    </StartupObject>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MruConnections\Datasources.cs" />
+    <Compile Include="DbConnectionParameter.cs" />
+    <Compile Include="Provider\IbmDb2\IbmDb2ConnectionFactory.cs" />
+    <Compile Include="Provider\Oracle\OracleConnectionFactory.cs" />
+    <Compile Include="Provider\Sybase\SybaseConnectionFactory.cs" />
+    <Compile Include="DbConnectionFactoryProvider.cs" />
+    <Compile Include="Provider\MsSql\MsSqlConnectionFactory.cs" />
+    <Compile Include="Provider\IWrappedDbConnectionFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MruConnections.xsd">
+      <Generator>Xsd2CodeCustomTool</Generator>
+      <LastGenOutput>MruConnections1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="..\csql.snk">
+      <Link>csql.snk</Link>
+    </None>
+    <None Include="MruConnections\readme.txt" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MruConnections\MruConnections.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Provider\SqlCe\SqlCeMessage.cs" />
+    <Compile Include="Provider\SqlCe\SqlCeWrappedException.cs" />
+    <Compile Include="WrappedDbConnection.cs" />
+    <Compile Include="WrappedDbException.cs" />
+    <Compile Include="DbMessage.cs" />
+    <Compile Include="DbMessageEventArgs.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="MruConnections.Designer.cs" />
+    <Compile Include="MruConnections\Authentication.cs" />
+    <Compile Include="MruDbConnectionParameterAdapter.cs" />
+    <Compile Include="Provider\MsSql\MsSqlWrappedConnection.cs" />
+    <Compile Include="Provider\SqlCe\SqlCeWrappedConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Provider\SqlCe\SqlCeConnectionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Provider\Sybase\SybaseConnection.cs">
+    </Compile>
+    <Compile Include="Provider\Sybase\SybaseMessage.cs" />
+    <Compile Include="Provider\Sybase\SybaseWrappedException.cs" />
+    <Compile Include="Provider\Sybase\SybaseMessageEventArgs.cs" />
+    <Compile Include="StringDomainConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1 @@
+﻿This folder contains the partial extension class for the coded generated based on the MruConnections.xsd schema.

@@ -1,0 +1,85 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{067182C7-8A53-422C-AF0B-F0B4633E2C78}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>csql</RootNamespace>
+    <AssemblyName>csql.Test</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="..\Build\CommonBuildProperties.targets" />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <DefineConstants>TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\csql.addin\csql.addin.csproj">
+      <Project>{37A22F40-1137-46F7-9260-B68CCFB1EA6E}</Project>
+      <Name>csql.addin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\csql.exe\csql.exe.csproj">
+      <Project>{15B41BEB-03B7-4B88-A6FA-A97F65202B43}</Project>
+      <Name>csql.exe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\csql\csql.lib.csproj">
+      <Project>{804CB225-6ACE-4171-9FE1-85038F5A452F}</Project>
+      <Name>csql.lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbcProvider\DbcProvider.csproj">
+      <Project>{C404D769-C642-461B-A5C1-4295F5B7542C}</Project>
+      <Name>DbcProvider</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\csql.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\csql\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="BatchContextTest.cs" />
+    <Compile Include="CmdArgsTest.cs" />
+    <Compile Include="Commands\VariableSubstitutorTest.cs" />
+    <Compile Include="ProcessorContextTest.cs" />
+    <Compile Include="ResultTrace\BooleanColumnFormatTest.cs" />
+    <Compile Include="ResultTrace\BinaryColumnFormatTest.cs" />
+    <Compile Include="ResultTrace\DateTimeColumnFormatTest.cs" />
+    <Compile Include="ResultTrace\StringColumnFormatTest.cs" />
+    <Compile Include="Settings\ScriptParameterCollectionTest.cs" />
+    <Compile Include="Settings\ScriptParameterTest.cs" />
+    <Compile Include="TerminateExceptionTest.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

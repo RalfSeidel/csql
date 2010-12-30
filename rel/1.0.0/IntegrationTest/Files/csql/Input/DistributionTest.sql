@@ -1,0 +1,1 @@
+﻿-- Empty file only used for the most simple distribution file creation test.

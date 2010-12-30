@@ -1,0 +1,25 @@
+/// ---------------------------------------------------------------------
+/// <summary>
+/// Test and exmaple for the CSQL_CREATE_DATABASE and CSQL_DROP_DATABASE
+/// macros.
+/// </summary>
+/// ---------------------------------------------------------------------
+#include "DbMacros.h"
+
+CSQL_SET_CATALOG( tempdb )
+go
+
+CSQL_CREATE_DATABASE( sql_crd_test )
+go
+
+if not exists ( select 1 from sys.databases where name = 'sql_crd_test' )
+	raiserror 50000 'Database was not created.'
+go
+
+
+CSQL_DROP_DATABASE( sql_crd_test )
+go
+
+if exists ( select 1 from sys.databases where name = 'sql_crd_test' )
+	raiserror 50000 'Database was not dropped.'
+go
