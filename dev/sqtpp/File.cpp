@@ -14,8 +14,10 @@
 #include "Util.h"
 #include "Range.h"
 #include "File.h"
+#include "Windows.h"
 
-namespace sqtpp {
+namespace sqtpp 
+{
 
 struct File::Data {
 	/// The instance counter/id
@@ -25,7 +27,7 @@ struct File::Data {
 	int             m_nRefCount;
 
 	/// The include level of the file.
-	int             m_nIncludeLevel;
+	size_t          m_nIncludeLevel;
 
 	/// The current position of the read pointer.
 	size_t          m_currentPosition;
@@ -186,7 +188,7 @@ int File::getInstanceId() const throw()
 /**
 ** @brief Get the nesting include level of this file.
 */
-int File::getIncludeLevel() const throw()
+size_t File::getIncludeLevel() const throw()
 {
 	return m_pData->m_nIncludeLevel;
 }
@@ -194,7 +196,7 @@ int File::getIncludeLevel() const throw()
 /**
 ** @brief Set the nesting include level of this file.
 */
-void File::setIncludeLevel( int includeLevel ) throw()
+void File::setIncludeLevel( size_t includeLevel ) throw()
 {
 	m_pData->m_nIncludeLevel = includeLevel;
 }
@@ -258,9 +260,9 @@ const locale& File::getLocale() const throw()
 {
 	/*
 	if ( m_pData->m_pInternalStream != NULL ) {
-		return m_pData->m_pInternalStream->rdbuf()->getloc();
+	return m_pData->m_pInternalStream->rdbuf()->getloc();
 	} else {
-		return m_pData->m_pExternalStream->rdbuf()->getloc();
+	return m_pData->m_pExternalStream->rdbuf()->getloc();
 	}
 	*/
 	return m_pData->m_locale;
@@ -346,12 +348,12 @@ int File::getNextCounter() const throw()
 void File::setLastToken( Token token, const Range& tokenRange )
 {
 	bool isWhite = token == TOK_BLOCK_COMMENT
-	            || token == TOK_LINE_COMMENT
-	            || token == TOK_SPACE
-				|| token == TOK_NEW_LINE
-				|| token == TOK_END_OF_FILE
-				|| token == TOK_DIR_MESSAGE
-				|| token == TOK_DIR_PRAGMA;
+		|| token == TOK_LINE_COMMENT
+		|| token == TOK_SPACE
+		|| token == TOK_NEW_LINE
+		|| token == TOK_END_OF_FILE
+		|| token == TOK_DIR_MESSAGE
+		|| token == TOK_DIR_PRAGMA;
 
 	if ( !isWhite ) {
 		if ( m_pData->m_firstToken == TOK_UNDEFINED ) {
@@ -482,7 +484,11 @@ const wstring File::getDirectory( const wstring& fullPath ) /* throw( Error ) */
 */
 bool File::isDirectory( const wstring& directoryPath ) throw()
 {
-	struct _stat  fileInfo;
+#ifdef _WINDOWS_
+	DWORD dwAttributes = ::GetFileAttributes( directoryPath.c_str() );
+	return dwAttributes != INVALID_FILE_ATTRIBUTES &&  (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0; 
+#else
+	struct _stat fileInfo;
 	memset( &fileInfo, 0, sizeof( fileInfo ) );
 
 	int     crtrc = _wstat( directoryPath.c_str(), &fileInfo );
@@ -491,6 +497,7 @@ bool File::isDirectory( const wstring& directoryPath ) throw()
 	} else {
 		return false;
 	}
+#endif
 }
 
 
@@ -502,15 +509,20 @@ bool File::isDirectory( const wstring& directoryPath ) throw()
 */
 bool File::isFile( const wstring& filePath ) throw()
 {
-	struct _stat  fileInfo;
+#ifdef _WINDOWS_
+	DWORD dwAttributes = ::GetFileAttributes( filePath.c_str() );
+	return dwAttributes != INVALID_FILE_ATTRIBUTES &&  (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0; 
+#else
+	struct _stat fileInfo;
 	memset( &fileInfo, 0, sizeof( fileInfo ) );
 
-	int     crtrc = _wstat( filePath.c_str(), &fileInfo );
+	int crtrc = _wstat( filePath.c_str(), &fileInfo );
 	if ( crtrc == 0 && (fileInfo.st_mode & _S_IFREG) != 0 ) {
 		return true;
 	} else {
 		return false;
 	}
+#endif
 }
 
 
@@ -522,8 +534,13 @@ bool File::isFile( const wstring& filePath ) throw()
 */
 const wstring File::checkFile( const wstring& filePath ) /* throw( Error ) */
 {
-	struct _stat fileInfo;
+#if 1
+	if ( !isFile( filePath ) ) {
+		throw error::C1083( filePath );
+	}
+#else
 	int    crtrc;
+	struct _stat fileInfo;
 	memset( &fileInfo, 0, sizeof( fileInfo ) );
 
 	if ( filePath.length() == 0 ) {
@@ -535,37 +552,29 @@ const wstring File::checkFile( const wstring& filePath ) /* throw( Error ) */
 
 	crtrc = _wstat( filePath.c_str(), &fileInfo );
 	switch ( crtrc ) {
-		case 0:
-			// Check if really a file.
-			if ( (fileInfo.st_mode & _S_IFREG) == 0 ) {
-				// No such file.
-				throw error::C1083( filePath );
-			}
-			if ( (fileInfo.st_mode & _S_IREAD) == 0 ) {
-				// Unable to open file {1}.
-				throw error::C1068( filePath );
-			}
-
-			break;
-		case -1:
-			// File not found.
+	case 0:
+		// Check if really a file.
+		if ( (fileInfo.st_mode & _S_IFREG) == 0 ) {
+			// No such file.
 			throw error::C1083( filePath );
-			break;
-		default:
-			// Internal error.
-			throw error::C1001_CRT( crtrc );
-	}
+		}
+		if ( (fileInfo.st_mode & _S_IREAD) == 0 ) {
+			// Unable to open file {1}.
+			throw error::C1068( filePath );
+		}
 
-
-	wchar_t  wcBuffer[_MAX_PATH];
-	wchar_t* pwszFullPath = _wfullpath( wcBuffer, filePath.c_str(), _MAX_PATH );
-	if ( pwszFullPath == NULL ) {
-		crtrc = *_errno();
+		break;
+	case -1:
+		// No such file.
+		throw error::C1083( filePath );
+		break;
+	default:
 		// Internal error.
 		throw error::C1001_CRT( crtrc );
 	}
-	wstring sFullPath( pwszFullPath );
-	//free( pwzsFullPath );
+#endif
+
+	wstring sFullPath = getFullPath( filePath );
 	return sFullPath;
 }
 
@@ -599,7 +608,11 @@ std::wistream& File::open( const std::wstring& fileName )
 	std::wifstream* pInnerStream = new std::wifstream();
 	const locale& fileLocale = pCodePage->getLocale();
 	pInnerStream->imbue( fileLocale ) ;
-	pInnerStream->open( fileName.c_str(), std::ios_base::in | std::ios_base::binary  );
+	pInnerStream->open( fileName.c_str(), std::ios_base::in | std::ios_base::binary, _SH_DENYWR );
+	if ( pInnerStream->fail() ) {
+		// Unable to open file {1}.
+		throw error::C1068( sFullPath );
+	}
 
 	const char* fileBom = pCodePage->getFileBom();
 	if ( fileBom != NULL ) {

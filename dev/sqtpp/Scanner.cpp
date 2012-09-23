@@ -22,6 +22,8 @@ const wchar_t* const Scanner::m_szBlockCommentStart = L"/*";
 /// The end of a multi line comment.
 const wchar_t* const Scanner::m_szBlockCommentEnd   = L"*/";
 
+const wstring Scanner::m_emptyString;
+
 
 /**
 ** @brief Scanner constructor.
@@ -973,7 +975,7 @@ Token Scanner::continueConditional( std::wistream& input )
 	assert( m_context == CTX_CONDITIONAL_FALSE || m_context == CTX_CONDITIONAL_DONE );
 
 	while ( input.good() ) {
-		m_tokenBuffer.str( std::wstring() );
+		m_tokenBuffer.str( m_emptyString );
 		m_tokenBuffer.clear();
 
 		input.get( wc );
@@ -1043,7 +1045,7 @@ Token Scanner::getNextToken( std::wistream& input, TokenExpression& tokenExpress
 	Token token;
 	size_t nCharCountRead = 0;
 
-	m_tokenBuffer.str( std::wstring() );
+	m_tokenBuffer.str( m_emptyString );
 	m_tokenBuffer.clear();
 	m_tokenIdentifier.clear();
 

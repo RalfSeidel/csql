@@ -42,7 +42,7 @@ const CodePageInfo* CodePageDetection::detectCodePage( const std::wstring& fileN
 {
 	std::ifstream ifs;
 
-	ifs.open( fileName.c_str(), ios::in | ios::binary  );
+	ifs.open( fileName.c_str(), ios::in | ios::binary, _SH_DENYWR  );
 	const CodePageInfo* pCodePageInfo = detectCodePageByBom( ifs );
 	ifs.close();
 
@@ -64,7 +64,7 @@ const CodePageInfo* CodePageDetection::detectCodePageByBom( std::ifstream& fileS
 
 	fileStream.seekg( ios_base::beg );
 	fileStream.read( fileStart, sizeof( fileStart ) );
-	size_t bytesRead = fileStream.gcount();
+	size_t bytesRead = (size_t)fileStream.gcount();
 	if ( bytesRead < sizeof(fileStart) ) {
 		fileStart[bytesRead] = '\0';
 	} else {

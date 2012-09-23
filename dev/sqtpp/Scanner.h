@@ -38,6 +38,9 @@ private:
 	/// All defined tokens.
 	static const TokenInfo m_tokenInfo[];
 
+	/// An empty string
+	static const wstring m_emptyString;
+
 	/// The current scanner context.
 	Context                    m_context;
 

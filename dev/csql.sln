@@ -1,18 +1,25 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp", "sqtpp\sqtpp-9.vcproj", "{8B66DF77-727B-4CD9-A9EB-7459D539338C}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80CDD787-218C-41B3-8448-14E76649F8C6}"
 	ProjectSection(SolutionItems) = preProject
 		csql.FxCop = csql.FxCop
 		CustomDictionary.xml = CustomDictionary.xml
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		profile_sqtpp.bat = profile_sqtpp.bat
+		profile_sqtpp.psess = profile_sqtpp.psess
+		profile_sqtpp_manual.bat = profile_sqtpp_manual.bat
 		Settings.StyleCop = Settings.StyleCop
 		sign.bat = sign.bat
 		sqtpp-9.vsmdi = sqtpp-9.vsmdi
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{AB73A413-C5B9-4698-9782-D7B4524C80D6}"
+	ProjectSection(SolutionItems) = preProject
+		Build\CommonBuildProperties.targets = Build\CommonBuildProperties.targets
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp", "sqtpp\sqtpp-9.vcxproj", "{8B66DF77-727B-4CD9-A9EB-7459D539338C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.lib", "csql\csql.lib.csproj", "{804CB225-6ACE-4171-9FE1-85038F5A452F}"
 EndProject
@@ -22,19 +29,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.addin", "csql.addin\cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.test", "csql.test\csql.test.csproj", "{067182C7-8A53-422C-AF0B-F0B4633E2C78}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.test", "sqtpp.test\sqtpp.test.vcproj", "{8B31549C-624D-4F80-B8BE-1EA0D50FC2A1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8B66DF77-727B-4CD9-A9EB-7459D539338C} = {8B66DF77-727B-4CD9-A9EB-7459D539338C}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.test", "sqtpp.test\sqtpp.test.vcxproj", "{8B31549C-624D-4F80-B8BE-1EA0D50FC2A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setup.CustomActions", "setup.CustomActions\Setup.CustomActions.csproj", "{EC48F459-91DE-484D-AA12-14562C1DC38A}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{B9CB870E-8D1C-4165-B1C8-48ACCB38765D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.exe", "sqtpp.exe\sqtpp.exe.vcproj", "{13F701CF-1674-40EE-B1F2-704C89F446A1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8B66DF77-727B-4CD9-A9EB-7459D539338C} = {8B66DF77-727B-4CD9-A9EB-7459D539338C}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.exe", "sqtpp.exe\sqtpp.exe.vcxproj", "{13F701CF-1674-40EE-B1F2-704C89F446A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -47,56 +48,56 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbcProvider.Test", "DbcProv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbcProvider.GuiTest", "DbcProvider.GuiTest\DbcProvider.GuiTest.csproj", "{FD081581-1F61-4127-8432-65FC15240D2C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{AB73A413-C5B9-4698-9782-D7B4524C80D6}"
-	ProjectSection(SolutionItems) = preProject
-		Build\CommonBuildProperties.targets = Build\CommonBuildProperties.targets
-	EndProjectSection
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Setup.Installer", "Setup.Installer\Setup.Installer.wixproj", "{E3096FC8-FC13-44C7-961C-3B310255DB4B}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 15
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs08
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = sqtpp\\sqtpp-9.vcproj
-		SccProjectName1 = sqtpp
-		SccLocalPath1 = sqtpp
-		SccProjectUniqueName2 = csql\\csql.lib.csproj
-		SccProjectName2 = csql
-		SccLocalPath2 = csql
-		SccProjectUniqueName3 = csql.exe\\csql.exe.csproj
-		SccProjectName3 = csql.exe
-		SccLocalPath3 = csql.exe
-		SccProjectUniqueName4 = csql.addin\\csql.addin.csproj
-		SccProjectName4 = csql.addin
-		SccLocalPath4 = csql.addin
-		SccProjectUniqueName5 = csql.test\\csql.test.csproj
-		SccProjectName5 = csql.test
-		SccLocalPath5 = csql.test
-		SccProjectUniqueName6 = sqtpp.test\\sqtpp.test.vcproj
-		SccProjectName6 = sqtpp.test
-		SccLocalPath6 = sqtpp.test
-		SccProjectUniqueName7 = setup.CustomActions\\Setup.CustomActions.csproj
-		SccProjectName7 = setup.CustomActions
-		SccLocalPath7 = setup.CustomActions
-		SccProjectUniqueName8 = setup\\setup.vdproj
-		SccProjectName8 = setup
-		SccLocalPath8 = setup
-		SccProjectUniqueName9 = sqtpp.exe\\sqtpp.exe.vcproj
-		SccProjectName9 = sqtpp.exe
-		SccLocalPath9 = sqtpp.exe
-		SccProjectUniqueName10 = IntegrationTest\\IntegrationTest.csproj
-		SccProjectName10 = IntegrationTest
-		SccLocalPath10 = IntegrationTest
-		SccProjectUniqueName11 = DbcProvider\\DbcProvider.csproj
-		SccProjectName11 = DbcProvider
-		SccLocalPath11 = DbcProvider
-		SccProjectUniqueName12 = DbcProvider.Test\\DbcProvider.Test.csproj
-		SccProjectName12 = DbcProvider.Test
-		SccLocalPath12 = DbcProvider.Test
-		SccProjectUniqueName13 = DbcProvider.GuiTest\\DbcProvider.GuiTest.csproj
-		SccProjectName13 = DbcProvider.GuiTest
-		SccLocalPath13 = DbcProvider.GuiTest
+		SccProjectUniqueName1 = csql\\csql.lib.csproj
+		SccProjectName1 = csql
+		SccLocalPath1 = csql
+		SccProjectUniqueName2 = csql.exe\\csql.exe.csproj
+		SccProjectName2 = csql.exe
+		SccLocalPath2 = csql.exe
+		SccProjectUniqueName3 = csql.addin\\csql.addin.csproj
+		SccProjectName3 = csql.addin
+		SccLocalPath3 = csql.addin
+		SccProjectUniqueName4 = csql.test\\csql.test.csproj
+		SccProjectName4 = csql.test
+		SccLocalPath4 = csql.test
+		SccProjectUniqueName5 = setup.CustomActions\\Setup.CustomActions.csproj
+		SccProjectName5 = setup.CustomActions
+		SccLocalPath5 = setup.CustomActions
+		SccProjectUniqueName6 = setup\\setup.vdproj
+		SccProjectName6 = setup
+		SccLocalPath6 = setup
+		SccProjectUniqueName7 = IntegrationTest\\IntegrationTest.csproj
+		SccProjectName7 = IntegrationTest
+		SccLocalPath7 = IntegrationTest
+		SccProjectUniqueName8 = DbcProvider\\DbcProvider.csproj
+		SccProjectName8 = DbcProvider
+		SccLocalPath8 = DbcProvider
+		SccProjectUniqueName9 = DbcProvider.Test\\DbcProvider.Test.csproj
+		SccProjectName9 = DbcProvider.Test
+		SccLocalPath9 = DbcProvider.Test
+		SccProjectUniqueName10 = DbcProvider.GuiTest\\DbcProvider.GuiTest.csproj
+		SccProjectName10 = DbcProvider.GuiTest
+		SccLocalPath10 = DbcProvider.GuiTest
+		SccProjectUniqueName11 = sqtpp\\sqtpp-9.vcxproj
+		SccProjectName11 = sqtpp
+		SccLocalPath11 = sqtpp
+		SccProjectUniqueName12 = sqtpp.test\\sqtpp.test.vcxproj
+		SccProjectName12 = sqtpp.test
+		SccLocalPath12 = sqtpp.test
+		SccProjectUniqueName13 = sqtpp.exe\\sqtpp.exe.vcxproj
+		SccProjectName13 = sqtpp.exe
+		SccLocalPath13 = sqtpp.exe
+		SccProjectUniqueName14 = Setup.Installer\\Setup.Installer.wixproj
+		SccProjectName14 = Setup.Installer
+		SccLocalPath14 = Setup.Installer
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = sqtpp-9.vsmdi
@@ -139,8 +140,8 @@ Global
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Deploy|x86.ActiveCfg = Deploy|x64
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Any CPU.ActiveCfg = Release|Win32
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Any CPU.Build.0 = Release|Win32
-		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Mixed Platforms.Build.0 = Release|x64
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Win32.ActiveCfg = Release|Win32
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|Win32.Build.0 = Release|Win32
 		{8B66DF77-727B-4CD9-A9EB-7459D539338C}.Release|x64.ActiveCfg = Release|x64
@@ -333,8 +334,8 @@ Global
 		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Deploy|x86.ActiveCfg = Deploy|x64
 		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Any CPU.ActiveCfg = Release|Win32
 		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Any CPU.Build.0 = Release|Win32
-		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Mixed Platforms.Build.0 = Release|x64
 		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Win32.ActiveCfg = Release|Win32
 		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|Win32.Build.0 = Release|Win32
 		{13F701CF-1674-40EE-B1F2-704C89F446A1}.Release|x64.ActiveCfg = Release|x64
@@ -419,11 +420,38 @@ Global
 		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|x64.ActiveCfg = Release|Any CPU
 		{FD081581-1F61-4127-8432-65FC15240D2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|Win32.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|Win32.Build.0 = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|x64.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|x86.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Debug|x86.Build.0 = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|Any CPU.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|Mixed Platforms.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|Mixed Platforms.Build.0 = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|Win32.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|Win32.Build.0 = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|x64.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|x86.ActiveCfg = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Deploy|x86.Build.0 = Debug|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|Any CPU.ActiveCfg = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|Win32.ActiveCfg = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|Win32.Build.0 = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|x64.ActiveCfg = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|x86.ActiveCfg = Release|x86
+		{E3096FC8-FC13-44C7-961C-3B310255DB4B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AB73A413-C5B9-4698-9782-D7B4524C80D6} = {80CDD787-218C-41B3-8448-14E76649F8C6}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

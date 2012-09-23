@@ -65,7 +65,7 @@ std::codecvt_base::result SbcsConverter::do_in( mbstate_t& state
 	// The function does not drop illegal code points if the application does not set this flag.
 	const DWORD dwFlags = MB_ERR_INVALID_CHARS;
 	const unsigned int codePageId = getCodePageId();
-	const int charCount = MultiByteToWideChar( codePageId, dwFlags, pFrom, fromLength, pTo, toLength ) ; 
+	const int charCount = MultiByteToWideChar( codePageId, dwFlags, pFrom, (int)fromLength, pTo, (int)toLength ) ; 
 	if ( charCount > 0 ) {
 		pFromNext = pFrom + fromLength;
 		pToNext   = pTo   + charCount;
@@ -106,7 +106,7 @@ std::codecvt_base::result SbcsConverter::do_out( mbstate_t& /* state */
 	// dwFlags must be set to either 0 or WC_ERR_INVALID_CHARS. 
 	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
 	const unsigned int codePageId = getCodePageId();
-	const int charCount = WideCharToMultiByte( codePageId, dwFlags, pFrom, fromLength, pTo, toLength, NULL, NULL ) ; 
+	const int charCount = WideCharToMultiByte( codePageId, dwFlags, pFrom, (int)fromLength, pTo, (int)toLength, NULL, NULL ) ; 
 	if ( charCount > 0 ) {
 		pFromNext = pFrom + fromLength;
 		pToNext = pTo + charCount;
@@ -128,14 +128,14 @@ std::codecvt_base::result SbcsConverter::do_unshift( mbstate_t& /* state */, cha
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int SbcsConverter::do_length( const mbstate_t& /* state */, const char* pFrom, const char* pFromMax, size_t toLength ) const throw() 
+int SbcsConverter::do_length( mbstate_t& /* state */, const char* pFrom, const char* pFromMax, size_t toLength ) const throw() 
 {
 	assert( pFrom != NULL );
 	assert( pFromMax != NULL );
 	assert( pFromMax > pFrom );
 
 	const size_t fromCount = pFromMax - pFrom;
-	return fromCount < toLength ? fromCount : toLength;
+	return (int)(fromCount < toLength ? fromCount : toLength);
 }
 
 /**
@@ -230,7 +230,7 @@ std::codecvt_base::result Utf7Converter::do_in( mbstate_t& state
 	// Set dwFlags (Windows Vista and later): 
 	// The function does not drop illegal code points if the application does not set this flag.
 	const DWORD dwFlags = MB_ERR_INVALID_CHARS;
-	const int charCount = MultiByteToWideChar( CP_UTF7, dwFlags, pFrom, fromLength, pTo, toLength ) ; 
+	const int charCount = MultiByteToWideChar( CP_UTF7, dwFlags, pFrom, (int)fromLength, pTo, (int)toLength ) ; 
 	if ( charCount > 0 ) {
 		pFromNext = pFrom + fromLength;
 		pToNext   = pTo   + charCount;
@@ -270,7 +270,7 @@ std::codecvt_base::result Utf7Converter::do_out( mbstate_t& /* state */
 	// Set dwFlags (Windows Vista and later): 
 	// dwFlags must be set to either 0 or WC_ERR_INVALID_CHARS. 
 	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
-	const int charCount = WideCharToMultiByte( CP_UTF7, dwFlags, pFrom, fromLength, pTo, toLength, NULL, NULL ) ; 
+	const int charCount = WideCharToMultiByte( CP_UTF7, dwFlags, pFrom, (int)fromLength, pTo, (int)toLength, NULL, NULL ) ; 
 	if ( charCount > 0 ) {
 		pFromNext = pFrom + fromLength;
 		pToNext = pTo + charCount;
@@ -292,7 +292,7 @@ std::codecvt_base::result Utf7Converter::do_unshift( mbstate_t& /* state */, cha
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int Utf7Converter::do_length( const mbstate_t& /* state */, const char* pFrom, const char* pFromMax, size_t toLength ) const throw()
+int Utf7Converter::do_length( mbstate_t& /* state */, const char* pFrom, const char* pFromMax, size_t toLength ) const throw()
 {
 	assert( pFrom != NULL );
 	assert( pFromMax != NULL );
@@ -300,7 +300,7 @@ int Utf7Converter::do_length( const mbstate_t& /* state */, const char* pFrom, c
 
 	const size_t fromLength = pFromMax - pFrom;
 	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
-	const int charCount = MultiByteToWideChar( CP_UTF7, dwFlags, pFrom, fromLength, NULL, 0 ) ; 
+	const int charCount = MultiByteToWideChar( CP_UTF7, dwFlags, pFrom, (int)fromLength, NULL, 0 ) ; 
 	return charCount;
 }
 
@@ -426,7 +426,7 @@ std::codecvt_base::result Utf8Converter::do_in( mbstate_t& state
 	// Set dwFlags (Windows Vista and later): 
 	// The function does not drop illegal code points if the application does not set this flag.
 	const DWORD dwFlags = MB_ERR_INVALID_CHARS;
-	const int charCount = MultiByteToWideChar( CP_UTF8, dwFlags, pFrom, fromLength, pTo, toLength ) ; 
+	const int charCount = MultiByteToWideChar( CP_UTF8, dwFlags, pFrom, (int)fromLength, pTo, (int)toLength ) ; 
 	if ( charCount > 0 ) {
 		pFromNext = pFrom + fromLength;
 		pToNext   = pTo   + charCount;
@@ -466,7 +466,7 @@ std::codecvt_base::result Utf8Converter::do_out( mbstate_t& state
 	// Set dwFlags (Windows Vista and later): 
 	// dwFlags must be set to either 0 or WC_ERR_INVALID_CHARS. 
 	const DWORD dwFlags = 0; // WC_ERR_INVALID_CHARS;
-	const int charCount = WideCharToMultiByte( CP_UTF8, dwFlags, pFrom, fromLength, pTo, toLength, NULL, NULL ) ; 
+	const int charCount = WideCharToMultiByte( CP_UTF8, dwFlags, pFrom, (int)fromLength, pTo, (int)toLength, NULL, NULL ) ; 
 	if ( charCount > 0 ) {
 		pFromNext = pFrom + fromLength;
 		pToNext = pTo + charCount;
@@ -488,7 +488,7 @@ std::codecvt_base::result Utf8Converter::do_unshift( mbstate_t& state, char* pTo
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int Utf8Converter::do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() 
+int Utf8Converter::do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() 
 {
 	assert( pFrom != NULL );
 	assert( pFromMax != NULL );
@@ -588,9 +588,10 @@ std::codecvt_base::result Utf16Converter::do_unshift( mbstate_t& state, char* pT
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int Utf16Converter::do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw()
+int Utf16Converter::do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw()
 {
-    return (toLength < (size_t)(pFromMax - pFrom)) ? toLength : pFromMax - pFrom ;
+	size_t length = (toLength < (size_t)(pFromMax - pFrom)) ? toLength : pFromMax - pFrom;
+    return (int)length;
 }
 
 /**
@@ -688,9 +689,10 @@ std::codecvt_base::result Utf16BeConverter::do_unshift( mbstate_t& state, char* 
 /**
 ** @brief See <a href="http://www.cplusplus.com/reference/std/locale/codecvt/length/">c++ documentation</a> for details.
 */
-int Utf16BeConverter::do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw()
+int Utf16BeConverter::do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw()
 {
-    return (toLength < (size_t)(pFromMax - pFrom)) ? toLength : pFromMax - pFrom ;
+	size_t length = (toLength < (size_t)(pFromMax - pFrom)) ? toLength : pFromMax - pFrom;
+    return (int)length;
 }
 
 /**

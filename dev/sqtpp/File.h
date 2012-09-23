@@ -81,10 +81,10 @@ public:
 	int getInstanceId() const throw();
 
 	// Get the nesting include level of this file.
-	int getIncludeLevel() const throw();
+	size_t getIncludeLevel() const throw();
 
 	// Set the nesting include level of this file.
-	void setIncludeLevel( int includeLevel ) throw();
+	void setIncludeLevel( size_t includeLevel ) throw();
 
 	// Check if this file is the root file processed.
 	bool isRootFile() const throw();

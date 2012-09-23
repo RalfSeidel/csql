@@ -239,7 +239,7 @@ void Processor::emitLineDirective( std::wostream& output )
 	// to avoid this (expected classic locale wouldn't do so). The workaround is to do
 	// the formatting manually.
 	wchar_t lineBuffer[20];
-	_itow( line, lineBuffer, 10 );
+	_itow( (int)line, lineBuffer, 10 );
 
 	output << L"#line " << lineBuffer << L' ' << quote;
 
@@ -1838,7 +1838,7 @@ void Processor::processIncludeDirective()
 		}
 
 		if ( !sFilePath.empty() && sFilePath.length() >= 2 ) {
-			sFilePath  = sFilePath.substr( 1, sFilePath.length() - 2 );
+			sFilePath = sFilePath.substr( 1, sFilePath.length() - 2 );
 		}
 
 		m_pScanner->popContext( CTX_INCLUDE_DIRECTIVE );
@@ -1864,6 +1864,8 @@ void Processor::processIncludeDirective()
 		throw error::C1083( sFilePath );
 	}
 
+	// Verify if the file was already included. Do not read the file if it
+	// is tagged with #pragma once.
 	bool bDoInclude  = m_includeOnceFiles.count( sFullPath ) == 0;
 
 	int   includedCt  = 0;

@@ -4,10 +4,17 @@ using System.IO;
 
 namespace Setup.CustomActions
 {
+	/// <summary>
+	/// Helper class to create and remove the csql.addin file in the visual studio addin directory.
+	/// </summary>
 	public class AddInLink
 	{
 		private InstallContext installContext;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AddInLink"/> class.
+		/// </summary>
+		/// <param name="installContext">The install context.</param>
 		public AddInLink( InstallContext installContext )
 		{
 			this.installContext = installContext;
@@ -33,6 +40,11 @@ namespace Setup.CustomActions
 				CreateDirectoryIfNotExisting( GetVS2010Folder() + @"\Addins" );
 				File.Copy( pathOfAddInFile, GetVS2010Folder() + @"\Addins\csql.AddIn", true );
 			}
+
+			if ( Directory.Exists( GetVS2012Folder() ) ) {
+				CreateDirectoryIfNotExisting( GetVS2012Folder() + @"\Addins" );
+				File.Copy( pathOfAddInFile, GetVS2012Folder() + @"\Addins\csql.AddIn", true );
+			}
 		}
 
 
@@ -43,21 +55,22 @@ namespace Setup.CustomActions
 			RemoveFileIfExists( GetVS2005Folder() + @"\Addins\csql.AddIn" );
 			RemoveFileIfExists( GetVS2008Folder() + @"\Addins\csql.AddIn" );
 			RemoveFileIfExists( GetVS2010Folder() + @"\Addins\csql.AddIn" );
+			RemoveFileIfExists( GetVS2012Folder() + @"\Addins\csql.AddIn" );
 		}
 
 		private static void CreateDirectoryIfNotExisting( string directoryPath )
 		{
-			if ( !Directory.Exists( directoryPath ) )
+			if ( !Directory.Exists( directoryPath ) ) {
 				Directory.CreateDirectory( directoryPath );
+			}
 		}
-
 
 		private static void RemoveFileIfExists( string filename )
 		{
-			if ( File.Exists( filename ) )
+			if ( File.Exists( filename ) ) {
 				File.Delete( filename );
+			}
 		}
-
 
 		private static string GetVS2005Folder()
 		{
@@ -72,6 +85,11 @@ namespace Setup.CustomActions
 		private static string GetVS2010Folder()
 		{
 			return Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) + @"\Visual Studio 2010";
+		}
+
+		private static string GetVS2012Folder()
+		{
+			return Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) + @"\Visual Studio 11";
 		}
 	}
 }

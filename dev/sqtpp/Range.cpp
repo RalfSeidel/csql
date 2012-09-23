@@ -9,7 +9,7 @@ Range::Range() throw()
 	nStartIndex = nEndIndex = size_t(-1);
 }
 
-Range::Range( int nFromChar, int nToChar ) throw()
+Range::Range( size_t nFromChar, size_t nToChar ) throw()
 {
 	this->nStartIndex = nFromChar;
 	this->nEndIndex = nToChar;

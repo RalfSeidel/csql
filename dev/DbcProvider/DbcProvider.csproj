@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -20,10 +20,12 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -72,7 +74,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MruConnections.xsd">
       <Generator>Xsd2CodeCustomTool</Generator>
-      <LastGenOutput>MruConnections1.Designer.cs</LastGenOutput>
+      <LastGenOutput>MruConnections.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="..\csql.snk">
       <Link>csql.snk</Link>
@@ -95,8 +97,12 @@
     <Compile Include="DbMessage.cs" />
     <Compile Include="DbMessageEventArgs.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MruConnections.Designer.cs" />
-    <Compile Include="MruConnections\Authentication.cs" />
+    <Compile Include="MruConnections.Designer.cs">
+		<AutoGen>True</AutoGen>
+		<DesignTime>True</DesignTime>
+		<DependentUpon>MruConnections.xsd</DependentUpon>
+	</Compile>
+	<Compile Include="MruConnections\Authentication.cs" />
     <Compile Include="MruDbConnectionParameterAdapter.cs" />
     <Compile Include="Provider\MsSql\MsSqlWrappedConnection.cs" />
     <Compile Include="Provider\SqlCe\SqlCeWrappedConnection.cs">

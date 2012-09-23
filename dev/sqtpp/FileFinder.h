@@ -32,7 +32,11 @@ private:
 	/// Not implemented assignment operator.
 	FileFinder& operator= ( const FileFinder& );
 public:
+
+	/// Find files in the include directory.
 	FileFinder( const std::vector<std::wstring>& includeDirectories );
+
+	/// File files in the include directory and additionally in the directory of the current file.
 	FileFinder( const std::vector<std::wstring>& includeDirectories, const std::wstring& currentFilePath );
 
 	// Find the specified file and return it's full path.

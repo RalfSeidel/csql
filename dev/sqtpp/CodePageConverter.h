@@ -42,7 +42,7 @@ protected:
 
     virtual result do_unshift( mbstate_t& state, char* pTo , char* pToMax, char*& pToNext ) const override;
 
-    virtual int do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
+    virtual int do_length( mbstate_t& state, const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
 
     virtual bool do_always_noconv() const throw() override;
 
@@ -77,7 +77,7 @@ protected:
 
     virtual result do_unshift( mbstate_t& state, char* pTo , char* pToMax, char*& pToNext ) const override;
 
-    virtual int do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
+    virtual int do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
 
     virtual bool do_always_noconv() const throw() override;
 
@@ -117,7 +117,7 @@ protected:
 
     virtual result do_unshift( mbstate_t& state, char* pTo , char* pToMax, char*& pToNext ) const override;
 
-    virtual int do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
+    virtual int do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t toLength ) const throw() override;
 
     virtual bool do_always_noconv() const throw() override;
 
@@ -157,7 +157,7 @@ protected:
 
     virtual result do_unshift( mbstate_t& state, char* pTo , char* pToMax, char*& pToNext ) const override;
 
-    virtual int do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t fromLength ) const throw() override;
+    virtual int do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t fromLength ) const throw() override;
 
     virtual bool do_always_noconv() const throw() override;
 
@@ -190,7 +190,7 @@ protected:
 
     virtual result do_unshift( mbstate_t& state, char* pTo , char* pToMax, char*& pToNext ) const override;
 
-    virtual int do_length( const mbstate_t& state , const char* pFrom, const char* pFromMax , size_t fromLength ) const throw() override;
+    virtual int do_length( mbstate_t& state , const char* pFrom, const char* pFromMax , size_t fromLength ) const throw() override;
 
     virtual bool do_always_noconv() const throw() override;
 

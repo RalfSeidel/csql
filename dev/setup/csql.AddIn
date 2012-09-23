@@ -2,6 +2,10 @@
 <Extensibility xmlns="http://schemas.microsoft.com/AutomationExtensibility">
 	<HostApplication>
 		<Name>Microsoft Visual Studio</Name>
+		<Version>11.0</Version>
+	</HostApplication>
+	<HostApplication>
+		<Name>Microsoft Visual Studio</Name>
 		<Version>10.0</Version>
 	</HostApplication>
 	<HostApplication>

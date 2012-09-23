@@ -25,7 +25,7 @@ namespace sqtpp {
 
 		Range() throw();
 
-		Range( int nFromChar, int nToChar ) throw();
+		Range( size_t nFromChar, size_t nToChar ) throw();
 
 		size_t getStartIndex() const throw()
 		{
