@@ -16,13 +16,17 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\csql.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\shared\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -186,7 +190,6 @@
     <None Include="Resources\Images\Commands\ExecuteScript.bmp" />
     <None Include="Resources\Images\Commands\AboutDialog.bmp" />
     <EmbeddedResource Include="Resources\Images\Commands\Settings.bmp" />
-    <Resource Include="Resources\Icon.ico" />
     <Resource Include="Resources\Images\Cancel.png" />
     <Resource Include="Resources\Images\CreateCopy.png" />
     <Resource Include="Resources\Images\Delete.png" />

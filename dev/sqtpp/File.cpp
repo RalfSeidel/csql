@@ -84,7 +84,7 @@ struct File::Data {
 	Data()
 	{
 		m_nRefCount         = 1;
-		m_nIncludeLevel     = -1;
+		m_nIncludeLevel     = (size_t)-1;
 		m_currentPosition   = 0;
 		m_pInternalStream   = NULL;
 		m_pExternalStream   = NULL;

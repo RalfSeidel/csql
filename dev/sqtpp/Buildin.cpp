@@ -37,6 +37,7 @@ void BuildinMacro::addBuildinMacros( const Options& options, MacroSet& macros )
 	BuildinTimestamp stmp;
 	BuildinTime time;
 	BuildinUser user;
+	BuildinInclude incl;
 
 	macros[cntr.getIdentifier()] = cntr;
 	macros[date.getIdentifier()] = date;
@@ -48,6 +49,7 @@ void BuildinMacro::addBuildinMacros( const Options& options, MacroSet& macros )
 	macros[stmp.getIdentifier()] = stmp;
 	macros[time.getIdentifier()] = time;
 	macros[user.getIdentifier()] = user;
+	macros[incl.getIdentifier()] = incl;
 
 	BuildinMacro  language( L"__SQTPP_LANGUAGE", MacroExpander::getInstance() );
 	const Options::LanguageInfo& languageInfo = options.getLanguageInfo();
@@ -454,6 +456,45 @@ BuildinEval::BuildinEval()
 	TokenExpressions expressions;
 	expressions.push_back( TokenExpression( TOK_IDENTIFIER, CTX_DEFAULT, L"__EXPR__" ) );
 	arguments.push_back( MacroArgument( L"__EXPR__" ) );
+	this->setArguments( arguments );
+	this->setExpression( expressions, L"" );
+}
+
+
+// --------------------------------------------------------------------
+// BuildinInclude
+// --------------------------------------------------------------------
+class BuildinInclude::BuildinIncludeExpander : public sqtpp::MacroExpander
+{
+private:
+	typedef sqtpp::MacroExpander base;
+public:
+	BuildinIncludeExpander() {}
+
+	/// Expand a macro expression.
+	virtual void expand( const Macro& macro, const Processor& processor, const MacroArgumentValues& argumentValues, TokenExpressions& result )
+	{
+		assert( macro.getIdentifier() == L"__INCLUDE" );
+		//assert( argumentValues.size() == 1 );
+
+		base::expand( macro, processor, argumentValues, result );
+		// TODO
+		assert( false );
+
+	}
+};
+
+BuildinInclude::BuildinIncludeExpander BuildinInclude::m_expander;
+
+BuildinInclude::BuildinInclude()
+: base( L"__INCLUDE", BuildinInclude::m_expander )
+{
+	MacroArguments   arguments;
+	TokenExpressions expressions;
+	expressions.push_back( TokenExpression( TOK_IDENTIFIER, CTX_DEFAULT, L"__PATH__" ) );
+	expressions.push_back( TokenExpression( TOK_IDENTIFIER, CTX_DEFAULT, L"__FORMAT__" ) );
+	arguments.push_back( MacroArgument( L"__PATH__" ) );
+	arguments.push_back( MacroArgument( L"__FORMAT__" ) );
 	this->setArguments( arguments );
 	this->setExpression( expressions, L"" );
 }

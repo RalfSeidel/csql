@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>csql.exe</RootNamespace>
     <AssemblyName>csql</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -22,20 +22,27 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\shared\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="..\Build\CommonBuildProperties.targets" />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS </DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
     <DefineConstants>TRACE</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -78,6 +85,9 @@
   <ItemGroup>
     <None Include="..\csql.snk">
       <Link>csql.snk</Link>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

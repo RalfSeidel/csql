@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using System.Reflection;
+using System.Text;
 using CommandLine;
-using System.Collections.Generic;
 
 namespace csql.exe
 {
@@ -17,8 +16,8 @@ namespace csql.exe
 	/// <returns><see cref="ExitCode.Success"/> if the program ran without an error. 
 	/// Another <see cref="ExitCode" /> otherwise.
 	/// </returns>
-	[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Main has to catch everything." )]
-	class Program
+	[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Main has to catch everything." )]
+	internal class Program
 	{
 		/// <summary>
 		/// Gets the program title.
@@ -40,14 +39,14 @@ namespace csql.exe
 		/// <returns><see cref="ExitCode.Success"/> if the program ran without an error. 
 		/// Another <see cref="ExitCode" /> otherwise.
 		/// </returns>
-		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Main has to catch everything." )]
+		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Main has to catch everything." )]
 		public static int Main( string[] args )
 		{
 			// If run without any argument show dialog with parameter usage.
 			// Prefer dialog over command line to make windows client software 
 			// logo toolkit happy.
 			if ( args.Length == 0 ) {
-				string usage = CommandLine.Parser.ArgumentsUsage( typeof(CmdArgs) );
+				string usage = CommandLine.Parser.ArgumentsUsage( typeof( CmdArgs ) );
 				var usageDialogItems = GetUsageDialogData();
 				UsageDialog dialog = new UsageDialog( usageDialogItems );
 				dialog.ShowDialog();
@@ -68,7 +67,8 @@ namespace csql.exe
 			VerbositySwitch verbosity = GlobalSettings.Verbosity;
 			verbosity.Level = (TraceLevel)(cmdArgs.Verbose);
 
-			ExitCode exitCode; ;
+			ExitCode exitCode;
+			;
 			if ( !argumentsValid ) {
 				if ( verbosity.TraceWarning ) {
 					TraceCommandLine( args );
@@ -77,7 +77,8 @@ namespace csql.exe
 					Console.Write( usage );
 				}
 				exitCode = ExitCode.ArgumentsError;
-			} else {
+			}
+			else {
 				verbosity.Level = (TraceLevel)cmdArgs.Verbose;
 				if ( verbosity.TraceVerbose ) {
 					TraceCommandLine( args );

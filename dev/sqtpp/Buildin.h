@@ -137,6 +137,10 @@ public:
 
 /**
 ** @brief __COUNTER__
+** 
+** Expands to a integer starting with 0 and incremented each time the macro is used.
+** The current counter value is maintained per file i.e. each for each file 
+** independed values are returned.
 */
 class BuildinCounter : public BuildinMacro 
 {
@@ -161,6 +165,22 @@ private:
 	static BuildinEvalExpander m_expander;
 public:
 	BuildinEval();
+};
+
+/**
+** @brief __INCLUDE( path ) - Includes the content of a file in the current position. 
+** 
+** Includes the content of a file in the current position. 
+** Unlike the #include directive the content is not processed. 
+*/
+class BuildinInclude : public BuildinMacro 
+{
+private:
+	typedef BuildinMacro base;
+	class  BuildinIncludeExpander;
+	static BuildinIncludeExpander m_expander;
+public:
+	BuildinInclude();
 };
 
 /**

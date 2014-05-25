@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <!--
+    See http://wix.tramontana.co.hu/tutorial/getting-started for description of this setup file.
+    
+    Use msiexec /i csql.msi /l* csql.log
+  -->
+
+  <Product Id="C298D88B-598A-4B29-A56F-1EB480CF138F"
+           UpgradeCode="64a58b4a-496b-408a-9e08-f9f789170498"
+           Name="csql"
+           Language="1033"
+           Codepage="1252"
+           Version="1.0.0.0"
+           Manufacturer="SQL Service"
+      >
+
+    <!--
+     Package GUIDs need to be different with each package you create. 
+     To make it easier and less likely to forget to issue a new one, we can instruct WiX to 
+     autogenerate one by typing an asterisk—but remember, this only applies to package GUIDs: 
+     all other GUIDs will need to stay unique and kept recorded for times to come. 
+    -->
+    <Package Id="*"
+             Keywords="csql, sqtpp, sql preprocessor"
+             Description="The installer for sqtpp and csql"
+             Languages="1033"
+             InstallerVersion="200"
+             InstallScope="perUser"
+             InstallPrivileges="elevated"
+             Compressed="yes"
+             Platform="x64"
+             />
+    
+    <!--<Condition Message="Sie brauchen Administratorrechte um dieses Produkt zu installieren.">
+      Privileged
+    </Condition>-->
+
+    <Icon Id="csql_Icon" SourceFile="../shared/Icon.ico" />
+
+
+    <!--
+      See How To: Check for .NET Framework Versions
+      http://wixtoolset.org/documentation/manual/v3/howtos/redistributables_and_install_checks/check_for_dotnet.html
+    -->
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <PropertyRef Id="NETFRAMEWORK45"/>
+    <Condition Message="Diese Anwendung benötigt das .NET Framework 4.0 oder höher. Bitte installieren sie eine aktuelle Version und starten sie dann erneut.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL or NETFRAMEWORK45]]>
+    </Condition>
+
+
+
+    <!-- 
+      In Control Panel > Add or Remove Programs, applications can have various entries like phone number and Internet contact 
+      information under the Click here for support information entry. To specify those, add any of the following properties to your source file:
+      http://wix.tramontana.co.hu/tutorial/com-expression-syntax-miscellanea/add-or-remove-programs-entries
+    -->
+    <Property Id="ARPPRODUCTICON" >csql_Icon</Property>
+    <Property Id="ARPURLINFOABOUT" >http://csql.codeplex.com</Property>
+
+
+    <Property Id="VISUAL_STUDIO_11_LOCATION" >
+      <RegistrySearch Id="Visual_Studio_11_Location_Registry" Name="VisualStudioLocation" Win64="yes"
+                      Type="raw" Root="HKCU" Key="Software\Microsoft\VisualStudio\11.0"  />
+    </Property>
+
+    <Property Id="VISUAL_STUDIO_12_LOCATION" >
+      <RegistrySearch Id="Visual_Studio_12_Location_Registry" Name="VisualStudioLocation" Win64="yes"
+                      Type="raw" Root="HKCU" Key="Software\Microsoft\VisualStudio\12.0"  />
+    </Property>
+
+    <Property Id="VISUAL_STUDIO_13_LOCATION" >
+      <RegistrySearch Id="Visual_Studio_13_Location_Registry" Name="VisualStudioLocation" Win64="yes"
+                      Type="raw" Root="HKCU" Key="Software\Microsoft\VisualStudio\13.0"  />
+    </Property>
+
+
+    <MediaTemplate CompressionLevel="high"  />
+
+    <!--
+      In the next step, we have to specify the media we want to install from. 
+      In the days of CDs and DVDs, we'll hardly need installation files spanning media but the 
+      possibility is there (if you need to use it, you can later refer to the individual disks 
+      using the media Id supplied here. DiskPrompt can contain any textual description of the 
+      various units of installation media that makes it possible for the user to determine which 
+      one to insert, Windows Installer will use this description to prompt for it):
+    -->
+    <!--<Media Id='1' Cabinet='csql1.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
+    <Property Id='DiskPrompt' Value="csql Installation Disk [1]" />-->
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="ManufacturerDir" Name="SQL Service">
+          <Directory Id="INSTALLDIR" Name="csql" >
+            
+            <Component Id="sqtpp_Component" Guid="{3CAC4F1E-094E-464C-86C3-3E734CCD4AA5}" Win64="yes">
+              <File Id="sqtpp_exe_File" Name="sqtpp.exe" Vital="yes" Source="..\bin\$(var.Configuration)\sqtpp.exe" KeyPath="yes" DiskId="1"  />
+              <File Id="sqtpp_pdb_File" Name="sqtpp.pdb" Vital="no" Source="..\bin\$(var.Configuration)\sqtpp.pdb" DiskId="1" />
+            </Component>
+
+            <Component Id="csqllib_Component" Guid="{E0DC17DA-C9A2-48FF-8643-0602641F12F3}" Win64="yes">
+              <File Id="csql_lib_dll_File" Name="csql.lib.dll" Vital="yes" Source="..\bin\$(var.Configuration)\csql.lib.dll" KeyPath="yes" DiskId="1" />
+              <File Id="csql_lib_pdb_File" Name="csql.lib.pdb" Vital="no" Source="..\bin\$(var.Configuration)\csql.lib.pdb" DiskId="1" />
+            </Component>
+
+            <Component Id="csqlexe_Component" Guid="{6A4DC539-6F7A-4823-A58B-6EB70A15D691}" Win64="yes">
+              <File Id="csql_exe_File" Name="csql.exe" Vital="yes" Source="..\bin\$(var.Configuration)\csql.exe" KeyPath="yes" DiskId="1" />
+              <File Id="csql_pdb_File" Name="csql.pdb" Vital="no" Source="..\bin\$(var.Configuration)\csql.pdb" DiskId="1" />
+            </Component>
+
+            <Component Id="csqladdin_Component" Guid="{468BDD7C-BDA0-457D-B7D8-6683084E9397}" Win64="yes">
+              <File Id="csql_addin_dll_File" Name="csql.addin.dll" Vital="yes" Source="..\bin\$(var.Configuration)\csql.addin.dll" KeyPath="yes" DiskId="1" />
+              <File Id="csql_addin_pdb_File" Name="csql.addin.pdb" Vital="no" Source="..\bin\$(var.Configuration)\csql.addin.pdb" DiskId="1" />
+              <File Id="csql_addin_addin_File" Name="csql.addin" Vital="no" Source="csql.addin" DiskId="1"  />
+              <File Id="Sqt_DbcProvider_dll_File" Name="Sqt.DbcProvider.dll" Vital="yes" Source="..\bin\$(var.Configuration)\Sqt.DbcProvider.dll" DiskId="1" />
+              <File Id="Sqt_DbcProvider_pdb_File" Name="Sqt.DbcProvider.pdb" Vital="no" Source="..\bin\$(var.Configuration)\Sqt.DbcProvider.pdb" DiskId="1" />
+              <!--
+                Set the assembly path in the addin file
+                See WIX: Update Application Configuration Files during Installation
+                http://ranjithk.wordpress.com/2009/11/06/wix-update-application-configuration-files-during-installation/
+              -->
+              <util:XmlFile Id="csql_addin_addin_File_Patch"
+                            File="[#csql_addin_addin_File]"
+                            Action="setValue"
+                            ElementPath="//Extensibility/Addin/Assembly"
+                            Value="[#csql_addin_dll_File]"
+                          />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+      
+
+
+      <!--
+        The Visual Studio Addin Files.
+        
+        - Visual Studio 10 (aka Visual Studio 2010)
+        - Visual Studio 11 (aka Visual Studio 2012)
+        - Visual Studio 12 (aka Visual Studio 2013)
+        - Visual Studio 13 (aka Visual Studio 2015)
+      -->
+
+      <!--<Directory Id="VISUAL_STUDIO_10_LOCATION">
+        <Directory Id="Visual_Studio_10_Addins" Name="Addins">
+          <Component Id="Visual_Studio_10_Addin_Component" Guid="{3ACD6BDA-9283-48E9-87FB-91CF0DE3D969}"  >
+            <Condition>VISUAL_STUDIO_10_LOCATION</Condition>
+            <RegistryValue Id="Visual_Studio_10_Addin_Key" KeyPath="yes"
+                           Root="HKCU"
+                           Key="Software\SQL Service\csql"
+                           Name="Visual Studio 2013 Addin" Type="integer" Value="1"  />
+            <CopyFile Id="Visual_Studio_10_Addin_File" FileId="csql_addin_addin_File" DestinationName="csql.addin"/>
+            <RemoveFolder Id="Visual_Studio_10_Addins" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>-->
+
+      <!--<Directory Id="VISUAL_STUDIO_11_LOCATION">
+        <Directory Id="Visual_Studio_11_Addins" Name="Addins">
+          <Component Id="Visual_Studio_11_Addin_Component" Guid="{2E025D89-8EB9-4784-8911-A0B66EA2F680}"  >
+            <Condition>VISUAL_STUDIO_11_LOCATION</Condition>
+            <RegistryValue Id="Visual_Studio_11_Addin_Key" KeyPath="yes"
+                           Root="HKCU"
+                           Key="Software\SQL Service\csql"
+                           Name="Visual Studio 2013 Addin" Type="integer" Value="1"  />
+            <CopyFile Id="Visual_Studio_11_Addin_File" FileId="csql_addin_addin_File" DestinationName="csql.addin"/>
+            <RemoveFolder Id="Visual_Studio_11_Addins" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>-->
+
+      <Directory Id="VISUAL_STUDIO_12_LOCATION">
+        <Directory Id="Visual_Studio_12_Addins" Name="Addins">
+          <Component Id="Visual_Studio_12_Addin_Component" Guid="{B67E4D77-DAB5-4783-A8E8-C7E96E3E611D}"  >
+            <Condition>VISUAL_STUDIO_12_LOCATION</Condition>
+            <RegistryValue Id="Visual_Studio_12_Addin_Key" KeyPath="yes"
+                           Root="HKCU" 
+                           Key="Software\SQL Service\csql" 
+                           Name="Visual Studio 2013 Addin" Type="integer" Value="1"  />
+            <CopyFile Id="Visual_Studio_12_Addin_File" FileId="csql_addin_addin_File" DestinationName="csql.addin" />
+            <RemoveFolder Id="Visual_Studio_12_Addins" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>
+
+
+      <Directory Id="VISUAL_STUDIO_13_LOCATION">
+        <Directory Id="Visual_Studio_13_Addins" Name="Addins">
+          <Component Id="Visual_Studio_13_Addin_Component" Guid="{631DEF35-A1F2-48FB-A5DA-C11390CA255F}"  >
+            <Condition>VISUAL_STUDIO_13_LOCATION</Condition>
+            <RegistryValue Id="Visual_Studio_13_Addin_Key" KeyPath="yes"
+                           Root="HKCU"
+                           Key="Software\SQL Service\csql"
+                           Name="Visual Studio 2013 Addin" Type="integer" Value="1"  />
+            <CopyFile Id="Visual_Studio_13_Addin_File" FileId="csql_addin_addin_File" DestinationName="csql.addin" />
+            <RemoveFolder Id="Visual_Studio_13_Addins" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>
+      
+    </Directory>
+
+
+
+    <Feature Id="Complete" Title="Vollständig" Level="1">
+      <ComponentRef Id="sqtpp_Component" />
+      <ComponentRef Id="csqllib_Component" />
+      <ComponentRef Id="csqlexe_Component" />
+      <ComponentRef Id="csqladdin_Component" />
+      <!--<ComponentRef Id="Visual_Studio_10_Addin_Component" />-->
+      <!--<ComponentRef Id="Visual_Studio_11_Addin_Component" />-->
+      <ComponentRef Id="Visual_Studio_12_Addin_Component" />
+      <ComponentRef Id="Visual_Studio_13_Addin_Component" />
+    </Feature>
+    
+    
+
+
+
+    <ComponentGroup Id="ProgramFiles" Directory="INSTALLDIR">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <!-- <Component Id="ProductComponent"> -->
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+      <!-- </Component> -->
+    </ComponentGroup>
+
+  </Product>
+
+</Wix>

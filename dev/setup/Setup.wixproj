@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.6</ProductVersion>
     <ProjectGuid>e3096fc8-fc13-44c7-961c-3b310255db4b</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Setup.Installer</OutputName>
+    <OutputName>csql</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -14,28 +14,47 @@
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
+    <Name>Setup</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressPdbOutput>True</SuppressPdbOutput>
+    <Cultures />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <SuppressPdbOutput>True</SuppressPdbOutput>
+    <Cultures />
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Product.wxs" />
+    <Compile Include="csql.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\setup.CustomActions\Setup.CustomActions.csproj">
-      <Name>Setup.CustomActions</Name>
-      <Project>{ec48f459-91de-484d-aa12-14562c1dc38a}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="csql.AddIn" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
