@@ -120,12 +120,6 @@
   <ItemGroup>
     <ResourceCompile Include="sqtpp.test.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\sqtpp\sqtpp-9.vcxproj">
-      <Project>{8b66df77-727b-4cd9-a9eb-7459d539338c}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

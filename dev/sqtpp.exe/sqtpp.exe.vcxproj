@@ -215,7 +215,6 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX64</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">
@@ -281,7 +280,7 @@
     <ResourceCompile Include="sqtpp.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\sqtpp\sqtpp-9.vcxproj">
+    <ProjectReference Include="..\sqtpp\sqtpp.vcxproj">
       <Project>{8b66df77-727b-4cd9-a9eb-7459d539338c}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

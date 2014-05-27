@@ -8,7 +8,7 @@ namespace csql.addin.Commands
 	/// <summary>
 	/// Wrapper to call the preprocessor and csql script processing engine.
 	/// </summary>
-	[SuppressMessage( "Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification="The field processor is disposed internaly. The reference as a field is just hold to allow cancelation while the processor is running." )]
+	[SuppressMessage( "Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "The field processor is disposed internaly. The reference as a field is just hold to allow cancelation while the processor is running." )]
 	internal class ScriptExecutor
 	{
 		private readonly CSqlOptions csqlOptions;
@@ -22,7 +22,7 @@ namespace csql.addin.Commands
 
 
 		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Catching general exception to keep visual studio alive no matter what happend while executing the command." )]
-		public void Execute()
+		public bool Execute()
 		{
 			GlobalSettings.Verbosity.Level = csqlOptions.Verbosity.Level;
 
@@ -34,6 +34,8 @@ namespace csql.addin.Commands
 				this.processor.Process();
 
 				this.processor.SignOut();
+
+				return true;
 			}
 			catch ( FileNotFoundException ex ) {
 				Trace.WriteLineIf( GlobalSettings.Verbosity.TraceError, ex.FileName + ": " + ex.Message );
@@ -53,6 +55,7 @@ namespace csql.addin.Commands
 				Trace.Flush();
 				processor.Dispose();
 			}
+			return false;
 		}
 
 		/// <summary>

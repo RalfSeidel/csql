@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		profile_sqtpp.bat = profile_sqtpp.bat
 		profile_sqtpp.psess = profile_sqtpp.psess
-		profile_sqtpp_manual.bat = profile_sqtpp_manual.bat
+		profile_sqtpp_manual.ps1 = profile_sqtpp_manual.ps1
 		Settings.StyleCop = Settings.StyleCop
 		sign.bat = sign.bat
 		sqtpp-9.vsmdi = sqtpp-9.vsmdi
@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{AB73A413
 		Build\CommonBuildProperties.targets = Build\CommonBuildProperties.targets
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp", "sqtpp\sqtpp-9.vcxproj", "{8B66DF77-727B-4CD9-A9EB-7459D539338C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp", "sqtpp\sqtpp.vcxproj", "{8B66DF77-727B-4CD9-A9EB-7459D539338C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csql.lib", "csql\csql.lib.csproj", "{804CB225-6ACE-4171-9FE1-85038F5A452F}"
 EndProject
@@ -34,6 +34,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.test", "sqtpp.test\sqtpp.test.vcxproj", "{8B31549C-624D-4F80-B8BE-1EA0D50FC2A1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqtpp.exe", "sqtpp.exe\sqtpp.exe.vcxproj", "{13F701CF-1674-40EE-B1F2-704C89F446A1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B66DF77-727B-4CD9-A9EB-7459D539338C} = {8B66DF77-727B-4CD9-A9EB-7459D539338C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "IntegrationTest\IntegrationTest.csproj", "{3DC6D418-DF24-45F3-A0B2-E9E1833CCF5F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -78,7 +81,7 @@ Global
 		SccProjectUniqueName8 = DbcProvider.GuiTest\\DbcProvider.GuiTest.csproj
 		SccProjectName8 = DbcProvider.GuiTest
 		SccLocalPath8 = DbcProvider.GuiTest
-		SccProjectUniqueName9 = sqtpp\\sqtpp-9.vcxproj
+		SccProjectUniqueName9 = sqtpp\\sqtpp.vcxproj
 		SccProjectName9 = sqtpp
 		SccLocalPath9 = sqtpp
 		SccProjectUniqueName10 = sqtpp.test\\sqtpp.test.vcxproj

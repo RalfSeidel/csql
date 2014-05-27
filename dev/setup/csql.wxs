@@ -29,7 +29,7 @@
              Description="The installer for sqtpp and csql"
              Languages="1033"
              InstallerVersion="200"
-             InstallScope="perUser"
+             InstallScope="perMachine"
              InstallPrivileges="elevated"
              Compressed="yes"
              Platform="x64"
@@ -59,8 +59,8 @@
       information under the Click here for support information entry. To specify those, add any of the following properties to your source file:
       http://wix.tramontana.co.hu/tutorial/com-expression-syntax-miscellanea/add-or-remove-programs-entries
     -->
-    <Property Id="ARPPRODUCTICON" >csql_Icon</Property>
-    <Property Id="ARPURLINFOABOUT" >http://csql.codeplex.com</Property>
+    <Property Id="ARPPRODUCTICON">csql_Icon</Property>
+    <Property Id="ARPURLINFOABOUT">http://csql.codeplex.com</Property>
 
 
     <Property Id="VISUAL_STUDIO_11_LOCATION" >
@@ -79,7 +79,7 @@
     </Property>
 
 
-    <MediaTemplate CompressionLevel="high"  />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high"  />
 
     <!--
       In the next step, we have to specify the media we want to install from. 
@@ -102,26 +102,26 @@
           <Directory Id="INSTALLDIR" Name="csql" >
             
             <Component Id="sqtpp_Component" Guid="{3CAC4F1E-094E-464C-86C3-3E734CCD4AA5}" Win64="yes">
-              <File Id="sqtpp_exe_File" Name="sqtpp.exe" Vital="yes" Source="..\bin\$(var.Configuration)\sqtpp.exe" KeyPath="yes" DiskId="1"  />
-              <File Id="sqtpp_pdb_File" Name="sqtpp.pdb" Vital="no" Source="..\bin\$(var.Configuration)\sqtpp.pdb" DiskId="1" />
+              <File Id="sqtpp_exe_File" Name="sqtpp.exe" Vital="yes" Source="..\bin\release\sqtpp.exe" KeyPath="yes" DiskId="1"  />
+              <File Id="sqtpp_pdb_File" Name="sqtpp.pdb" Vital="no" Source="..\bin\release\sqtpp.pdb" DiskId="1" />
             </Component>
 
             <Component Id="csqllib_Component" Guid="{E0DC17DA-C9A2-48FF-8643-0602641F12F3}" Win64="yes">
-              <File Id="csql_lib_dll_File" Name="csql.lib.dll" Vital="yes" Source="..\bin\$(var.Configuration)\csql.lib.dll" KeyPath="yes" DiskId="1" />
-              <File Id="csql_lib_pdb_File" Name="csql.lib.pdb" Vital="no" Source="..\bin\$(var.Configuration)\csql.lib.pdb" DiskId="1" />
+              <File Id="csql_lib_dll_File" Name="csql.lib.dll" Vital="yes" Source="..\bin\release\csql.lib.dll" KeyPath="yes" DiskId="1" />
+              <File Id="csql_lib_pdb_File" Name="csql.lib.pdb" Vital="no" Source="..\bin\release\csql.lib.pdb" DiskId="1" />
             </Component>
 
             <Component Id="csqlexe_Component" Guid="{6A4DC539-6F7A-4823-A58B-6EB70A15D691}" Win64="yes">
-              <File Id="csql_exe_File" Name="csql.exe" Vital="yes" Source="..\bin\$(var.Configuration)\csql.exe" KeyPath="yes" DiskId="1" />
-              <File Id="csql_pdb_File" Name="csql.pdb" Vital="no" Source="..\bin\$(var.Configuration)\csql.pdb" DiskId="1" />
+              <File Id="csql_exe_File" Name="csql.exe" Vital="yes" Source="..\bin\release\csql.exe" KeyPath="yes" DiskId="1" />
+              <File Id="csql_pdb_File" Name="csql.pdb" Vital="no" Source="..\bin\release\csql.pdb" DiskId="1" />
             </Component>
 
             <Component Id="csqladdin_Component" Guid="{468BDD7C-BDA0-457D-B7D8-6683084E9397}" Win64="yes">
-              <File Id="csql_addin_dll_File" Name="csql.addin.dll" Vital="yes" Source="..\bin\$(var.Configuration)\csql.addin.dll" KeyPath="yes" DiskId="1" />
-              <File Id="csql_addin_pdb_File" Name="csql.addin.pdb" Vital="no" Source="..\bin\$(var.Configuration)\csql.addin.pdb" DiskId="1" />
+              <File Id="csql_addin_dll_File" Name="csql.addin.dll" Vital="yes" Source="..\bin\release\csql.addin.dll" KeyPath="yes" DiskId="1" />
+              <File Id="csql_addin_pdb_File" Name="csql.addin.pdb" Vital="no" Source="..\bin\release\csql.addin.pdb" DiskId="1" />
               <File Id="csql_addin_addin_File" Name="csql.addin" Vital="no" Source="csql.addin" DiskId="1"  />
-              <File Id="Sqt_DbcProvider_dll_File" Name="Sqt.DbcProvider.dll" Vital="yes" Source="..\bin\$(var.Configuration)\Sqt.DbcProvider.dll" DiskId="1" />
-              <File Id="Sqt_DbcProvider_pdb_File" Name="Sqt.DbcProvider.pdb" Vital="no" Source="..\bin\$(var.Configuration)\Sqt.DbcProvider.pdb" DiskId="1" />
+              <File Id="Sqt_DbcProvider_dll_File" Name="Sqt.DbcProvider.dll" Vital="yes" Source="..\bin\release\Sqt.DbcProvider.dll" DiskId="1" />
+              <File Id="Sqt_DbcProvider_pdb_File" Name="Sqt.DbcProvider.pdb" Vital="no" Source="..\bin\release\Sqt.DbcProvider.pdb" DiskId="1" />
               <!--
                 Set the assembly path in the addin file
                 See WIX: Update Application Configuration Files during Installation

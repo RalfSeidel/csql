@@ -1,0 +1,4 @@
+﻿Start Action: Start External Program:
+"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\devenv.exe"
+Command Line Arguments:
+D:\src\Codeplex\sqtpp\dev\IntegrationTest.sln

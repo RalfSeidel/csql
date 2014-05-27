@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using csql.addin.Settings;
 using EnvDTE;
 using EnvDTE80;
@@ -74,7 +75,7 @@ namespace csql.addin.Commands
 			DTE2 application = e.Application;
 
 			var activeDocument = application.ActiveDocument;
-			var documentPath   = activeDocument.FullName;
+			var documentPath = activeDocument.FullName;
 			if ( !activeDocument.Saved && !activeDocument.ReadOnly ) {
 				activeDocument.Save( documentPath );
 			}
@@ -206,9 +207,9 @@ namespace csql.addin.Commands
 					Trace.Listeners.Add( traceListener );
 				}
 				this.currentExecutor = new ScriptExecutor( settings );
-				this.currentExecutor.Execute();
+				bool succeeded = this.currentExecutor.Execute();
 
-				if ( !String.IsNullOrEmpty( settings.DistributionFile ) ) {
+				if ( succeeded && !String.IsNullOrEmpty( settings.DistributionFile ) && File.Exists( settings.DistributionFile ) ) {
 					application.ItemOperations.OpenFile( settings.DistributionFile, Constants.vsViewKindCode );
 				}
 				currentExecutor = null;

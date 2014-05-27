@@ -167,6 +167,7 @@
     </Resource>
     <Content Include="csql.addin" />
     <None Include="Resources\Images\Commands\CancelScript.bmp" />
+    <Content Include="DebuggingProperties.txt" />
     <Content Include="Resources\Images\ExecuteScript.png" />
     <EmbeddedResource Include="Gui\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>

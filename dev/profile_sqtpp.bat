@@ -1,6 +1,6 @@
 setlocal
-set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio 11.0\Team Tools\Performance Tools\x64
-set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio 11.0\Team Tools\Performance Tools
+set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio 12.0\Team Tools\Performance Tools\x64
+set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio 12.0\Team Tools\Performance Tools
 cd bin\release
 vsinstr.exe sqtpp.exe
 vsperfcmd /start:trace /output:sqtpp.vsp
