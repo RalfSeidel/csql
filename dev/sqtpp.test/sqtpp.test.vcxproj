@@ -19,7 +19,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
     <PlatformToolset>v120</PlatformToolset>
@@ -54,6 +54,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile />
     </Link>
     <PostBuildEvent>
       <Command>if exist app.config copy app.config "$(OutDir)app.config"</Command>
@@ -114,11 +115,16 @@
     <ClInclude Include="TestBase.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="sqtpp.test.ico" />
     <None Include="Common.vsprops" />
+    <None Include="sqtpp.test.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="sqtpp.test.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sqtpp\sqtpp.vcxproj">
+      <Project>{8b66df77-727b-4cd9-a9eb-7459d539338c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

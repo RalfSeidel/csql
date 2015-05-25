@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Extensibility xmlns="http://schemas.microsoft.com/AutomationExtensibility">
+  <HostApplication>
+    <Name>Microsoft Visual Studio</Name>
+    <Version>14.0</Version>
+  </HostApplication>
+  <HostApplication>
+    <Name>Microsoft Visual Studio</Name>
+    <Version>12.0</Version>
+  </HostApplication>
+  <HostApplication>
+    <Name>Microsoft Visual Studio</Name>
+    <Version>11.0</Version>
+  </HostApplication>
+  <HostApplication>
+    <Name>Microsoft Visual Studio</Name>
+    <Version>10.0</Version>
+  </HostApplication>
+  <Addin>
+    <FriendlyName>csql</FriendlyName>
+    <Description>Addin to execute macro enhanced SQL scripts.</Description>
+    <Assembly>[csql_addin_dll_File]</Assembly>
+    <FullClassName>csql.addin.CSqlAddin</FullClassName>
+    <LoadBehavior>1</LoadBehavior>
+    <CommandPreload>1</CommandPreload>
+    <CommandLineSafe>0</CommandLineSafe>
+  </Addin>
+</Extensibility>

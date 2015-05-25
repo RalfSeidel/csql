@@ -267,7 +267,7 @@ void Processor::emitLineDirective( std::wostream& output )
 **
 ** @param sNewLine The line feed found in the input.
 */
-void Processor::emitLineFeed( std::wostream& output, const wstring& sNewLine )
+void Processor::emitLineFeed( std::wostream& output, const wstring& sNewLine ) const
 {
 	switch ( m_options.getNewLineOutput() ) {
 		case Options::NLO_AS_IS:
@@ -305,7 +305,9 @@ void Processor::emitMessage( error::Error& error ) const
 		error.setFileInfo( file );
 	}
 
-	m_pOutput->getErrStream() << error;
+	std::wostream& errorStream = m_pOutput->getErrStream();
+	errorStream << error;
+	emitLineFeed( errorStream, m_options.getOsDefaultNewLine() );
 
 	if ( error.getSeverity() > m_eMaxMsgSeverity )
 		m_eMaxMsgSeverity = error.getSeverity();
@@ -1711,8 +1713,10 @@ void Processor::processDefineDirective()
 		if ( def2Text != macroDefText ) {
 			wstringstream buffer;
 			buffer << macro2.getDefineFile() << L" ("  << (unsigned int)macro2.getDefineLine() << L')';
-			buffer << L"\nOld macro definition:" << def2Text;
-			buffer << L"\nNew macro definition:" << macroDefText;
+			emitLineFeed( buffer, m_options.getOsDefaultNewLine() );
+			buffer << L"Old macro definition:" << def2Text;
+			emitLineFeed( buffer, m_options.getOsDefaultNewLine() );
+			buffer << L"New macro definition:" << macroDefText;
 			const wstring prevDefinition = buffer.str();
 			// Redefinition of macro {1}. The macro has already been defined in {2}.
 			error::C4005 warning( identifier, prevDefinition );

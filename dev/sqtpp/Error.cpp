@@ -180,6 +180,6 @@ std::wostream& operator<<( std::wostream& os, const sqtpp::error::Error& error )
 {
 	os << error.getFilePath() << L'(' << error.getLine() << L"): " 
 	   << error.getSeverity() << L' ' << error.getCode() << L": "
-	   << error.getText() << endl;
+	   << error.getText();
 	return os;
 }

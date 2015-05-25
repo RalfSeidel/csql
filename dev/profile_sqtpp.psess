@@ -39,7 +39,7 @@
       <Path>bin\Release\sqtpp.exe</Path>
       <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
       <Instrument>true</Instrument>
-      <Sample>true</Sample>
+      <Sample>false</Sample>
       <ExternalWebsite>false</ExternalWebsite>
       <InteractionProfilingEnabled>false</InteractionProfilingEnabled>
       <IsLocalJavascript>false</IsLocalJavascript>

@@ -217,7 +217,7 @@ private:
 	void emitLineDirective( std::wostream& output );
 
 	// Emit the new line chacter(s).
-	void emitLineFeed( std::wostream& output, const wstring& sNewLine );
+	void emitLineFeed( std::wostream& output, const wstring& sNewLine ) const;
 
 	// Emit the current output buffer.
 	size_t emitBuffer( std::wostream& ouput );
