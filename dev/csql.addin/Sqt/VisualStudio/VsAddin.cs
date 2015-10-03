@@ -276,7 +276,7 @@ namespace Sqt.VisualStudio
 			CommandBars commandBars = (CommandBars)this.application.CommandBars;
 			CommandBar commandBar = commandBars[name];
 			if ( commandBar == null ) {
-				VsApplicationExtensions.GetMenuBar( application, name );
+				VsApplicationExtensions.TryGetMenuBar( application, name, out commandBar );
 			}
 			return commandBar;
 		}

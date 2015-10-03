@@ -32,6 +32,11 @@ namespace csql.addin.Settings
 
 		private static SettingsManager instance;
 
+		/// <summary>
+		/// The name of the file that contains the most recently used connections.
+		/// </summary>
+		private const string MruConnectionFileName = "csqlConnection.xml";
+
 		private MruConnections mruDbConnectionParameters;
 		private ScriptParameterCollection scriptParameters;
 
@@ -58,10 +63,10 @@ namespace csql.addin.Settings
 				}
 				if ( this.scriptParameters == null ) {
 					this.scriptParameters = new ScriptParameterCollection();
-					var defaultParameter = new ScriptParameter() { Name = "Default" };
+					var defaultParameter = ScriptParameter.CreateDefaultInstance();
 					this.scriptParameters.Add( defaultParameter );
 				}
-				return this.scriptParameters; ;
+				return this.scriptParameters;
 			}
 		}
 
@@ -70,7 +75,7 @@ namespace csql.addin.Settings
 		/// </summary>
 		public ScriptParameter CurrentScriptParameter
 		{
-			get { return ScriptParameters.Current;  }
+			get { return ScriptParameters.Current; }
 		}
 
 		/// <summary>
@@ -143,7 +148,7 @@ namespace csql.addin.Settings
 			if ( !parameterChanged )
 				return;
 
-			string mruConnectionsPath = GetGlobalFilePath( "CSqlConnection.xml" );
+			string mruConnectionsPath = GetGlobalFilePath( MruConnectionFileName );
 			if ( String.IsNullOrEmpty( mruConnectionsPath ) )
 				return;
 
@@ -161,9 +166,9 @@ namespace csql.addin.Settings
 			catch ( Exception ex ) {
 				string context = MethodInfo.GetCurrentMethod().Name;
 				string message = String.Format( "{0}: Failed to save connection settings because [{1}].", context, ex.Message );
+				Debug.WriteLine( message );
 				var outputPane = Output.GetAndActivateOutputPane( (EnvDTE80.DTE2)application );
 				outputPane.OutputString( message );
-				Debug.WriteLine( message );
 			}
 		}
 
@@ -202,7 +207,8 @@ namespace csql.addin.Settings
 			string csqlParameterPath;
 			if ( string.IsNullOrEmpty( solutionDirectory ) ) {
 				csqlParameterPath = GetGlobalFilePath( csqlParameterName );
-			} else {
+			}
+			else {
 				csqlParameterPath = GetSolutionFilePath( application, csqlParameterName );
 				if ( !IsFileWritable( csqlParameterPath ) ) {
 					csqlParameterName = "CSqlParameter.user.xml";
@@ -260,7 +266,8 @@ namespace csql.addin.Settings
 					if ( parameters != null )
 						return parameters;
 				}
-			} else {
+			}
+			else {
 				parametersPath = GetSolutionFilePath( application, "CSqlParameter.user.xml" );
 				if ( !String.IsNullOrEmpty( parametersPath ) && File.Exists( parametersPath ) ) {
 					ScriptParameterCollection parameters = LoadScriptParameterFromFile( parametersPath );
@@ -274,7 +281,7 @@ namespace csql.addin.Settings
 						return parameters;
 				}
 			}
-			
+
 			return null;
 		}
 
@@ -319,7 +326,7 @@ namespace csql.addin.Settings
 		/// </summary>
 		private MruConnections LoadMruConnectionParameters()
 		{
-			string mruConnectionsName = "CSqlConnection.xml";
+			string mruConnectionsName = MruConnectionFileName;
 			string mruConnectionsPath = GetGlobalFilePath( mruConnectionsName );
 			if ( !String.IsNullOrEmpty( mruConnectionsPath ) && File.Exists( mruConnectionsPath ) ) {
 				MruConnections mruConnections = LoadMruConnectionParametersFromFile( mruConnectionsPath );
@@ -373,7 +380,7 @@ namespace csql.addin.Settings
 		private static string GetSolutionDirectory( _DTE application )
 		{
 			string solutionPath = application.Solution.FileName;
-			if ( string.IsNullOrEmpty( solutionPath ) ) 
+			if ( string.IsNullOrEmpty( solutionPath ) )
 				return null;
 
 			string solutionDirectory = Path.GetDirectoryName( solutionPath );

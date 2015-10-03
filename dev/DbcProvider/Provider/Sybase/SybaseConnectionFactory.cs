@@ -20,9 +20,6 @@ namespace Sqt.DbcProvider.Provider.Sybase
 			if ( !String.IsNullOrEmpty( parameter.DatasourceAddress ) ) {
 				sb.Append( "DataSource=" ).Append( parameter.DatasourceAddress ).Append( ";" );
 			}
-			if ( parameter.DatasourcePort != 0 ) {
-				sb.Append( "Port=" ).Append( parameter.DatasourcePort ).Append( ";" );
-			}
 			if ( !String.IsNullOrEmpty( parameter.Catalog ) ) {
 				sb.Append( "Database=" ).Append( parameter.Catalog ).Append( ";" );
 			}

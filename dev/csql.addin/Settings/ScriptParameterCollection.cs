@@ -8,7 +8,7 @@ using Sqt.DbcProvider;
 
 namespace csql.addin.Settings
 {
-	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification="The letter C is not a prefix but part of the product name." )]
+	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification = "The letter C is not a prefix but part of the product name." )]
 	[Serializable]
 	[XmlRoot( "ScriptParameters" )]
 	public sealed class ScriptParameterCollection : IEnumerable<ScriptParameter>
@@ -40,21 +40,22 @@ namespace csql.addin.Settings
 		/// </summary>
 		public ScriptParameter Current
 		{
-			get 
+			get
 			{
 				if ( this.parameters.Count == 0 ) {
-					this.parameters.Add( new ScriptParameter() );
+					var defaultParameters = ScriptParameter.CreateDefaultInstance();
+					this.parameters.Add( defaultParameters );
 				}
 
 				if ( this.currentParameters == null ) {
 					this.currentParameters = this.parameters[0];
 				}
-				return this.currentParameters; 
+				return this.currentParameters;
 			}
-			set 
+			set
 			{
 				Debug.Assert( this.parameters.Contains( value ) );
-				this.currentParameters = value; 
+				this.currentParameters = value;
 			}
 		}
 
@@ -97,10 +98,12 @@ namespace csql.addin.Settings
 			if ( parameter == this.currentParameters ) {
 				int index = parameters.IndexOf( parameter );
 				if ( index < this.parameters.Count - 2 ) {
-					this.currentParameters = this.parameters[index+1];
-				} else if ( index > 0 ) {
-					this.currentParameters = this.parameters[index-1];
-				} else {
+					this.currentParameters = this.parameters[index + 1];
+				}
+				else if ( index > 0 ) {
+					this.currentParameters = this.parameters[index - 1];
+				}
+				else {
 					this.currentParameters = null;
 				}
 			}

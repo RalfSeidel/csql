@@ -20,22 +20,23 @@ namespace Sqt.VisualStudio.Util
 		/// <param name="application">The visual studio application object.</param>
 		/// <param name="variableName">Name of the variable.</param>
 		/// <returns>The variable value or <c>null</c> if the variable is not defined.</returns>
-		public static object GetVariableFromSolutionOrGlobals( this _DTE application, string variableName )
+		public static bool TryGetVariableFromSolutionOrGlobals( this _DTE application, string variableName, out object result )
 		{
 			if ( application.Solution != null ) {
 				Globals solutionGlobals = application.Solution.Globals;
 				if ( solutionGlobals.get_VariableExists( variableName ) ) {
-					object result = solutionGlobals[variableName];
-					return result;
+					result = solutionGlobals[variableName];
+					return true;
 				}
 			}
 			Globals globals = application.Globals;
 			if ( globals.get_VariableExists( variableName ) ) {
-				object result = globals[variableName];
-				return result;
+				result = globals[variableName];
+				return true;
 			}
 			Debug.WriteLine( "VsApplicationExtensions.GetVariableFromSolutionOrGlobals - Variable not found: " + variableName );
-			return null;
+			result = null;
+			return false;
 		}
 
 
@@ -49,24 +50,25 @@ namespace Sqt.VisualStudio.Util
 		/// The menu bar with the specified english name or <c>null</c>
 		/// if the menu bar was not found.
 		/// </returns>
-		public static CommandBar GetMenuBar( this _DTE application, string menuBarName )
+		public static bool TryGetMenuBar( this _DTE application, string menuBarName, out CommandBar menuBar )
 		{
 			CommandBars commandBars = (CommandBars)application.CommandBars;
-			CommandBar menuBar = (CommandBar)commandBars["MenuBar"];
-			foreach ( CommandBarControl ctrl in menuBar.Controls ) {
+			CommandBar mainMenuBar = (CommandBar)commandBars["MenuBar"];
+			foreach ( CommandBarControl ctrl in mainMenuBar.Controls ) {
 				MsoControlType type = ctrl.Type;
 				if ( type != MsoControlType.msoControlPopup )
 					continue;
 
 				CommandBarPopup ctrlPopup = (CommandBarPopup)ctrl;
-				CommandBar subMenuBar = ctrlPopup.CommandBar;
-				string subMenuName = subMenuBar.Name;
+				menuBar = ctrlPopup.CommandBar;
+				string subMenuName = menuBar.Name;
 				if ( subMenuName.Equals( menuBarName, StringComparison.InvariantCultureIgnoreCase ) ) {
-					return subMenuBar;
+					return true;
 				}
 			}
 			Debug.WriteLine( "VsApplicationExtensions.GetMenuBar - Menu bar not found: " + menuBarName );
-			return null;
+			menuBar = null;
+			return false;
 		}
 	}
 }

@@ -4,9 +4,9 @@ using System.Resources;
 
 [assembly: AssemblyProduct( "csql" )]
 [assembly: AssemblyCompany( "SQL Service GmbH" )]
-[assembly: AssemblyCopyright( "Copyright © 2009-2014 SQL Service GmbH" )]
+[assembly: AssemblyCopyright( "Copyright © 2009-2015 SQL Service GmbH" )]
 [assembly: NeutralResourcesLanguage( "en-US" )]
-[assembly: AssemblyVersion( "1.1.*" )]
+[assembly: AssemblyVersion( "1.2.*" )]
 #if DEBUG
 [assembly: AssemblyConfiguration( "Debug" )]
 #else

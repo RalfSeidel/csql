@@ -28,7 +28,7 @@ namespace Sqt.DbcProvider.Gui
 		/// <summary>
 		/// Currently selected provider.
 		/// </summary>
-		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private ProviderType provider;
 
 		/// <summary>
@@ -85,6 +85,11 @@ namespace Sqt.DbcProvider.Gui
 
 		#endregion
 
+		/// <summary>
+		/// Event raised when a property value changed.
+		/// </summary>
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		#region Properties
 
 		/// <summary>
@@ -128,7 +133,7 @@ namespace Sqt.DbcProvider.Gui
 			}
 			set
 			{
-				if ( Object.Equals( this.provider, value ) ) 
+				if ( Object.Equals( this.provider, value ) )
 					return;
 
 				string currentDatasource = Datasource;
@@ -141,11 +146,13 @@ namespace Sqt.DbcProvider.Gui
 
 				if ( this.hasDatasourceChanged || this.datasourceList.Contains( currentDatasource ) ) {
 					Datasource = currentDatasource;
-				} else if ( Datasources.Any() ) {
+				}
+				else if ( Datasources.Any() ) {
 					ComboListItem firstDatasource = Datasources.First();
 					Datasource = firstDatasource.Name;
-				} else {
-					Datasource = "";
+				}
+				else {
+					Datasource = string.Empty;
 				}
 			}
 		}
@@ -158,7 +165,7 @@ namespace Sqt.DbcProvider.Gui
 			get
 			{
 				if ( this.datasourceList == null ) {
-					datasourceList =  LoadDataSources( this.provider );
+					datasourceList = LoadDataSources( this.provider );
 				}
 				return this.datasourceList;
 			}
@@ -185,7 +192,7 @@ namespace Sqt.DbcProvider.Gui
 
 				this.hasDatasourceChanged = IsManualEnteredDatasource( value );
 				this.datasource = value;
-				this.catalogList = LoadCatalogs( Provider, Datasource, 0 );
+				this.catalogList = LoadCatalogs( Provider, Datasource );
 				OnPropertyChanged( "Datasource" );
 				OnPropertyChanged( "Catalogs" );
 				OnPropertyChanged( "ConnectionParameter" );
@@ -193,19 +200,22 @@ namespace Sqt.DbcProvider.Gui
 
 				if ( this.hasCatalogChanged || this.catalogList.Contains( currentCatalog ) ) {
 					Catalog = currentCatalog;
-				} else if ( Catalogs.Any() ) {
+				}
+				else if ( Catalogs.Any() ) {
 					ComboListItem firstCatalog = Catalogs.First();
 					Catalog = firstCatalog.Name;
-				} else {
-					Catalog = "";
+				}
+				else {
+					Catalog = string.Empty;
 				}
 
 				if ( this.hasLoginChanged ) {
 					IntegratedSecurity = currentIntegratedSecurity;
 					UserId = currentUserId;
 					Password = currentPassword;
-				} else {
-					Authentication authentication = LoadAuthentication( Provider, Datasource, 0 );
+				}
+				else {
+					Authentication authentication = LoadAuthentication( Provider, Datasource );
 					if ( authentication != null ) {
 						IntegratedSecurity = authentication.Integrated;
 						UserId = authentication.UserId;
@@ -224,7 +234,7 @@ namespace Sqt.DbcProvider.Gui
 			get
 			{
 				if ( this.catalogList == null ) {
-					this.catalogList = LoadCatalogs( Provider, Datasource, 0 );
+					this.catalogList = LoadCatalogs( Provider, Datasource );
 					if ( catalogList.Any() ) {
 						string firstCatalog = catalogList.First().Name;
 						Catalog = firstCatalog;
@@ -245,7 +255,7 @@ namespace Sqt.DbcProvider.Gui
 			}
 			set
 			{
-				if ( this.catalog == value ) 
+				if ( this.catalog == value )
 					return;
 
 				this.hasCatalogChanged = IsManualEnteredCatalog( value );
@@ -338,7 +348,6 @@ namespace Sqt.DbcProvider.Gui
 
 				result.Provider = this.Provider;
 				result.DatasourceAddress = this.Datasource;
-				// result.DatasourcePort = this.Port;
 				result.Catalog = this.Catalog;
 				result.IntegratedSecurity = this.IntegratedSecurity;
 				result.UserId = this.UserId;
@@ -405,7 +414,7 @@ namespace Sqt.DbcProvider.Gui
 			List<string> datasourceNames = new List<string>();
 			foreach ( var datasource in datasources.Datasource ) {
 				string dsAddress = datasource.Address;
-				if ( !datasourceNames.Contains( dsAddress ) ) 
+				if ( !datasourceNames.Contains( dsAddress ) )
 					datasourceNames.Add( dsAddress );
 			}
 
@@ -413,13 +422,13 @@ namespace Sqt.DbcProvider.Gui
 			return cl;
 		}
 
-		private ComboList LoadCatalogs( ProviderType currentProvider, string currentDatasource, int currentPort )
+		private ComboList LoadCatalogs( ProviderType currentProvider, string currentDatasource )
 		{
 			if ( this.mruConnections == null ) {
 				return new ComboList();
 			}
 
-			var datasource = mruConnections.FindDatasourceByAddress( currentProvider, currentDatasource, currentPort );
+			var datasource = mruConnections.FindDatasourceByAddress( currentProvider, currentDatasource );
 			if ( datasource == null )
 				return new ComboList();
 
@@ -433,12 +442,12 @@ namespace Sqt.DbcProvider.Gui
 			return cl;
 		}
 
-		private Authentication LoadAuthentication( ProviderType currentProvider, string currentDatasource, int currentPort )
+		private Authentication LoadAuthentication( ProviderType currentProvider, string currentDatasource )
 		{
 			if ( this.mruConnections == null )
 				return new Authentication();
 
-			var datasource = mruConnections.FindDatasourceByAddress( currentProvider, currentDatasource, currentPort );
+			var datasource = mruConnections.FindDatasourceByAddress( currentProvider, currentDatasource );
 			if ( datasource == null )
 				return new Authentication();
 
@@ -499,16 +508,6 @@ namespace Sqt.DbcProvider.Gui
 		}
 
 
-
-
-
-		#region INotifyPropertyChanged Members
-
-		/// <summary>
-		/// Event raised when a property value changed.
-		/// </summary>
-		public event PropertyChangedEventHandler PropertyChanged;
-
 		private void OnPropertyChanged( string p )
 		{
 			if ( this.PropertyChanged != null ) {
@@ -516,7 +515,6 @@ namespace Sqt.DbcProvider.Gui
 			}
 		}
 
-		#endregion
 
 		#region Provider List
 
@@ -601,7 +599,7 @@ namespace Sqt.DbcProvider.Gui
 
 				var enumValues = System.Enum.GetValues( typeof( ProviderType ) );
 				foreach ( ProviderType e in enumValues ) {
-					if ( e == ProviderType.Undefined ) 
+					if ( e == ProviderType.Undefined )
 						continue;
 
 					if ( list.Contains( e ) )

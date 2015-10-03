@@ -12,11 +12,13 @@ namespace Sqt.DbcProvider
 		[TestMethod]
 		public void GetMruDbConnectionParameterTest()
 		{
-			var datasources1 = new Datasources() {
+			var datasources1 = new Datasources()
+			{
 				Provider = ProviderType.Oracle
 			};
 
-			var datasource1_1 = new Datasource() {
+			var datasource1_1 = new Datasource()
+			{
 				Address = "datasource1_1"
 			};
 			var datasourcesList1 = new List<Datasource>();
@@ -47,7 +49,6 @@ namespace Sqt.DbcProvider
 			DbConnectionParameter parameter = new DbConnectionParameter();
 			parameter.Provider = ProviderType.MsSql;
 			parameter.DatasourceAddress = "server";
-			parameter.DatasourcePort = 4711;
 			parameter.Catalog = "catalog";
 			parameter.UserId = "test";
 			parameter.Password = "password";

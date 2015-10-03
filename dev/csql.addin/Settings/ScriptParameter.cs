@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
-using csql.addin.Settings.Gui;
-using Sqt.DbcProvider;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
+using csql.addin.Settings.Gui;
 
 namespace csql.addin.Settings
 {
@@ -14,10 +14,10 @@ namespace csql.addin.Settings
 	/// An item of the settings collection i.e. one of the settings the user has created
 	/// and is able to select as the active csql configuration.
 	/// </summary>
-	[DefaultProperty("Name")]
+	[DefaultProperty( "Name" )]
 	[Serializable]
-	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification="The letter C is not a prefix but part of the product name." )]
-	[XmlRoot("CSqlParameter")]
+	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification = "The letter C is not a prefix but part of the product name." )]
+	[XmlRoot( "CSqlParameter" )]
 	public class ScriptParameter : INotifyPropertyChanged
 	{
 		#region Data fields
@@ -55,12 +55,12 @@ namespace csql.addin.Settings
 		/// </summary>
 		public ScriptParameter()
 		{
-			this.name = "New";
-			this.Verbosity = TraceLevel.Info;
-			this.AdvancedPreprocessorParameter = String.Empty;
+			Name = "New";
+			Verbosity = TraceLevel.Info;
+			AdvancedPreprocessorParameter = String.Empty;
 
-			this.outputFile = String.Empty;
-			this.maxResultColumnWidth = DefaultResultColumnWidth;
+			OutputFile = String.Empty;
+			MaxResultColumnWidth = DefaultResultColumnWidth;
 			IsOutputFileEnabled = false;
 			IsPreprocessorEnabled = true;
 			IsBreakOnErrorEnabled = true;
@@ -77,7 +77,7 @@ namespace csql.addin.Settings
 		{
 			this.Name = that.Name;
 			this.Verbosity = that.Verbosity;
-			this.maxResultColumnWidth = that.maxResultColumnWidth;
+			this.MaxResultColumnWidth = that.MaxResultColumnWidth;
 
 			this.IncludeDirectories.Clear();
 			this.IncludeDirectories.AddRange( that.IncludeDirectories );
@@ -97,6 +97,14 @@ namespace csql.addin.Settings
 			this.IsTemporaryFileEnabled = that.IsTemporaryFileEnabled;
 		}
 
+		internal static ScriptParameter CreateDefaultInstance()
+		{
+			var result = new ScriptParameter();
+			result.Name = "Default";
+
+			return result;
+		}
+
 		/// <summary>
 		/// Occurs when a property value changes.
 		/// </summary>
@@ -106,17 +114,17 @@ namespace csql.addin.Settings
 		[Category( "CSql" )]
 		[DefaultValue( "Default" )]
 		[DisplayName( "Configuration Name" )]
-		[Description( "The name of the script parameter configuration") ]
-		public string Name 
+		[Description( "The name of the script parameter configuration" )]
+		public string Name
 		{
 			get { return this.name; }
 			set
 			{
-				if ( String.Equals( this.name, value ) )
+				if ( string.Equals( this.name, value ) )
 					return;
 
 				this.name = value;
-				RaisePropertyChanged("Name");
+				RaisePropertyChanged();
 			}
 		}
 
@@ -130,19 +138,19 @@ namespace csql.addin.Settings
 		[DefaultValue( "" )]
 		[DisplayName( "Distribution File" )]
 		[Editor( typeof( OutputFileEditor ), typeof( UITypeEditor ) )]
-		public string OutputFile 
-		{ 
+		public string OutputFile
+		{
 			get { return this.outputFile; }
 			set
 			{
 				if ( value == null )
 					value = String.Empty;
 
-				if ( String.Equals( this.outputFile, value ) )
+				if ( string.Equals( this.outputFile, value ) )
 					return;
 
 				this.outputFile = value;
-				RaisePropertyChanged("OutputFile");
+				RaisePropertyChanged();
 			}
 		}
 
@@ -153,7 +161,7 @@ namespace csql.addin.Settings
 		[TypeConverter( typeof( PathCollectionConverter ) )]
 		[SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
 		[SuppressMessage( "Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
-		[DefaultValue(".csql;.sql;.ins")]
+		[DefaultValue( ".csql;.sql;.ins" )]
 		public List<string> ScriptExtensions
 		{
 			get { return this.scriptExtensions; }
@@ -167,19 +175,19 @@ namespace csql.addin.Settings
 
 				this.scriptExtensions.Clear();
 				this.scriptExtensions.AddRange( value );
-				RaisePropertyChanged( "ScriptExtensions" );
+				RaisePropertyChanged();
 			}
 		}
 
 		[Category( "CSql" )]
 		[DefaultValue( true )]
-		[DisplayName("Stop on First Error")]
+		[DisplayName( "Stop on First Error" )]
 		[Description( "Option to stop when the script execution encountered an error. If false the execution will continue until the script has finished." )]
 		public bool IsBreakOnErrorEnabled { get; set; }
 
 		[Category( "CSql" )]
 		[DefaultValue( TraceLevel.Info )]
-		[DisplayName("Verbosity")]
+		[DisplayName( "Verbosity" )]
 		[Description( "The verbosity of the trace output of this addin." )]
 		public TraceLevel Verbosity { get; set; }
 
@@ -200,7 +208,7 @@ namespace csql.addin.Settings
 				}
 
 				this.maxResultColumnWidth = value;
-				RaisePropertyChanged( "MaxResultColumnWidth" );
+				RaisePropertyChanged();
 			}
 		}
 
@@ -213,23 +221,23 @@ namespace csql.addin.Settings
 		[DisplayName( "Include Directories" )]
 		[DesignerSerializationVisibility( DesignerSerializationVisibility.Content )]
 		[Editor( StringCollectionEditorTypeReferences, typeof( System.Drawing.Design.UITypeEditor ) )]
-		[TypeConverter(typeof(PathCollectionConverter))]
+		[TypeConverter( typeof( PathCollectionConverter ) )]
 		[SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
 		[SuppressMessage( "Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Class is serializable. Serializer doesn't work with abtract classes or interfaces." )]
-		public List<string> IncludeDirectories 
-		{ 
+		public List<string> IncludeDirectories
+		{
 			get { return this.includeDirectories; }
-			set 
-			{ 
+			set
+			{
 				if ( Object.Equals( this.includeDirectories, value ) )
 					return;
 
 				this.includeDirectories.Clear();
 				foreach ( var directory in value ) {
-					if ( !String.IsNullOrEmpty( directory ) ) 
-						this.includeDirectories.Add( directory ); 
+					if ( !String.IsNullOrEmpty( directory ) )
+						this.includeDirectories.Add( directory );
 				}
-				RaisePropertyChanged( "IncludeDirectories" );
+				RaisePropertyChanged();
 			}
 		}
 
@@ -252,7 +260,7 @@ namespace csql.addin.Settings
 					if ( !String.IsNullOrEmpty( pd.Name ) )
 						this.preprocessorDefinitions.Add( pd );
 				}
-				RaisePropertyChanged( "PreprocessorDefinitions" );
+				RaisePropertyChanged();
 			}
 		}
 
@@ -271,13 +279,13 @@ namespace csql.addin.Settings
 			set
 			{
 				if ( value == null )
-					value = "";
+					value = string.Empty;
 
 				if ( String.Equals( this.temporaryFile, value ) )
 					return;
 
 				this.temporaryFile = value;
-				RaisePropertyChanged( "TemporaryFile" );
+				RaisePropertyChanged();
 			}
 		}
 
@@ -290,7 +298,7 @@ namespace csql.addin.Settings
 		/// Raises the property changed event.
 		/// </summary>
 		[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "The method is a wrapper to raise the event." )]
-		protected internal void RaisePropertyChanged( string propertyName )
+		protected internal void RaisePropertyChanged( [CallerMemberName] string propertyName = null )
 		{
 			if ( PropertyChanged != null ) {
 				PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );

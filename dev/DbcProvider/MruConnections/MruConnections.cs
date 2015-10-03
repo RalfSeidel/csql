@@ -27,7 +27,7 @@ namespace Sqt.DbcProvider
 				Assembly assembly = Assembly.GetExecutingAssembly();
 				Stream resourceStream = assembly.GetManifestResourceStream( resourceId );
 				XmlReader xmlReader = XmlReader.Create( resourceStream );
-				XmlSchema xmlSchema = XmlSchema.Read( xmlReader, (s, e ) => Trace.WriteLine( e.ToString() ) );
+				XmlSchema xmlSchema = XmlSchema.Read( xmlReader, ( s, e ) => Trace.WriteLine( e.ToString() ) );
 				return xmlSchema;
 			}
 		}
@@ -41,7 +41,7 @@ namespace Sqt.DbcProvider
 		/// <returns>The loaded object.</returns>
 		public static MruConnections LoadFromFile( string filePath )
 		{
-			using ( Stream stream = new FileStream( filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) ) 
+			using ( Stream stream = new FileStream( filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan ) )
 			using ( TextReader reader = new StreamReader( stream ) ) {
 				return LoadFromTextReader( reader );
 			}
@@ -95,19 +95,18 @@ namespace Sqt.DbcProvider
 		/// Find the datasource with the specified address (i.e. server name).
 		/// </summary>
 		/// <param name="provider">The id of the provider.</param>
-		/// <param name="datasourceAddress">The name of the datasource.</param>
-		/// <param name="datasourcePort">The server connection ip port or zero if not used.</param>
+		/// <param name="datasourceAddress">The name of the datasource e.g. the server name or IP address.</param>
 		/// <returns>
 		/// The datasource for the specified provider and address or <c>null</c>
 		/// if the history does not contain any record for it.
 		/// </returns>
-		public Datasource FindDatasourceByAddress( ProviderType provider, string datasourceAddress, int datasourcePort )
+		public Datasource FindDatasourceByAddress( ProviderType provider, string datasourceAddress )
 		{
 			Datasources datasourcesOfProvider = FindDatasources( provider );
 			if ( datasourcesOfProvider == null )
 				return null;
 
-			Datasource datasource = datasourcesOfProvider.FindDatasourceByAddress( datasourceAddress, datasourcePort );
+			Datasource datasource = datasourcesOfProvider.FindDatasourceByAddress( datasourceAddress );
 			return datasource;
 		}
 

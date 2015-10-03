@@ -31,7 +31,6 @@ namespace Sqt.DbcProvider
 
 			Datasource mruDatasource = mruDatasources.Datasource[0];
 			result.DatasourceAddress = mruDatasource.Address;
-			result.DatasourcePort = mruDatasource.Port;
 			result.DatasourceComment = mruDatasource.Comment;
 
 			if ( mruDatasource.Catalogs != null && mruDatasource.Catalogs.Count != 0 ) {
@@ -73,7 +72,6 @@ namespace Sqt.DbcProvider
 					Datasource newFirstDatasource = new Datasource()
 					{
 						Address = mruParameter.DatasourceAddress,
-						Port = mruParameter.DatasourcePort,
 						Comment = mruParameter.DatasourceComment
 					};
 					datasources.Add( newFirstDatasource );
@@ -89,7 +87,7 @@ namespace Sqt.DbcProvider
 
 			// Add all previously used datasources 
 			IEnumerable<Datasources> otherDatasources = mruConnections.Datasources;
-			foreach( Datasources mruDatasources in otherDatasources ) {
+			foreach ( Datasources mruDatasources in otherDatasources ) {
 				if ( newMruDatasources.Count >= MaxMruEntries )
 					break;
 
@@ -122,7 +120,7 @@ namespace Sqt.DbcProvider
 			if ( providerDatasources.Datasource == null || providerDatasources.Datasource.Count == 0 )
 				return;
 
-			Datasource mruDatasource = providerDatasources.FindDatasourceByAddress( datasource.Address, datasource.Port );
+			Datasource mruDatasource = providerDatasources.FindDatasourceByAddress( datasource.Address );
 			if ( mruDatasource == null || mruDatasource.Catalogs == null )
 				return;
 
@@ -161,7 +159,7 @@ namespace Sqt.DbcProvider
 			if ( providerDatasources.Datasource == null || providerDatasources.Datasource.Count == 0 )
 				return;
 
-			Datasource mruDatasource = providerDatasources.FindDatasourceByAddress( datasource.Address, datasource.Port );
+			Datasource mruDatasource = providerDatasources.FindDatasourceByAddress( datasource.Address );
 			if ( mruDatasource == null || mruDatasource.Authentications == null )
 				return;
 

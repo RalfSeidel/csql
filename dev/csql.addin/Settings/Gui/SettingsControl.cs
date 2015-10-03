@@ -80,7 +80,6 @@ namespace csql.addin.Settings.Gui
 			var datasource = datasources.Datasource[0];
 			parameter.DatasourceComment = datasource.Comment;
 			parameter.DatasourceAddress = datasource.Address;
-			parameter.DatasourcePort = datasource.Port;
 			SelectMruDatasourceParameter( parameter, datasource );
 		}
 
@@ -97,7 +96,6 @@ namespace csql.addin.Settings.Gui
 			parameter.Provider = provider;
 			parameter.DatasourceComment = datasource.Comment;
 			parameter.DatasourceAddress = datasource.Address;
-			parameter.DatasourcePort = datasource.Port;
 			SelectMruDatasourceParameter( parameter, datasource );
 		}
 
@@ -107,14 +105,13 @@ namespace csql.addin.Settings.Gui
 				return;
 
 			var provider = parameter.Provider;
-			var datasource = mruConnection.FindDatasourceByAddress( provider, parameter.DatasourceAddress, parameter.DatasourcePort );
+			var datasource = mruConnection.FindDatasourceByAddress( provider, parameter.DatasourceAddress );
 			if ( datasource == null )
 				return;
 
 			parameter.Provider = provider;
 			parameter.DatasourceComment = datasource.Comment;
 			parameter.DatasourceAddress = datasource.Address;
-			parameter.DatasourcePort = datasource.Port;
 			SelectMruDatasourceParameter( parameter, datasource );
 		}
 
@@ -148,7 +145,7 @@ namespace csql.addin.Settings.Gui
 			if ( this.mruConnections == null )
 				return null;
 
-			Datasource datasource = mruConnections.FindDatasourceByAddress( dbConnectionParameter.Provider, dbConnectionParameter.DatasourceAddress, dbConnectionParameter.DatasourcePort );
+			Datasource datasource = mruConnections.FindDatasourceByAddress( dbConnectionParameter.Provider, dbConnectionParameter.DatasourceAddress );
 			return datasource;
 		}
 
@@ -177,7 +174,8 @@ namespace csql.addin.Settings.Gui
 		{
 			if ( this.Visible ) {
 				ReloadSettings();
-			} else {
+			}
+			else {
 				this.editorObjects.DataSource = null;
 				this.propertyGrid.SelectedObject = null;
 				this.reloadSettings = true;
@@ -239,7 +237,7 @@ namespace csql.addin.Settings.Gui
 		/// <summary>
 		/// Start a time that will defer the updates a bit deferred.
 		/// </summary>
-		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification="The timer is stoped after it eplapsed for the first time." )]
+		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer is stoped after it eplapsed for the first time." )]
 		private void DbConnectionParameter_PropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			if ( this.ignoreParameterPropertyChanges )
@@ -247,7 +245,8 @@ namespace csql.addin.Settings.Gui
 
 			if ( this.dbConnectionParameterChangedTimer == null ) {
 				dbConnectionParameterChangedTimer = new Timer();
-			} else {
+			}
+			else {
 				dbConnectionParameterChangedTimer.Stop();
 			}
 			dbConnectionParameterChangedTimer.Interval = 100;
@@ -336,12 +335,13 @@ namespace csql.addin.Settings.Gui
 		/// <summary>
 		/// Starts a timer that will save the changes a short while after the user made the modification.
 		/// </summary>
-		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification="Timer is stoped when it ellapsed for the first time." )]
+		[SuppressMessage( "Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Timer is stoped when it ellapsed for the first time." )]
 		private void PropertyGrid_PropertyValueChanged( object s, PropertyValueChangedEventArgs e )
 		{
 			if ( this.saveChangesTimer != null ) {
 				this.saveChangesTimer.Stop();
-			} else {
+			}
+			else {
 				this.saveChangesTimer = new Timer();
 			}
 
@@ -418,7 +418,7 @@ namespace csql.addin.Settings.Gui
 			copiedScriptParameter.Name = GetScriptParameterName( currentScriptParameter );
 			this.scriptParameters.Add( copiedScriptParameter );
 			this.scriptParameters.Current = copiedScriptParameter;
-			
+
 			var comboBoxItem = new SelectedScriptParameterComboBoxItem( copiedScriptParameter );
 			this.editorObjectComboItems.Add( comboBoxItem );
 			this.editorObjects.SelectedItem = comboBoxItem;
@@ -480,7 +480,8 @@ namespace csql.addin.Settings.Gui
 			if ( editorObjectComboItems.Count > 0 ) {
 				this.editorObjects.SelectedIndex = 0;
 				this.propertyGrid.SelectedObject = editorObjectComboItems[0].EditorObject;
-			} else {
+			}
+			else {
 				this.editorObjects.SelectedIndex = -1;
 				this.propertyGrid.SelectedObject = null;
 			}
@@ -565,7 +566,7 @@ namespace csql.addin.Settings.Gui
 			/// <summary>
 			/// Raises the property changed event.
 			/// </summary>
-			[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification="The method is a wrapper to raise the event." )]
+			[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "The method is a wrapper to raise the event." )]
 			protected void RaisePropertyChanged( string propertyName )
 			{
 				if ( PropertyChanged != null ) {
@@ -594,19 +595,19 @@ namespace csql.addin.Settings.Gui
 			internal SelectedScriptParameterComboBoxItem( ScriptParameter scriptParameter )
 				: base( scriptParameter )
 			{
-				scriptParameter.PropertyChanged+=ScriptParameter_PropertyChanged;
+				scriptParameter.PropertyChanged += ScriptParameter_PropertyChanged;
 			}
 
 			public override string Name
 			{
-				get 
+				get
 				{
 					ScriptParameter parameter = (ScriptParameter)EditorObject;
-					return "Script Parameter " + parameter.Name + (this.isCurrent ? " *" : string.Empty); 
+					return "Script Parameter " + parameter.Name + (this.isCurrent ? " *" : string.Empty);
 				}
 			}
 
-			internal bool IsCurrent 
+			internal bool IsCurrent
 			{
 				get { return this.isCurrent; }
 				set

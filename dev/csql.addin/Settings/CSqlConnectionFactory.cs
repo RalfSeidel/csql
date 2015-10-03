@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data.Common;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
-using EnvDTE;
 using System.Diagnostics.CodeAnalysis;
+using EnvDTE;
 
 namespace csql.addin.Settings
 {
@@ -13,10 +11,10 @@ namespace csql.addin.Settings
 	/// Sample to create a database connection based on the connection parameters
 	/// configured in the csql addin.
 	/// </summary>
-	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification="Derived from product name."  )]
+	[SuppressMessage( "Microsoft.Naming", "CA1722:IdentifiersShouldNotHaveIncorrectPrefix", Justification = "Derived from product name." )]
 	public static class CSqlConnectionFactory
 	{
-		private const string defaultProviderName = "System.Data.SqlClient";
+		private const string DefaultProviderName = "System.Data.SqlClient";
 
 		/// <summary>
 		/// Gets the name of the visual studio variable name where csql stores the current 
@@ -102,18 +100,8 @@ namespace csql.addin.Settings
 		/// <returns><c>true</c> if the connection string was found. <c>false</c> if not.</returns>
 		private static bool TryGetConnectionProviderFomGlobals( _DTE application, out string connectionProvider )
 		{
-			Globals globals = application.Globals;
-			string variableName = CSqlConnectionProviderVariableName;
-			if ( globals.get_VariableExists( variableName ) ) {
-				connectionProvider = globals[variableName].ToString();
-				return true;
-			}
-			else {
-				connectionProvider = null;
-				return false;
-			}
+			return TryGetGlobalStringString( application, CSqlConnectionProviderVariableName, out connectionProvider );
 		}
-
 
 		/// <summary>
 		/// Tries to get the connection string from the visual studio global variable pool.
@@ -121,14 +109,26 @@ namespace csql.addin.Settings
 		/// <returns><c>true</c> if the connection string was found. <c>false</c> if not.</returns>
 		private static bool TryGetConnectionStringFromGlobals( _DTE application, out string connectionString )
 		{
+			return TryGetGlobalStringString( application, CSqlConnectionStringVariableName, out connectionString );
+		}
+
+		private static bool TryGetGlobalStringString( _DTE application, string variableName, out string value )
+		{
+			if ( application.Solution != null ) {
+				Globals solutionGlobals = application.Solution.Globals;
+				if ( solutionGlobals.get_VariableExists( variableName ) ) {
+					value = solutionGlobals[variableName].ToString();
+					return true;
+				}
+			}
+
 			Globals globals = application.Globals;
-			string variableName = CSqlConnectionStringVariableName;
 			if ( globals.get_VariableExists( variableName ) ) {
-				connectionString = globals[variableName].ToString();
+				value = globals[variableName].ToString();
 				return true;
 			}
 			else {
-				connectionString = null;
+				value = null;
 				return false;
 			}
 		}

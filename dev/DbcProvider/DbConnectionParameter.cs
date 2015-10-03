@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -10,7 +11,7 @@ namespace Sqt.DbcProvider
 	/// <summary>
 	/// Generic database base connection parameter.
 	/// </summary>
-	[DefaultProperty("DatasourceName")]
+	[DefaultProperty( "DatasourceName" )]
 	[CLSCompliant( true )]
 	[Serializable]
 	public class DbConnectionParameter : INotifyPropertyChanged
@@ -29,9 +30,6 @@ namespace Sqt.DbcProvider
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private string datasourceAddress;
-
-		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
-		private int datasourcePort;
 
 		[DebuggerBrowsable( DebuggerBrowsableState.Never )]
 		private string catalog;
@@ -93,7 +91,6 @@ namespace Sqt.DbcProvider
 		{
 			Provider = that.Provider;
 			DatasourceAddress = that.DatasourceAddress;
-			DatasourcePort = that.DatasourcePort;
 			DatasourceComment = that.DatasourceComment;
 			Catalog = that.Catalog;
 			UserId = that.UserId;
@@ -126,8 +123,8 @@ namespace Sqt.DbcProvider
 		/// </summary>
 		[Category( "Database" )]
 		[DefaultValue( ProviderType.MsSql )]
-		public ProviderType Provider 
-		{ 
+		public ProviderType Provider
+		{
 			get { return this.provider; }
 			set
 			{
@@ -151,9 +148,9 @@ namespace Sqt.DbcProvider
 			get { return datasoureComment; }
 			set
 			{
-				if ( !Object.Equals( datasoureComment, value ) ) {
-					datasoureComment = value;
-					RaisePropertyChanged( "DatasourceComment" );
+				if ( !Object.Equals( this.datasoureComment, value ) ) {
+					this.datasoureComment = value;
+					RaisePropertyChanged();
 				}
 			}
 		}
@@ -166,7 +163,7 @@ namespace Sqt.DbcProvider
 		[DisplayName( "Server" )]
 		[TypeConverter( typeof( StringLookupConverter ) )]
 		public string DatasourceAddress
-		{ 
+		{
 			get { return this.datasourceAddress; }
 			set
 			{
@@ -177,40 +174,19 @@ namespace Sqt.DbcProvider
 					return;
 
 				this.datasourceAddress = value;
-				RaisePropertyChanged( "DatasourceAddress" );
+				RaisePropertyChanged();
 			}
 		}
 
-
-		/// <summary>
-		/// When using a tcp/ip connection this property defines
-		/// the ip port to use e.g. 1433 for MS SQL Server or 1521
-		/// for Oracle.
-		/// </summary>
-		[Category( "Database" )]
-		[DisplayName( "Port" )]
-		[Description( "When using a tcp/ip connection this property defines the ip port to use e.g. 1433 for MS SQL Server or 1521 for Oracle." )]
-		[DefaultValue( 0 )]
-		public int DatasourcePort
-		{
-			get { return this.datasourcePort; }
-			set
-			{
-				if ( this.datasourcePort == value  ) 
-					return;
-				this.datasourcePort = value;
-				RaisePropertyChanged( "DatasourcePort" );
-			}
-		}
 
 		/// <summary>
 		/// The initial catalog / database.
 		/// </summary>
 		[Category( "Database" )]
 		[DisplayName( "Database" )]
-		[TypeConverter(typeof( StringLookupConverter ))]
+		[TypeConverter( typeof( StringLookupConverter ) )]
 		public string Catalog
-		{ 
+		{
 			get { return this.catalog; }
 			set
 			{
@@ -221,7 +197,7 @@ namespace Sqt.DbcProvider
 					return;
 
 				this.catalog = value;
-				RaisePropertyChanged( "Catalog" );
+				RaisePropertyChanged();
 			}
 		}
 
@@ -235,11 +211,11 @@ namespace Sqt.DbcProvider
 			get { return this.authentication.Integrated; }
 			set
 			{
-				if ( value == authentication.Integrated )
+				if ( value == this.authentication.Integrated )
 					return;
 
-				authentication.Integrated = value;
-				RaisePropertyChanged( "IntegratedSecurity" );
+				this.authentication.Integrated = value;
+				RaisePropertyChanged();
 			}
 		}
 
@@ -250,7 +226,7 @@ namespace Sqt.DbcProvider
 		[Category( "Database" )]
 		[DisplayName( "Login Name" )]
 		[TypeConverter( typeof( StringLookupConverter ) )]
-		public string UserId 
+		public string UserId
 		{
 			get { return this.authentication.UserId; }
 			set
@@ -261,8 +237,8 @@ namespace Sqt.DbcProvider
 				if ( string.Equals( this.authentication.UserId, value ) )
 					return;
 
-				authentication.UserId = value;
-				RaisePropertyChanged( "UserId" );
+				this.authentication.UserId = value;
+				RaisePropertyChanged();
 			}
 		}
 
@@ -282,8 +258,8 @@ namespace Sqt.DbcProvider
 				if ( string.Equals( this.authentication.Password, value ) )
 					return;
 
-				authentication.Password = value;
-				RaisePropertyChanged( "Password" );
+				this.authentication.Password = value;
+				RaisePropertyChanged();
 			}
 		}
 
@@ -301,7 +277,7 @@ namespace Sqt.DbcProvider
 				if ( this.timeout == value )
 					return;
 				this.timeout = value;
-				RaisePropertyChanged( "Timeout" );
+				RaisePropertyChanged();
 			}
 		}
 
@@ -319,7 +295,7 @@ namespace Sqt.DbcProvider
 		/// <summary>
 		/// The verbosity level of the traces.
 		/// </summary>
-		[Browsable(false)]
+		[Browsable( false )]
 		[XmlIgnore]
 		public TraceLevel VerbosityLevel
 		{
@@ -345,9 +321,6 @@ namespace Sqt.DbcProvider
 
 			if ( !String.IsNullOrEmpty( DatasourceAddress ) )
 				sb.Append( ", Datasource=" ).Append( DatasourceAddress );
-
-			if ( DatasourcePort > 0 )
-				sb.Append( ":" ).Append( DatasourcePort );
 
 			if ( !String.IsNullOrEmpty( DatasourceComment ) )
 				sb.Append( " (" ).Append( DatasourceComment ).Append( ")" );
@@ -387,9 +360,6 @@ namespace Sqt.DbcProvider
 			if ( !String.Equals( this.DatasourceComment, that.DatasourceComment ) )
 				return false;
 
-			if ( this.DatasourcePort != that.DatasourcePort )
-				return false;
-
 			if ( !String.Equals( this.Catalog, that.Catalog ) )
 				return false;
 
@@ -408,7 +378,6 @@ namespace Sqt.DbcProvider
 			unchecked {
 				int hashCode = Provider.GetHashCode();
 				hashCode = hashCode * 31 + (DatasourceAddress == null ? 0 : DatasourceAddress.GetHashCode());
-				hashCode = hashCode * 31 + DatasourcePort;
 				hashCode = hashCode * 31 + (DatasourceComment == null ? 0 : DatasourceComment.GetHashCode());
 				hashCode = hashCode * 31 + (Catalog == null ? 0 : Catalog.GetHashCode());
 				hashCode = hashCode * 31 + (authentication == null ? 0 : authentication.GetHashCode());
@@ -426,7 +395,7 @@ namespace Sqt.DbcProvider
 		/// Raises the property changed event.
 		/// </summary>
 		[SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "This method raises an event." )]
-		protected internal void RaisePropertyChanged( string propertyName )
+		protected internal void RaisePropertyChanged( [CallerMemberName] string propertyName = null )
 		{
 			if ( PropertyChanged != null ) {
 				PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );

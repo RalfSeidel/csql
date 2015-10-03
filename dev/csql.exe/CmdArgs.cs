@@ -47,15 +47,11 @@ namespace csql.exe
 		public ProviderType System;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[Argument( ArgumentType.Required | ArgumentType.AtMostOnce, HelpText="The server/datasource name.", ShortName="S" )]
+		[Argument( ArgumentType.Required | ArgumentType.AtMostOnce, HelpText = "The server/datasource name.", ShortName = "S" )]
 		public string Server;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[Argument( ArgumentType.AtMostOnce, HelpText = "The server IP port.", ShortName = "R" )]
-		public int ServerPort;
-
-		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification="Command line parser does not support properties." )]
-		[Argument( ArgumentType.AtMostOnce, HelpText="The initial server database/catalog.", ShortName="D" )]
+		[Argument( ArgumentType.AtMostOnce, HelpText = "The initial server database/catalog.", ShortName = "D" )]
 		public string Database;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
@@ -67,7 +63,7 @@ namespace csql.exe
 		public string Password;
 
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Command line parser does not support properties." )]
-		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification= "This attribute is for backward compatibilty only. It will be replace by codepage in future." )]
+		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "This attribute is for backward compatibilty only. It will be replace by codepage in future." )]
 		[Argument( ArgumentType.AtMostOnce, HelpText = "The character set used when creating output files. This option is deprected.", ShortName = "cs", DefaultValue = "Ansi" )]
 		public string Charset;
 
@@ -107,13 +103,12 @@ namespace csql.exe
 		/// Creates the options for the script processor.
 		/// </summary>
 		/// <returns>The options instance created based on the command line arguments provided.</returns>
-		[SecurityPermission( SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode )]
+		[SecurityPermission( SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode )]
 		public CSqlOptions CreateCsqlOptions()
 		{
 			DbConnectionParameter connectionParameter = new DbConnectionParameter();
 			connectionParameter.Provider = this.System;
 			connectionParameter.DatasourceAddress = this.Server;
-			connectionParameter.DatasourcePort = this.ServerPort;
 			connectionParameter.Catalog = this.Database;
 			connectionParameter.UserId = this.User;
 			connectionParameter.Password = this.Password;

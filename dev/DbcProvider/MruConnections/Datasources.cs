@@ -15,24 +15,12 @@ namespace Sqt.DbcProvider
 		/// The address case is irrelevant.
 		/// </param>
 		/// <param name="port">The server connection ip port or zero if not used.</param>
-		public Datasource FindDatasourceByAddress( string address, int port )
+		public Datasource FindDatasourceByAddress( string address )
 		{
 			foreach ( var ds in this.Datasource ) {
 				if ( !ds.Address.Equals( address, StringComparison.CurrentCultureIgnoreCase ) )
 					continue;
-				if ( ds.Port != port )
-					continue;
-
 				return ds;
-			}
-			// If the port number was not specified return the first entry where only the address matches.
-			if ( port == 0 ) {
-				foreach ( var ds in this.Datasource ) {
-					if ( !ds.Address.Equals( address, StringComparison.CurrentCultureIgnoreCase ) )
-						continue;
-
-					return ds;
-				}
 			}
 			return null;
 		}
