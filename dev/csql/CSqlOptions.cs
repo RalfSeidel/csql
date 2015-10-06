@@ -73,7 +73,7 @@ namespace csql
 		public string TempFile { get; set; }
 
 		/// <summary>
-		/// Option to suppress the starup logo.
+		/// Option to suppress the startup logo.
 		/// </summary>
 		/// <value><c>true</c> if the logo is not shown; <c>false</c> otherwise.</value>
 		public bool NoLogo { get; set; }
@@ -118,8 +118,8 @@ namespace csql
 		/// <summary>
 		/// Options for the preprocessor sqtpp.
 		/// </summary>
-		public SqtppOptions PreprocessorOptions 
-		{ 
+		public SqtppOptions PreprocessorOptions
+		{
 			get { return this.preprocessorOptions; }
 			set { this.preprocessorOptions = value; }
 		}

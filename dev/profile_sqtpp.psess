@@ -63,6 +63,11 @@
       </PostinstrumentEvent>
     </Binary>
   </Binaries>
+  <Reports>
+    <Report>
+      <Path>bin\Release\sqtpp.vsp</Path>
+    </Report>
+  </Reports>
   <Launches>
     <Binary>
       <Path>bin\Release\sqtpp.exe</Path>

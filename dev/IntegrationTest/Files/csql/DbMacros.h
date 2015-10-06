@@ -2,7 +2,7 @@
 /**
 ** @file
 ** <copyright file="DbMacros.h" company="SQL Service GmbH">
-** Copyright (c) SQL Service GmbH. All rights reserved.
+** Copyright (c) SQL Service GmbH.  All rights reserved.
 ** </copyright>
 ** <summary>
 ** Common helper macros for MS Transact SQL Scripts / Sample macro
@@ -11,7 +11,7 @@
 **
 ** <remarks>
 ** This file can be included several times. Depending on the
-** definitions in the including script the helpers are defined in 
+** definitions in the including script the helpers are defined in
 ** different ways.
 ** </remarks>
 **
@@ -368,6 +368,7 @@
 #undef CSQL_DROP_INDEXES
 #undef CSQL_DROP_TRIGGERS
 #undef CSQL_DROP_VIEWS
+#undef CSQL_DROP_ASSEMBLIES
 #undef CSQL_DROP_PROCEDURES
 #undef CSQL_DROP_FUNCTIONS
 #undef CSQL_DROP_SYNONYMS
@@ -387,6 +388,7 @@
 #undef CSQL_CREATE_INDEXES
 #undef CSQL_CREATE_TRIGGERS
 #undef CSQL_CREATE_VIEWS
+#undef CSQL_CREATE_ASSEMBLIES
 #undef CSQL_CREATE_PROCEDURES
 #undef CSQL_CREATE_FUNCTIONS
 #undef CSQL_CREATE_SYNONYMS
@@ -413,31 +415,32 @@
 ** to drop and create everything.
 */
 
-#if !( defined( CSQL_CREATE_ALL )             || defined( CSQL_CREATE_ALL_BUT_TABLES ) \
-    || defined( CSQL_CREATE_DATABASES )       || defined( CSQL_CREATE_SCHEMAS ) \
-    || defined( CSQL_CREATE_DEFAULTS  )       || defined( CSQL_CREATE_RULES  ) \
-    || defined( CSQL_CREATE_TYPES )           || defined( CSQL_CREATE_TABLES ) \
-    || defined( CSQL_CREATE_PRIMARY_KEYS )    || defined( CSQL_CREATE_FOREIGN_KEYS )  \
-    || defined( CSQL_CREATE_PKEYS )           || defined( CSQL_CREATE_FKEYS )  \
-    || defined( CSQL_CREATE_INDEXES )         || defined( CSQL_CREATE_TRIGGERS ) \
-    || defined( CSQL_CREATE_VIEWS )           || defined( CSQL_CREATE_PROCEDURES ) \
-    || defined( CSQL_CREATE_FUNCTIONS )       || defined( CSQL_CREATE_SYNONYMS ) \
-    || defined( CSQL_GRANT_ALL ) \
-    || defined( CSQL_GRANT_TABLES )           || defined( CSQL_GRANT_VIEWS ) \
-    || defined( CSQL_GRANT_PROCEDURES )       || defined( CSQL_GRANT_FUNCTIONS ) \
-    || defined( CSQL_INSERT_DEFAULT_DATA ) \
-    || defined( CSQL_DELETE_DICTIONARY_DATA ) || defined( CSQL_INSERT_DICTIONARY_DATA ) \
-    || defined( CSQL_EXECUTE_TESTS ) \
-    || defined( CSQL_DROP_ALL ) \
+#if !( defined(CSQL_CREATE_ALL)             || defined(CSQL_CREATE_ALL_BUT_TABLES) \
+    || defined( CSQL_CREATE_DATABASES )     || defined( CSQL_CREATE_SCHEMAS ) \
+    || defined(CSQL_CREATE_ASSEMBLIES) \
+    || defined(CSQL_CREATE_DEFAULTS )       || defined(CSQL_CREATE_RULES ) \
+    || defined(CSQL_CREATE_TYPES)           || defined(CSQL_CREATE_TABLES) \
+    || defined(CSQL_CREATE_PRIMARY_KEYS)    || defined(CSQL_CREATE_FOREIGN_KEYS)  \
+    || defined(CSQL_CREATE_PKEYS)           || defined(CSQL_CREATE_FKEYS)  \
+    || defined(CSQL_CREATE_INDEXES)         || defined(CSQL_CREATE_TRIGGERS) \
+    || defined(CSQL_CREATE_VIEWS)           || defined(CSQL_CREATE_PROCEDURES) \
+    || defined(CSQL_CREATE_FUNCTIONS)       || defined(CSQL_CREATE_SYNONYMS) \
+    || defined(CSQL_GRANT_ALL) \
+    || defined(CSQL_GRANT_TABLES)           || defined(CSQL_GRANT_VIEWS) \
+    || defined(CSQL_GRANT_PROCEDURES)       || defined(CSQL_GRANT_FUNCTIONS) \
+    || defined(CSQL_INSERT_DEFAULT_DATA) \
+	|| defined(CSQL_DELETE_DICTIONARY_DATA) || defined(CSQL_INSERT_DICTIONARY_DATA) \
+    || defined(CSQL_EXECUTE_TESTS)   \
+    || defined(CSQL_DROP_ALL) \
     || defined( CSQL_DROP_DATABASES )         || defined( CSQL_DROP_SCHEMAS ) \
-    || defined( CSQL_DROP_DEFAULTS )          || defined( CSQL_DROP_RULES ) \
-    || defined( CSQL_DROP_TYPES )             || defined( CSQL_DROP_TABLES ) \
-    || defined( CSQL_DROP_PRIMARY_KEYS )      || defined( CSQL_DROP_FOREIGN_KEYS )  \
-    || defined( CSQL_DROP_PKEYS )             || defined( CSQL_DROP_FKEYS )  \
-    || defined( CSQL_DROP_INDEXES )           || defined( CSQL_DROP_TRIGGERS ) \
-    || defined( CSQL_DROP_VIEWS )             || defined( CSQL_DROP_PROCEDURES ) \
-    || defined( CSQL_DROP_FUNCTIONS )         || defined( CSQL_DROP_SYNONYMS ) )
-
+    || defined(CSQL_DROP_ASSEMBLIES) \
+    || defined(CSQL_DROP_DEFAULTS)          || defined(CSQL_DROP_RULES) \
+    || defined(CSQL_DROP_TYPES)             || defined(CSQL_DROP_TABLES) \
+    || defined(CSQL_DROP_PRIMARY_KEYS)      || defined(CSQL_DROP_FOREIGN_KEYS)  \
+    || defined(CSQL_DROP_PKEYS)             || defined(CSQL_DROP_FKEYS)  \
+    || defined(CSQL_DROP_INDEXES)           || defined(CSQL_DROP_TRIGGERS) \
+    || defined(CSQL_DROP_VIEWS)             || defined(CSQL_DROP_PROCEDURES) \
+    || defined(CSQL_DROP_FUNCTIONS)         || defined(CSQL_DROP_SYNONYMS))
 #define CSQL_CREATE_ALL
 #define CSQL_DROP_ALL
 #define CSQL_DROP_CREATE
@@ -450,7 +453,7 @@
 
 
 /*
-** Alles einspielen? Dann die ensprechenden defines setzten.
+** Alles einspielen? Dann die ensprechenden defines setzen.
 */
 
 #if defined( CSQL_CREATE_ALL ) || defined( CSQL_CREATE_ALL_BUT_TABLES )
@@ -470,9 +473,9 @@
 #undef CSQL_CREATE_PROCEDURES
 #undef CSQL_CREATE_FUNCTIONS
 #undef CSQL_CREATE_SYNONYMS
+#undef CSQL_CREATE_ASSEMBLIES
 
 #ifdef CSQL_CREATE_ALL_BUT_TABLES
-#define CSQL_CREATE_SCHEMAS      CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_DEFAULTS     CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_RULES        CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_TYPES        CSQL_CREATE_ALL_BUT_TABLES
@@ -484,6 +487,7 @@
 #define CSQL_CREATE_PROCEDURES   CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_FUNCTIONS    CSQL_CREATE_ALL_BUT_TABLES
 #define CSQL_CREATE_SYNONYMS     CSQL_CREATE_ALL_BUT_TABLES
+#define CSQL_CREATE_ASSEMBLIES   CSQL_CREATE_ALL_BUT_TABLES
 #else
 #define CSQL_CREATE_DATABASES    CSQL_CREATE_ALL
 #define CSQL_CREATE_SCHEMAS      CSQL_CREATE_ALL
@@ -499,6 +503,7 @@
 #define CSQL_CREATE_PROCEDURES   CSQL_CREATE_ALL
 #define CSQL_CREATE_FUNCTIONS    CSQL_CREATE_ALL
 #define CSQL_CREATE_SYNONYMS     CSQL_CREATE_ALL
+#define CSQL_CREATE_ASSEMBLIES   CSQL_CREATE_ALL
 #endif
 #endif // CSQL_CREATE_ALL
 
@@ -519,6 +524,7 @@
 #undef CSQL_DROP_PROCEDURES
 #undef CSQL_DROP_FUNCTIONS
 #undef CSQL_DROP_SYNONYMS
+#undef CSQL_DROP_ASSEMBLIES
 #endif // defined( CSQL_DROP_ALL ) || defined( CSQL_DROP_CREATE )
 
 
@@ -566,6 +572,9 @@
 #ifdef CSQL_CREATE_SYNONYMS
 #define CSQL_DROP_SYNONYMS     CSQL_CREATE_SYNONYMS
 #endif
+#ifdef CSQL_CREATE_ASSEMBLIES
+#define CSQL_DROP_ASSEMBLIES   CSQL_CREATE_ASSEMBLIES
+#endif
 
 
 #elif defined( CSQL_DROP_ALL ) || defined( CSQL_DROP_ALL_BUT_TABLES )
@@ -588,6 +597,7 @@
 #define CSQL_DROP_PROCEDURES   CSQL_DROP_ALL
 #define CSQL_DROP_FUNCTIONS    CSQL_DROP_ALL
 #define CSQL_DROP_SYNONYMS     CSQL_DROP_ALL
+#define CSQL_DROP_ASSEMBLIES   CSQL_DROP_ALL
 
 #endif // CSQL_DROP_ALL
 
@@ -634,6 +644,7 @@
 /*
 ** Redefine all helper macros.
 */
+#undef CSQL_CONCATE
 #undef CSQL_SET_CATALOG
 #undef CSQL_DROP_DEFAULT
 #undef CSQL_DROP_TYPE
@@ -650,6 +661,9 @@
 #undef CSQL_DROP_LOGIN
 #undef CSQL_DROP_PRIMARY_KEY
 #undef CSQL_DROP_FOREIGN_KEY
+#undef CSQL_DROP_ALL_FOREIGN_KEYS
+#undef CSQL_DROP_REFERENCING_KEYS
+#undef CSQL_DISABLE_ALL_FOREIGN_KEYS
 #undef CSQL_DROP_PK_CONSTRAINT
 #undef CSQL_DROP_FK_CONSTRAINT
 #undef CSQL_DROP_UNIQUE_CONSTRAINT
@@ -674,6 +688,13 @@
 
 /// @ingroup Action
 /// <summary>
+/// Concate to expressions to a string.
+/// </summary>
+#define CSQL_CONCATE( A, B ) A ## B
+
+
+/// @ingroup Action
+/// <summary>
 /// Macro to change the current database/catalog.
 /// </summary>
 #define CSQL_SET_CATALOG( C ) if db_name() != __QUOTE( C ) use C;
@@ -683,8 +704,6 @@
 /// Prints a message at the start of an SQL script.
 ///</summary>
 #define CSQL_PRINT_ENTER_SCRIPT \
-set quoted_identifier, ansi_padding off \
-set concat_null_yields_null, ansi_warnings, ansi_nulls on \
 print '*** Enter script: ' ##__FILE__ ##' ***' \
 print '*** Context: ' + @@servername + '.' + db_name() + ' ***'
 
@@ -843,10 +862,18 @@ end
 #define CSQL_DROP_DEFAULT( X ) \
 if exists ( select 1 from sys.objects where type = 'D' and object_id = object_id( #@X ) ) \
 begin \
-	declare @SqlStmt nvarchar( max ) \
-	set @SqlStmt = 'drop default ' + #@X \
-	print @SqlStmt \
-	exec( @SqlStmt ) \
+	declare @DefaultId int = object_id( #@X ) \
+	      , @MsgText nvarchar(max) \
+	      , @SqlStmt nvarchar(max); \
+	select top 1 @MsgText = 'Can''t drop the default ' + #@X + ' because it is still bound to ' + object_schema_name(object_id) + '.' + object_name(object_id) + '.' + name from sys.columns where default_object_id = @DefaultId; \
+	if @MsgText is not null \
+		print @MsgText; \
+		else \
+	begin \
+		set @SqlStmt = 'drop default ' + #@X; \
+		print @SqlStmt; \
+		exec( @SqlStmt ); \
+	end \
 end
 #else  // !CSQL_DROP_DEFAULTS
 #define CSQL_DROP_DEFAULT(X)
@@ -950,11 +977,11 @@ end
 #ifdef CSQL_DROP_TYPES
 #define CSQL_DROP_TYPE( X ) \
 if exists ( select 1 from sys.types where name = parsename( #@X, 1 ) and is_user_defined = 1 ) \
-begin \
+	begin \
 	declare @SqlStmt nvarchar( max ) \
-	set @SqlStmt = 'drop type ' + #@X \
-	print @SqlStmt \
-	exec( @SqlStmt ) \
+		set @SqlStmt = 'drop type ' + #@X \
+		print @SqlStmt \
+		exec( @SqlStmt ) \
 end
 #else  // !CSQL_DROP_TYPES
 #define CSQL_DROP_TYPE(X)
@@ -970,10 +997,8 @@ end
 /// </param>
 #ifdef CSQL_DROP_TABLES
 #define CSQL_DROP_TABLE(X) \
-if exists (select 1 from sys.objects where type ='U' and object_id = object_id( #@X ) ) \
+if object_id( #@X, 'U' ) is not null \
 begin \
-if exists (select 1 from sys.objects where type ='P' and object_id = object_id( 'dbo.pUtilDropRefKeys' ) ) \
-	exec dbo.pUtilDropRefKeys #@X, 1 \
 print 'drop table ' + #@X \
 drop table X \
 end
@@ -1074,16 +1099,54 @@ alter view X
 /// <param name="X">
 /// The (schema qualified) name of the procedure.
 /// </param>
-#ifdef CSQL_DROP_PROCEDURES
+#if defined( CSQL_DROP_PROCEDURES ) || defined( CSQL_DROP_ASSEMBLIES )
 #define CSQL_DROP_PROCEDURE(X) \
-if exists (select 1 from sys.objects where type ='P' and object_id = object_id(#@X) ) \
+if exists (select 1 from sys.objects where type in ( 'P', 'PC' ) and object_id = object_id(#@X) ) \
 begin \
 print 'drop procedure ' + #@X \
 drop procedure X \
 end
-#else  // !CSQL_DROP_PROCEDURES
+#else  // !CSQL_DROP_PROCEDURES && !CSQL_DROP_ASSEMBLIES
 #define CSQL_DROP_PROCEDURE(X)
-#endif // CSQL_DROP_PROCEDURES
+#endif // CSQL_DROP_PROCEDURES || CSQL_DROP_ASSEMBLIES
+
+
+/// @ingroup Action
+/// <summary>
+/// Macro to drop an assembly if it exists.
+/// </summary>
+/// <param name="X">
+/// The (schema qualified) name of the assembly.
+/// </param>
+#ifdef CSQL_DROP_ASSEMBLIES
+#define CSQL_DROP_ASSEMBLY(X) \
+if exists ( select * from sys.assemblies where name = #@X ) \
+begin \
+print 'drop assembly ' + #@X \
+drop assembly [X] \
+end
+#else  // !CSQL_DROP_ASSEMBLIES
+#define CSQL_DROP_ASSEMBLY(X)
+#endif // CSQL_DROP_ASSEMBLIES
+
+
+/// @ingroup Action
+/// <summary>
+/// Macro to drop an aggregate if it exists.
+/// </summary>
+/// <param name="X">
+/// The (schema qualified) name of the function.
+/// </param>
+#ifdef CSQL_DROP_ASSEMBLIES
+#define CSQL_DROP_AGGREGATE(X) \
+if exists (select 1 from sys.objects where type = 'AF' and object_id = object_id(#@X) ) \
+begin \
+print 'drop aggregate ' + #@X \
+drop aggregate X \
+end
+#else  // !CSQL_DROP_ASSEMBLIES
+#define CSQL_DROP_AGGREGATE(X)
+#endif // CSQL_DROP_ASSEMBLIES
 
 
 /// @ingroup Action
@@ -1097,10 +1160,10 @@ end
 if not exists (select 1 from sys.objects where type ='P' and object_id = object_id(#@X)) \
 begin \
 	print 'create procedure ' + #@X \
-	exec( 'create procedure ' + #@X + ' as raiserror 50000 ''Forward implementation only''') \
-	end \
-	else \
-	begin \
+	exec( 'create procedure ' + #@X + ' as raiserror (''Forward implementation only'', 16, 1)') \
+end \
+else \
+begin \
 	print 'alter procedure ' + #@X \
 end \
 go \
@@ -1114,16 +1177,16 @@ alter procedure X
 /// <param name="X">
 /// The (schema qualified) name of the function.
 /// </param>
-#ifdef CSQL_DROP_FUNCTIONS
+#if defined( CSQL_DROP_FUNCTIONS ) || defined( CSQL_DROP_ASSEMBLIES )
 #define CSQL_DROP_FUNCTION(X) \
-if exists (select 1 from sys.objects where type in ('FN', 'IF', 'TF') and object_id = object_id(#@X) ) \
+if exists (select 1 from sys.objects where type in ('FN', 'IF', 'TF', 'FS', 'FT') and object_id = object_id(#@X) ) \
 begin \
 print 'drop function ' + #@X \
 drop function X \
 end
-#else  // !CSQL_DROP_FUNCTIONS
+#else  // !CSQL_DROP_FUNCTIONS && !CSQL_DROP_ASSEMBLIES
 #define CSQL_DROP_FUNCTION(X)
-#endif // CSQL_DROP_FUNCTIONS
+#endif // CSQL_DROP_FUNCTIONS || CSQL_DROP_ASSEMBLIES
 
 
 /// @ingroup Action
@@ -1222,12 +1285,34 @@ alter function X
 #define CSQL_DROP_SYNONYM(X) \
 if exists (select 1 from sys.objects where type = 'SN' and object_id = object_id(#@X) ) \
 begin \
-print 'drop synonym ' + #@X \
-drop synonym X \
+	print 'drop synonym ' + #@X \
+	drop synonym X \
 end
 #else  // !CSQL_DROP_SYNONYMS
 #define CSQL_DROP_SYNONYM(X)
 #endif // CSQL_DROP_SYNONYMS
+
+
+/// @ingroup Action
+/// <summary>
+/// Macro to create a synonym if it doesn't exists.
+/// </summary>
+/// <param name="ALIAS">
+/// The (schema qualified) name of the synonym.
+/// </param>
+/// <param name="TARGET">
+/// The (schema qualified) name of the synonym target.
+/// </param>
+#ifdef CSQL_CREATE_SYNONYMS
+#define CSQL_CREATE_SYNONYM( ALIAS, TARGET ) \
+if object_id( #@ALIAS, 'SN' ) is null \
+begin \
+	print 'create synonym ' + #@ALIAS + ' for ' + #@TARGET \
+	create synonym ALIAS for TARGET \
+end
+#else  // !CSQL_CREATE_SYNONYMS
+#define CSQL_CREATE_SYNONYM( ALIAS, TARGET )
+#endif // CSQL_CREATE_SYNONYMS
 
 
 /// @ingroup Action
@@ -1257,7 +1342,7 @@ end
 /// </param>
 #ifdef CSQL_DROP_TRIGGERS
 #define CSQL_DROP_ALL_TRIGGERS( X ) \
-declare c cursor local forward_only for \
+declare c cursor local fast_forward for \
 	select 'drop trigger ' + schema_name( o.schema_id ) + '.' + o.name \
 	  from sys.objects o \
 	 where o.parent_object_id = object_id( #@X ) \
@@ -1446,6 +1531,104 @@ end
 
 /// @ingroup Action
 /// <summary>
+/// Macro to drop a foreign key constraint specified by its (qualified) name.
+/// </summary>
+/// <param name="X">
+/// The (schema qualified) name of the constraint.
+/// </param>
+/// @example DropForeignKey.csql
+#ifdef CSQL_CREATE_FOREIGN_KEYS
+
+#define CSQL_CREATE_FK_CONSTRAINT( FK_TAB_NAME, FK_COL_NAME, PK_TAB_NAME ) \
+begin \
+	declare @SqlStmt varchar(max), @MsgText varchar(max)\
+	if object_id( #@PK_TAB_NAME, 'SN' ) is not null\
+	begin\
+		set @MsgText = 'Create foreign key ' + #@FK_TAB_NAME + ' -> ' + #@PK_TAB_NAME + ' skipped because '+ #@PK_TAB_NAME + ' is a synonym.';\
+		print @MsgText;\
+	end\
+		else\
+	begin\
+		set @SqlStmt = 'alter table '+ #@FK_TAB_NAME +' add constraint '\
+					+ #@FK_COL_NAME + ' foreign key('+ #@FK_COL_NAME+') references ' + #@PK_TAB_NAME\
+		set @MsgText = 'Create foreign key '+#@FK_TAB_NAME +' -> '+#@PK_TAB_NAME\
+		print @MsgText\
+		exec (@SqlStmt)\
+	end\
+end
+
+#define CSQL_CREATE_FK_CONSTRAINT_D( FK_TAB_NAME, FK_COL_NAME, PK_TAB_NAME ) \
+begin \
+	declare @SqlStmt varchar(max), @MsgText varchar(max)\
+	if object_id( #@PK_TAB_NAME, 'SN' ) is not null\
+	begin\
+		set @MsgText = 'Create foreign key ' + #@FK_TAB_NAME + ' -> ' + #@PK_TAB_NAME + ' skipped because '+ #@PK_TAB_NAME + ' is a synonym.';\
+		print @MsgText;\
+	end\
+		else\
+	begin\
+		set @SqlStmt = 'alter table '+ #@FK_TAB_NAME +' add constraint '\
+					+ #@FK_COL_NAME + ' foreign key('+ #@FK_COL_NAME+') references ' + #@PK_TAB_NAME + ' on delete cascade'\
+		set @MsgText = 'Create foreign key '+#@FK_TAB_NAME +' -> '+#@PK_TAB_NAME\
+		print @MsgText\
+		exec (@SqlStmt)\
+	end\
+end
+
+#define CSQL_CREATE_FK_CONSTRAINT_N( FK_TAB_NAME, FK_COL_NAME, PK_TAB_NAME ) \
+begin \
+	declare @SqlStmt varchar(max), @MsgText varchar(max)\
+	if object_id( #@PK_TAB_NAME, 'SN' ) is not null\
+	begin\
+		set @MsgText = 'Create foreign key ' + #@FK_TAB_NAME + ' -> ' + #@PK_TAB_NAME + ' skipped because '+ #@PK_TAB_NAME + ' is a synonym.';\
+		print @MsgText;\
+	end\
+		else\
+	begin\
+		set @SqlStmt = 'alter table '+ #@FK_TAB_NAME +' add constraint '\
+					+ #@FK_COL_NAME + ' foreign key('+ #@FK_COL_NAME+') references ' + #@PK_TAB_NAME +' on delete set null';\
+		set @MsgText = ' create foreign key '+#@FK_TAB_NAME +' -> '+#@PK_TAB_NAME\
+		print @MsgText;\
+		exec (@SqlStmt);\
+	end\
+end
+
+
+
+/* Bitset Foreign Key */
+#define CSQL_CREATE_FKBS_CONSTRAINT( FK_TAB_NAME, FK_COL_NAME, PK_TAB_NAME) \
+	exec dbo.PUtilCreateBitsetReferenceConstraint #@FK_TAB_NAME, #@FK_COL_NAME, #@PK_TAB_NAME
+
+
+
+
+
+
+#define CSQL_CREATE_OBJECT_CONSTRAINT(FK_TAB_NAME, FK_COL_NAME, FK_CLS_ID) \
+exec dbo.PUtilCreateObjectReferenceConstraint  @RefTableQualName = #@FK_TAB_NAME \
+                                              ,@RefTableColumName= #@FK_COL_NAME \
+											  ,@RefTableClsId	 = 	FK_CLS_ID \
+											  ,@ObjTableSchemaName= SQAF_OBJECT_SCHEMA \
+											  ,@ObjTableTableName = SQAF_OBJECT_TABLE \
+											  ,@ObjTableKeyColName= SQAF_OBJECT_KEY \
+											  ,@ObjTableClsColName= SQAF_OBJECT_CLASS \
+											  ,@ObjTableTsColName = SQAF_OBJECT_TS \
+
+
+#else // !CSQL_CREATE_FOREIGN_KEYS
+#define CSQL_CREATE_FK_CONSTRAINT( FKTAB_NAME, FKCOL_NAME, PKTABNAME )
+#define CSQL_CREATE_FK_CONSTRAINT_D( FKTAB_NAME, FKCOL_NAME, PKTABNAME )
+#define CSQL_CREATE_FK_CONSTRAINT_N( FKTAB_NAME, FKCOL_NAME, PKTABNAME )
+#define CSQL_CREATE_FKBS_CONSTRAINT( FK_TAB_NAME, FK_COL_NAME, PK_TAB_NAME) 
+#define CSQL_CREATE_OBJECT_CONSTRAINT(FK_TAB_NAME, FK_COL_NAME, FK_CLS_ID)
+
+#endif // CSQL_CREATE_FOREIGN_KEYS
+
+
+
+
+/// @ingroup Action
+/// <summary>
 /// Macro to drop a foreign key constraint specified the table
 /// that defines the key and the referenced table.
 /// </summary>
@@ -1482,27 +1665,61 @@ end
 /// @example DropAllForeignKeys.csql
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_ALL_FOREIGN_KEYS( Detail ) \
-declare c cursor local forward_only for \
-	select ' drop constraint ' + #@Detail + '.' + k.name \
-	     , 'alter table ' + #@Detail \
-	     + ' drop constraint ' + k.name \
-	  from sys.foreign_keys k \
-	 where k.parent_object_id = object_id( #@Detail ) \
-declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
-open c \
-fetch c into @Message, @SqlStmt \
-while @@fetch_status = 0 \
 begin \
-	print @Message \
-	exec( @SqlStmt ) \
+	declare c cursor local fast_forward for \
+		select ' drop constraint ' + #@Detail + '.' + k.name \
+			 , 'alter table ' + #@Detail \
+			 + ' drop constraint ' + k.name \
+		  from sys.foreign_keys k \
+		 where k.parent_object_id = object_id( #@Detail ) \
+	declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
+	open c \
 	fetch c into @Message, @SqlStmt \
-end \
-close c \
-deallocate c 
+		while @@fetch_status = 0 \
+	begin \
+		print @Message \
+		exec( @SqlStmt ) \
+		fetch c into @Message, @SqlStmt \
+	end \
+	close c \
+	deallocate c \
+end
 #else // !CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_ALL_FOREIGN_KEYS( Detail )
 #endif // CSQL_DROP_FOREIGN_KEYS
 
+
+/// @ingroup Action
+/// <summary>
+/// Disable all foreign key constraints defined for the specified table.
+/// </summary>
+/// <param name="Detail">
+/// The qualified name of the table for which the constraints are defined.
+/// </param>
+#ifdef CSQL_DROP_FOREIGN_KEYS
+#define CSQL_DISABLE_ALL_FOREIGN_KEYS( Detail ) \
+begin \
+	declare c cursor local fast_forward for \
+		select 'disable constraint ' + #@Detail + '.' + k.name \
+			 , 'alter table ' + #@Detail + ' check constraint '+ k.name \
+		  from sys.foreign_keys k \
+		 where k.parent_object_id = object_id( #@Detail ) \
+		   and k.is_disabled = 0 \
+	declare @DisableMsgText nvarchar(max), @DisableSqlStmt nvarchar(max) \
+	open c \
+	fetch c into @DisableMsgText, @DisableSqlStmt; \
+				while @@fetch_status = 0 \
+	begin \
+		print @DisableMsgText; \
+		exec( @DisableSqlStmt ); \
+		fetch c into @DisableMsgText, @DisableSqlStmt; \
+	end \
+	close c; \
+	deallocate c; \
+end
+#else // !CSQL_DROP_FOREIGN_KEYS
+#define CSQL_DISABLE_ALL_FOREIGN_KEYS( Detail )
+#endif // CSQL_DROP_FOREIGN_KEYS
 
 
 /// @ingroup Action
@@ -1514,7 +1731,7 @@ deallocate c
 /// </param>
 #ifdef CSQL_DROP_FOREIGN_KEYS
 #define CSQL_DROP_REFERENCING_KEYS( Master ) \
-declare c cursor local forward_only for \
+declare c cursor local fast_forward for \
 	select ' drop constraint ' + schema_name(so.schema_id) + '.' +object_name( so.object_id ) + '.' + k.name \
 	     , 'alter table ' + schema_name(so.schema_id) + '.' + object_name( so.object_id ) \
 	     + ' drop constraint ' + k.name \
@@ -1596,7 +1813,7 @@ end
 #ifdef CSQL_DROP_INDEXES
 #define CSQL_DROP_ALL_INDEXES( TblName ) \
 declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
-declare c cursor local forward_only for \
+declare c cursor local fast_forward for \
 	select 'drop index ' + #TblName + '.' + i.name as SqlStmt \
 	 from sys.indexes as i \
 	 where i.object_id = object_id( #TblName ) \
@@ -1604,7 +1821,7 @@ declare c cursor local forward_only for \
 	   and i.is_primary_key = 0 \
 open c \
 fetch c into @SqlStmt \
-while @@fetch_status = 0 \
+	while @@fetch_status = 0 \
 begin \
 	print @SqlStmt \
 	exec( @SqlStmt ) \
@@ -1612,7 +1829,7 @@ begin \
 end \
 close c \
 deallocate c \
-declare cft cursor local forward_only for \
+declare cft cursor local fast_forward for \
 	select 'drop fulltext index on ' + #TblName as SqlStmt \
 	 from sys.fulltext_indexes as i \
 	 where i.object_id = object_id( #TblName ) \

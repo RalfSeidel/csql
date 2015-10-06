@@ -190,6 +190,7 @@
     <Content Include="Files\sqtpp\input\include\rinclude3.h" />
     <Content Include="Files\sqtpp\input\message.h" />
     <Content Include="Files\sqtpp\input\mixedcp.h" />
+    <None Include="Files\sqtpp\input\comment.sql" />
     <Content Include="Files\sqtpp\input\nested.h" />
     <Content Include="Files\sqtpp\input\ninclude.h" />
     <Content Include="Files\sqtpp\input\once.h" />

@@ -18,13 +18,18 @@ public:
 	ScannerTest()
 	: m_options( *new Options() )
 	{
-		m_options.setNewLineOutput( Options::NLO_AS_IS );
-		m_options.keepComments( false );
 	}
 
 	~ScannerTest()
 	{
 		delete &m_options;
+	}
+
+	[TestInitialize]
+	void testInitialize()
+	{	
+		m_options.setNewLineOutput(Options::NLO_AS_IS);
+		m_options.keepComments(false);
 	}
 
 	/**
@@ -225,6 +230,127 @@ public:
 		tokensExpected.clear();
 		tokensExpected.push_back( TokenExpression( TOK_BLOCK_COMMENT, CTX_DEFAULT, inputText ) );
 		testTokenSequence( inputText, tokensExpected );
+	}
+
+
+	/**
+	** @brief Test scanning comments that contain unterminated string (single quote characters).
+	** 
+	** Repro and fixture for 13732.
+	*/
+	[TestMethod]
+	void scanQuoteWithinCppComment1Test()
+	{
+		wstring          inputText;;
+		TokenExpressions tokensExpected;
+
+		inputText = L"// A single 'quote";
+
+		tokensExpected.clear();
+		tokensExpected.push_back(TokenExpression(TOK_LINE_COMMENT, CTX_DEFAULT, inputText ));
+
+		testTokenSequence(inputText, tokensExpected);
+	}
+
+
+	/**
+	** @brief Test scanning comments that contain unterminated string (single quote characters).
+	**
+	** Repro and fixture for 13732.
+	*/
+	[TestMethod]
+	void scanQuoteWithinCppComment2Test()
+	{
+		wstring          inputText;;
+		TokenExpressions tokensExpected;
+
+		inputText = L"// A double \"quote";
+
+		tokensExpected.clear();
+		tokensExpected.push_back(TokenExpression(TOK_LINE_COMMENT, CTX_DEFAULT, inputText));
+
+		testTokenSequence(inputText, tokensExpected);
+	}
+
+
+	/**
+	** @brief Test scanning comments that contain unterminated string (single quote characters).
+	**
+	** Repro and fixture for 13732.
+	*/
+	[TestMethod]
+	void scanQuoteWithinBlockComment1Test()
+	{
+		wstring          inputText;;
+		TokenExpressions tokensExpected;
+
+		inputText = L"/* A single 'quote */";
+
+		tokensExpected.clear();
+		tokensExpected.push_back(TokenExpression(TOK_BLOCK_COMMENT, CTX_DEFAULT, inputText));
+
+		testTokenSequence(inputText, tokensExpected);
+	}
+
+
+	/**
+	** @brief Test scanning comments that contain unterminated string (single quote characters).
+	**
+	** Repro and fixture for 13732.
+	*/
+	[TestMethod]
+	void scanQuoteWithinBlockComment2Test()
+	{
+		wstring          inputText;;
+		TokenExpressions tokensExpected;
+
+		inputText = L"/* A double \"quote */";
+
+		tokensExpected.clear();
+		tokensExpected.push_back(TokenExpression(TOK_BLOCK_COMMENT, CTX_DEFAULT, inputText));
+
+		testTokenSequence(inputText, tokensExpected);
+	}
+
+
+	/**
+	** @brief Test scanning comments that contain unterminated string (single quote characters).
+	**
+	** Repro and fixture for 13732.
+	*/
+	[TestMethod]
+	void scanQuoteWithinSqlComment1Test()
+	{
+		wstring          inputText;;
+		TokenExpressions tokensExpected;
+
+		inputText = L"-- A single 'quote";
+
+		tokensExpected.clear();
+		tokensExpected.push_back(TokenExpression(TOK_SQL_LINE_COMMENT, CTX_DEFAULT, inputText));
+
+		m_options.keepComments(false);
+		testTokenSequence(inputText, tokensExpected);
+	}
+
+
+	/**
+	** @brief Test scanning comments that contain unterminated string (single quote characters).
+	**
+	** Repro and fixture for 13732.
+	*/
+	[TestMethod]
+	void scanQuoteWithinSqlComment2Test()
+	{
+		wstring          inputText;;
+		TokenExpressions tokensExpected;
+
+		inputText = L"-- A double \"quote";
+
+		tokensExpected.clear();
+		tokensExpected.push_back(TokenExpression(TOK_SQL_LINE_COMMENT, CTX_DEFAULT, inputText));
+
+		testTokenSequence(inputText, tokensExpected);
 	}
 
 
@@ -506,8 +632,13 @@ private:
 			TokenExpression  foundExpr;
 			scanner.getNextToken( input, foundExpr );
 
-			Assert::IsTrue( foundExpr.getToken() == expectedExpr.getToken() );
-			Assert::IsTrue( foundExpr.getIdentifier() == expectedExpr.getIdentifier() );
+			Token expectedToken = expectedExpr.getToken();
+			Token actualToken = foundExpr.getToken();
+			Assert::IsTrue( expectedToken == actualToken );
+
+			const wstring& expectedIdentifier = expectedExpr.getIdentifier();
+			const wstring& actualIdentifier = foundExpr.getIdentifier();
+			Assert::IsTrue( expectedIdentifier == actualIdentifier );
 		}
 	}
 
