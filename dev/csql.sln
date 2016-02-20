@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80CDD787-218C-41B3-8448-14E76649F8C6}"
 	ProjectSection(SolutionItems) = preProject
 		csql.FxCop = csql.FxCop
 		CustomDictionary.xml = CustomDictionary.xml
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
-		profile_sqtpp.bat = profile_sqtpp.bat
-		profile_sqtpp.psess = profile_sqtpp.psess
+		optimize_sqtpp.ps1 = optimize_sqtpp.ps1
+		profile_sqtpp.ps1 = profile_sqtpp.ps1
 		profile_sqtpp_manual.ps1 = profile_sqtpp_manual.ps1
 		Settings.StyleCop = Settings.StyleCop
 		sign.bat = sign.bat
@@ -393,9 +393,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AB73A413-C5B9-4698-9782-D7B4524C80D6} = {80CDD787-218C-41B3-8448-14E76649F8C6}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = sqtpp-9.vsmdi

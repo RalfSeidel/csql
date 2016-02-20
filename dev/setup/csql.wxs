@@ -9,12 +9,18 @@
     Use msiexec /i csql.msi /l* csql.log
   -->
 
+  <!-- 
+    Version taken from assembly using Binder Variables
+    See http://wixtoolset.org/documentation/manual/v3/overview/light.html
+    and http://blog.tentaclesoftware.com/archive/2009/05/03/38.aspx
+  
+  -->
   <Product Id="C298D88B-598A-4B29-A56F-1EB480CF138F"
            UpgradeCode="64a58b4a-496b-408a-9e08-f9f789170498"
            Name="csql"
            Language="1033"
            Codepage="1252"
-           Version="1.2.0.0"
+           Version="!(bind.FileVersion.csql_exe_File)"
            Manufacturer="SQL Service"
       >
 
@@ -170,7 +176,6 @@
         - Visual Studio 10 (aka Visual Studio 2010)
         - Visual Studio 11 (aka Visual Studio 2012)
         - Visual Studio 12 (aka Visual Studio 2013)
-        - Visual Studio 14 (aka Visual Studio 2015)
       -->
 
       <!--<Directory Id="VISUAL_STUDIO_10_LOCATION">
@@ -231,31 +236,7 @@
           </Component>
         </Directory>
       </Directory>
-
-      <Directory Id="VISUAL_STUDIO_14_LOCATION" >
-        <Directory Id="Visual_Studio_14_Addins" Name="Addins">
-          <Component Id="Visual_Studio_14_Addin_Component" Guid="{631DEF35-A1F2-48FB-A5DA-C11390CA255F}">
-            <Condition>VISUAL_STUDIO_14_LOCATION</Condition>
-            <RegistryValue Id="Visual_Studio_14_Addin_Key" KeyPath="yes"
-                           Root="HKCU"
-                           Key="Software\SQL Service\csql"
-                           Name="Visual Studio 2015 Addin" Type="integer" Value="1"  />
-            <!--
-            <CopyFile Id="Visual_Studio_14_Addin_File" FileId="csql_addin_addin_File" DestinationName="csql.addin" />
-            -->
-            <File Id="Visual_Studio_14_Addin_File" Name="csql.addin" Vital="no" Source="csql.addin" />
-            <util:XmlFile Id="Visual_Studio_14_Addin_File_Patch"
-                          File="[#Visual_Studio_14_Addin_File]"
-                          Action="setValue"
-                          ElementPath="/Extensibility/Addin/Assembly"
-                          Value="[#csql_addin_dll_File]" />
-            <RemoveFolder Id="Visual_Studio_14_Addins" On="uninstall"/>
-          </Component>
-        </Directory>
-      </Directory>
     </Directory>
-
-
 
     <Feature Id="Complete" Title="Vollständig" Level="1">
       <ComponentRef Id="sqtpp_Component" />
@@ -265,12 +246,7 @@
       <!--<ComponentRef Id="Visual_Studio_10_Addin_Component" />-->
       <ComponentRef Id="Visual_Studio_11_Addin_Component" />
       <ComponentRef Id="Visual_Studio_12_Addin_Component" />
-      <ComponentRef Id="Visual_Studio_14_Addin_Component" />
     </Feature>
-
-
-
-
 
     <ComponentGroup Id="ProgramFiles" Directory="INSTALLDIR">
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->

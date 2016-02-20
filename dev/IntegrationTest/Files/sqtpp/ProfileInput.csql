@@ -1,0 +1,15 @@
+﻿/*
+** ProfileInput.csql
+** Compilation of some csql skripts to do profiling.
+*/ 
+#include "..\csql\DbMacros.h"
+
+#incldue "..\csql\DropAllForeignKeys.csql"
+#incldue "..\csql\DropAllIndexes.csql"
+#include "..\csql\CreateDatabase.csql"
+#include "..\csql\CreateSchema.csql"
+#include "..\csql\CreateType.csql"
+#include "..\csql\CreateRule.csql"
+#include "..\csql\CreateDefault.csql"
+#include "..\csql\CreateTable.csql"
+#include "..\csql\CreateInlineFunction.csql"

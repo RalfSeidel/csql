@@ -90,7 +90,6 @@
     <None Include="Files\csql\print1252.sql" />
     <None Include="Files\csql\printutf16.sql" />
     <None Include="Files\csql\printutf16be.sql" />
-    <None Include="Files\csql\printutf8.sql" />
     <None Include="Files\csql\Reference\DependencyWarning.mssql.log" />
     <None Include="Files\csql\Reference\ErrorLineTest_1.mssql.log" />
     <None Include="Files\csql\Reference\ErrorLineTest_2.mssql.log" />
@@ -100,6 +99,8 @@
     <None Include="Files\csql\Reference\SelectTest.mssql.log" />
     <None Include="Files\csql\run.bat" />
     <None Include="Files\sqtpp\input\multiline.sql" />
+    <Content Include="Files\csql\printutf8.sql" />
+    <None Include="Files\sqtpp\ProfileInput.csql" />
     <Content Include="Files\sqtpp\input\ErrC1083.h" />
     <None Include="Files\sqtpp\input\temptable.sql" />
     <None Include="Files\sqtpp\reference\multiline.sql" />

@@ -688,7 +688,7 @@
 
 /// @ingroup Action
 /// <summary>
-/// Concate to expressions to a string.
+/// Concate two expressions to a string.
 /// </summary>
 #define CSQL_CONCATE( A, B ) A ## B
 
@@ -868,7 +868,7 @@ begin \
 	select top 1 @MsgText = 'Can''t drop the default ' + #@X + ' because it is still bound to ' + object_schema_name(object_id) + '.' + object_name(object_id) + '.' + name from sys.columns where default_object_id = @DefaultId; \
 	if @MsgText is not null \
 		print @MsgText; \
-		else \
+	else \
 	begin \
 		set @SqlStmt = 'drop default ' + #@X; \
 		print @SqlStmt; \
@@ -977,11 +977,20 @@ end
 #ifdef CSQL_DROP_TYPES
 #define CSQL_DROP_TYPE( X ) \
 if exists ( select 1 from sys.types where name = parsename( #@X, 1 ) and is_user_defined = 1 ) \
+begin \
+	declare @TypeId smallint \
+          , @SqlStmt nvarchar( max ) \
+	      , @MsgText nvarchar(max ); \
+	set @TypeId = ( select user_type_id from sys.types where schema_name( schema_id ) + '.' + name = #@X ); \
+	select top 1 @MsgText = 'Can''t drop type ' + #@X + ' because it is still used by ' + object_schema_name(object_id) + '.' + object_name(object_id) + '.' + name from sys.columns where user_type_id = @TypeId; \
+	if @MsgText is not null \
+		print @MsgText; \
+		else \
 	begin \
-	declare @SqlStmt nvarchar( max ) \
 		set @SqlStmt = 'drop type ' + #@X \
 		print @SqlStmt \
 		exec( @SqlStmt ) \
+	end \
 end
 #else  // !CSQL_DROP_TYPES
 #define CSQL_DROP_TYPE(X)
@@ -1547,7 +1556,7 @@ begin \
 		set @MsgText = 'Create foreign key ' + #@FK_TAB_NAME + ' -> ' + #@PK_TAB_NAME + ' skipped because '+ #@PK_TAB_NAME + ' is a synonym.';\
 		print @MsgText;\
 	end\
-		else\
+	else\
 	begin\
 		set @SqlStmt = 'alter table '+ #@FK_TAB_NAME +' add constraint '\
 					+ #@FK_COL_NAME + ' foreign key('+ #@FK_COL_NAME+') references ' + #@PK_TAB_NAME\
@@ -1565,7 +1574,7 @@ begin \
 		set @MsgText = 'Create foreign key ' + #@FK_TAB_NAME + ' -> ' + #@PK_TAB_NAME + ' skipped because '+ #@PK_TAB_NAME + ' is a synonym.';\
 		print @MsgText;\
 	end\
-		else\
+	else\
 	begin\
 		set @SqlStmt = 'alter table '+ #@FK_TAB_NAME +' add constraint '\
 					+ #@FK_COL_NAME + ' foreign key('+ #@FK_COL_NAME+') references ' + #@PK_TAB_NAME + ' on delete cascade'\
@@ -1583,7 +1592,7 @@ begin \
 		set @MsgText = 'Create foreign key ' + #@FK_TAB_NAME + ' -> ' + #@PK_TAB_NAME + ' skipped because '+ #@PK_TAB_NAME + ' is a synonym.';\
 		print @MsgText;\
 	end\
-		else\
+	else\
 	begin\
 		set @SqlStmt = 'alter table '+ #@FK_TAB_NAME +' add constraint '\
 					+ #@FK_COL_NAME + ' foreign key('+ #@FK_COL_NAME+') references ' + #@PK_TAB_NAME +' on delete set null';\
@@ -1675,7 +1684,7 @@ begin \
 	declare @Message nvarchar(max), @SqlStmt nvarchar(max) \
 	open c \
 	fetch c into @Message, @SqlStmt \
-		while @@fetch_status = 0 \
+	while @@fetch_status = 0 \
 	begin \
 		print @Message \
 		exec( @SqlStmt ) \
@@ -1708,7 +1717,7 @@ begin \
 	declare @DisableMsgText nvarchar(max), @DisableSqlStmt nvarchar(max) \
 	open c \
 	fetch c into @DisableMsgText, @DisableSqlStmt; \
-				while @@fetch_status = 0 \
+	while @@fetch_status = 0 \
 	begin \
 		print @DisableMsgText; \
 		exec( @DisableSqlStmt ); \
@@ -1800,7 +1809,6 @@ end
 #endif // CSQL_DROP_INDEXES
 
 
-
 /// @ingroup Action
 /// <summary>
 /// Drop all indexes defined for the specified table and which 
@@ -1821,7 +1829,7 @@ declare c cursor local fast_forward for \
 	   and i.is_primary_key = 0 \
 open c \
 fetch c into @SqlStmt \
-	while @@fetch_status = 0 \
+while @@fetch_status = 0 \
 begin \
 	print @SqlStmt \
 	exec( @SqlStmt ) \
@@ -1846,7 +1854,6 @@ deallocate cft
 #else // !CSQL_DROP_INDEXES
 #define CSQL_DROP_ALL_INDEXES( TblName )
 #endif // CSQL_DROP_INDEXES
-
 
 
 /// @ingroup Action
