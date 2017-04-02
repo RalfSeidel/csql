@@ -86,7 +86,7 @@ public:
 	{
 		Utf8Converter converter(0);
 
-		mbstate_t state = 0;
+		mbstate_t state;
 		char inAbc[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		// "ä"
 		char inUmlaut[] = "\xC3\xA4";
@@ -125,7 +125,7 @@ public:
 	{
 		Utf8Converter converter(0);
 
-		mbstate_t state = 0;
+		mbstate_t state;
 		char inAbc[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		// "ä"
 		//char inUmlaut[] = "\xC3\xA4";
@@ -142,7 +142,7 @@ public:
 		wchar_t* pOutNext;
 
 		int result;
-		
+
 		pIn = inAbc;
 		inCount = strlen( pIn );
 		pInMax = pIn + inCount;
@@ -174,7 +174,7 @@ public:
 		Utf8Converter converter(0);
 
 		int result;
-		mbstate_t state = 0;
+		mbstate_t state;
 		wchar_t inAbc[] = L"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		//wchar_t inUmlaut[] = L"ä";
 		//wchar_t inEuro[] = L"€";

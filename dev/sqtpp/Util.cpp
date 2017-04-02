@@ -18,10 +18,10 @@ char Convert::wc2ch( const wchar_t wc, const std::locale& loc )
 	const wchar_t*  pwszInput     = &wc;
 	const wchar_t*  pwszInputNext = NULL;
 	size_t          nInputLen     = 1;
-	mbstate_t       state         = 0;
 	char            chResult      = L'\0';
 	char*           pszAnsi       = &chResult;
 	char*           pszAnsiNext   = NULL;
+	mbstate_t       state;
 
 	const std::codecvt<wchar_t, char, mbstate_t>& decoder = use_facet<codecvt<wchar_t, char, mbstate_t> >(loc);
 
@@ -60,10 +60,10 @@ const std::string Convert::wcs2str( const wchar_t* str )
 	const wchar_t* pwszInputNext = NULL;
 	const size_t   nInputLen    = wcslen( str );
 	const size_t   nOutputLen   = nInputLen + 1;
-	mbstate_t      state        = 0;
 	char*          pszOutput     = new char[nOutputLen+1];
 	char*          pszOutputNext = NULL;
 	const std::codecvt<wchar_t, char, mbstate_t>& codec = use_facet<codecvt<wchar_t, char, mbstate_t> >( locale() );
+	mbstate_t      state;
 
 	int result = codec.out( state
 				          , pwszInput, &pwszInput[nInputLen], pwszInputNext
@@ -111,13 +111,13 @@ void Util::getLocalTime( tm& localTime )
 	time( &currentTime );
 	// Convert to local time
 #	if _MSC_VER >= 1400
-		errno_t  error = _localtime64_s( &localTime, &currentTime ); 
+		errno_t  error = _localtime64_s( &localTime, &currentTime );
 		if ( error != 0 ) {
 			throw RuntimeError( "Error converting date/time." );
 		}
-#	else 
+#	else
 		const tm* localTimePtr;
-		localTimePtr = localtime( &currentTime ); 
+		localTimePtr = localtime( &currentTime );
 		localTime    = *localTimePtr;
 #	endif
 }
@@ -125,7 +125,7 @@ void Util::getLocalTime( tm& localTime )
 
 /**
 ** @brief Remove leading and trailing blanks from a string.
-** 
+**
 ** @param str The string to trim.
 */
 const wstring Util::trim( const wstring& str )
@@ -135,7 +135,7 @@ const wstring Util::trim( const wstring& str )
 
 	if ( pos1 == wstring::npos )
 		pos1 = 0;
-	if ( pos2 == wstring::npos ) 
+	if ( pos2 == wstring::npos )
 		pos2 = str.length() - 1;
 
 	wstring trimed = str.substr( pos1, pos2 - pos1 + 1 );
@@ -155,7 +155,7 @@ const wstring Util::trim( const wstring& str, wchar_t c )
 
 	if ( pos1 == wstring::npos )
 		pos1 = 0;
-	if ( pos2 == wstring::npos ) 
+	if ( pos2 == wstring::npos )
 		pos2 = str.length() - 1;
 
 	wstring trimed = str.substr( pos1, pos2 - pos1 + 1 );

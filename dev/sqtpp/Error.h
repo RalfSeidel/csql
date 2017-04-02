@@ -275,7 +275,7 @@ public:
 
 /**
 ** @brief Undefined / unkown fatal error.
-*/ 
+*/
 class C1010 : public UndefinedFatalError
 {
 public:
@@ -287,7 +287,7 @@ public:
 
 /**
 ** @brief Unmatched parenthesis.
-*/ 
+*/
 class C1012 : public FatalError
 {
 public:
@@ -299,7 +299,7 @@ public:
 
 /**
 ** @brief {1} has already been included. Recursive includes are not supported.
-*/ 
+*/
 class C1014 : public FatalError
 {
 public:
@@ -317,7 +317,7 @@ public:
 ** @brief Excpected macro identifier for preprocessor conditional {1}.
 **
 ** \#ifdef or \#indef found without operand.
-*/ 
+*/
 class C1016 : public FatalError
 {
 public:
@@ -338,7 +338,7 @@ public:
 ** #define X '1'
 ** #if X
 ** @endcode
-*/ 
+*/
 class C1017 : public FatalError
 {
 public:
@@ -352,10 +352,10 @@ public:
 ** @brief Invalid expression: missing left operand for operator {1}.
 **
 ** @code
-** #if *1 
+** #if *1
 ** #endif
 ** @endcode
-*/ 
+*/
 class C1017B : public FatalError
 {
 public:
@@ -373,7 +373,7 @@ public:
 ** #if ()
 ** #endif
 ** @endcode
-*/ 
+*/
 class C1017C : public FatalError
 {
 public:
@@ -385,7 +385,7 @@ public:
 
 /**
 ** @brief Unexpected \#elif.
-*/ 
+*/
 class C1018 : public FatalError
 {
 public:
@@ -398,7 +398,7 @@ public:
 
 /**
 ** @brief Unexpected \#else.
-*/ 
+*/
 class C1019 : public FatalError
 {
 public:
@@ -411,7 +411,7 @@ public:
 
 /**
 ** @brief Unexpected \#endif.
-*/ 
+*/
 class C1020 : public FatalError
 {
 public:
@@ -425,7 +425,7 @@ public:
 
 /**
 ** @brief Unknown preprocessor directive {1}.
-*/ 
+*/
 class C1021 : public FatalError
 {
 public:
@@ -438,7 +438,7 @@ public:
 
 /**
 ** @brief Unknown preprocessor directive {1}.
-*/ 
+*/
 class C1026 : public FatalError
 {
 public:
@@ -452,7 +452,7 @@ public:
 
 /**
 ** @brief Preprocessor limit exceeded: To many symbols.
-*/ 
+*/
 class C1055 : public FatalError
 {
 public:
@@ -464,7 +464,7 @@ public:
 
 /**
 ** @brief Unexpected end of file while collecting arguments for the macro {1}.
-*/ 
+*/
 class C1057 : public FatalError
 {
 public:
@@ -477,7 +477,7 @@ public:
 
 /**
 ** @brief Unable to open file {1}.
-*/ 
+*/
 class C1068 : public FatalError
 {
 public:
@@ -490,7 +490,7 @@ public:
 
 /**
 ** @brief Matching \#endif not found for conditional starting in line.
-*/ 
+*/
 class C1070 : public FatalError
 {
 public:
@@ -504,7 +504,7 @@ public:
 
 /**
 ** @brief Encountered end of file in comment.
-*/ 
+*/
 class C1071 : public FatalError
 {
 public:
@@ -516,9 +516,9 @@ public:
 
 /**
 ** @brief Path to long: {1}.
-** 
+**
 ** The length of a file path exceeds _MAX_PATH.
-*/ 
+*/
 class C1081 : public FatalError
 {
 public:
@@ -588,7 +588,7 @@ public:
 			const char* pszMessageNext = NULL;
 			wchar_t*    pwszBufferNext = NULL;
 			const std::codecvt<wchar_t, char, mbstate_t>& codec = use_facet<codecvt<wchar_t, char, mbstate_t> >( locale() );
-			mbstate_t state = 0;
+			mbstate_t state;
 
 			int result = codec.in( state
 					             , pszMessage, &pszMessage[length], pszMessageNext
@@ -831,7 +831,7 @@ public:
 };
 
 /**
-** @brief Unexcpeted token found while parseing expression. 
+** @brief Unexcpeted token found while parseing expression.
 */
 class C4067 : public Warning
 {
@@ -913,7 +913,7 @@ public:
 /**
 ** @brief Invalid argument {1}.
 */
-class D9002 : public Warning 
+class D9002 : public Warning
 {
 public:
 	D9002( const wstring& argument )
@@ -927,7 +927,7 @@ public:
 /**
 ** @brief {1} requires {2}; option ignored.
 */
-class D9007 : public Warning 
+class D9007 : public Warning
 {
 public:
 	D9007( const wstring& argument, const wstring& option )
@@ -941,7 +941,7 @@ public:
 /**
 ** @brief Unknown file type {1}.
 */
-class D9024 : public Warning 
+class D9024 : public Warning
 {
 public:
 	D9024( const wstring& argument )

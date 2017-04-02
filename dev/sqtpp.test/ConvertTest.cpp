@@ -44,11 +44,11 @@ public:
 		const char*    pszInputNext = NULL;
 		size_t         nInputLen    = strlen( pszInput );
 		const size_t   nOutputLen   = 127;
-		mbstate_t      state        = 0;
 		wchar_t        pwszOutput[nOutputLen+1];
 		wchar_t*       pwszOutputNext = NULL;
 		char           pszBack[nOutputLen+1];
 		char*          pszBackNext = NULL;
+		mbstate_t      state;
 
 		memset( pwszOutput, 0, sizeof( pwszOutput ) );
 
@@ -122,11 +122,11 @@ public:
 		const wchar_t* pwszInputNext = NULL;
 		size_t         nInputLen    = wcslen( pwszInput );
 		const size_t   nOutputLen   = 127;
-		mbstate_t      state        = 0;
 		char           pszOutput[nOutputLen+1];
 		char*          pszOutputNext = NULL;
 		wchar_t        pwszBack[nOutputLen+1];
 		wchar_t*       pwszBackNext = NULL;
+		mbstate_t      state;
 
 		memset( pszOutput, 0, sizeof( pszOutput ) );
 

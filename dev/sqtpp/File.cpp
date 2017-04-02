@@ -402,7 +402,7 @@ std::wistream& File::attach( std::wistream& is )
 
 	int exceptions = ios::badbit;
 #	if	_MSC_VER > 10
-	exceptions|= ios::_Hardfail;
+	exceptions|= ios::failbit;
 #	endif
 
 	m_pData->m_pExternalStream->exceptions( exceptions );

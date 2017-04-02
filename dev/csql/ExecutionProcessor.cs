@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using csql.ResultTrace;
@@ -92,6 +93,7 @@ namespace csql
 		/// a "go" statement.
 		/// </remarks>
 		/// <param name="batch">The batch.</param>
+		[SuppressMessage( "Microsoft.Usage", "CA2202:Do not dispose objects multiple times" )]
 		public void ProcessBatch( ProcessorContext context, string batch )
 		{
 			m_context = context;

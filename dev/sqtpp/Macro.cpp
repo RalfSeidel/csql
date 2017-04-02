@@ -203,7 +203,6 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 	const TokenExpressions&    tokens         = macro.getTokens();
 	Token                      prevToken      = TOK_UNDEFINED;
 	TokenExpressions           interimResult;
-	int   nArgumentIndex;
 
 	// Expand macros in the arguments.
 	MacroArgumentValues expandedArguments;
@@ -228,8 +227,8 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 				while ( interimResult.begin() != interimResult.end() ) {
 					const TokenExpression& rtokenExpression = *interimResult.rbegin();
 					const Token            rtoken           = rtokenExpression.token;
-					if ( rtoken != TOK_SPACE         && rtoken != TOK_NEW_LINE 
-					  && rtoken != TOK_BLOCK_COMMENT && rtoken != TOK_LINE_COMMENT ) 
+					if ( rtoken != TOK_SPACE         && rtoken != TOK_NEW_LINE
+					  && rtoken != TOK_BLOCK_COMMENT && rtoken != TOK_LINE_COMMENT )
 					{
 						break;
 					}
@@ -241,10 +240,10 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 				}
 				// skip all white space after the '##' operator.
 				while ( ++itToken != tokens.end() ) {
-					const TokenExpression& tokenExpression = *itToken;
-					const Token            token           = tokenExpression.token;
-					if ( token != TOK_SPACE         && token != TOK_NEW_LINE 
-					  && token != TOK_BLOCK_COMMENT && token != TOK_LINE_COMMENT ) 
+					const TokenExpression& expression2 = *itToken;
+					const Token            token2           = expression2.token;
+					if ( token2 != TOK_SPACE         && token2 != TOK_NEW_LINE
+					  && token2 != TOK_BLOCK_COMMENT && token2 != TOK_LINE_COMMENT )
 					{
 						break;
 					}
@@ -260,9 +259,9 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 
 			case TOK_SHARP:
 			case TOK_SHARP_AT: {
-				// Determine string delimiter and delimiter escaping
+				// Determine string delimiter and delimiter escaping.
 				// If the operator is the charizeoperator (\#@) the delimiter is always '. Otherwises it depends
-				// no the preprocessor options.
+				// on the preprocessor options.
 				const wchar_t delimiter     = token == TOK_SHARP_AT ? L'\'' : wchar_t(options.getStringDelimiter());
 				const wchar_t escape        = options.getStringQuoting() == Options::QUOT_DOUBLE ? delimiter : L'\\';
 				bool          bOperandFound = false;
@@ -271,8 +270,8 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 				while ( ++itToken != tokens.end() ) {
 					const TokenExpression& tokenExpression = *itToken;
 					const Token            token           = tokenExpression.token;
-					if ( token != TOK_SPACE         && token != TOK_NEW_LINE 
-					  && token != TOK_BLOCK_COMMENT && token != TOK_LINE_COMMENT ) 
+					if ( token != TOK_SPACE         && token != TOK_NEW_LINE
+					  && token != TOK_BLOCK_COMMENT && token != TOK_LINE_COMMENT )
 					{
 						break;
 					}
@@ -285,7 +284,6 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 						const wstring& identifier     = tokenExpression.getText();
 						int            nArgumentIndex = macroArguments.getArgumentIndex( identifier );
 						if ( nArgumentIndex >= 0 ) {
-							//const TokenExpressions& argumentExpressions = expandedArguments[nArgumentIndex];
 							const TokenExpressions& argumentExpressions = argumentValues[nArgumentIndex];
 							const wstring stringizedTokens = argumentExpressions.stringize( delimiter, escape );
 							TokenExpression replacement( TOK_STRING, tokenExpression.getContext(), stringizedTokens );
@@ -317,9 +315,9 @@ void MacroExpander::expand( const Macro& macro, const Processor& processor, cons
 				emitExpression = false;
 				break;
 			}
-			case TOK_IDENTIFIER: 
+			case TOK_IDENTIFIER:
 				if ( prevToken != TOK_SHARP && prevToken != TOK_SHARP_AT ) {
-					nArgumentIndex = macroArguments.getArgumentIndex( identifier );
+					int nArgumentIndex = macroArguments.getArgumentIndex( identifier );
 					if ( nArgumentIndex >= 0 ) {
 						const TokenExpressions& argumentTokens = expandedArguments[nArgumentIndex];
 						interimResult.insert( interimResult.end(), argumentTokens.begin(), argumentTokens.end() );
@@ -449,7 +447,7 @@ void Macro::setExpression( const TokenExpressions& tokens, const wstring& expres
 	m_isMultiLine = false;
 	m_sDefText    = Util::trim( expressionText );
 
-	
+
 
 	for ( TokenExpressions::const_iterator it = tokens.begin(); it != tokens.end(); ++it ) {
 		const TokenExpression& tokex = *it;

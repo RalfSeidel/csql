@@ -145,6 +145,7 @@ namespace csql
 		/// <summary>
 		/// Preprocess the input file and 
 		/// </summary>
+		[SuppressMessage( "Microsoft.Usage", "CA2202:Do not dispose objects multiple times" )]
 		[SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Want to catch everything to be able to add file and line number infos." )]
 		public virtual void Process()
 		{

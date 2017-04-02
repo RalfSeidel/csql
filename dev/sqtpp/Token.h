@@ -156,16 +156,16 @@ public:
 	// Reset everything to be empty / undefined.
 	void clear();
 
-	void setTokenId( size_t tokenId ) throw() { this->tokenId = tokenId; }
+	void setTokenId( size_t value ) throw() { this->tokenId = value; }
 
-	void setToken( Token token ) throw() { this->token = token; }
+	void setToken( Token value ) throw() { this->token = value; }
 	Token getToken() const throw() { return this->token; }
 
 	void setTokenLength( size_t nCharCount ) throw() { this->tokenLength = nCharCount; }
 	size_t getTokenLength() const throw() { return this->tokenLength; }
 
 	void setTokenRange( size_t startIndex, size_t endIndex ) throw() { this->tokenRange = Range( startIndex, endIndex ); }
-	void setTokenRange( const Range& tokenRange ) throw() { this->tokenRange = tokenRange; }
+	void setTokenRange( const Range& value ) throw() { this->tokenRange = value; }
 	const Range& getTokenRange() const throw() { return this->tokenRange; }
 
 	Context getContext() const throw() { return this->context; }
